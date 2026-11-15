@@ -1,0 +1,3186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="carbon">
+  <title>Gestion des Périphériques et des Pilotes sous Windows 11 — Cours BTS TSIG 2e année</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+      --surface-code: #161616;
+      --on-surface-code: #f4f4f4;
+      --code-accent: #78a9ff;
+      --code-success: #42be65;
+      --code-warn: #f1c21b;
+      --bsod-surface: #003b8e;
+      --bsod-ink: #ffffff;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --primary-hover: #0043ce;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --tertiary-container: #defbe6;
+      --error: #da1e28;
+      --error-container: #fff1f1;
+      --on-error: #ffffff;
+
+      /* Semantic */
+      --positive: #198038;
+      --warning: #8a6100;
+      --warning-container: #fcf4d6;
+      --focus: #0f62fe;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --rule-strong: 1px solid var(--on-surface);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+      --state-bar-info: 3px solid var(--primary);
+      --state-bar-ok: 3px solid var(--positive);
+      --state-bar-warn: 3px solid var(--warning);
+      --state-bar-err: 3px solid var(--error);
+
+      /* Type scale - Narrative */
+      --display-size: clamp(2.25rem, 1.4rem + 3.2vw, 3.75rem);
+      --headline-size: clamp(1.625rem, 1.2rem + 1.5vw, 2.25rem);
+      --subhead-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.375rem);
+      --body-size: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    *:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Layout shell */
+    .course-shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    .course-masthead {
+      border-bottom: var(--rule);
+      padding: var(--space-xl) 0 var(--space-xl);
+    }
+
+    .masthead-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      gap: var(--space-xl);
+      align-items: end;
+    }
+
+    .label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--on-surface-variant);
+      display: block;
+    }
+
+    .headline-display {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      font-size: var(--display-size);
+      line-height: 1.12;
+      letter-spacing: 0;
+      margin: var(--space-sm) 0 var(--space-md);
+    }
+    .headline-display strong { font-weight: 600; }
+
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      font-size: var(--headline-size);
+      line-height: 1.2;
+      letter-spacing: 0;
+      margin: var(--space-xs) 0 var(--space-sm);
+    }
+    .headline strong { font-weight: 600; }
+
+    h3 {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      line-height: 1.3;
+      margin: var(--space-lg) 0 var(--space-sm);
+    }
+
+    h4 {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.35;
+      margin: var(--space-md) 0 var(--space-xs);
+    }
+
+    p {
+      margin: 0 0 var(--space-md);
+      max-width: 65ch;
+    }
+
+    ul, ol {
+      margin: 0 0 var(--space-md);
+      padding-left: var(--space-lg);
+      max-width: 65ch;
+    }
+    li + li { margin-top: var(--space-xs); }
+
+    code, .mono {
+      font-family: var(--font-label);
+      font-size: 0.88em;
+    }
+
+    .inline-code {
+      font-family: var(--font-label);
+      font-size: 0.85em;
+      background: var(--surface-container);
+      padding: 0.1em 0.35em;
+      border: var(--rule);
+    }
+
+    /* Key figure tiles */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .layer {
+      background: var(--surface-container);
+      border-radius: 0;
+      padding: var(--space-md);
+    }
+    .layer .layer {
+      background: var(--surface-container-high);
+    }
+
+    .key-tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-bottom: var(--indicator);
+    }
+    .key-tile--neutral {
+      border-bottom: var(--rule);
+    }
+    .key-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: 1.85rem;
+      line-height: 1.15;
+      margin: var(--space-xs) 0;
+      color: var(--on-surface);
+    }
+    .helper-text {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Main Workspace Grid */
+    .page-layout {
+      display: grid;
+      grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+      gap: var(--space-2xl);
+      padding-top: var(--space-xl);
+      padding-bottom: var(--space-3xl);
+      align-items: start;
+    }
+    .page-layout * { min-width: 0; }
+
+    /* Side Navigation */
+    .side-nav {
+      position: sticky;
+      top: var(--space-lg);
+      background: var(--surface-container);
+      padding: var(--space-md);
+    }
+
+    .side-nav-list {
+      list-style: none;
+      margin: var(--space-sm) 0 var(--space-md);
+      padding: 0;
+    }
+
+    .side-nav-link {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-sm);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: 0.875rem;
+      line-height: 1.35;
+      border-left: 2px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .side-nav-link:hover {
+      background: var(--surface-container-high);
+    }
+    .side-nav-link.is-active {
+      border-left: var(--indicator);
+      font-weight: 600;
+      background: var(--background);
+    }
+    .side-nav-num {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      min-width: 1.5rem;
+      padding-top: 0.1rem;
+    }
+    .side-nav-link.is-active .side-nav-num {
+      color: var(--primary);
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--surface-container-high);
+      margin: var(--space-xs) 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Mobile chapter strip */
+    .mobile-chapter-bar {
+      display: none;
+      overflow-x: auto;
+      gap: var(--space-xs);
+      padding: var(--space-sm) 0;
+      border-bottom: var(--rule);
+      margin-bottom: var(--space-lg);
+    }
+    .mobile-chip {
+      flex: 0 0 auto;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      border-bottom: 2px solid transparent;
+    }
+    .mobile-chip.is-active {
+      border-bottom: var(--indicator);
+      font-weight: 600;
+    }
+
+    /* Chapter sections */
+    .chapter-section {
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-2xl);
+      border-bottom: var(--rule);
+    }
+    .chapter-section:last-of-type {
+      border-bottom: 0;
+    }
+
+    .section-head {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+
+    .chapter-objectives {
+      background: var(--surface-container);
+      border-left: var(--state-bar-info);
+      padding: var(--space-md) var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Asymmetric grids */
+    .split-8-4 {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--space-lg);
+      align-items: start;
+      margin-bottom: var(--space-lg);
+    }
+
+    .split-5-7 {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--space-lg);
+      align-items: start;
+      margin-bottom: var(--space-lg);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Buttons (Carbon style: square corners, 40px/48px, left aligned text) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg) var(--space-sm) var(--space-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 400;
+      border-radius: 0;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .btn--compact {
+      min-height: 40px;
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+    }
+    .btn--primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn--primary:hover {
+      background: var(--primary-hover);
+    }
+    .btn--secondary {
+      background: transparent;
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn--secondary:hover {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn--ghost {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn--ghost:hover {
+      background: var(--surface-container-high);
+    }
+    .btn--danger {
+      background: var(--error);
+      color: var(--on-error);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Tags (only elements with --rounded-full) */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-full);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .tag--ok {
+      background: var(--tertiary-container);
+      color: var(--tertiary);
+    }
+    .tag--err {
+      background: var(--error-container);
+      color: var(--error);
+    }
+    .tag--warn {
+      background: var(--warning-container);
+      color: var(--warning);
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: var(--rule);
+      margin-bottom: var(--space-md);
+      gap: var(--space-xs);
+    }
+    .tab-btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      transition: color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover {
+      color: var(--on-surface);
+      background: var(--surface-container);
+    }
+    .tab-btn.is-active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom: var(--indicator);
+    }
+
+    /* Inputs & Labels */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+    }
+    .field-input, .field-select {
+      height: 40px;
+      background: var(--background);
+      border: 0;
+      border-bottom: var(--field-rule);
+      border-radius: var(--rounded);
+      padding: 0 var(--space-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      width: 100%;
+    }
+    .field-select {
+      padding-right: var(--space-xl);
+    }
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: end;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: var(--space-lg);
+      border-bottom: var(--rule);
+    }
+    table.carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+    table.carbon-table thead th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule-strong);
+    }
+    table.carbon-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-top: var(--rule);
+      vertical-align: top;
+    }
+    table.carbon-table tbody tr:nth-child(even) {
+      background: var(--surface-container);
+    }
+    table.carbon-table tbody tr.is-selected {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    /* Notifications */
+    .notice {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-left: var(--state-bar-info);
+      margin-bottom: var(--space-md);
+    }
+    .notice--ok { border-left: var(--state-bar-ok); }
+    .notice--warn { border-left: var(--state-bar-warn); }
+    .notice--err { border-left: var(--state-bar-err); }
+
+    /* Interactive Simulators */
+    .sim-box {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    .sim-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .sim-panel {
+      background: var(--background);
+      padding: var(--space-md);
+      border: var(--rule);
+    }
+
+    /* SVG Stack & Architecture diagrams */
+    .arch-flow {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .arch-node {
+      background: var(--background);
+      border: var(--rule);
+      border-left: 4px solid var(--outline);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+    }
+    .arch-node:hover {
+      background: var(--primary-container);
+    }
+    .arch-node.is-active {
+      border-left: 4px solid var(--primary);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .arch-arrow {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      padding-left: var(--space-md);
+    }
+
+    /* Terminal Emulator */
+    .terminal-window {
+      background: var(--surface-code);
+      color: var(--on-surface-code);
+      font-family: var(--font-label);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      padding: var(--space-md);
+      overflow-x: auto;
+    }
+    .terminal-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--on-surface-variant);
+      padding-bottom: var(--space-xs);
+      margin-bottom: var(--space-sm);
+      font-size: 0.75rem;
+      color: var(--outline);
+    }
+    .terminal-prompt {
+      color: var(--code-accent);
+    }
+    .terminal-ok { color: var(--code-success); }
+    .terminal-warn { color: var(--code-warn); }
+
+    /* BSOD Simulation Panel */
+    .bsod-screen {
+      background: var(--bsod-surface);
+      color: var(--bsod-ink);
+      padding: var(--space-lg);
+      font-family: var(--font-body);
+    }
+    .bsod-face {
+      font-size: 2.5rem;
+      font-weight: 300;
+      margin-bottom: var(--space-sm);
+      line-height: 1;
+    }
+
+    /* INF Interactive Inspector */
+    .inf-line {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      border-left: 3px solid transparent;
+      padding: 0.25rem var(--space-sm);
+      font-family: var(--font-label);
+      font-size: 0.82rem;
+      color: var(--on-surface-code);
+      cursor: pointer;
+    }
+    .inf-line:hover {
+      background: var(--on-surface-variant);
+    }
+    .inf-line.is-active {
+      border-left-color: var(--code-accent);
+      background: var(--on-surface-variant);
+    }
+
+    /* Collapsible Exercices & TPs */
+    .tp-box {
+      border-top: var(--rule);
+      border-bottom: var(--rule);
+      padding: var(--space-md) 0;
+      margin: var(--space-md) 0;
+    }
+
+    .exercise-card {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .correction-panel {
+      background: var(--background);
+      border-left: var(--state-bar-ok);
+      padding: var(--space-md);
+      margin-top: var(--space-md);
+      display: none;
+    }
+    .correction-panel.is-open {
+      display: block;
+    }
+
+    /* Quiz Module */
+    .quiz-block {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    .quiz-q {
+      background: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .quiz-options {
+      display: grid;
+      gap: var(--space-xs);
+      margin-top: var(--space-sm);
+    }
+    .quiz-opt {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      width: 100%;
+      min-height: 44px;
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      border: 1px solid transparent;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt:hover {
+      background: var(--surface-container-high);
+    }
+    .quiz-opt.is-selected {
+      background: var(--primary-container);
+      border-color: var(--primary);
+      font-weight: 500;
+    }
+    .quiz-opt.is-correct {
+      background: var(--tertiary-container);
+      border-color: var(--tertiary);
+    }
+    .quiz-opt.is-wrong {
+      background: var(--error-container);
+      border-color: var(--error);
+    }
+    .quiz-feedback {
+      margin-top: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.875rem;
+      background: var(--surface-container);
+      border-left: var(--state-bar-info);
+    }
+    .quiz-feedback--ok { border-left: var(--state-bar-ok); }
+    .quiz-feedback--err { border-left: var(--state-bar-err); }
+
+    /* Chart container */
+    .chart-box {
+      position: relative;
+      min-height: 320px;
+      width: 100%;
+      background: var(--background);
+      padding: var(--space-md);
+      border: var(--rule);
+    }
+
+    /* Glossary grid */
+    .glossary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .glossary-card {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-top: 2px solid var(--on-surface);
+    }
+
+    /* List separators */
+    .ruled-list > * + * {
+      border-top: var(--rule);
+      padding-top: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+
+    /* Responsive rules */
+    @media (max-width: 960px) {
+      .masthead-grid,
+      .page-layout,
+      .split-8-4,
+      .split-5-7 {
+        grid-template-columns: 1fr;
+      }
+      .side-nav { display: none; }
+      .mobile-chapter-bar { display: flex; }
+    }
+
+    @media (max-width: 640px) {
+      .course-shell { padding: 0 var(--space-md); }
+      .kpi-strip { grid-template-columns: 1fr; }
+      .sim-box, .quiz-block { padding: var(--space-md); }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="course-shell">
+    <nav style="display:flex; justify-content:space-between; align-items:center; padding:0.85rem 1.25rem; margin-bottom:1.5rem; background:#f4f4f4; border:1px solid #e0e0e0; border-radius:4px; font-size:0.92rem; flex-wrap:wrap; gap:0.75rem;">
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <a href="/" style="font-weight:700; color:#0f62fe; text-decoration:none;">PCDOCTOR.TN</a>
+        <span style="color:#8d8d8d; opacity:0.6;">|</span>
+        <a href="/etudiants.html" style="color:#525252; text-decoration:none;">&larr; Espace Étudiants</a>
+        <span style="color:#8d8d8d; opacity:0.6;">|</span>
+        <a href="/tsig/" style="color:#0f62fe; font-weight:600; text-decoration:none;">Portail Filière TSIG</a>
+      </div>
+      <div style="color:#161616; font-size:0.88rem;">
+        👨‍🏫 Conçu &amp; animé par : <strong style="color:#0f62fe;">Mohamed Aissaoui</strong> (Formateur IT / IMSET)
+      </div>
+    </nav>
+    <header class="course-masthead">
+      <div class="masthead-grid">
+        <div>
+          <span class="label">BTS TSIG 2e année — Systèmes d'exploitation &amp; Administration</span>
+          <h1 class="headline-display">Gestion des <strong>Périphériques</strong> et des <strong>Pilotes (Drivers)</strong> sous Windows 11</h1>
+          <p>Cours interactif complet pour techniciens supérieurs en informatique de gestion : architecture matérielle et logicielle (HAL, Ring 0/3), modèles WDF, administration avancée (PnPUtil, PowerShell, HVCI), dépannage des codes d'erreur et gouvernance par GPO.</p>
+          <div class="btn-row">
+            <a href="#chapitre-1" class="btn btn--primary">
+              <span>Commencer le cours</span>
+              <i data-lucide="arrow-down-right" aria-hidden="true"></i>
+            </a>
+            <button type="button" class="btn btn--secondary" onclick="exportProgressReport()">
+              <span>Exporter mon bilan</span>
+              <i data-lucide="download" aria-hidden="true"></i>
+            </button>
+            <button type="button" id="reset-progress-btn" class="btn btn--ghost" onclick="handleResetProgress(this)">
+              <span>Réinitialiser la progression</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="kpi-strip">
+            <div class="key-tile">
+              <span class="label">Score Quiz Global</span>
+              <div class="key-value" id="kpi-quiz-score">0 / 31</div>
+              <p class="helper-text" id="kpi-quiz-pct">0 % de réussite</p>
+            </div>
+            <div class="key-tile key-tile--neutral">
+              <span class="label">TP VM Validés</span>
+              <div class="key-value" id="kpi-tp-count">0 / 6</div>
+              <p class="helper-text">Travaux pratiques VirtualBox / Hyper-V</p>
+            </div>
+            <div class="key-tile key-tile--neutral">
+              <span class="label">Environnement</span>
+              <div class="key-value">Win 11</div>
+              <p class="helper-text">Versions 23H2 / 24H2 x64</p>
+            </div>
+            <div class="key-tile key-tile--neutral">
+              <span class="label">Modèle WDF</span>
+              <div class="key-value">1.33 / 2.33</div>
+              <p class="helper-text">KMDF noyau &amp; UMDF utilisateur</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="mobile-chapter-bar" aria-label="Navigation rapide des chapitres">
+      <a href="#chapitre-1" class="mobile-chip is-active" data-nav="chapitre-1">Ch. 1 · Introduction</a>
+      <a href="#chapitre-2" class="mobile-chip" data-nav="chapitre-2">Ch. 2 · HAL &amp; Bus</a>
+      <a href="#chapitre-3" class="mobile-chip" data-nav="chapitre-3">Ch. 3 · WDM / WDF</a>
+      <a href="#chapitre-4" class="mobile-chip" data-nav="chapitre-4">Ch. 4 · Admin Win 11</a>
+      <a href="#chapitre-5" class="mobile-chip" data-nav="chapitre-5">Ch. 5 · Dépannage</a>
+      <a href="#chapitre-6" class="mobile-chip" data-nav="chapitre-6">Ch. 6 · Sécurité &amp; GPO</a>
+      <a href="#chapitre-7" class="mobile-chip" data-nav="chapitre-7">Ch. 7 · Glossaire &amp; Bilan</a>
+    </nav>
+
+    <div class="page-layout">
+      <aside class="side-nav" aria-label="Sommaire du cours">
+        <span class="label">Progression du module</span>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill" id="global-progress-bar"></div>
+        </div>
+        <p class="helper-text" id="global-progress-label">0 / 31 questions validées</p>
+
+        <ul class="side-nav-list">
+          <li><a href="#chapitre-1" class="side-nav-link is-active" data-nav="chapitre-1"><span class="side-nav-num">01</span><span>Périphériques &amp; Pilotes</span></a></li>
+          <li><a href="#chapitre-2" class="side-nav-link" data-nav="chapitre-2"><span class="side-nav-num">02</span><span>Architecture HAL &amp; Modes E/S</span></a></li>
+          <li><a href="#chapitre-3" class="side-nav-link" data-nav="chapitre-3"><span class="side-nav-num">03</span><span>Typologie WDM, KMDF &amp; UMDF</span></a></li>
+          <li><a href="#chapitre-4" class="side-nav-link" data-nav="chapitre-4"><span class="side-nav-num">04</span><span>Administration Windows 11</span></a></li>
+          <li><a href="#chapitre-5" class="side-nav-link" data-nav="chapitre-5"><span class="side-nav-num">05</span><span>Dépannage &amp; Fichiers .inf</span></a></li>
+          <li><a href="#chapitre-6" class="side-nav-link" data-nav="chapitre-6"><span class="side-nav-num">06</span><span>Sécurité &amp; GPO Entreprise</span></a></li>
+          <li><a href="#chapitre-7" class="side-nav-link" data-nav="chapitre-7"><span class="side-nav-num">07</span><span>Synthèse, Glossaire &amp; Sources</span></a></li>
+        </ul>
+
+        <div class="layer layer--nested">
+          <span class="label">Prérequis</span>
+          <p class="helper-text" style="margin-top: var(--space-xs);">Architecture des ordinateurs, Windows, réseaux et ligne de commande (VM VirtualBox / Hyper-V / VMware).</p>
+        </div>
+      </aside>
+
+      <main id="course-main">
+        <!-- ==================== CHAPITRE 1 ==================== -->
+        <section id="chapitre-1" class="chapter-section" aria-labelledby="ch1-title">
+          <div class="section-head">
+            <div>
+              <span class="label">Chapitre 01 — Fondamentaux</span>
+              <h2 id="ch1-title" class="headline">Introduction aux <strong>périphériques</strong> et aux <strong>pilotes</strong></h2>
+            </div>
+            <span class="tag">Objectif : Abstraction &amp; E/S</span>
+          </div>
+
+          <div class="chapter-objectives">
+            <span class="label">Objectifs pédagogiques</span>
+            <ul style="margin-top: var(--space-xs); margin-bottom: 0;">
+              <li>Définir précisément ce qu'est un périphérique informatique et un pilote (driver).</li>
+              <li>Expliquer le rôle d'intermédiaire du système d'exploitation (OS) entre les applications et le matériel.</li>
+              <li>Identifier les enjeux de la gestion des pilotes dans un parc informatique d'entreprise.</li>
+            </ul>
+          </div>
+
+          <div class="split-8-4">
+            <div>
+              <h3>1.1 Périphérique informatique et rôle de traducteur du pilote</h3>
+              <p>Un <strong>périphérique</strong> (ou appareil matériel) est tout composant matériel connecté à l'unité centrale (processeur et mémoire vive) via un <strong>bus interne</strong> (PCIe, SATA, M.2) ou un <strong>port externe</strong> (USB, HDMI, Ethernet, Bluetooth) permettant d'échanger des données avec le système informatique.</p>
+              <p>Selon la documentation Microsoft Learn (<em>What is a Driver?</em>), un <strong>pilote (driver)</strong> est un composant logiciel permettant au système d'exploitation et à un périphérique matériel de communiquer entre eux. Il agit comme un <strong>traducteur</strong> :</p>
+              <ul>
+                <li>Il reçoit des requêtes génériques d'entrée/sortie (E/S ou <em>I/O</em>) provenant de l'OS ou des applications (ex. : « imprimer cette page », « lire le secteur X du SSD »).</li>
+                <li>Il traduit ces requêtes en instructions matérielles spécifiques compréhensibles par le contrôleur du périphérique (registres, signaux électriques, commandes de bus).</li>
+              </ul>
+
+              <div class="notice">
+                <span class="label">Note importante — Pilotes logiciels (Software Drivers)</span>
+                <p style="margin-top: var(--space-xs); margin-bottom: 0;">Certains pilotes dits <em>pilotes logiciels</em> ne sont associés à aucun matériel physique. Ils s'exécutent en mode noyau (<code class="inline-code">.sys</code>) pour accéder à des structures protégées du système (ex. : outils de monitoring, hyperviseurs ou pilotes d'antivirus).</p>
+              </div>
+            </div>
+
+            <div class="layer">
+              <span class="label">Rôle d'arbitre de Windows 11</span>
+              <div class="ruled-list" style="margin-top: var(--space-sm);">
+                <div>
+                  <h4>Abstraction</h4>
+                  <p class="helper-text">Masque la diversité des composants matériels derrière des interfaces standardisées (API Win32, DirectX, spouleur d'impression).</p>
+                </div>
+                <div>
+                  <h4>Partage et arbitrage</h4>
+                  <p class="helper-text">Gère l'accès concurrent de plusieurs applications à un même périphérique (file d'attente d'impression, partage de la carte réseau).</p>
+                </div>
+                <div>
+                  <h4>Sécurité et stabilité</h4>
+                  <p class="helper-text">Contrôle les privilèges d'accès matériel afin qu'une application défaillante ne corrompe pas la mémoire ou les registres d'un périphérique.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulateur 1 -->
+          <div class="sim-box">
+            <div class="sim-header">
+              <div>
+                <span class="label">Simulateur 01 — Chaîne de communication E/S</span>
+                <h3 style="margin-top: var(--space-xs); margin-bottom: 0;">Traceur de requête Application → Matériel (IRP)</h3>
+              </div>
+              <div class="field-group" style="min-width: 260px;">
+                <label class="field-label" for="sim1-scenario">Scénario d'entrée/sortie</label>
+                <select id="sim1-scenario" class="field-select" onchange="updateSim1Scenario()">
+                  <option value="print_hp">Impression Word sur HP LaserJet (USB)</option>
+                  <option value="print_canon">Impression Word sur Canon Pixma (Réseau)</option>
+                  <option value="ssd_read">Lecture secteur SSD NVMe (PCIe)</option>
+                  <option value="soft_av">Sonde antivirus (Pilote logiciel sans matériel)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="split-5-7" style="margin-bottom: 0;">
+              <div class="arch-flow" id="sim1-stack">
+                <button type="button" class="arch-node is-active" onclick="selectSim1Layer(0)">
+                  <div>
+                    <span class="label">Couche 1</span>
+                    <strong>Application utilisateur</strong>
+                  </div>
+                  <span class="mono">Win32 / API</span>
+                </button>
+                <div class="arch-arrow">↓ Appel API standardisé</div>
+                <button type="button" class="arch-node" onclick="selectSim1Layer(1)">
+                  <div>
+                    <span class="label">Couche 2</span>
+                    <strong>Noyau Windows (I/O Manager)</strong>
+                  </div>
+                  <span class="mono">Requête IRP</span>
+                </button>
+                <div class="arch-arrow">↓ Transmission IRP</div>
+                <button type="button" class="arch-node" onclick="selectSim1Layer(2)">
+                  <div>
+                    <span class="label">Couche 3</span>
+                    <strong>Pilote (.sys)</strong>
+                  </div>
+                  <span class="mono">Traduction</span>
+                </button>
+                <div class="arch-arrow">↓ Commandes de bus</div>
+                <button type="button" class="arch-node" onclick="selectSim1Layer(3)">
+                  <div>
+                    <span class="label">Couche 4</span>
+                    <strong>Bus / Contrôleur</strong>
+                  </div>
+                  <span class="mono">PCIe / USB / IP</span>
+                </button>
+                <div class="arch-arrow">↓ Signaux physiques</div>
+                <button type="button" class="arch-node" onclick="selectSim1Layer(4)">
+                  <div>
+                    <span class="label">Couche 5</span>
+                    <strong>Périphérique matériel</strong>
+                  </div>
+                  <span class="mono">Cible</span>
+                </button>
+              </div>
+
+              <div class="sim-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+                  <span class="label" id="sim1-layer-badge">Couche 1 / 5 — Application</span>
+                  <div class="btn-row">
+                    <button type="button" class="btn btn--ghost btn--compact" onclick="stepSim1(-1)">Précédent</button>
+                    <button type="button" class="btn btn--primary btn--compact" onclick="stepSim1(1)">Étape suivante</button>
+                  </div>
+                </div>
+                <h4 id="sim1-detail-title" style="margin-top: 0;">Appel générique depuis l'application</h4>
+                <p id="sim1-detail-desc"></p>
+                <div class="terminal-window" id="sim1-trace"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TP 1 -->
+          <div class="tp-box">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <div>
+                <span class="label">Manipulation pratique en VM — TP 1</span>
+                <h4 style="margin-top: var(--space-xs);">Observer la détection initiale des périphériques virtuels</h4>
+              </div>
+              <button type="button" class="btn btn--secondary btn--compact" id="tp-btn-1" onclick="toggleTpDone(1)">Marquer TP 1 réalisé</button>
+            </div>
+            <ol style="margin-top: var(--space-sm);">
+              <li>Démarrer la machine virtuelle Windows 11 (VirtualBox ou Hyper-V).</li>
+              <li>Ouvrir le menu Démarrer, taper <code class="inline-code">devmgmt.msc</code> et valider par Entrée pour lancer le <strong>Gestionnaire de périphériques</strong>.</li>
+              <li>Déplier les catégories <strong>Cartes réseau</strong> et <strong>Cartes graphiques</strong>.</li>
+              <li>Effectuer un clic droit sur la carte réseau virtuelle → <strong>Propriétés</strong> → onglet <strong>Pilote</strong> → cliquer sur <strong>Détails du pilote</strong> pour observer les fichiers <code class="inline-code">.sys</code> chargés.</li>
+            </ol>
+          </div>
+
+          <!-- Exercices Chapitre 1 -->
+          <h3>1.2 Exercices d'application (Chapitre 1)</h3>
+          <div class="card-grid">
+            <article class="exercise-card">
+              <span class="label">Exercice 1.1</span>
+              <h4>Rôle du pilote et abstraction</h4>
+              <p>Un développeur crée une application de traitement de texte sous Windows 11. Doit-il écrire un code différent pour imprimer sur une imprimante HP LaserJet et sur une imprimante Canon Pixma ? Justifiez votre réponse.</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-1-1', this)">Afficher le corrigé</button>
+              <div id="corr-1-1" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Non. L'application utilise les API standardisées de Windows (couche d'abstraction). Le système d'exploitation transmet la tâche au spouleur d'impression puis au pilote spécifique installé (HP ou Canon). C'est le pilote qui traduit les commandes génériques en langage propre à chaque imprimante.</p>
+              </div>
+            </article>
+
+            <article class="exercise-card">
+              <span class="label">Exercice 1.2</span>
+              <h4>Pilote matériel vs pilote logiciel</h4>
+              <p>Lors d'un audit sur un poste Windows 11, vous repérez un fichier <code class="inline-code">.sys</code> appartenant à un logiciel de virtualisation ou de surveillance système, sans carte d'extension physique associée. S'agit-il d'une anomalie ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-1-2', this)">Afficher le corrigé</button>
+              <div id="corr-1-2" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Non, il ne s'agit pas d'une anomalie. C'est un <strong>pilote logiciel (software driver)</strong> qui s'exécute en mode noyau pour accéder à des données ou fonctions protégées du système d'exploitation sans être lié à un périphérique matériel physique.</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Quiz Chapitre 1 -->
+          <div class="quiz-block" id="quiz-ch1"></div>
+        </section>
+
+        <!-- ==================== CHAPITRE 2 ==================== -->
+        <section id="chapitre-2" class="chapter-section" aria-labelledby="ch2-title">
+          <div class="section-head">
+            <div>
+              <span class="label">Chapitre 02 — Architecture Matérielle &amp; Couches</span>
+              <h2 id="ch2-title" class="headline">Fondamentaux matériels, <strong>HAL</strong> et modes de communication</h2>
+            </div>
+            <span class="tag">Objectif : Bus, Pile IRP &amp; DMA</span>
+          </div>
+
+          <div class="chapter-objectives">
+            <span class="label">Objectifs pédagogiques</span>
+            <ul style="margin-top: var(--space-xs); margin-bottom: 0;">
+              <li>Comprendre l'architecture en couches de Windows et le rôle de la HAL (<em>Hardware Abstraction Layer</em>).</li>
+              <li>Classer les périphériques selon leurs fonctions et leurs bus de connexion.</li>
+              <li>Comparer les 4 principaux modes de communication entre le processeur et les périphériques.</li>
+            </ul>
+          </div>
+
+          <div class="split-8-4">
+            <div>
+              <h3>2.1 Couche HAL et pile de pilotes (Driver Stack)</h3>
+              <p>Pour garantir la portabilité de Windows sur des milliers de configurations matérielles (Intel, AMD, ARM64), le système s'appuie sur la <strong>HAL (Hardware Abstraction Layer)</strong>, contenue dans <code class="inline-code">hal.dll</code>. Située entre le noyau et le matériel physique, elle masque les différences entre les cartes mères, les contrôleurs d'interruptions (APIC) et les horloges système.</p>
+              <p>Sous Windows, une requête d'E/S (<strong>IRP</strong> — <em>I/O Request Packet</em>) traverse une pile verticale de pilotes :</p>
+              <ol>
+                <li><strong>Pilote de filtre supérieur (Upper Filter) :</strong> ajoute des fonctions auxiliaires (chiffrement, journalisation, blocage antivirus).</li>
+                <li><strong>Pilote de fonction (Function Driver) :</strong> pilote principal qui gère les opérations du périphérique (ex. <code class="inline-code">usbstor.sys</code>).</li>
+                <li><strong>Pilote de filtre inférieur (Lower Filter) :</strong> modifie ou surveille les requêtes juste avant l'envoi au bus.</li>
+                <li><strong>Pilote de bus (Bus Driver) :</strong> gère le contrôleur du bus (<code class="inline-code">pci.sys</code>, <code class="inline-code">usbhub3.sys</code>) et détecte les appareils branchés.</li>
+              </ol>
+            </div>
+
+            <div class="layer">
+              <span class="label">Typologie des 6 familles de périphériques</span>
+              <div class="ruled-list" style="margin-top: var(--space-sm);">
+                <div><strong>Entrée :</strong> <span class="helper-text">Clavier, souris, scanner, microphone, webcam (norme USB HID / UVC).</span></div>
+                <div><strong>Sortie :</strong> <span class="helper-text">Écran, imprimante, haut-parleurs.</span></div>
+                <div><strong>Stockage (E/S) :</strong> <span class="helper-text">Disques SATA, SSD NVMe/PCIe, clés USB, lecteurs optiques.</span></div>
+                <div><strong>Réseau :</strong> <span class="helper-text">Cartes Ethernet (RJ45), Wi-Fi/Bluetooth (M.2 / PCIe / USB).</span></div>
+                <div><strong>Affichage :</strong> <span class="helper-text">Cartes graphiques intégrées (iGPU) ou dédiées (dGPU PCIe x16).</span></div>
+                <div><strong>Contrôleurs USB :</strong> <span class="helper-text">Contrôleurs hôtes xHCI (USB 3.x / USB4) gérant l'énumération Plug and Play.</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tableau comparatif officiel -->
+          <h3>2.2 Tableau comparatif des 4 modes de communication CPU ↔ Périphériques</h3>
+          <div class="table-wrap">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>Mode</th>
+                  <th>Principe de fonctionnement</th>
+                  <th>Charge CPU</th>
+                  <th>Débit / Latence</th>
+                  <th>Exemples d'usage typique</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Polling (Scrutation)</strong></td>
+                  <td>Le CPU vérifie en boucle l'état du périphérique (E/S programmées)</td>
+                  <td>Très élevée</td>
+                  <td>Latence variable</td>
+                  <td>Ports série simples, capteurs bas niveau</td>
+                </tr>
+                <tr>
+                  <td><strong>Interruptions (IRQ / MSI-X)</strong></td>
+                  <td>Le périphérique alerte le CPU à la demande (routine ISR)</td>
+                  <td>Faible à modérée</td>
+                  <td>Faible latence (réactif)</td>
+                  <td>Clavier, souris, carte son, événements réseau</td>
+                </tr>
+                <tr>
+                  <td><strong>DMA (Accès Direct Mémoire)</strong></td>
+                  <td>Transfert direct Périphérique ↔ RAM sans solliciter le CPU par octet</td>
+                  <td>Très faible</td>
+                  <td>Très haut débit</td>
+                  <td>SSD NVMe, cartes graphiques, Ethernet Gigabit</td>
+                </tr>
+                <tr>
+                  <td><strong>MMIO (E/S mappées mémoire)</strong></td>
+                  <td>Registres matériels vus comme des adresses RAM (vs Port I/O IN/OUT)</td>
+                  <td>Faible</td>
+                  <td>Accès très rapide</td>
+                  <td>Cartes PCIe modernes, contrôleurs USB xHCI</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Simulateur 2 : Comparateur CPU / DMA / Polling / IRQ / MMIO -->
+          <div class="sim-box">
+            <div class="sim-header">
+              <div>
+                <span class="label">Simulateur 02 — Dynamique des échanges matériels</span>
+                <h3 style="margin-top: var(--space-xs); margin-bottom: 0;">Impact CPU, latence et débit selon le mode de communication</h3>
+              </div>
+              <div class="field-group" style="min-width: 260px;">
+                <label class="field-label" for="sim2-device">Périphérique à tester</label>
+                <select id="sim2-device" class="field-select" onchange="updateSim2()">
+                  <option value="nvme">SSD NVMe PCIe (3 500 Mo/s)</option>
+                  <option value="keyboard">Clavier USB HID (frappes ponctuelles)</option>
+                  <option value="nic">Carte Ethernet Gigabit (paquets continus)</option>
+                  <option value="serial">Capteur série RS-232 bas débit</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="btn-row" style="margin-bottom: var(--space-md);" role="group" aria-label="Choisir le mode de communication">
+              <button type="button" class="btn btn--ghost btn--compact sim2-mode-btn" data-mode="polling" onclick="setSim2Mode('polling')">Polling (Scrutation)</button>
+              <button type="button" class="btn btn--ghost btn--compact sim2-mode-btn" data-mode="irq" onclick="setSim2Mode('irq')">Interruptions (IRQ / MSI-X)</button>
+              <button type="button" class="btn btn--primary btn--compact sim2-mode-btn" data-mode="dma" onclick="setSim2Mode('dma')">DMA (Accès Direct Mémoire)</button>
+              <button type="button" class="btn btn--ghost btn--compact sim2-mode-btn" data-mode="mmio" onclick="setSim2Mode('mmio')">MMIO (Registres en RAM)</button>
+            </div>
+
+            <div class="split-8-4" style="margin-bottom: 0;">
+              <div class="chart-box">
+                <span class="label">Comparaison relative (indice 0–100) — <span id="sim2-chart-subtitle">SSD NVMe</span></span>
+                <canvas id="sim2-chart" aria-label="Graphique comparant la charge CPU, le débit et la réactivité"></canvas>
+              </div>
+              <div class="sim-panel">
+                <span class="label" id="sim2-verdict-tag">Architecture optimale</span>
+                <h4 id="sim2-verdict-title" style="margin-top: var(--space-xs);">Analyse matérielle</h4>
+                <p id="sim2-verdict-text"></p>
+                <div class="ruled-list" style="margin-top: var(--space-md);">
+                  <div><span class="label">Charge CPU estimée</span><div class="key-value" id="sim2-kpi-cpu">4 %</div></div>
+                  <div><span class="label">Efficacité sur ce périphérique</span><div class="key-value" id="sim2-kpi-eff">Optimale</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TP 2 -->
+          <div class="tp-box">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <div>
+                <span class="label">Manipulation pratique en VM — TP 2</span>
+                <h4 style="margin-top: var(--space-xs);">Explorer les ressources matérielles (IRQ, plages MMIO, DMA)</h4>
+              </div>
+              <button type="button" class="btn btn--secondary btn--compact" id="tp-btn-2" onclick="toggleTpDone(2)">Marquer TP 2 réalisé</button>
+            </div>
+            <ol style="margin-top: var(--space-sm);">
+              <li>Dans la VM Windows 11, ouvrir le Gestionnaire de périphériques (<code class="inline-code">devmgmt.msc</code>).</li>
+              <li>Dans le menu du haut, cliquer sur <strong>Affichage</strong> → <strong>Ressources par type</strong>.</li>
+              <li>Déplier <strong>Requête d'interruption (IRQ)</strong> et <strong>Mémoire</strong> : observer les adresses hexadécimales attribuées au contrôleur USB, à la carte réseau et au contrôleur de stockage.</li>
+              <li>Repérer la mention <strong>MSI</strong> (numéros IRQ négatifs sous Windows, ex. <code class="inline-code">-2</code>, <code class="inline-code">-3</code>) utilisée par les périphériques PCIe modernes.</li>
+            </ol>
+          </div>
+
+          <!-- Exercices Chapitre 2 -->
+          <h3>2.3 Exercices d'application (Chapitre 2)</h3>
+          <div class="card-grid">
+            <article class="exercise-card">
+              <span class="label">Exercice 2.1</span>
+              <h4>Choix du mode de communication (SSD NVMe)</h4>
+              <p>Pourquoi un SSD NVMe transférant des données à 3 500 Mo/s ne peut-il pas fonctionner efficacement en mode <em>Polling</em> pur ? Quel mécanisme matériel utilise-t-il principalement ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-2-1', this)">Afficher le corrigé</button>
+              <div id="corr-2-1" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> En <em>Polling</em>, le processeur serait saturé à 100 % à attendre et copier chaque mot de donnée, effondrant les performances globales du système. Le SSD NVMe utilise le <strong>DMA</strong> pour écrire directement dans la RAM et des interruptions <strong>MSI-X</strong> pour signaler au CPU la fin des transferts par lots.</p>
+              </div>
+            </article>
+
+            <article class="exercise-card">
+              <span class="label">Exercice 2.2</span>
+              <h4>Rôle de la pile de pilotes (Driver Stack)</h4>
+              <p>Un logiciel de sécurité d'entreprise bloque l'écriture sur les clés USB tout en autorisant la lecture. À quel niveau de la pile de pilotes ce composant logiciel s'insère-t-il généralement ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-2-2', this)">Afficher le corrigé</button>
+              <div id="corr-2-2" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Il s'insère en tant que <strong>pilote de filtre</strong> (<em>Upper Filter</em> ou <em>Lower Filter</em>) au-dessus ou au-dessous du pilote de fonction de stockage USB (<code class="inline-code">usbstor.sys</code>). Il inspecte les requêtes IRP d'écriture et les rejette sans avoir à réécrire le pilote USB complet.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="quiz-block" id="quiz-ch2"></div>
+        </section>
+
+        <!-- ==================== CHAPITRE 3 ==================== -->
+        <section id="chapitre-3" class="chapter-section" aria-labelledby="ch3-title">
+          <div class="section-head">
+            <div>
+              <span class="label">Chapitre 03 — Modèles &amp; Isolation</span>
+              <h2 id="ch3-title" class="headline">Typologie des pilotes : <strong>Ring 0 vs Ring 3</strong>, WDM, KMDF et UMDF</h2>
+            </div>
+            <span class="tag">Windows 11 : KMDF 1.33 / UMDF 2.33</span>
+          </div>
+
+          <div class="chapter-objectives">
+            <span class="label">Objectifs pédagogiques</span>
+            <ul style="margin-top: var(--space-xs); margin-bottom: 0;">
+              <li>Distinguer les pilotes s'exécutant en mode noyau (<em>Kernel Mode</em>) de ceux en mode utilisateur (<em>User Mode</em>).</li>
+              <li>Différencier les pilotes de classe (<em>inbox</em>) et les pilotes constructeurs (OEM / IHV).</li>
+              <li>Comprendre l'évolution de WDM vers WDF (KMDF et UMDF) et le rôle de la signature numérique WHQL.</li>
+            </ul>
+          </div>
+
+          <div class="split-8-4">
+            <div>
+              <h3>3.1 Anneaux de protection et cadres WDF</h3>
+              <p>Les processeurs x86/x64 séparent les privilèges d'exécution en anneaux de protection (<em>Rings</em>) :</p>
+              <ul>
+                <li><strong>Mode Noyau (Ring 0) :</strong> les pilotes partagent l'espace mémoire protégé du noyau Windows. Accès direct au matériel et performances maximales, mais une erreur critique déclenche un écran bleu (<strong>BSOD</strong> — <em>Blue Screen of Death</em>).</li>
+                <li><strong>Mode Utilisateur (Ring 3) :</strong> le pilote s'exécute dans un processus isolé (<code class="inline-code">WUDFHost.exe</code>) avec accès restreint via API. S'il plante, seul son processus redémarre sans faire tomber Windows.</li>
+              </ul>
+              <p>Windows 11 privilégie le modèle moderne <strong>WDF (Windows Driver Frameworks)</strong> au modèle historique <strong>WDM</strong> (qui imposait de recoder manuellement le <em>Plug and Play</em> et l'alimentation) :</p>
+              <ul>
+                <li><strong>KMDF 1.33 (Kernel-Mode Driver Framework) :</strong> pour cartes graphiques, contrôleurs réseau et stockage nécessitant interruptions directes ou DMA.</li>
+                <li><strong>UMDF 2.33 (User-Mode Driver Framework) :</strong> pour lecteurs biométriques, appareils photo PTP/MTP, capteurs et périphériques USB simples.</li>
+              </ul>
+            </div>
+
+            <div class="layer">
+              <span class="label">Certification &amp; Signature WHQL</span>
+              <p style="margin-top: var(--space-sm);">Windows 11 64 bits impose que les pilotes en mode noyau soient signés numériquement par Microsoft (programme <strong>WHQL</strong> ou signature par attestation Partner Center) via un fichier catalogue <code class="inline-code">.cat</code>.</p>
+              <div class="ruled-list">
+                <div><strong>1. Authenticité</strong><p class="helper-text">Garantit que le pilote provient bien de l'éditeur identifié.</p></div>
+                <div><strong>2. Intégrité</strong><p class="helper-text">Vérifie les empreintes cryptographiques : toute modification d'un <code class="inline-code">.sys</code> ou <code class="inline-code">.inf</code> invalide la signature.</p></div>
+                <div><strong>3. Inbox vs OEM</strong><p class="helper-text">Les pilotes de classe génériques (<code class="inline-code">usbstor.sys</code>, <code class="inline-code">hidclass.sys</code>) sont intégrés à Windows ; les constructeurs fournissent les fonctions avancées.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tableau WDM vs KMDF vs UMDF -->
+          <div class="table-wrap">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>Critère</th>
+                  <th>WDM (Hérité)</th>
+                  <th>KMDF (WDF Noyau)</th>
+                  <th>UMDF (WDF Utilisateur)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Niveau d'exécution</strong></td>
+                  <td>Mode Noyau (Ring 0)</td>
+                  <td>Mode Noyau (Ring 0)</td>
+                  <td>Mode Utilisateur (Ring 3)</td>
+                </tr>
+                <tr>
+                  <td><strong>Stabilité système</strong></td>
+                  <td>Risque élevé de BSOD</td>
+                  <td>Risque réduit (garde-fous WDF)</td>
+                  <td>Très élevée (isolation <code class="inline-code">WUDFHost.exe</code>)</td>
+                </tr>
+                <tr>
+                  <td><strong>Accès interruptions / DMA</strong></td>
+                  <td>Direct</td>
+                  <td>Direct</td>
+                  <td>Indirect (via couche noyau)</td>
+                </tr>
+                <tr>
+                  <td><strong>Complexité de développement</strong></td>
+                  <td>Élevée (gestion manuelle PnP)</td>
+                  <td>Modérée (modèle objet WDF)</td>
+                  <td>Plus simple et débogage aisé</td>
+                </tr>
+                <tr>
+                  <td><strong>Version sous Windows 11</strong></td>
+                  <td>Maintenu pour compatibilité</td>
+                  <td>KMDF 1.33</td>
+                  <td>UMDF 2.33</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Simulateur 3 : Ring 0 BSOD vs Ring 3 Isolation -->
+          <div class="sim-box">
+            <div class="sim-header">
+              <div>
+                <span class="label">Simulateur 03 — Isolation &amp; Stabilité</span>
+                <h3 style="margin-top: var(--space-xs); margin-bottom: 0;">Laboratoire Ring 0 (KMDF) vs Ring 3 (UMDF) &amp; Vérification WHQL</h3>
+              </div>
+              <div class="btn-row">
+                <button type="button" class="btn btn--primary btn--compact" onclick="triggerRingFault('ring0')">Injecter bogue Ring 0 (KMDF)</button>
+                <button type="button" class="btn btn--secondary btn--compact" onclick="triggerRingFault('ring3')">Injecter bogue Ring 3 (UMDF)</button>
+                <button type="button" class="btn btn--ghost btn--compact" onclick="triggerRingFault('tamper')">Altérer fichier .inf signé</button>
+              </div>
+            </div>
+
+            <div id="sim3-output" class="sim-panel">
+              <span class="label">État nominal — Windows 11 x64</span>
+              <h4 style="margin-top: var(--space-xs);">Tous les pilotes sont opérationnels et signés WHQL</h4>
+              <p class="helper-text">Cliquez sur un des scénarios ci-dessus pour observer la différence comportementale entre un plantage en mode noyau (Ring 0), un plantage isolé en mode utilisateur (Ring 3), et une rupture d'intégrité de signature numérique.</p>
+            </div>
+          </div>
+
+          <!-- TP 3 -->
+          <div class="tp-box">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <div>
+                <span class="label">Manipulation pratique en VM — TP 3</span>
+                <h4 style="margin-top: var(--space-xs);">Identifier des pilotes en mode noyau et en mode utilisateur</h4>
+              </div>
+              <button type="button" class="btn btn--secondary btn--compact" id="tp-btn-3" onclick="toggleTpDone(3)">Marquer TP 3 réalisé</button>
+            </div>
+            <ol style="margin-top: var(--space-sm);">
+              <li>Ouvrir PowerShell ou l'Invite de commandes en tant qu'administrateur.</li>
+              <li>Lister les pilotes actifs avec la commande : <code class="inline-code">driverquery /v /fo table</code></li>
+              <li>Repérer dans la colonne <strong>Driver Type</strong> les pilotes de type <code class="inline-code">Kernel</code> et <code class="inline-code">File System</code>.</li>
+              <li>Dans le Gestionnaire de tâches (<code class="inline-code">Ctrl + Maj + Échap</code>) → onglet <strong>Détails</strong>, vérifier la présence du processus <code class="inline-code">WUDFHost.exe</code> (hôte des pilotes UMDF).</li>
+            </ol>
+          </div>
+
+          <!-- Exercices Chapitre 3 -->
+          <h3>3.2 Exercices d'application (Chapitre 3)</h3>
+          <div class="card-grid">
+            <article class="exercise-card">
+              <span class="label">Exercice 3.1</span>
+              <h4>Choix entre KMDF et UMDF</h4>
+              <p>Un constructeur conçoit un nouveau lecteur d'empreintes digitales USB pour ordinateurs portables et souhaite éviter tout risque d'écran bleu (BSOD) sur les postes Windows 11. Quel framework WDF doit-il privilégier et pourquoi ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-3-1', this)">Afficher le corrigé</button>
+              <div id="corr-3-1" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Il doit privilégier <strong>UMDF (User-Mode Driver Framework)</strong>. Le pilote s'exécutera en mode utilisateur (Ring 3) dans <code class="inline-code">WUDFHost.exe</code> : en cas d'erreur logicielle du pilote, seul le service du lecteur d'empreintes redémarrera sans provoquer de BSOD sur Windows 11.</p>
+              </div>
+            </article>
+
+            <article class="exercise-card">
+              <span class="label">Exercice 3.2</span>
+              <h4>Conséquence d'une altération de fichier .inf</h4>
+              <p>Un technicien modifie manuellement un paramètre dans un fichier <code class="inline-code">.inf</code> d'un package pilote signé WHQL avant de l'installer sur Windows 11 64 bits. Que va-t-il se passer lors de l'installation ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-3-2', this)">Afficher le corrigé</button>
+              <div id="corr-3-2" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> La signature numérique du package est invalidée car l'empreinte cryptographique du fichier <code class="inline-code">.inf</code> ne correspond plus à celle enregistrée dans le fichier catalogue <code class="inline-code">.cat</code>. Windows 11 bloquera le chargement du pilote en mode noyau (ou affichera une alerte critique de signature invalide).</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="quiz-block" id="quiz-ch3"></div>
+        </section>
+
+        <!-- ==================== CHAPITRE 4 ==================== -->
+        <section id="chapitre-4" class="chapter-section" aria-labelledby="ch4-title">
+          <div class="section-head">
+            <div>
+              <span class="label">Chapitre 04 — Exploitation &amp; Outils CLI/GUI</span>
+              <h2 id="ch4-title" class="headline">Administration avancée des pilotes sous <strong>Windows 11</strong></h2>
+            </div>
+            <span class="tag">Driver Store · PnPUtil · HVCI</span>
+          </div>
+
+          <div class="chapter-objectives">
+            <span class="label">Objectifs pédagogiques</span>
+            <ul style="margin-top: var(--space-xs); margin-bottom: 0;">
+              <li>Utiliser le Gestionnaire de périphériques et identifier un composant inconnu via son ID matériel (VID/PID, VEN/DEV).</li>
+              <li>Gérer le cycle de vie d'un pilote : installation, Windows Update, retour arrière (<em>Roll Back</em>) et purge du Driver Store.</li>
+              <li>Maîtriser les outils en ligne de commande (<code class="inline-code">pnputil</code>, <code class="inline-code">driverquery</code>, PowerShell) et comprendre Secure Boot / HVCI.</li>
+            </ul>
+          </div>
+
+          <div class="split-8-4">
+            <div>
+              <h3>4.1 Driver Store et cycle de vie d'un pilote</h3>
+              <p>Windows 11 ne copie pas de fichiers épars lors d'une installation : tout package pilote doit d'abord être préchargé (<em>staged</em>) et validé dans le <strong>Driver Store</strong> (<code class="inline-code">C:\Windows\System32\DriverStore\FileRepository</code>).</p>
+              <ul>
+                <li><strong>Windows Update (Mises à jour facultatives) :</strong> dans <em>Paramètres &gt; Windows Update &gt; Options avancées &gt; Mises à jour facultatives</em>, Windows propose des pilotes certifiés sans les imposer automatiquement s'ils ne sont pas critiques.</li>
+                <li><strong>Retour arrière (Roll Back Driver) :</strong> onglet <em>Pilote &gt; Revenir à la version précédente</em> restaure l'ancien package conservé dans le Driver Store.</li>
+                <li><strong>Désinstallation complète :</strong> cocher <em>« Tenter de supprimer le pilote pour cet appareil »</em> lors de la désinstallation pour éviter la réinstallation automatique au redémarrage.</li>
+              </ul>
+            </div>
+
+            <div class="layer">
+              <span class="label">Sécurité Windows 11 : Secure Boot &amp; HVCI</span>
+              <div class="ruled-list" style="margin-top: var(--space-sm);">
+                <div>
+                  <h4>Secure Boot (UEFI)</h4>
+                  <p class="helper-text">Vérifie la signature du chargeur de démarrage et du noyau avant le lancement de Windows pour bloquer les <em>bootkits</em>.</p>
+                </div>
+                <div>
+                  <h4>Intégrité de la mémoire (HVCI)</h4>
+                  <p class="helper-text"><em>Hypervisor-Protected Code Integrity</em> (Isolation du noyau) utilise la virtualisation matérielle pour vérifier les signatures en mode hyperviseur. Un pilote ancien non compatible HVCI est bloqué.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tableau outils CLI & GUI -->
+          <h3>4.2 Boîte à outils d'administration et de diagnostic</h3>
+          <div class="table-wrap">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>Outil</th>
+                  <th>Mode</th>
+                  <th>Syntaxe / Commande exacte</th>
+                  <th>Rôle principal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>PnPUtil (Liste)</strong></td>
+                  <td>CLI (Admin)</td>
+                  <td><code class="mono">pnputil /enum-drivers</code></td>
+                  <td>Lister les pilotes tiers présents dans le Driver Store (<code class="inline-code">oemX.inf</code>)</td>
+                </tr>
+                <tr>
+                  <td><strong>PnPUtil (Ajout)</strong></td>
+                  <td>CLI (Admin)</td>
+                  <td><code class="mono">pnputil /add-driver "C:\Pilotes\*.inf" /subdirs /install</code></td>
+                  <td>Injecter et installer des pilotes dans le Driver Store</td>
+                </tr>
+                <tr>
+                  <td><strong>PnPUtil (Suppr.)</strong></td>
+                  <td>CLI (Admin)</td>
+                  <td><code class="mono">pnputil /delete-driver oem12.inf /uninstall /force</code></td>
+                  <td>Désinstaller et supprimer définitivement un pilote tiers du Driver Store</td>
+                </tr>
+                <tr>
+                  <td><strong>driverquery</strong></td>
+                  <td>CLI</td>
+                  <td><code class="mono">driverquery /si</code></td>
+                  <td>Afficher les pilotes signés et leur statut de signature</td>
+                </tr>
+                <tr>
+                  <td><strong>PowerShell</strong></td>
+                  <td>CLI</td>
+                  <td><code class="mono">Get-PnpDevice -Status Error</code></td>
+                  <td>Lister tous les périphériques en erreur sous Windows 11</td>
+                </tr>
+                <tr>
+                  <td><strong>msinfo32</strong></td>
+                  <td>GUI</td>
+                  <td><code class="mono">msinfo32</code></td>
+                  <td>Informations système complètes (Ressources, Conflits/Partage, Pilotes)</td>
+                </tr>
+                <tr>
+                  <td><strong>DxDiag</strong></td>
+                  <td>GUI</td>
+                  <td><code class="mono">dxdiag</code></td>
+                  <td>Diagnostic vidéo, audio, DirectX et versions des pilotes graphiques</td>
+                </tr>
+                <tr>
+                  <td><strong>Observateur d'événements</strong></td>
+                  <td>GUI</td>
+                  <td><code class="mono">eventvwr.msc</code></td>
+                  <td>Journaux <em>Kernel-PnP</em> et fichier <code class="inline-code">C:\Windows\INF\setupapi.dev.log</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Simulateur 4 : Décodeur VID/PID & Terminal Windows 11 -->
+          <div class="sim-box">
+            <div class="sim-header">
+              <div>
+                <span class="label">Simulateur 04 — Identification &amp; Console Admin</span>
+                <h3 style="margin-top: var(--space-xs); margin-bottom: 0;">Décodeur Hardware ID (VID/PID, VEN/DEV) &amp; Terminal PnPUtil / PowerShell</h3>
+              </div>
+            </div>
+
+            <div class="tab-bar" role="tablist">
+              <button type="button" class="tab-btn is-active" id="sim4-tab-id" onclick="switchSim4Tab('id')">1. Décodeur VID/PID &amp; VEN/DEV</button>
+              <button type="button" class="tab-btn" id="sim4-tab-cli" onclick="switchSim4Tab('cli')">2. Terminal Windows 11 (Admin)</button>
+            </div>
+
+            <div id="sim4-panel-id">
+              <div class="field-row" style="margin-bottom: var(--space-md);">
+                <div class="field-group" style="flex: 1 1 280px;">
+                  <label class="field-label" for="hwid-preset">Exemples d'identifiants matériels du cours</label>
+                  <select id="hwid-preset" class="field-select" onchange="applyHwidPreset(this.value)">
+                    <option value="PCI\VEN_8086&DEV_2725&SUBSYS_00248086">PCI\VEN_8086&amp;DEV_2725&amp;SUBSYS_00248086 (Wi-Fi inconnu)</option>
+                    <option value="USB\VID_046D&PID_C52B">USB\VID_046D&amp;PID_C52B (Récepteur Logitech)</option>
+                    <option value="PCI\VEN_10EC&DEV_8168">PCI\VEN_10EC&amp;DEV_8168 (Contrôleur Ethernet)</option>
+                    <option value="PCI\VEN_10DE&DEV_2684">PCI\VEN_10DE&amp;DEV_2684 (Carte graphique dédiée)</option>
+                    <option value="USB\VID_0951&PID_1666">USB\VID_0951&amp;PID_1666 (Clé USB chiffrée DSI)</option>
+                  </select>
+                </div>
+                <div class="field-group" style="flex: 1 1 280px;">
+                  <label class="field-label" for="hwid-input">Chaîne Hardware ID à analyser</label>
+                  <input id="hwid-input" class="field-input mono" type="text" value="PCI\VEN_8086&amp;DEV_2725&amp;SUBSYS_00248086" oninput="decodeHardwareId(this.value)">
+                </div>
+              </div>
+              <div class="sim-panel" id="hwid-result"></div>
+            </div>
+
+            <div id="sim4-panel-cli" style="display: none;">
+              <p class="helper-text" style="margin-bottom: var(--space-sm);">Exécutez une commande d'administration ou testez une syntaxe du cours :</p>
+              <div class="btn-row" style="margin-bottom: var(--space-md);">
+                <button type="button" class="btn btn--ghost btn--compact" onclick="runCliCmd('pnputil /enum-drivers')">pnputil /enum-drivers</button>
+                <button type="button" class="btn btn--ghost btn--compact" onclick="runCliCmd('pnputil /delete-driver oem24.inf /uninstall /force')">Purger oem24.inf</button>
+                <button type="button" class="btn btn--ghost btn--compact" onclick="runCliCmd('pnputil /export-driver * C:\\BackupPilotes')">Exporter pilotes</button>
+                <button type="button" class="btn btn--ghost btn--compact" onclick="runCliCmd('driverquery /si')">driverquery /si</button>
+                <button type="button" class="btn btn--ghost btn--compact" onclick="runCliCmd('Get-PnpDevice -Status Error')">Get-PnpDevice -Status Error</button>
+              </div>
+              <div class="field-row" style="margin-bottom: var(--space-md);">
+                <div class="field-group" style="flex: 1 1 320px;">
+                  <label class="field-label" for="cli-input">Invite PowerShell Administrateur</label>
+                  <input id="cli-input" class="field-input mono" type="text" value="pnputil /enum-drivers" onkeydown="if(event.key==='Enter'){runCliCmd(this.value);}">
+                </div>
+                <button type="button" class="btn btn--primary btn--compact" onclick="runCliCmd(document.getElementById('cli-input').value)">Exécuter</button>
+              </div>
+              <div class="terminal-window" id="cli-output" style="min-height: 190px;"></div>
+            </div>
+          </div>
+
+          <!-- TP 4 -->
+          <div class="tp-box">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <div>
+                <span class="label">Manipulation pratique en VM — TP 4</span>
+                <h4 style="margin-top: var(--space-xs);">Auditer le Driver Store et identifier les périphériques en erreur</h4>
+              </div>
+              <button type="button" class="btn btn--secondary btn--compact" id="tp-btn-4" onclick="toggleTpDone(4)">Marquer TP 4 réalisé</button>
+            </div>
+            <ol style="margin-top: var(--space-sm);">
+              <li>Ouvrir le Terminal Windows (en mode Administrateur).</li>
+              <li>Exécuter <code class="inline-code">pnputil /enum-drivers &gt; C:\Temp\inventaire_pilotes.txt</code> et repérer les fichiers <code class="inline-code">oem*.inf</code>.</li>
+              <li>Exécuter <code class="inline-code">Get-PnpDevice | Where-Object {$_.Status -ne "OK"}</code> en PowerShell pour vérifier si un périphérique est en défaut.</li>
+              <li>Lancer <code class="inline-code">dxdiag</code> pour noter version et date du pilote graphique, puis vérifier <code class="inline-code">msinfo32</code> (<em>Composants &gt; Périphériques à problème</em>).</li>
+            </ol>
+          </div>
+
+          <!-- Exercices Chapitre 4 -->
+          <h3>4.3 Exercices d'application (Chapitre 4)</h3>
+          <div class="card-grid">
+            <article class="exercise-card">
+              <span class="label">Exercice 4.1</span>
+              <h4>Identification d'un périphérique inconnu</h4>
+              <p>Après réinstallation de Windows 11 sur un PC portable, un « Contrôleur de réseau » reste sans pilote et affiche <code class="inline-code">PCI\VEN_8086&amp;DEV_2725&amp;SUBSYS_00248086</code>. Comment trouver le pilote exact sans outil tiers douteux ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-4-1', this)">Afficher le corrigé</button>
+              <div id="corr-4-1" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> <code class="inline-code">VEN_8086</code> correspond à <strong>Intel</strong> et <code class="inline-code">DEV_2725</code> correspond à la carte Wi-Fi <strong>Intel Wi-Fi 6E AX210</strong>. Le technicien doit télécharger le pilote officiel sur le portail du constructeur du PC portable (Dell, HP, Lenovo…) ou sur le centre de téléchargement Intel.</p>
+              </div>
+            </article>
+
+            <article class="exercise-card">
+              <span class="label">Exercice 4.2</span>
+              <h4>Suppression complète d'un pilote instable</h4>
+              <p>Un pilote audio tiers (<code class="inline-code">oem24.inf</code>) provoque des grésillements. Même après désinstallation simple, Windows 11 le réinstalle automatiquement au redémarrage. Pourquoi et quelle commande exacte permet de le purger ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-4-2', this)">Afficher le corrigé</button>
+              <div id="corr-4-2" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Windows réinstalle le pilote car le package est toujours présent dans le <strong>Driver Store</strong>. Pour le désinstaller et le purger définitivement, exécuter en administrateur :<br><code class="inline-code">pnputil /delete-driver oem24.inf /uninstall /force</code></p>
+              </div>
+            </article>
+          </div>
+
+          <div class="quiz-block" id="quiz-ch4"></div>
+        </section>
+
+        <!-- ==================== CHAPITRE 5 ==================== -->
+        <section id="chapitre-5" class="chapter-section" aria-labelledby="ch5-title">
+          <div class="section-head">
+            <div>
+              <span class="label">Chapitre 05 — Diagnostic &amp; Fichiers INF</span>
+              <h2 id="ch5-title" class="headline">Dépannage avancé des <strong>codes d'erreur</strong> et analyse <strong>.inf</strong></h2>
+            </div>
+            <span class="tag">Codes 10 · 28 · 39 · 43</span>
+          </div>
+
+          <div class="chapter-objectives">
+            <span class="label">Objectifs pédagogiques</span>
+            <ul style="margin-top: var(--space-xs); margin-bottom: 0;">
+              <li>Diagnostiquer et résoudre les principaux codes d'erreur du Gestionnaire de périphériques (Codes 10, 28, 39, 43).</li>
+              <li>Identifier les conflits de ressources matérielles (Code 12) et les erreurs de registre (<code class="inline-code">UpperFilters</code>/<code class="inline-code">LowerFilters</code>).</li>
+              <li>Savoir lire et analyser la structure d'un fichier <code class="inline-code">.inf</code>.</li>
+            </ul>
+          </div>
+
+          <h3>5.1 Référentiel des codes d'erreur du Gestionnaire de périphériques</h3>
+          <div class="table-wrap">
+            <table class="carbon-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Signification officielle Microsoft</th>
+                  <th>Causes fréquentes</th>
+                  <th>Actions de résolution</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Code 10</strong></td>
+                  <td><em>Ce périphérique ne peut pas démarrer</em></td>
+                  <td>Pilote incompatible, défaillance matérielle ou firmware obsolète</td>
+                  <td>Mettre à jour ou revenir à la version précédente, vérifier alimentation / BIOS</td>
+                </tr>
+                <tr>
+                  <td><strong>Code 28</strong></td>
+                  <td><em>Les pilotes de ce périphérique ne sont pas installés</em></td>
+                  <td>Périphérique détecté mais aucun pilote adapté dans le Driver Store</td>
+                  <td>Installer le pilote constructeur (Windows Update ou ID matériel VID/PID)</td>
+                </tr>
+                <tr>
+                  <td><strong>Code 39</strong></td>
+                  <td><em>Windows ne peut pas charger le pilote (endommagé ou absent)</em></td>
+                  <td>Fichier <code class="inline-code">.sys</code> corrompu, valeur registre <code class="inline-code">UpperFilters</code>/<code class="inline-code">LowerFilters</code> cassée, blocage HVCI</td>
+                  <td>Exécuter <code class="inline-code">sfc /scannow</code>, réinstaller le pilote, inspecter les filtres registre ou compatibilité HVCI</td>
+                </tr>
+                <tr>
+                  <td><strong>Code 43</strong></td>
+                  <td><em>Windows a arrêté ce périphérique car il présente des problèmes</em></td>
+                  <td>Le pilote a signalé une panne matérielle (GPU, port USB en court-circuit)</td>
+                  <td>Débrancher/rebrancher, tester sur un autre port/PC, réinstaller le pilote, suspecter panne matérielle</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Simulateur 5 : Diagnostic Erreur + Inspecteur INF -->
+          <div class="sim-box">
+            <div class="sim-header">
+              <div>
+                <span class="label">Simulateur 05 — Atelier de dépannage</span>
+                <h3 style="margin-top: var(--space-xs); margin-bottom: 0;">Assistant de diagnostic d'erreurs &amp; Inspecteur interactif de fichier .inf</h3>
+              </div>
+            </div>
+
+            <div class="split-5-7" style="margin-bottom: 0;">
+              <div class="sim-panel">
+                <span class="label">1. Sélectionner un incident dans devmgmt.msc</span>
+                <div class="arch-flow" style="margin-top: var(--space-sm);">
+                  <button type="button" class="arch-node is-active" onclick="selectErrorCode('10', this)">
+                    <span><strong>Code 10</strong> · Contrôleur audio HD</span>
+                    <span class="tag tag--warn">Ne démarre pas</span>
+                  </button>
+                  <button type="button" class="arch-node" onclick="selectErrorCode('28', this)">
+                    <span><strong>Code 28</strong> · Contrôleur de réseau</span>
+                    <span class="tag tag--warn">Sans pilote</span>
+                  </button>
+                  <button type="button" class="arch-node" onclick="selectErrorCode('39', this)">
+                    <span><strong>Code 39</strong> · Lecteur optique / USB</span>
+                    <span class="tag tag--err">Pilote corrompu</span>
+                  </button>
+                  <button type="button" class="arch-node" onclick="selectErrorCode('43', this)">
+                    <span><strong>Code 43</strong> · Carte graphique PCIe</span>
+                    <span class="tag tag--err">Arrêt matériel</span>
+                  </button>
+                  <button type="button" class="arch-node" onclick="selectErrorCode('12', this)">
+                    <span><strong>Code 12</strong> · Carte d'acquisition</span>
+                    <span class="tag tag--warn">Conflit IRQ/MMIO</span>
+                  </button>
+                </div>
+                <div id="sim5-err-detail" style="margin-top: var(--space-md); border-top: var(--rule); padding-top: var(--space-md);"></div>
+              </div>
+
+              <div class="sim-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+                  <span class="label">2. Inspecteur de fichier .inf (cliquez sur une ligne)</span>
+                  <button type="button" class="btn btn--ghost btn--compact" onclick="toggleInfMismatch()">Tester conflit DEV_8125 vs DEV_8168</button>
+                </div>
+                <div class="terminal-window" id="inf-viewer" style="padding: var(--space-sm);">
+                  <button type="button" class="inf-line is-active" onclick="inspectInfLine(0, this)">[Version]</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(1, this)">Signature   = "$WINDOWS NT$"</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(2, this)">Class       = Net</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(3, this)">CatalogFile = MonPiloteReseau.cat</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(4, this)">DriverVer   = 10/15/2025, 2.4.1.0</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(5, this)">[Manufacturer]</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(6, this)">%ManufacturerName% = Standard, NTamd64.10.0...16299</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(7, this)">[Standard.NTamd64.10.0...16299]</button>
+                  <button type="button" class="inf-line" id="inf-hwid-line" onclick="inspectInfLine(8, this)">%DeviceDesc% = MonPilote_Install, PCI\VEN_10EC&amp;DEV_8168</button>
+                  <button type="button" class="inf-line" onclick="inspectInfLine(9, this)">[Strings]</button>
+                </div>
+                <div id="inf-explanation" class="notice" style="margin-top: var(--space-sm); margin-bottom: 0;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TP 5 -->
+          <div class="tp-box">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <div>
+                <span class="label">Manipulation pratique en VM — TP 5</span>
+                <h4 style="margin-top: var(--space-xs);">Simuler un dépannage matériel et inspecter un fichier .inf réel</h4>
+              </div>
+              <button type="button" class="btn btn--secondary btn--compact" id="tp-btn-5" onclick="toggleTpDone(5)">Marquer TP 5 réalisé</button>
+            </div>
+            <ol style="margin-top: var(--space-sm);">
+              <li>Dans la VM Windows 11, ouvrir <code class="inline-code">C:\Windows\INF</code> et localiser <code class="inline-code">usbstor.inf</code>.</li>
+              <li>L'ouvrir en lecture seule avec le Bloc-notes (<code class="inline-code">notepad C:\Windows\INF\usbstor.inf</code>) et repérer <code class="inline-code">[Version]</code>, <code class="inline-code">[Manufacturer]</code> et <code class="inline-code">[Strings]</code>.</li>
+              <li>Dans <code class="inline-code">devmgmt.msc</code>, désactiver un périphérique non critique (carte audio virtuelle) → observer la flèche vers le bas (Code 22), vérifier via <code class="inline-code">Get-PnpDevice -Status Error</code> puis réactiver.</li>
+            </ol>
+          </div>
+
+          <!-- Exercices Chapitre 5 -->
+          <h3>5.2 Exercices d'application (Chapitre 5)</h3>
+          <div class="card-grid">
+            <article class="exercise-card">
+              <span class="label">Exercice 5.1</span>
+              <h4>Diagnostic Code 43 sur carte graphique</h4>
+              <p>Un étudiant signale que sa carte graphique dédiée affiche un <strong>Code 43</strong> après une coupure de courant. L'affichage est bloqué en 1024×768. Quelle démarche de diagnostic adoptez-vous ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-5-1', this)">Afficher le corrigé</button>
+              <div id="corr-5-1" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> 1) Consulter l'Observateur d'événements et vérifier les câbles d'alimentation PCIe de la carte graphique. 2) Désinstaller proprement le pilote (avec suppression du Driver Store) et réinstaller le pilote officiel constructeur. 3) Si le Code 43 persiste sur un autre poste de test, suspecter une panne matérielle (VRAM, GPU ou étage d'alimentation).</p>
+              </div>
+            </article>
+
+            <article class="exercise-card">
+              <span class="label">Exercice 5.2</span>
+              <h4>Analyse d'un fichier .inf incompatible</h4>
+              <p>L'assistant d'installation indique qu'aucun pilote compatible n'a été trouvé. Le <code class="inline-code">.inf</code> déclare <code class="inline-code">PCI\VEN_10EC&amp;DEV_8125</code> alors que <code class="inline-code">devmgmt.msc</code> affiche <code class="inline-code">PCI\VEN_10EC&amp;DEV_8168</code>. Quelle est l'origine du blocage ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-5-2', this)">Afficher le corrigé</button>
+              <div id="corr-5-2" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Le package téléchargé est destiné à une puce Realtek 2.5GbE (<code class="inline-code">DEV_8125</code>), alors que la machine est équipée d'une puce Realtek 1GbE (<code class="inline-code">DEV_8168</code>). Il faut télécharger le pilote correspondant exactement à <code class="inline-code">DEV_8168</code>.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="quiz-block" id="quiz-ch5"></div>
+        </section>
+
+        <!-- ==================== CHAPITRE 6 ==================== -->
+        <section id="chapitre-6" class="chapter-section" aria-labelledby="ch6-title">
+          <div class="section-head">
+            <div>
+              <span class="label">Chapitre 06 — Sécurité &amp; Gouvernance</span>
+              <h2 id="ch6-title" class="headline">Sécurité des pilotes, sauvegarde et <strong>politiques de groupe (GPO)</strong></h2>
+            </div>
+            <span class="tag">BYOVD · IOMMU · Active Directory</span>
+          </div>
+
+          <div class="chapter-objectives">
+            <span class="label">Objectifs pédagogiques</span>
+            <ul style="margin-top: var(--space-xs); margin-bottom: 0;">
+              <li>Évaluer les risques liés aux pilotes obsolètes, non signés ou vulnérables (attaques BYOVD et DMA physiques).</li>
+              <li>Mettre en place une stratégie de sauvegarde et de déploiement automatisé (<code class="inline-code">pnputil</code> / <code class="inline-code">dism</code>).</li>
+              <li>Configurer des stratégies de groupe (GPO) pour restreindre l'installation de périphériques non autorisés.</li>
+            </ul>
+          </div>
+
+          <div class="split-8-4">
+            <div>
+              <h3>6.1 Menaces noyau et protections matérielles</h3>
+              <ul>
+                <li><strong>Failles de privilèges (Ring 0) :</strong> une faille mémoire dans un pilote permet l'exécution de code avec les privilèges système maximaux.</li>
+                <li><strong>Attaque BYOVD (<em>Bring Your Own Vulnerable Driver</em>) :</strong> un logiciel malveillant installe un pilote légitime (signé) mais connu pour être vulnérable afin de désactiver les antivirus/EDR depuis le mode noyau.</li>
+                <li><strong>Attaques DMA physiques :</strong> un appareil malveillant branché sur Thunderbolt / PCIe externe peut lire la RAM. Windows 11 s'en protège via <strong>Kernel DMA Protection</strong>, qui s'appuie sur l'IOMMU (VT-d / AMD-Vi).</li>
+              </ul>
+
+              <h3>6.2 Sauvegarde et restauration des pilotes</h3>
+              <div class="terminal-window" style="margin-bottom: var(--space-md);">
+                <div><span class="terminal-prompt"># Via PnPUtil (sauvegarde en ligne)</span></div>
+                <div>mkdir C:\BackupPilotes</div>
+                <div>pnputil /export-driver * C:\BackupPilotes</div>
+                <div style="margin-top: var(--space-xs);"><span class="terminal-prompt"># Via DISM (en ligne ou image WIM hors ligne)</span></div>
+                <div>dism /online /export-driver /destination:C:\BackupPilotes</div>
+              </div>
+            </div>
+
+            <div class="layer">
+              <span class="label">Chemin GPO Active Directory</span>
+              <p class="mono" style="font-size: 0.8rem; margin-top: var(--space-sm);">Configuration ordinateur &gt; Modèles d'administration &gt; Système &gt; Installation de périphériques &gt; Restrictions d'installation de périphériques</p>
+              <div class="ruled-list">
+                <div><strong>Empêcher les amovibles</strong><p class="helper-text">Bloque clés USB et disques externes non approuvés (prévention fuites et malwares).</p></div>
+                <div><strong>Liste blanche VID/PID</strong><p class="helper-text"><em>Autoriser l'installation des périphériques correspondant à l'un de ces ID</em> (matériels validés DSI).</p></div>
+                <div><strong>Contrôle Windows Update</strong><p class="helper-text"><em>Ne pas inclure les pilotes avec les mises à jour Windows</em> pour valider d'abord via WSUS, Intune ou MECM.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulateur 6 : Configurateur GPO -->
+          <div class="sim-box">
+            <div class="sim-header">
+              <div>
+                <span class="label">Simulateur 06 — Gouvernance Active Directory</span>
+                <h3 style="margin-top: var(--space-xs); margin-bottom: 0;">Simulateur de règles GPO &amp; contrôle de branchement USB</h3>
+              </div>
+              <button type="button" class="btn btn--primary btn--compact" onclick="applyGpoPolicy()">Exécuter gpupdate /force</button>
+            </div>
+
+            <div class="split-5-7" style="margin-bottom: 0;">
+              <div class="sim-panel">
+                <span class="label">Paramètres GPO (Configuration ordinateur)</span>
+                <div style="display: grid; gap: var(--space-sm); margin-top: var(--space-sm);">
+                  <label style="display: flex; align-items: flex-start; gap: var(--space-sm); cursor: pointer;">
+                    <input type="checkbox" id="gpo-block-removable" onchange="evaluateGpoDevices()" style="width: 18px; height: 18px; margin-top: 2px;">
+                    <span><strong>Empêcher l'installation de périphériques amovibles</strong><br><span class="helper-text">Bloque par défaut toute nouvelle clé USB / disque externe.</span></span>
+                  </label>
+                  <label style="display: flex; align-items: flex-start; gap: var(--space-sm); cursor: pointer;">
+                    <input type="checkbox" id="gpo-allow-whitelist" onchange="evaluateGpoDevices()" style="width: 18px; height: 18px; margin-top: 2px;">
+                    <span><strong>Autoriser les périphériques correspondant à ces ID (Liste blanche)</strong><br><span class="helper-text">ID autorisé : <code class="inline-code">USB\VID_0951&amp;PID_1666</code> (Clé chiffrée DSI)</span></span>
+                  </label>
+                  <label style="display: flex; align-items: flex-start; gap: var(--space-sm); cursor: pointer;">
+                    <input type="checkbox" id="gpo-block-wu" onchange="evaluateGpoDevices()" style="width: 18px; height: 18px; margin-top: 2px;">
+                    <span><strong>Ne pas inclure les pilotes avec les mises à jour Windows</strong><br><span class="helper-text">Délègue la validation des pilotes à WSUS / Intune.</span></span>
+                  </label>
+                </div>
+                <div class="notice" id="gpo-status-msg" style="margin-top: var(--space-md); margin-bottom: 0;">
+                  Stratégie par défaut : aucune restriction appliquée.
+                </div>
+              </div>
+
+              <div class="sim-panel">
+                <span class="label">Résultat lors du branchement sur un poste Windows 11</span>
+                <div class="ruled-list" id="gpo-device-results" style="margin-top: var(--space-sm);"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TP 6 -->
+          <div class="tp-box">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <div>
+                <span class="label">Manipulation pratique en VM — TP 6</span>
+                <h4 style="margin-top: var(--space-xs);">Sauvegarder les pilotes tiers et inspecter les GPO locales</h4>
+              </div>
+              <button type="button" class="btn btn--secondary btn--compact" id="tp-btn-6" onclick="toggleTpDone(6)">Marquer TP 6 réalisé</button>
+            </div>
+            <ol style="margin-top: var(--space-sm);">
+              <li>Dans le Terminal (Admin), créer <code class="inline-code">C:\Sauvegarde_Pilotes</code> et exécuter <code class="inline-code">pnputil /export-driver * C:\Sauvegarde_Pilotes</code>.</li>
+              <li>Ouvrir l'éditeur de stratégie de groupe locale (<code class="inline-code">gpedit.msc</code>) sur Windows 11 Pro/Entreprise.</li>
+              <li>Naviguer vers <em>Configuration ordinateur &gt; Modèles d'administration &gt; Système &gt; Installation de périphériques &gt; Restrictions d'installation de périphériques</em>.</li>
+              <li>Examiner les paramètres sans les activer brutalement sans liste blanche afin de ne pas bloquer les périphériques de la VM.</li>
+            </ol>
+          </div>
+
+          <!-- Exercices Chapitre 6 -->
+          <h3>6.3 Exercices d'application (Chapitre 6)</h3>
+          <div class="card-grid">
+            <article class="exercise-card">
+              <span class="label">Exercice 6.1</span>
+              <h4>Sécurisation d'un parc contre les clés USB inconnues</h4>
+              <p>Une entreprise interdit toute clé USB personnelle sur Windows 11, tout en autorisant uniquement les clés chiffrées fournies par la DSI (<code class="inline-code">USB\VID_0951&amp;PID_1666</code>). Quelle stratégie GPO mettre en place ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-6-1', this)">Afficher le corrigé</button>
+              <div id="corr-6-1" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Dans la GPO (<em>Configuration ordinateur &gt; ... &gt; Restrictions d'installation de périphériques</em>) : 1) Activer <strong>« Autoriser l'installation des périphériques correspondant à l'un de ces ID de périphérique »</strong> avec <code class="inline-code">USB\VID_0951&amp;PID_1666</code>. 2) Activer <strong>« Empêcher l'installation de périphériques amovibles »</strong> (avec ordre d'évaluation en couches pour que l'autorisation prime). 3) Appliquer via <code class="inline-code">gpupdate /force</code>.</p>
+              </div>
+            </article>
+
+            <article class="exercise-card">
+              <span class="label">Exercice 6.2</span>
+              <h4>Préparation d'une migration de 15 postes</h4>
+              <p>Vous devez réinstaller Windows 11 sur 15 postes équipés d'une carte d'acquisition spécifique dont le CD est perdu, mais qui fonctionne sur un poste témoin. Quelle procédure fiable appliquez-vous ?</p>
+              <button type="button" class="btn btn--ghost btn--compact" onclick="toggleCorrection('corr-6-2', this)">Afficher le corrigé</button>
+              <div id="corr-6-2" class="correction-panel">
+                <p style="margin-bottom: 0;"><strong>Corrigé :</strong> Sur le poste témoin, exécuter <code class="inline-code">pnputil /export-driver * D:\Pilotes_Poste</code> sur une clé USB. Sur chaque nouveau poste Windows 11, exécuter <code class="inline-code">pnputil /add-driver "D:\Pilotes_Poste\*.inf" /subdirs /install</code> pour réinjecter l'ensemble des pilotes validés.</p>
+              </div>
+            </article>
+          </div>
+
+          <div class="quiz-block" id="quiz-ch6"></div>
+        </section>
+
+        <!-- ==================== CHAPITRE 7 ==================== -->
+        <section id="chapitre-7" class="chapter-section" aria-labelledby="ch7-title">
+          <div class="section-head">
+            <div>
+              <span class="label">Chapitre 07 — Synthèse, Glossaire &amp; Références</span>
+              <h2 id="ch7-title" class="headline">Points clés, <strong>glossaire technique</strong> et bibliographie</h2>
+            </div>
+            <span class="tag">Révision BTS TSIG</span>
+          </div>
+
+          <div class="layer" style="margin-bottom: var(--space-lg);">
+            <span class="label">Synthèse — Les 5 piliers à retenir</span>
+            <ul style="margin-top: var(--space-sm); margin-bottom: 0;">
+              <li>Un <strong>pilote</strong> est l'interprète indispensable entre le système d'exploitation et le matériel ; Windows 11 privilégie le modèle moderne <strong>WDF</strong> (KMDF 1.33 / UMDF 2.33).</li>
+              <li>Les pilotes <strong>mode utilisateur (UMDF)</strong> assurent une meilleure stabilité (pas de BSOD), tandis que le <strong>mode noyau (KMDF)</strong> reste indispensable pour les débits critiques (GPU, réseau, stockage DMA).</li>
+              <li>Tout package pilote sous Windows 11 doit être <strong>signé numériquement</strong> et transiter par le <strong>Driver Store</strong> (<code class="inline-code">System32\DriverStore\FileRepository</code>).</li>
+              <li>L'identification par <strong>Hardware ID (VID/PID ou VEN/DEV)</strong>, la maîtrise de <code class="inline-code">pnputil</code>, de <code class="inline-code">driverquery</code> et l'analyse des codes (10, 28, 39, 43) constituent le cœur du dépannage TSIG.</li>
+              <li>En entreprise, la sécurité repose sur <strong>Secure Boot</strong>, <strong>HVCI</strong>, <strong>Kernel DMA Protection</strong> et le contrôle des installations via <strong>GPO</strong>.</li>
+            </ul>
+          </div>
+
+          <h3>7.1 Glossaire interactif des termes techniques</h3>
+          <div class="field-row" style="margin-bottom: var(--space-md);">
+            <div class="field-group" style="flex: 1 1 260px;">
+              <label class="field-label" for="glossary-search">Rechercher un terme ou une définition</label>
+              <input id="glossary-search" class="field-input" type="text" value="" oninput="filterGlossary()">
+            </div>
+            <div class="field-group" style="min-width: 200px;">
+              <label class="field-label" for="glossary-cat">Domaine</label>
+              <select id="glossary-cat" class="field-select" onchange="filterGlossary()">
+                <option value="all">Tous les domaines</option>
+                <option value="arch">Architecture &amp; Matériel</option>
+                <option value="win">Windows &amp; Pilotes</option>
+                <option value="sec">Sécurité &amp; Gouvernance</option>
+              </select>
+            </div>
+          </div>
+          <div class="glossary-grid" id="glossary-container"></div>
+
+          <h3 style="margin-top: var(--space-xl);">7.2 Bilan d'auto-évaluation global</h3>
+          <div class="layer" id="summary-dashboard">
+            <div class="kpi-strip" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+              <div class="key-tile">
+                <span class="label">Questions répondues</span>
+                <div class="key-value" id="sum-answered">0 / 31</div>
+              </div>
+              <div class="key-tile">
+                <span class="label">Bonnes réponses</span>
+                <div class="key-value" id="sum-correct">0</div>
+              </div>
+              <div class="key-tile key-tile--neutral">
+                <span class="label">TP VM validés</span>
+                <div class="key-value" id="sum-tps">0 / 6</div>
+              </div>
+            </div>
+            <p class="helper-text" id="sum-message" style="margin-top: var(--space-md);">Répondez aux quiz de validation à la fin de chaque chapitre pour calculer votre niveau de maîtrise BTS TSIG.</p>
+          </div>
+
+          <h3 style="margin-top: var(--space-xl);">7.3 Bibliographie et documentation officielle</h3>
+          <div class="layer">
+            <span class="label">Sources de référence — Microsoft Learn &amp; Cours BTS TSIG 2e année</span>
+            <ul style="margin-top: var(--space-sm); margin-bottom: 0; font-size: 0.9rem;">
+              <li><em>What is a Driver?</em> — Microsoft Learn (Windows Hardware Drivers)</li>
+              <li><em>Windows Driver Frameworks (WDF)</em> &amp; <em>Differences Between WDM and WDF</em> — Microsoft Learn</li>
+              <li><em>Driver Store</em> &amp; <em>Overview of INF Files</em> — Microsoft Learn</li>
+              <li><em>PnPUtil Command Syntax</em>, <em>PnPUtil Examples</em> &amp; <em>driverquery</em> — Microsoft Learn</li>
+              <li><em>Using Device Manager</em> &amp; <em>Messages d'erreur du gestionnaire de périphériques</em> — Microsoft Learn</li>
+              <li><em>Driver Signing With Digital Signatures</em>, <em>Enable memory integrity (HVCI)</em> &amp; <em>Kernel DMA Protection</em> — Microsoft Learn</li>
+              <li><em>Manage Device Installation with Group Policy</em> — Microsoft Learn</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    // ==================== DATA DEFINITIONS (Backticks for safety) ====================
+    var QUIZ_DATA = {
+      1: [
+        {
+          id: `ch1-q1`,
+          q: `Quel est le rôle principal d'un pilote (driver) ?`,
+          options: [
+            `a) Accélérer la fréquence du processeur`,
+            `b) Permettre au système d'exploitation et à un périphérique de communiquer`,
+            `c) Remplacer le BIOS/UEFI au démarrage`,
+            `d) Compresser les fichiers sur le disque dur`
+          ],
+          correct: 1,
+          explanation: `Il traduit les requêtes génériques de l'OS en commandes matérielles spécifiques et inversement.`
+        },
+        {
+          id: `ch1-q2`,
+          q: `Quelle extension porte généralement un fichier exécutable de pilote noyau sous Windows ?`,
+          options: [`a) .exe`, `b) .bat`, `c) .sys`, `d) .txt`],
+          correct: 2,
+          explanation: `Les pilotes en mode noyau sont compilés sous forme de fichiers .sys.`
+        },
+        {
+          id: `ch1-q3`,
+          q: `Vrai ou Faux : Un pilote est toujours écrit par le fabricant du matériel.`,
+          options: [`Vrai`, `Faux`],
+          correct: 1,
+          explanation: `Faux. Si le périphérique respecte un standard matériel publié (clé USB Mass Storage, souris HID), Microsoft fournit un pilote générique intégré (inbox driver).`
+        },
+        {
+          id: `ch1-q4`,
+          q: `Quelles sont les conséquences possibles de l'absence de pilote adapté pour une carte graphique ?`,
+          options: [
+            `a) Résolution d'écran limitée (pilote vidéo de base Microsoft) et perte d'accélération 3D / multi-écrans`,
+            `b) Chiffrement automatique du SSD NVMe`,
+            `c) Blocage du contrôleur clavier PS/2`
+          ],
+          correct: 0,
+          explanation: `Sans pilote constructeur, Windows bascule sur le pilote d'affichage de base Microsoft : la résolution est limitée et l'accélération matérielle 3D ou la sortie multi-écrans sont indisponibles.`
+        },
+        {
+          id: `ch1-q5`,
+          q: `Quel outil graphique natif de Windows 11 permet de lister rapidement les périphériques et leurs pilotes ?`,
+          options: [`a) notepad.exe`, `b) devmgmt.msc`, `c) calc.exe`, `d) mspaint.exe`],
+          correct: 1,
+          explanation: `devmgmt.msc ouvre le Gestionnaire de périphériques.`
+        }
+      ],
+      2: [
+        {
+          id: `ch2-q1`,
+          q: `Que signifie l'acronyme HAL dans l'architecture Windows ?`,
+          options: [
+            `a) High Access Layer`,
+            `b) Hardware Abstraction Layer`,
+            `c) Host Adapter Link`,
+            `d) Hypervisor Application Logic`
+          ],
+          correct: 1,
+          explanation: `Couche d'abstraction matérielle (hal.dll) isolant le noyau des spécificités de la carte mère.`
+        },
+        {
+          id: `ch2-q2`,
+          q: `Quel mécanisme permet à une carte réseau de placer des paquets en RAM sans intervention constante du processeur ?`,
+          options: [`a) Polling`, `b) BIOS`, `c) DMA`, `d) ACPI`],
+          correct: 2,
+          explanation: `Direct Memory Access (DMA) transfère directement les blocs de données entre le périphérique et la RAM.`
+        },
+        {
+          id: `ch2-q3`,
+          q: `Vrai ou Faux : Dans une pile de pilotes, le pilote de filtre communique toujours directement avec le câble physique.`,
+          options: [`Vrai`, `Faux`],
+          correct: 1,
+          explanation: `Faux. C'est le pilote de bus qui gère le contrôleur physique ; les filtres interceptent et traitent les requêtes IRP dans la pile.`
+        },
+        {
+          id: `ch2-q4`,
+          q: `Quelle affirmation décrit le mieux le MMIO (Memory-Mapped I/O) ?`,
+          options: [
+            `a) Les registres du périphérique partagent le même espace d'adressage que la RAM`,
+            `b) Le périphérique stocke ses pilotes dans la RAM vidéo`,
+            `c) Le CPU doit interroger le disque dur avant chaque écriture`,
+            `d) Il est réservé uniquement aux imprimantes parallèles`
+          ],
+          correct: 0,
+          explanation: `En MMIO, les registres matériels sont adressés comme des emplacements mémoire classiques.`
+        },
+        {
+          id: `ch2-q5`,
+          q: `Quel est l'avantage majeur des interruptions par rapport au Polling pour un clavier USB ?`,
+          options: [
+            `a) Le CPU ne gaspille pas de cycles à vérifier en boucle si une touche est pressée`,
+            `b) Le clavier peut écrire directement dans la VRAM via DMA`,
+            `c) Le clavier fonctionne sans pilote bus USB`
+          ],
+          correct: 0,
+          explanation: `Avec les interruptions, le processeur n'est sollicité que lorsqu'une frappe ou un événement USB survient.`
+        }
+      ],
+      3: [
+        {
+          id: `ch3-q1`,
+          q: `Quel anneau de protection (Ring) correspond au mode noyau sous architecture x64 ?`,
+          options: [`a) Ring 3`, `b) Ring 2`, `c) Ring 1`, `d) Ring 0`],
+          correct: 3,
+          explanation: `Le noyau et les pilotes critiques s'exécutent en Ring 0.`
+        },
+        {
+          id: `ch3-q2`,
+          q: `Quel processus héberge les pilotes UMDF sous Windows 11 ?`,
+          options: [`a) explorer.exe`, `b) WUDFHost.exe`, `c) winlogon.exe`, `d) svchost.exe`],
+          correct: 1,
+          explanation: `Windows User-Mode Driver Framework Host (WUDFHost.exe) isole les pilotes en mode utilisateur.`
+        },
+        {
+          id: `ch3-q3`,
+          q: `Vrai ou Faux : Un pilote de classe (inbox) nécessite toujours un téléchargement préalable sur le site du constructeur.`,
+          options: [`Vrai`, `Faux`],
+          correct: 1,
+          explanation: `Faux. Les pilotes de classe génériques sont intégrés directement dans Windows 11.`
+        },
+        {
+          id: `ch3-q4`,
+          q: `Quelle version de KMDF est intégrée nativement à Windows 11 ?`,
+          options: [`a) KMDF 1.9`, `b) KMDF 1.15`, `c) KMDF 1.33`, `d) KMDF 2.0`],
+          correct: 2,
+          explanation: `Windows 11 intègre KMDF 1.33 et UMDF 2.33.`
+        },
+        {
+          id: `ch3-q5`,
+          q: `Pourquoi Windows 11 impose-t-il la signature numérique des pilotes noyau ?`,
+          options: [
+            `a) Pour garantir l'authenticité de l'éditeur et l'intégrité du code exécuté en Ring 0`,
+            `b) Pour compresser les fichiers .sys dans le Driver Store`,
+            `c) Pour désactiver l'UEFI Secure Boot`
+          ],
+          correct: 0,
+          explanation: `Elle empêche l'injection de rootkits ou de pilotes corrompus en Ring 0 en garantissant éditeur et intégrité.`
+        }
+      ],
+      4: [
+        {
+          id: `ch4-q1`,
+          q: `Dans quel répertoire Windows 11 stocke-t-il les packages pilotes validés ?`,
+          options: [
+            `a) C:\\Program Files\\Drivers`,
+            `b) C:\\Windows\\System32\\DriverStore\\FileRepository`,
+            `c) C:\\Users\\Public\\INF`,
+            `d) C:\\Windows\\Temp`
+          ],
+          correct: 1,
+          explanation: `Le Driver Store réside dans System32\\DriverStore\\FileRepository.`
+        },
+        {
+          id: `ch4-q2`,
+          q: `Dans l'identifiant USB\\VID_046D&PID_C52B, que représente VID ?`,
+          options: [`a) Virtual Interface Driver`, `b) Vendor ID`, `c) Video Input Device`, `d) Version ID`],
+          correct: 1,
+          explanation: `Vendor ID (identifiant unique du fabricant, ici 046D = Logitech).`
+        },
+        {
+          id: `ch4-q3`,
+          q: `Quelle commande pnputil permet d'exporter tous les pilotes tiers installés vers un dossier de sauvegarde ?`,
+          options: [
+            `a) pnputil /backup-all`,
+            `b) pnputil /export-driver * C:\\Backup`,
+            `c) pnputil /save-drivers`,
+            `d) pnputil /copy-inf`
+          ],
+          correct: 1,
+          explanation: `pnputil /export-driver * <dossier> exporte l'ensemble des pilotes tiers.`
+        },
+        {
+          id: `ch4-q4`,
+          q: `Vrai ou Faux : L'outil driverquery /si permet de vérifier si les pilotes installés sont signés.`,
+          options: [`Vrai`, `Faux`],
+          correct: 0,
+          explanation: `Vrai. Le commutateur /si (Signed Information) affiche les informations de signature.`
+        },
+        {
+          id: `ch4-q5`,
+          q: `Quel fichier journal enregistre en détail le déroulement de l'installation des périphériques Plug and Play ?`,
+          options: [
+            `a) C:\\Windows\\INF\\setupapi.dev.log`,
+            `b) C:\\boot.ini`,
+            `c) C:\\Windows\\win.ini`,
+            `d) C:\\pagefile.sys`
+          ],
+          correct: 0,
+          explanation: `setupapi.dev.log trace toutes les étapes d'installation PnP.`
+        },
+        {
+          id: `ch4-q6`,
+          q: `Quel est l'impact de l'activation de l'Intégrité de la mémoire (HVCI) sur d'anciens pilotes ?`,
+          options: [
+            `a) HVCI bloque le chargement des pilotes incompatibles et peut empêcher l'activation de l'isolation du noyau`,
+            `b) HVCI convertit automatiquement un pilote WDM en pilote UMDF`,
+            `c) HVCI supprime le fichier hal.dll`
+          ],
+          correct: 0,
+          explanation: `HVCI bloque les pilotes non conformes à l'isolation hyperviseur tant qu'ils ne sont pas mis à jour ou supprimés.`
+        }
+      ],
+      5: [
+        {
+          id: `ch5-q1`,
+          q: `Quel code d'erreur indique que les pilotes du périphérique ne sont pas installés ?`,
+          options: [`a) Code 10`, `b) Code 22`, `c) Code 28`, `d) Code 43`],
+          correct: 2,
+          explanation: `Le Code 28 signifie qu'aucun pilote n'est installé pour cet appareil.`
+        },
+        {
+          id: `ch5-q2`,
+          q: `Que signifie un Code 43 dans le Gestionnaire de périphériques ?`,
+          options: [
+            `a) Le périphérique est désactivé manuellement`,
+            `b) Windows a arrêté le périphérique car il a signalé un problème`,
+            `c) Le câble réseau est débranché`,
+            `d) Le disque dur est plein`
+          ],
+          correct: 1,
+          explanation: `Le périphérique ou son pilote a remonté une défaillance matérielle à Windows.`
+        },
+        {
+          id: `ch5-q3`,
+          q: `Vrai ou Faux : La section [Strings] d'un fichier .inf contient le code binaire du pilote.`,
+          options: [`Vrai`, `Faux`],
+          correct: 1,
+          explanation: `Faux. Elle contient les libellés textuels localisés (noms de fabricants, descriptions).`
+        },
+        {
+          id: `ch5-q4`,
+          q: `Quel code d'erreur est fréquemment lié à un fichier .sys corrompu ou à une entrée UpperFilters/LowerFilters défaillante ?`,
+          options: [`a) Code 39`, `b) Code 28`, `c) Code 12`, `d) Code 1`],
+          correct: 0,
+          explanation: `Code 39 : Windows ne peut pas charger le pilote de périphérique.`
+        },
+        {
+          id: `ch5-q5`,
+          q: `Pourquoi un fichier .inf contient-il la directive CatalogFile=....cat ?`,
+          options: [
+            `a) Pour lier le .inf au catalogue contenant les empreintes et la signature numérique du package`,
+            `b) Pour indiquer la taille de la RAM vidéo nécessaire`,
+            `c) Pour contourner le Driver Store`
+          ],
+          correct: 0,
+          explanation: `Elle lie le fichier d'installation au catalogue de signatures cryptographiques garantissant l'intégrité du package.`
+        }
+      ],
+      6: [
+        {
+          id: `ch6-q1`,
+          q: `Que désigne l'attaque BYOVD ?`,
+          options: [
+            `a) Une panne de batterie CMOS`,
+            `b) L'utilisation d'un pilote légitime mais vulnérable pour obtenir des privilèges noyau`,
+            `c) Le blocage des pilotes par Secure Boot`,
+            `d) Un formatage accidentel du Driver Store`
+          ],
+          correct: 1,
+          explanation: `Bring Your Own Vulnerable Driver : exploitation d'un pilote signé vulnérable pour escalader en Ring 0.`
+        },
+        {
+          id: `ch6-q2`,
+          q: `Sur quel niveau s'appliquent les GPO de Restrictions d'installation de périphériques ?`,
+          options: [
+            `a) Configuration utilisateur uniquement`,
+            `b) Configuration ordinateur uniquement`,
+            `c) Navigateur Edge`,
+            `d) Pare-feu Windows`
+          ],
+          correct: 1,
+          explanation: `Elles s'appliquent à la machine (Configuration ordinateur).`
+        },
+        {
+          id: `ch6-q3`,
+          q: `Vrai ou Faux : La protection Kernel DMA Protection protège la RAM contre les accès directs non autorisés via Thunderbolt.`,
+          options: [`Vrai`, `Faux`],
+          correct: 0,
+          explanation: `Vrai. Elle s'appuie sur l'IOMMU (VT-d / AMD-Vi) pour isoler la mémoire.`
+        },
+        {
+          id: `ch6-q4`,
+          q: `Quelle commande permet de forcer la mise à jour des GPO après modification sur un poste client ?`,
+          options: [`a) ipconfig /flushdns`, `b) gpupdate /force`, `c) sfc /scannow`, `d) chkdsk /f`],
+          correct: 1,
+          explanation: `gpupdate /force actualise immédiatement les stratégies de groupe.`
+        },
+        {
+          id: `ch6-q5`,
+          q: `Pourquoi les entreprises bloquent-elles parfois les mises à jour automatiques de pilotes via Windows Update ?`,
+          options: [
+            `a) Pour tester et valider la compatibilité des pilotes avec les logiciels métiers avant déploiement via WSUS ou Intune`,
+            `b) Parce que Windows Update ne fournit jamais de pilotes signés`,
+            `c) Pour forcer le passage en mode Polling`
+          ],
+          correct: 0,
+          explanation: `La validation préalable évite des régressions sur le parc métier avant déploiement centralisé.`
+        }
+      ]
+    };
+
+    var GLOSSARY_DATA = [
+      { term: `ACPI`, cat: `arch`, full: `Advanced Configuration and Power Interface`, desc: `Norme de gestion de l'alimentation et de la configuration matérielle par l'OS.` },
+      { term: `BSOD`, cat: `win`, full: `Blue Screen of Death`, desc: `Écran d'arrêt critique provoqué par une erreur fatale en mode noyau (souvent liée à un pilote).` },
+      { term: `DMA`, cat: `arch`, full: `Direct Memory Access`, desc: `Transfert direct de données entre un périphérique et la RAM sans solliciter le CPU.` },
+      { term: `Driver Store`, cat: `win`, full: `Dépôt sécurisé Windows`, desc: `Dépôt centralisé des packages pilotes validés sous C:\\Windows\\System32\\DriverStore.` },
+      { term: `GPO`, cat: `sec`, full: `Group Policy Object`, desc: `Objet de stratégie de groupe permettant d'administrer centralement les postes Windows.` },
+      { term: `HAL`, cat: `arch`, full: `Hardware Abstraction Layer`, desc: `Couche logicielle (hal.dll) isolant le noyau des spécificités matérielles de la carte mère.` },
+      { term: `HVCI`, cat: `sec`, full: `Hypervisor-Protected Code Integrity`, desc: `Intégrité de la mémoire sous Windows 11 vérifiant la signature des pilotes via l'hyperviseur.` },
+      { term: `INF`, cat: `win`, full: `Setup Information File`, desc: `Fichier texte décrivant les instructions, fichiers et identifiants matériels pour installer un pilote.` },
+      { term: `IRQ`, cat: `arch`, full: `Interrupt Request`, desc: `Signal émis par un périphérique pour demander l'attention immédiate du processeur.` },
+      { term: `KMDF / UMDF`, cat: `win`, full: `Kernel-Mode / User-Mode Driver Framework`, desc: `Frameworks WDF de Microsoft pour développer des pilotes en mode noyau (1.33) ou utilisateur (2.33).` },
+      { term: `MMIO`, cat: `arch`, full: `Memory-Mapped I/O`, desc: `Technique mappant les registres d'un périphérique dans l'espace d'adressage mémoire du processeur.` },
+      { term: `PnP`, cat: `win`, full: `Plug and Play`, desc: `Mécanisme de détection et de configuration automatique des périphériques par l'OS.` },
+      { term: `VID / PID`, cat: `win`, full: `Vendor ID / Product ID`, desc: `Identifiants hexadécimaux uniques du fabricant et du modèle USB (équivalent VEN/DEV en PCIe).` },
+      { term: `WHQL`, cat: `sec`, full: `Windows Hardware Quality Labs`, desc: `Programme de test et de certification officielle des pilotes par Microsoft.` }
+    ];
+
+    // ==================== PERSISTENT STATE ====================
+    var appState = {
+      answers: {},       // { "ch1-q1": 1, ... }
+      tpsDone: [],       // [1, 2, ...]
+      sim1Scenario: `print_hp`,
+      sim2Device: `nvme`,
+      sim2Mode: `dma`,
+      gpoBlockRemovable: false,
+      gpoAllowWhitelist: false,
+      gpoBlockWu: false,
+      oem24Deleted: false
+    };
+
+    function getCssToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    async function saveState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        // Ignore persistence errors silently in standalone mode
+      }
+    }
+
+    // ==================== SIMULATOR 1: I/O CHAIN ====================
+    var sim1LayerIndex = 0;
+    var SIM1_SCENARIOS = {
+      print_hp: [
+        { title: `Word demande l'impression (API Win32)`, desc: `Le développeur de Word n'écrit aucun code spécifique à HP. Il appelle simplement l'API standard d'impression de Windows 11.`, trace: `[Win32 API] StartDoc("Rapport_TSIG.docx") -> Spouleur Windows` },
+        { title: `Gestionnaire d'E/S & Spouleur Windows`, desc: `Windows 11 arbitre la file d'attente d'impression entre les applications et encapsule la demande dans un paquet IRP envoyé au pilote HP.`, trace: `[I/O Manager] Création IRP_MJ_WRITE -> File d'attente HP_LaserJet` },
+        { title: `Pilote HP LaserJet (.sys / pilote imprimante)`, desc: `Le pilote traduit les commandes graphiques génériques Windows en langage spécifique PCL / PostScript compris par la HP LaserJet.`, trace: `[Driver HP] Traduction GDI/XPS -> Flux PCL6 propriétaire HP` },
+        { title: `Contrôleur hôte USB (usbhub3.sys / xHCI)`, desc: `Le pilote de bus USB découpe le flux en paquets USB et pilote le contrôleur hôte de la carte mère.`, trace: `[USB xHCI] Transfert Bulk-OUT sur Port_#0003 (USB\\VID_03F0)` },
+        { title: `Imprimante HP LaserJet`, desc: `Le contrôleur interne de l'imprimante interprète le flux PCL6 et lance l'impression physique des pages.`, trace: `[Matériel HP] Impression terminée -> Acquittement IRQ vers OS` }
+      ],
+      print_canon: [
+        { title: `Word demande exactement la même API Win32`, desc: `Même code applicatif que pour l'imprimante HP : l'abstraction OS isole l'application du modèle de matériel.`, trace: `[Win32 API] StartDoc("Rapport_TSIG.docx") -> Spouleur Windows` },
+        { title: `Gestionnaire d'E/S Windows 11`, desc: `Windows dirige la requête vers la file d'attente associée au port réseau TCP/IP de la Canon Pixma.`, trace: `[I/O Manager] Routage IRP vers Port WSD / TCP 192.168.10.45` },
+        { title: `Pilote Canon Pixma`, desc: `Le pilote Canon traduit exactement la même page en commandes jet d'encre propres au moteur Canon.`, trace: `[Driver Canon] Traduction XPS -> Commandes propriétaires Canon` },
+        { title: `Pile réseau & Pilote carte Ethernet`, desc: `Les données encapsulées en paquets IP/TCP traversent le pilote de la carte réseau vers le switch.`, trace: `[NIC Driver] Envoi trame Ethernet via DMA vers RJ45` },
+        { title: `Imprimante Canon Pixma`, desc: `L'imprimante reçoit les trames réseau et imprime la page à l'identique pour l'utilisateur.`, trace: `[Matériel Canon] Impression exécutée -> Statut Prêt` }
+      ],
+      ssd_read: [
+        { title: `Explorateur Windows ouvre un fichier`, desc: `L'application demande la lecture d'un fichier sur C:\\ sans connaître la géométrie du SSD.`, trace: `[Win32 API] ReadFile("C:\\Temp\\inventaire.txt")` },
+        { title: `Système de fichiers NTFS & I/O Manager`, desc: `Windows convertit le chemin de fichier en numéros de secteurs logiques et émet un IRP de lecture.`, trace: `[NTFS / I/O Mgr] IRP_MJ_READ -> Secteur logique 4096 (4 Ko)` },
+        { title: `Pilote NVMe (stornvme.sys)`, desc: `Le pilote de stockage traduit la demande en commande NVMe placée dans la file d'attente de soumission.`, trace: `[stornvme.sys] Commande NVMe Read LBA=4096 -> File PCIe` },
+        { title: `Bus PCIe & Contrôleur DMA`, desc: `Le SSD écrit directement les 4 Ko en RAM via DMA, puis déclenche une interruption MSI-X.`, trace: `[PCIe x4 Gen4] Transfert DMA direct -> RAM 0x7FF8A000` },
+        { title: `SSD NVMe M.2`, desc: `Les puces NAND flash lisent les cellules mémoire et valident la complétion.`, trace: `[Matériel NVMe] Interruption MSI-X (-3) -> Donnée disponible` }
+      ],
+      soft_av: [
+        { title: `Ouverture d'un fichier suspect`, desc: `Une application tente d'exécuter un binaire depuis le dossier Téléchargements.`, trace: `[Win32 API] CreateProcess("setup_inconnu.exe")` },
+        { title: `Gestionnaire d'E/S & Filtre de système de fichiers`, desc: `Windows intercepte l'ouverture avant exécution et notifie les pilotes de filtre enregistrés.`, trace: `[Filter Manager] Interception IRP_MJ_CREATE -> Minifiltre` },
+        { title: `Pilote logiciel d'antivirus (.sys en Ring 0)`, desc: `Ce pilote logiciel ne contrôle aucun matériel physique : il s'exécute en mode noyau pour inspecter les structures protégées.`, trace: `[av_driver.sys] Analyse signature mémoire Ring 0 (aucun bus)` },
+        { title: `Aucun bus matériel sollicité`, desc: `Contrairement à un pilote matériel, aucune trame PCIe ou USB n'est émise vers un périphérique externe.`, trace: `[Kernel Only] Traitement 100 % logiciel en mémoire centrale` },
+        { title: `Décision de sécurité (Autoriser / Bloquer)`, desc: `Le pilote logiciel renvoie STATUS_ACCESS_DENIED au noyau si une menace est détectée.`, trace: `[Verdict Noyau] IRP complétée -> Exécution autorisée ou bloquée` }
+      ]
+    };
+
+    function updateSim1Scenario() {
+      var sel = document.getElementById(`sim1-scenario`);
+      if (!sel) return;
+      appState.sim1Scenario = sel.value;
+      renderSim1();
+      saveState();
+    }
+
+    function selectSim1Layer(idx) {
+      sim1LayerIndex = idx;
+      renderSim1();
+    }
+
+    function stepSim1(delta) {
+      sim1LayerIndex = (sim1LayerIndex + delta + 5) % 5;
+      renderSim1();
+    }
+
+    function renderSim1() {
+      var scenario = SIM1_SCENARIOS[appState.sim1Scenario] || SIM1_SCENARIOS.print_hp;
+      var item = scenario[sim1LayerIndex];
+      var nodes = document.querySelectorAll(`#sim1-stack .arch-node`);
+      nodes.forEach(function (n, i) {
+        n.classList.toggle(`is-active`, i === sim1LayerIndex);
+      });
+      var badge = document.getElementById(`sim1-layer-badge`);
+      var title = document.getElementById(`sim1-detail-title`);
+      var desc = document.getElementById(`sim1-detail-desc`);
+      var trace = document.getElementById(`sim1-trace`);
+      if (badge) badge.textContent = `Couche ${sim1LayerIndex + 1} / 5`;
+      if (title) title.textContent = item.title;
+      if (desc) desc.textContent = item.desc;
+      if (trace) trace.innerHTML = `<span class="terminal-prompt">&gt; TRACE KERNEL :</span> ${item.trace}`;
+    }
+
+    // ==================== SIMULATOR 2: CPU MODES CHART ====================
+    var sim2Chart = null;
+    var SIM2_DATA = {
+      nvme: {
+        label: `SSD NVMe PCIe (3 500 Mo/s)`,
+        polling: { cpu: 100, throughput: 12, latency: 25, eff: `Critique`, tag: `À proscrire`, desc: `En Polling pur, le processeur est saturé à 100 % à lire chaque mot de donnée : les performances du système s'effondrent.` },
+        irq: { cpu: 65, throughput: 45, latency: 75, eff: `Insuffisante`, tag: `Goulot CPU`, desc: `Gérer 3 500 Mo/s uniquement par interruptions surcharge le CPU avec des millions de commutations de contexte.` },
+        dma: { cpu: 4, throughput: 98, latency: 94, eff: `Optimale`, tag: `Architecture réelle NVMe`, desc: `Le contrôleur DMA écrit des blocs entiers directement en RAM sans solliciter le CPU pour chaque octet, puis avertit via MSI-X.` },
+        mmio: { cpu: 18, throughput: 70, latency: 90, eff: `Complémentaire`, tag: `Contrôle registres`, desc: `Le MMIO sert à configurer les registres de commande du contrôleur NVMe (files de soumission), tandis que le DMA transporte les données.` }
+      },
+      keyboard: {
+        label: `Clavier USB HID`,
+        polling: { cpu: 22, throughput: 10, latency: 60, eff: `Médiocre`, tag: `Gaspillage CPU`, desc: `Vérifier en boucle si une touche est pressée consomme inutilement des cycles processeur entre deux frappes.` },
+        irq: { cpu: 2, throughput: 20, latency: 98, eff: `Optimale`, tag: `Mode recommandé`, desc: `Le processeur reste libre tant qu'aucune touche n'est pressée ; il est alerté instantanément à la frappe.` },
+        dma: { cpu: 3, throughput: 20, latency: 80, eff: `Disproportionnée`, tag: `Surdimensionné`, desc: `Mettre en place des descripteurs DMA pour quelques octets de frappe est inutilement complexe.` },
+        mmio: { cpu: 5, throughput: 25, latency: 85, eff: `Partielle`, tag: `Contrôleur xHCI`, desc: `Utilisé par le contrôleur hôte USB pour exposer ses registres, couplé aux interruptions pour signaler l'événement.` }
+      },
+      nic: {
+        label: `Carte Ethernet Gigabit`,
+        polling: { cpu: 96, throughput: 18, latency: 30, eff: `Critique`, tag: `Saturation CPU`, desc: `À 1 Gbit/s, scruter chaque paquet reçu en boucle bloque les autres processus de Windows 11.` },
+        irq: { cpu: 48, throughput: 60, latency: 82, eff: `Moyenne`, tag: `Coalescence requise`, desc: `Sans DMA, le CPU devrait copier chaque paquet depuis les tampons de la carte réseau.` },
+        dma: { cpu: 6, throughput: 96, latency: 92, eff: `Optimale`, tag: `Architecture réelle NIC`, desc: `La carte réseau dépose directement les trames reçues dans des tampons en RAM via DMA et alerte le CPU par MSI-X.` },
+        mmio: { cpu: 15, throughput: 72, latency: 88, eff: `Complémentaire`, tag: `Registres PCIe`, desc: `Permet au pilote réseau d'accéder rapidement aux registres d'état de la carte PCIe.` }
+      },
+      serial: {
+        label: `Capteur série RS-232`,
+        polling: { cpu: 14, throughput: 8, latency: 50, eff: `Acceptable`, tag: `Cas simple`, desc: `Sur un capteur très bas débit ou un microcontrôleur sans contrôleur d'interruption, la scrutation reste simple à implémenter.` },
+        irq: { cpu: 2, throughput: 12, latency: 90, eff: `Optimale`, tag: `Économie énergie`, desc: `Évite de maintenir le cœur CPU actif si les mesures sont espacées.` },
+        dma: { cpu: 4, throughput: 12, latency: 75, eff: `Inutile`, tag: `Surdimensionné`, desc: `Le débit d'une ligne série ne justifie pas un canal DMA dédié.` },
+        mmio: { cpu: 6, throughput: 15, latency: 85, eff: `Adaptée`, tag: `Registres UART`, desc: `Les registres UART peuvent être mappés en mémoire (MMIO) ou en Port I/O historique.` }
+      }
+    };
+
+    function setSim2Mode(mode) {
+      appState.sim2Mode = mode;
+      updateSim2();
+      saveState();
+    }
+
+    function updateSim2() {
+      var devSel = document.getElementById(`sim2-device`);
+      if (devSel) appState.sim2Device = devSel.value;
+
+      var dev = SIM2_DATA[appState.sim2Device] || SIM2_DATA.nvme;
+      var m = dev[appState.sim2Mode] || dev.dma;
+
+      document.querySelectorAll(`.sim2-mode-btn`).forEach(function (btn) {
+        var active = btn.getAttribute(`data-mode`) === appState.sim2Mode;
+        btn.classList.toggle(`btn--primary`, active);
+        btn.classList.toggle(`btn--ghost`, !active);
+      });
+
+      var sub = document.getElementById(`sim2-chart-subtitle`);
+      var tag = document.getElementById(`sim2-verdict-tag`);
+      var title = document.getElementById(`sim2-verdict-title`);
+      var text = document.getElementById(`sim2-verdict-text`);
+      var kCpu = document.getElementById(`sim2-kpi-cpu`);
+      var kEff = document.getElementById(`sim2-kpi-eff`);
+
+      if (sub) sub.textContent = dev.label;
+      if (tag) tag.textContent = m.tag;
+      if (title) title.textContent = `${dev.label} — Mode ${appState.sim2Mode.toUpperCase()}`;
+      if (text) text.textContent = m.desc;
+      if (kCpu) kCpu.textContent = `${m.cpu} %`;
+      if (kEff) kEff.textContent = m.eff;
+
+      renderSim2Chart(dev);
+    }
+
+    function renderSim2Chart(dev) {
+      var canvas = document.getElementById(`sim2-chart`);
+      if (!canvas || typeof Chart === `undefined`) return;
+      var modes = [`polling`, `irq`, `dma`, `mmio`];
+      var labels = [`Polling`, `IRQ / MSI-X`, `DMA`, `MMIO`];
+      var cpuData = modes.map(function (k) { return dev[k].cpu; });
+      var thrData = modes.map(function (k) { return dev[k].throughput; });
+
+      var cBlue = getCssToken(`--data-1`);
+      var cContext = getCssToken(`--data-context`);
+      var cInk = getCssToken(`--on-surface-variant`);
+      var cGrid = getCssToken(`--outline-variant`);
+
+      var activeIdx = modes.indexOf(appState.sim2Mode);
+      var cpuColors = modes.map(function (_, i) { return i === activeIdx ? cBlue : cContext; });
+
+      if (sim2Chart) {
+        sim2Chart.data.datasets[0].data = cpuData;
+        sim2Chart.data.datasets[0].backgroundColor = cpuColors;
+        sim2Chart.data.datasets[1].data = thrData;
+        sim2Chart.update();
+        return;
+      }
+
+      sim2Chart = new Chart(canvas, {
+        type: `bar`,
+        data: {
+          labels: labels,
+          datasets: [
+            { label: `Charge CPU (%)`, data: cpuData, backgroundColor: cpuColors, borderRadius: 0 },
+            { label: `Capacité débit (indice)`, data: thrData, backgroundColor: getCssToken(`--data-3`), borderRadius: 0 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              grid: { color: cGrid },
+              ticks: { color: cInk, font: { family: `IBM Plex Mono`, size: 11 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: cInk, font: { family: `IBM Plex Mono`, size: 11 } }
+            }
+          },
+          plugins: {
+            legend: {
+              position: `top`,
+              align: `start`,
+              labels: { boxWidth: 12, boxHeight: 12, color: getCssToken(`--on-surface`) }
+            }
+          }
+        }
+      });
+    }
+
+    // ==================== SIMULATOR 3: RING 0 vs RING 3 ====================
+    function triggerRingFault(kind) {
+      var box = document.getElementById(`sim3-output`);
+      if (!box) return;
+      if (kind === `ring0`) {
+        box.innerHTML = `
+          <div class="bsod-screen">
+            <div class="bsod-face">:(</div>
+            <p style="font-weight: 600; margin-bottom: var(--space-sm);">Votre ordinateur a rencontré un problème et doit redémarrer.</p>
+            <p style="font-size: 0.9rem; margin-bottom: var(--space-sm);">Une exception mémoire non gérée s'est produite dans un pilote exécuté en <strong>Mode Noyau (Ring 0)</strong> partageant l'espace d'adressage du noyau Windows.</p>
+            <p class="mono" style="font-size: 0.85rem; margin-bottom: 0;">Code d'arrêt : DRIVER_IRQL_NOT_LESS_OR_EQUAL<br>Élément ayant échoué : mon_pilote_kmdf.sys</p>
+          </div>
+          <p class="helper-text" style="margin-top: var(--space-sm);">Leçon : en Ring 0 (WDM / KMDF), aucune isolation mémoire ne protège le noyau d'un bogue critique.</p>
+        `;
+      } else if (kind === `ring3`) {
+        box.innerHTML = `
+          <div class="notice notice--ok" style="margin-bottom: var(--space-sm);">
+            <span class="label">Isolation Mode Utilisateur (Ring 3 — UMDF 2.33)</span>
+            <h4 style="margin-top: var(--space-xs);">Incident contenu dans WUDFHost.exe — Aucun BSOD</h4>
+            <p style="margin-bottom: 0;">Le pilote biométrique UMDF a planté en Ring 3. Windows 11 a arrêté puis redémarré automatiquement le processus hôte <code class="inline-code">WUDFHost.exe</code> sans interrompre la session ni corrompre le noyau.</p>
+          </div>
+          <div class="terminal-window">
+            <div><span class="terminal-ok">[Kernel-PnP]</span> Processus WUDFHost.exe (PID 4812) terminé de façon inattendue.</div>
+            <div><span class="terminal-prompt">[UMDF Manager]</span> Redémarrage automatique du pilote UMDF dans un nouveau processus isolé (PID 5104).</div>
+            <div><span class="terminal-ok">[Système]</span> Disponibilité Windows 11 : 100 % maintenue.</div>
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="notice notice--err" style="margin-bottom: var(--space-sm);">
+            <span class="label">Sécurité WHQL &amp; Fichier Catalogue (.cat)</span>
+            <h4 style="margin-top: var(--space-xs);">Chargement bloqué — Signature numérique invalidée</h4>
+            <p style="margin-bottom: 0;">La modification manuelle du fichier <code class="inline-code">.inf</code> a changé son empreinte cryptographique (hash). Elle ne correspond plus à la signature stockée dans <code class="inline-code">pilote.cat</code>. Windows 11 64 bits refuse le chargement en Ring 0.</p>
+          </div>
+          <div class="terminal-window">
+            <div><span class="terminal-warn">[setupapi.dev.log]</span> Vérification catalogue .cat : ÉCHEC (HASH_MISMATCH sur pilote.inf).</div>
+            <div><span class="terminal-warn">[Windows Code Integrity]</span> Le pilote tiers n'est pas signé numériquement. Chargement bloqué (Code 52).</div>
+          </div>
+        `;
+      }
+    }
+
+    // ==================== SIMULATOR 4: HWID & CLI ====================
+    function switchSim4Tab(tab) {
+      var idPanel = document.getElementById(`sim4-panel-id`);
+      var cliPanel = document.getElementById(`sim4-panel-cli`);
+      var idBtn = document.getElementById(`sim4-tab-id`);
+      var cliBtn = document.getElementById(`sim4-tab-cli`);
+      if (!idPanel || !cliPanel || !idBtn || !cliBtn) return;
+
+      var isId = tab === `id`;
+      idPanel.style.display = isId ? `block` : `none`;
+      cliPanel.style.display = isId ? `none` : `block`;
+      idBtn.classList.toggle(`is-active`, isId);
+      cliBtn.classList.toggle(`is-active`, !isId);
+    }
+
+    var KNOWN_VENDORS = {
+      "8086": `Intel Corporation`,
+      "10DE": `NVIDIA Corporation`,
+      "10EC": `Realtek Semiconductor`,
+      "046D": `Logitech Inc.`,
+      "0951": `Kingston Technology`,
+      "1022": `AMD`
+    };
+    var KNOWN_DEVICES = {
+      "8086:2725": `Intel Wi-Fi 6E AX210 (160MHz)`,
+      "046D:C52B": `Récepteur USB Logitech Unifying`,
+      "10EC:8168": `Realtek PCIe GbE Family Controller (1 Gbit/s)`,
+      "10EC:8125": `Realtek PCIe 2.5GbE Family Controller`,
+      "10DE:2684": `NVIDIA GeForce RTX 4090`,
+      "0951:1666": `Clé USB chiffrée validée par la DSI`
+    };
+
+    function applyHwidPreset(val) {
+      var inp = document.getElementById(`hwid-input`);
+      if (inp) inp.value = val;
+      decodeHardwareId(val);
+    }
+
+    function decodeHardwareId(raw) {
+      var res = document.getElementById(`hwid-result`);
+      if (!res) return;
+      var s = (raw || ``).trim().toUpperCase();
+      var usbMatch = s.match(/^USB\\VID_([0-9A-F]{4})&PID_([0-9A-F]{4})/);
+      var pciMatch = s.match(/^PCI\\VEN_([0-9A-F]{4})&DEV_([0-9A-F]{4})/);
+
+      if (usbMatch) {
+        var vid = usbMatch[1];
+        var pid = usbMatch[2];
+        var vName = KNOWN_VENDORS[vid] || `Fabricant USB identifié par VID_${vid}`;
+        var dName = KNOWN_DEVICES[`${vid}:${pid}`] || `Périphérique USB modèle PID_${pid}`;
+        res.innerHTML = `
+          <span class="label">Décodage Bus USB</span>
+          <h4 style="margin-top: var(--space-xs);">${dName}</h4>
+          <p><strong>Bus :</strong> USB · <strong>VID (Vendor ID) :</strong> <code class="inline-code">${vid}</code> (${vName}) · <strong>PID (Product ID) :</strong> <code class="inline-code">${pid}</code></p>
+          <p class="helper-text" style="margin-bottom: 0;">Action TSIG : rechercher le pilote officiel sur le portail de ${vName} ou autoriser <code class="inline-code">USB\\VID_${vid}&amp;PID_${pid}</code> en liste blanche GPO.</p>
+        `;
+      } else if (pciMatch) {
+        var ven = pciMatch[1];
+        var dev = pciMatch[2];
+        var pvName = KNOWN_VENDORS[ven] || `Fabricant PCIe identifié par VEN_${ven}`;
+        var pdName = KNOWN_DEVICES[`${ven}:${dev}`] || `Contrôleur PCIe modèle DEV_${dev}`;
+        res.innerHTML = `
+          <span class="label">Décodage Bus PCI Express (PCIe)</span>
+          <h4 style="margin-top: var(--space-xs);">${pdName}</h4>
+          <p><strong>Bus :</strong> PCIe · <strong>VEN (Vendor) :</strong> <code class="inline-code">${ven}</code> (${pvName}) · <strong>DEV (Device) :</strong> <code class="inline-code">${dev}</code></p>
+          <p class="helper-text" style="margin-bottom: 0;">Action TSIG : télécharger le package officiel chez le constructeur du PC (Dell, HP, Lenovo) ou sur le portail ${pvName}.</p>
+        `;
+      } else {
+        res.innerHTML = `
+          <div class="notice notice--warn" style="margin-bottom: 0;">
+            <strong>Format non reconnu.</strong> Saisissez un identifiant au format <code class="inline-code">USB\\VID_XXXX&amp;PID_YYYY</code> ou <code class="inline-code">PCI\\VEN_XXXX&amp;DEV_YYYY</code>.
+          </div>
+        `;
+      }
+    }
+
+    function runCliCmd(cmdText) {
+      var out = document.getElementById(`cli-output`);
+      var inp = document.getElementById(`cli-input`);
+      if (inp) inp.value = cmdText;
+      if (!out) return;
+      var cmd = (cmdText || ``).trim().toLowerCase();
+
+      if (cmd.indexOf(`enum-drivers`) !== -1) {
+        var oem24Block = appState.oem24Deleted
+          ? `<div class="terminal-warn">[oem24.inf supprimé du Driver Store lors de la session précédente]</div>`
+          : `<div>Nom publié :        oem24.inf<br>Nom d'origine :     rtkaudio64.inf<br>Nom du fournisseur : Realtek<br>Nom de la classe :  MEDIA (Audio instable)<br>Version du pilote : 10/15/2025 6.0.9597.1</div>`;
+        out.innerHTML = `
+          <div><span class="terminal-prompt">PS C:\\Windows\\System32&gt;</span> ${cmdText}</div>
+          <div>Outil PnP Microsoft — Inventaire du Driver Store :</div><br>
+          <div>Nom publié :        oem12.inf<br>Nom d'origine :     netwtw10.inf<br>Nom du fournisseur : Intel Corporation<br>Nom de la classe :  Net<br>Version du pilote : 08/21/2025 23.80.0.4</div><br>
+          ${oem24Block}
+        `;
+      } else if (cmd.indexOf(`delete-driver`) !== -1 && cmd.indexOf(`oem24.inf`) !== -1) {
+        appState.oem24Deleted = true;
+        saveState();
+        out.innerHTML = `
+          <div><span class="terminal-prompt">PS C:\\Windows\\System32&gt;</span> ${cmdText}</div>
+          <div class="terminal-ok">Package de pilote désinstallé des périphériques concernés.</div>
+          <div class="terminal-ok">Package oem24.inf supprimé avec succès du Driver Store (FileRepository).</div>
+          <div>Windows 11 ne réinstallera plus automatiquement ce pilote au redémarrage.</div>
+        `;
+      } else if (cmd.indexOf(`export-driver`) !== -1) {
+        out.innerHTML = `
+          <div><span class="terminal-prompt">PS C:\\Windows\\System32&gt;</span> ${cmdText}</div>
+          <div>Exportation de oem12.inf (Intel Wi-Fi)... <span class="terminal-ok">OK</span></div>
+          <div>Exportation de oem15.inf (NVIDIA Display)... <span class="terminal-ok">OK</span></div>
+          <div class="terminal-ok">Total des packages de pilotes exportés avec succès : 14</div>
+        `;
+      } else if (cmd.indexOf(`driverquery`) !== -1) {
+        out.innerHTML = `
+          <div><span class="terminal-prompt">PS C:\\Windows\\System32&gt;</span> ${cmdText}</div>
+          <div>Nom du module   Nom complet                  Est signé</div>
+          <div>=============   ==========================   =========</div>
+          <div>stornvme        Pilote NVMe standard MS      TRUE</div>
+          <div>usbhub3         Concentrateur USB3 racine    TRUE</div>
+          <div>Netwtw10        Intel(R) Wi-Fi 6E AX210      TRUE</div>
+        `;
+      } else if (cmd.indexOf(`get-pnpdevice`) !== -1) {
+        out.innerHTML = `
+          <div><span class="terminal-prompt">PS C:\\Windows\\System32&gt;</span> ${cmdText}</div>
+          <div class="terminal-warn">Status  Class   FriendlyName                   InstanceId</div>
+          <div>------  -----   ------------                   ----------</div>
+          <div class="terminal-warn">Error   Net     Contrôleur de réseau           PCI\\VEN_8086&amp;DEV_2725\\4&amp;1A2B3C</div>
+          <div class="terminal-warn">Error   MEDIA   Périphérique Audio (Code 22)   ROOT\\MEDIA\\0001</div>
+        `;
+      } else {
+        out.innerHTML = `
+          <div><span class="terminal-prompt">PS C:\\Windows\\System32&gt;</span> ${cmdText}</div>
+          <div class="terminal-warn">Commande simulée non reconnue. Essayez : pnputil /enum-drivers, pnputil /delete-driver oem24.inf /uninstall /force, pnputil /export-driver * C:\\BackupPilotes, driverquery /si ou Get-PnpDevice -Status Error.</div>
+        `;
+      }
+    }
+
+    // ==================== SIMULATOR 5: ERROR CODES & INF ====================
+    var ERROR_CODES_DATA = {
+      "10": { title: `Code 10 — Ce périphérique ne peut pas démarrer`, cause: `Pilote incompatible, firmware obsolète ou défaillance matérielle empêchant l'initialisation.`, action: `Mettre à jour le pilote, utiliser « Revenir à la version précédente » (Roll Back), ou vérifier alimentation et BIOS/UEFI.` },
+      "28": { title: `Code 28 — Les pilotes de ce périphérique ne sont pas installés`, cause: `Périphérique détecté par le bus PnP, mais aucun package correspondant dans le Driver Store.`, action: `Relever le Hardware ID (VID/PID ou VEN/DEV) dans Détails et installer le pilote officiel constructeur.` },
+      "39": { title: `Code 39 — Windows ne peut pas charger le pilote (endommagé ou absent)`, cause: `Fichier .sys corrompu, valeur registre UpperFilters/LowerFilters cassée, ou blocage par Intégrité de la mémoire (HVCI).`, action: `Exécuter sfc /scannow, réinstaller le pilote, inspecter les filtres registre ou la compatibilité HVCI.` },
+      "43": { title: `Code 43 — Windows a arrêté ce périphérique car il présente des problèmes`, cause: `Le pilote a remonté une anomalie matérielle grave (ex. : GPU défaillant, port USB en court-circuit).`, action: `Vérifier les câbles PCIe / tester sur un autre port ou PC, réinstaller proprement le pilote, diagnostiquer une panne matérielle.` },
+      "12": { title: `Code 12 — Ressources libres insuffisantes`, cause: `Conflit d'attribution d'IRQ ou de plages mémoire MMIO (matériel industriel ou carte ancienne).`, action: `Inspecter Ressources matérielles > Conflits/Partage dans msinfo32 et mettre à jour le BIOS ACPI.` }
+    };
+
+    var INF_EXPLANATIONS = [
+      `<strong>[Version]</strong> — Section obligatoire ouvrant l'en-tête du fichier d'installation.`,
+      `<strong>Signature = "$WINDOWS NT$"</strong> — Indique que ce pilote est destiné à la famille Windows NT (Windows 10/11).`,
+      `<strong>Class = Net</strong> — Rattache le périphérique à la catégorie Cartes réseau dans devmgmt.msc.`,
+      `<strong>CatalogFile = MonPiloteReseau.cat</strong> — Lie le .inf au catalogue cryptographique contenant les empreintes et la signature WHQL.`,
+      `<strong>DriverVer = 10/15/2025, 2.4.1.0</strong> — Date et numéro de version utilisés par Windows Plug and Play pour choisir le pilote le plus récent.`,
+      `<strong>[Manufacturer]</strong> — Liste les fabricants et pointe vers les sections modèles selon l'architecture CPU.`,
+      `<strong>NTamd64.10.0...16299</strong> — Restreint ce package aux systèmes 64 bits (x64) à partir de Windows 10/11.`,
+      `<strong>[Standard.NTamd64...]</strong> — Section Models associant chaque nom de modèle à une directive d'installation.`,
+      `<strong>PCI\\VEN_10EC&amp;DEV_8168</strong> — Hardware ID exact ciblé : ici Realtek (VEN_10EC) contrôleur 1GbE (DEV_8168).`,
+      `<strong>[Strings]</strong> — Contient les chaînes textuelles localisées (noms affichés à l'utilisateur), jamais de code binaire.`
+    ];
+    var infMismatchMode = false;
+
+    function selectErrorCode(code, btn) {
+      document.querySelectorAll(`#chapitre-5 .arch-node`).forEach(function (n) {
+        n.classList.remove(`is-active`);
+      });
+      if (btn) btn.classList.add(`is-active`);
+      var data = ERROR_CODES_DATA[code];
+      var target = document.getElementById(`sim5-err-detail`);
+      if (!target || !data) return;
+      target.innerHTML = `
+        <h4 style="margin-top: 0;">${data.title}</h4>
+        <p style="margin-bottom: var(--space-xs);"><strong>Causes fréquentes :</strong> ${data.cause}</p>
+        <p style="margin-bottom: 0;"><strong>Procédure TSIG :</strong> ${data.action}</p>
+      `;
+    }
+
+    function inspectInfLine(idx, btn) {
+      document.querySelectorAll(`.inf-line`).forEach(function (l) { l.classList.remove(`is-active`); });
+      if (btn) btn.classList.add(`is-active`);
+      var exp = document.getElementById(`inf-explanation`);
+      if (!exp) return;
+      if (idx === 8 && infMismatchMode) {
+        exp.className = `notice notice--err`;
+        exp.innerHTML = `<strong>Blocage détecté (Exercice 5.2) :</strong> Le .inf cible <code class="inline-code">DEV_8125</code> (Realtek 2.5GbE) alors que la carte installée est <code class="inline-code">DEV_8168</code> (1GbE). L'assistant Windows rejette l'installation.`;
+      } else {
+        exp.className = `notice`;
+        exp.innerHTML = INF_EXPLANATIONS[idx] || ``;
+      }
+    }
+
+    function toggleInfMismatch() {
+      infMismatchMode = !infMismatchMode;
+      var line = document.getElementById(`inf-hwid-line`);
+      if (line) {
+        line.textContent = infMismatchMode
+          ? `%DeviceDesc% = MonPilote_Install, PCI\\VEN_10EC&DEV_8125  ; <-- Incompatibilité !`
+          : `%DeviceDesc% = MonPilote_Install, PCI\\VEN_10EC&DEV_8168`;
+        inspectInfLine(8, line);
+      }
+    }
+
+    // ==================== SIMULATOR 6: GPO ====================
+    function evaluateGpoDevices() {
+      var cbBlock = document.getElementById(`gpo-block-removable`);
+      var cbAllow = document.getElementById(`gpo-allow-whitelist`);
+      var cbWu = document.getElementById(`gpo-block-wu`);
+      if (cbBlock) appState.gpoBlockRemovable = cbBlock.checked;
+      if (cbAllow) appState.gpoAllowWhitelist = cbAllow.checked;
+      if (cbWu) appState.gpoBlockWu = cbWu.checked;
+
+      var devices = [
+        { name: `Clé USB personnelle (SanDisk inconnue)`, id: `USB\\VID_0781&PID_5581`, removable: true, isDsi: false },
+        { name: `Clé USB chiffrée DSI (Kingston validée)`, id: `USB\\VID_0951&PID_1666`, removable: true, isDsi: true },
+        { name: `Carte Ethernet interne Intel (PCIe)`, id: `PCI\\VEN_8086&DEV_15F3`, removable: false, isDsi: false }
+      ];
+
+      var html = devices.map(function (d) {
+        var blocked = false;
+        var reason = `Autorisé par défaut sous Windows 11.`;
+        if (d.removable && appState.gpoBlockRemovable) {
+          if (d.isDsi && appState.gpoAllowWhitelist) {
+            blocked = false;
+            reason = `Autorisé par la liste blanche VID/PID (prioritaire sur le blocage amovible).`;
+          } else {
+            blocked = true;
+            reason = `Bloqué par GPO « Empêcher l'installation de périphériques amovibles ».`;
+          }
+        }
+        var tagClass = blocked ? `tag--err` : `tag--ok`;
+        var tagText = blocked ? `BLOQUÉ PAR GPO` : `AUTORISÉ`;
+        return `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+              <strong>${d.name}</strong>
+              <span class="tag ${tagClass}">${tagText}</span>
+            </div>
+            <p class="helper-text" style="margin-top: var(--space-xs);"><code class="inline-code">${d.id}</code> — ${reason}</p>
+          </div>
+        `;
+      }).join(``);
+
+      if (appState.gpoBlockWu) {
+        html += `<div><strong>Canal Windows Update :</strong> <span class="tag">GOUVERNANCE WSUS / INTUNE</span><p class="helper-text" style="margin-top: var(--space-xs);">Les pilotes ne sont plus téléchargés automatiquement depuis Windows Update public.</p></div>`;
+      }
+
+      var container = document.getElementById(`gpo-device-results`);
+      if (container) container.innerHTML = html;
+      saveState();
+    }
+
+    function applyGpoPolicy() {
+      var msg = document.getElementById(`gpo-status-msg`);
+      evaluateGpoDevices();
+      if (msg) {
+        msg.className = `notice notice--ok`;
+        msg.innerHTML = `<strong>gpupdate /force exécuté :</strong> La stratégie Configuration ordinateur a été actualisée avec succès sur le poste Windows 11.`;
+      }
+    }
+
+    // ==================== GLOSSARY ====================
+    function filterGlossary() {
+      var qEl = document.getElementById(`glossary-search`);
+      var cEl = document.getElementById(`glossary-cat`);
+      var box = document.getElementById(`glossary-container`);
+      if (!box) return;
+      var q = qEl ? qEl.value.trim().toLowerCase() : ``;
+      var cat = cEl ? cEl.value : `all`;
+
+      var filtered = GLOSSARY_DATA.filter(function (item) {
+        var matchCat = cat === `all` || item.cat === cat;
+        var matchQ = !q || item.term.toLowerCase().indexOf(q) !== -1 || item.full.toLowerCase().indexOf(q) !== -1 || item.desc.toLowerCase().indexOf(q) !== -1;
+        return matchCat && matchQ;
+      });
+
+      if (filtered.length === 0) {
+        box.innerHTML = `<div class="notice">Aucun terme du glossaire ne correspond à votre filtre.</div>`;
+        return;
+      }
+
+      box.innerHTML = filtered.map(function (item) {
+        return `
+          <article class="glossary-card">
+            <span class="label">${item.full}</span>
+            <h4 style="margin-top: var(--space-xs);">${item.term}</h4>
+            <p class="helper-text">${item.desc}</p>
+          </article>
+        `;
+      }).join(``);
+    }
+
+    // ==================== EXERCISES, TPS & QUIZZES ====================
+    function toggleCorrection(id, btn) {
+      var panel = document.getElementById(id);
+      if (!panel) return;
+      var open = panel.classList.toggle(`is-open`);
+      if (btn) btn.textContent = open ? `Masquer le corrigé` : `Afficher le corrigé`;
+    }
+
+    function toggleTpDone(tpNum) {
+      var idx = appState.tpsDone.indexOf(tpNum);
+      if (idx === -1) {
+        appState.tpsDone.push(tpNum);
+      } else {
+        appState.tpsDone.splice(idx, 1);
+      }
+      updateProgressUI();
+      saveState();
+    }
+
+    function renderAllQuizzes() {
+      Object.keys(QUIZ_DATA).forEach(function (ch) {
+        var container = document.getElementById(`quiz-ch${ch}`);
+        if (!container) return;
+        var questions = QUIZ_DATA[ch];
+        var html = `
+          <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);">
+            <div>
+              <span class="label">Auto-évaluation — Chapitre ${ch}</span>
+              <h3 style="margin-top: var(--space-xs); margin-bottom: 0;">Quiz de validation (${questions.length} questions)</h3>
+            </div>
+            <span class="mono" id="quiz-score-ch${ch}">0 / ${questions.length}</span>
+          </div>
+        `;
+        questions.forEach(function (item, qIdx) {
+          html += `
+            <div class="quiz-q" id="wrap-${item.id}">
+              <p style="font-weight: 600; margin-bottom: var(--space-xs);">${qIdx + 1}. ${item.q}</p>
+              <div class="quiz-options">
+                ${item.options.map(function (opt, oIdx) {
+                  return `<button type="button" class="quiz-opt" data-qid="${item.id}" data-oid="${oIdx}" onclick="answerQuiz('${ch}', '${item.id}', ${oIdx})">${opt}</button>`;
+                }).join(``)}
+              </div>
+              <div class="quiz-feedback" id="fb-${item.id}" style="display: none;"></div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      });
+      refreshQuizVisuals();
+    }
+
+    function answerQuiz(ch, qId, choiceIdx) {
+      appState.answers[qId] = choiceIdx;
+      refreshQuizVisuals();
+      updateProgressUI();
+      saveState();
+    }
+
+    function refreshQuizVisuals() {
+      Object.keys(QUIZ_DATA).forEach(function (ch) {
+        var questions = QUIZ_DATA[ch];
+        var chCorrect = 0;
+        questions.forEach(function (item) {
+          var chosen = appState.answers[item.id];
+          var hasChoice = typeof chosen === `number`;
+          var btns = document.querySelectorAll(`button.quiz-opt[data-qid="${item.id}"]`);
+          btns.forEach(function (b, oIdx) {
+            b.classList.remove(`is-selected`, `is-correct`, `is-wrong`);
+            if (hasChoice) {
+              if (oIdx === item.correct) b.classList.add(`is-correct`);
+              else if (oIdx === chosen) b.classList.add(`is-wrong`);
+            }
+          });
+          var fb = document.getElementById(`fb-${item.id}`);
+          if (fb) {
+            if (hasChoice) {
+              var ok = chosen === item.correct;
+              if (ok) chCorrect++;
+              fb.style.display = `block`;
+              fb.className = `quiz-feedback ${ok ? `quiz-feedback--ok` : `quiz-feedback--err`}`;
+              fb.innerHTML = `<strong>${ok ? `Bonne réponse.` : `Réponse incorrecte.`}</strong> ${item.explanation}`;
+            } else {
+              fb.style.display = `none`;
+            }
+          }
+        });
+        var sc = document.getElementById(`quiz-score-ch${ch}`);
+        if (sc) sc.textContent = `${chCorrect} / ${questions.length}`;
+      });
+    }
+
+    function updateProgressUI() {
+      var totalQ = 0;
+      var answeredQ = 0;
+      var correctQ = 0;
+
+      Object.keys(QUIZ_DATA).forEach(function (ch) {
+        QUIZ_DATA[ch].forEach(function (item) {
+          totalQ++;
+          var chosen = appState.answers[item.id];
+          if (typeof chosen === `number`) {
+            answeredQ++;
+            if (chosen === item.correct) correctQ++;
+          }
+        });
+      });
+
+      var pct = totalQ > 0 ? Math.round((correctQ / totalQ) * 100) : 0;
+      var tpCount = appState.tpsDone.length;
+
+      var kpiQuiz = document.getElementById(`kpi-quiz-score`);
+      var kpiPct = document.getElementById(`kpi-quiz-pct`);
+      var kpiTp = document.getElementById(`kpi-tp-count`);
+      var bar = document.getElementById(`global-progress-bar`);
+      var barLbl = document.getElementById(`global-progress-label`);
+      var sumAns = document.getElementById(`sum-answered`);
+      var sumCor = document.getElementById(`sum-correct`);
+      var sumTps = document.getElementById(`sum-tps`);
+      var sumMsg = document.getElementById(`sum-message`);
+
+      if (kpiQuiz) kpiQuiz.textContent = `${correctQ} / ${totalQ}`;
+      if (kpiPct) kpiPct.textContent = `${pct} % de réussite`;
+      if (kpiTp) kpiTp.textContent = `${tpCount} / 6`;
+      if (bar) bar.style.width = `${pct}%`;
+      if (barLbl) barLbl.textContent = `${correctQ} / ${totalQ} questions validées (${tpCount}/6 TP)`;
+      if (sumAns) sumAns.textContent = `${answeredQ} / ${totalQ}`;
+      if (sumCor) sumCor.textContent = `${correctQ}`;
+      if (sumTps) sumTps.textContent = `${tpCount} / 6`;
+      if (sumMsg) {
+        if (answeredQ === 0) {
+          sumMsg.textContent = `Répondez aux quiz de validation à la fin de chaque chapitre pour calculer votre niveau de maîtrise BTS TSIG.`;
+        } else if (pct >= 80) {
+          sumMsg.textContent = `Excellent niveau de maîtrise (${pct} %) : vous maîtrisez l'architecture WDF, l'administration CLI et le dépannage sous Windows 11.`;
+        } else {
+          sumMsg.textContent = `Progression en cours (${pct} % de réussite sur ${answeredQ} questions répondues). Poursuivez les quiz et TP sur votre VM.`;
+        }
+      }
+
+      for (var t = 1; t <= 6; t++) {
+        var btn = document.getElementById(`tp-btn-${t}`);
+        if (btn) {
+          var isDone = appState.tpsDone.indexOf(t) !== -1;
+          btn.textContent = isDone ? `TP ${t} validé` : `Marquer TP ${t} réalisé`;
+          btn.classList.toggle(`btn--primary`, isDone);
+          btn.classList.toggle(`btn--secondary`, !isDone);
+        }
+      }
+    }
+
+    // ==================== RESET & EXPORT ====================
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Confirmer la réinitialisation`;
+        btn.classList.add(`btn--danger`);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Réinitialiser la progression`;
+      btn.classList.remove(`btn--danger`);
+
+      appState.answers = {};
+      appState.tpsDone = [];
+      appState.oem24Deleted = false;
+      refreshQuizVisuals();
+      updateProgressUI();
+      saveState();
+    }
+
+    function exportProgressReport() {
+      var totalQ = 0;
+      var correctQ = 0;
+      var lines = [`BILAN DE FORMATION BTS TSIG 2E ANNEE - PILOTES WINDOWS 11`, `==========================================================`];
+      Object.keys(QUIZ_DATA).forEach(function (ch) {
+        var c = 0;
+        var qList = QUIZ_DATA[ch];
+        qList.forEach(function (q) {
+          totalQ++;
+          if (appState.answers[q.id] === q.correct) { c++; correctQ++; }
+        });
+        lines.push(`Chapitre ${ch} : ${c} / ${qList.length} bonnes reponses`);
+      });
+      lines.push(`----------------------------------------------------------`);
+      lines.push(`Score global : ${correctQ} / ${totalQ}`);
+      lines.push(`TP VM valides : ${appState.tpsDone.length} / 6 (${appState.tpsDone.join(', ') || 'aucun'})`);
+
+      var content = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `bilan_bts_tsig_pilotes_win11.txt`
+        });
+      }
+    }
+
+    // ==================== SCROLL SPY ====================
+    function initScrollSpy() {
+      var sections = document.querySelectorAll(`.chapter-section`);
+      var links = document.querySelectorAll(`[data-nav]`);
+      if (!(`IntersectionObserver` in window) || sections.length === 0) return;
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var id = entry.target.id;
+            links.forEach(function (lnk) {
+              lnk.classList.toggle(`is-active`, lnk.getAttribute(`data-nav`) === id);
+            });
+          }
+        });
+      }, { rootMargin: `-20% 0px -65% 0px`, threshold: 0.05 });
+
+      sections.forEach(function (s) { observer.observe(s); });
+    }
+
+    // ==================== INIT ====================
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          var saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            if (saved.answers) appState.answers = saved.answers;
+            if (Array.isArray(saved.tpsDone)) appState.tpsDone = saved.tpsDone;
+            if (saved.sim1Scenario) appState.sim1Scenario = saved.sim1Scenario;
+            if (saved.sim2Device) appState.sim2Device = saved.sim2Device;
+            if (saved.sim2Mode) appState.sim2Mode = saved.sim2Mode;
+            if (typeof saved.gpoBlockRemovable === `boolean`) appState.gpoBlockRemovable = saved.gpoBlockRemovable;
+            if (typeof saved.gpoAllowWhitelist === `boolean`) appState.gpoAllowWhitelist = saved.gpoAllowWhitelist;
+            if (typeof saved.gpoBlockWu === `boolean`) appState.gpoBlockWu = saved.gpoBlockWu;
+            if (typeof saved.oem24Deleted === `boolean`) appState.oem24Deleted = saved.oem24Deleted;
+          }
+        }
+      } catch (e) {
+        // Fallback safely
+      }
+
+      var s1 = document.getElementById(`sim1-scenario`);
+      if (s1) s1.value = appState.sim1Scenario;
+      var s2 = document.getElementById(`sim2-device`);
+      if (s2) s2.value = appState.sim2Device;
+
+      var cb1 = document.getElementById(`gpo-block-removable`);
+      var cb2 = document.getElementById(`gpo-allow-whitelist`);
+      var cb3 = document.getElementById(`gpo-block-wu`);
+      if (cb1) cb1.checked = appState.gpoBlockRemovable;
+      if (cb2) cb2.checked = appState.gpoAllowWhitelist;
+      if (cb3) cb3.checked = appState.gpoBlockWu;
+
+      renderSim1();
+      updateSim2();
+      decodeHardwareId(`PCI\\VEN_8086&DEV_2725&SUBSYS_00248086`);
+      runCliCmd(`pnputil /enum-drivers`);
+      selectErrorCode(`10`, document.querySelector(`#chapitre-5 .arch-node`));
+      inspectInfLine(0, document.querySelector(`.inf-line`));
+      evaluateGpoDevices();
+      filterGlossary();
+      renderAllQuizzes();
+      updateProgressUI();
+      initScrollSpy();
+
+      if (typeof lucide !== `undefined` && typeof lucide.createIcons === `function`) {
+        lucide.createIcons();
+      }
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

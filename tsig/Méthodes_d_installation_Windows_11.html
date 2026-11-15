@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="handbook">
+  <title>Cours Technique : Maîtriser l'Installation de Windows 11 | pcdoctor.tn</title>
+  
+  <!-- Polices Google Fonts conformes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces - Handbook Theme */
+      --background: #ffffff;
+      --surface-container-low: #f3f2f1;
+      --surface-container: #e8e7e5;
+      --surface-container-high: #dbdad9;
+
+      /* Ink */
+      --on-surface: #0b0c0c;
+      --on-surface-variant: #505a5f;
+
+      /* Rules */
+      --outline: #0b0c0c;
+      --outline-variant: #b1b4b6;
+
+      /* Accents */
+      --primary: #162e51;
+      --on-primary: #ffffff;
+      --primary-container: #d2e2f1;
+      --on-primary-container: #0c2d4a;
+      --secondary: #4c2c92;
+      --tertiary: #1a569e;
+      --error: #d4351c;
+      --on-error: #ffffff;
+
+      /* Semantic tokens */
+      --positive: #00703c;
+      --on-positive: #ffffff;
+      --positive-container: #d4f3e3;
+      --warning: #a34e00;
+      --warning-container: #ffeedb;
+      --focus: #162e51;
+
+      /* Data series */
+      --data-1: #1a569e;
+      --data-2: #c75a0a;
+      --data-3: #28a197;
+      --data-4: #4c2c92;
+      --data-context: #b1b4b6;
+
+      /* Windows Setup & Simulator UI semantic tokens */
+      --win-blue: #0078d4;
+      --win-link: #005a9e;
+      --win-titlebar: #004275;
+      --sim-bios-bg: #0000aa;
+      --sim-bios-box: #000000;
+      --sim-bios-yellow: #ffff55;
+      --sim-bios-border: #777777;
+      --sim-dark-bg: #0f172a;
+      --sim-dark-panel: #1e293b;
+      --sim-dark-border: #334155;
+      --sim-dark-text-muted: #94a3b8;
+      --sim-dark-text-body: #cbd5e1;
+      --sim-terminal-bg: #0b1523;
+      --sim-terminal-text: #f1f5f9;
+      --sim-brand-navy: #0c213d;
+      --sim-success-dark: #0f291e;
+      --sim-success-light: #86efac;
+      --sim-success-text: #dcfce7;
+      --sim-success-border: #22c55e;
+      --sim-oobe-grad-1: #0b1a30;
+      --sim-oobe-grad-2: #173258;
+      --sim-progress-bar: #0284c7;
+      --sim-text-white: #ffffff;
+      --sim-text-gray: #666666;
+      --sim-footer-note: #888888;
+      --sim-reboot-bg: #fef08a;
+      --sim-reboot-text: #713f12;
+      --sim-reboot-border: #ca8a04;
+      --sim-sel-part: #bae6fd;
+      --tag-err-bg: #fcd8d3;
+      --tag-err-text: #7d1c0d;
+      --tag-succ-text: #004d25;
+      --tag-warn-text: #612f00;
+      --btn-action-ground: #0d3667;
+      --sim-main-bg: #090e17;
+      --sim-bar-bg: #121d2d;
+      --sim-bar-icon: #38bdf8;
+      --oobe-border: #3b82f6;
+      --oobe-blue-text: #93c5fd;
+      --oobe-input-border: #60a5fa;
+      --oobe-tip-border: #38bdf8;
+      --oobe-tip-text: #e2e8f0;
+      --oobe-btn-bg: #2563eb;
+      --win-border-gray: #71717a;
+      --win-footer-bg: #f3f4f6;
+      --win-footer-border: #d1d5db;
+      --table-border-light: #9ca3af;
+      --table-th-bg: #e5e7eb;
+      --table-th-text: #111827;
+
+      /* Fonts */
+      --font-headline: 'Public Sans', sans-serif;
+      --font-body: 'Public Sans', sans-serif;
+      --font-label: 'Public Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Shape */
+      --rounded: 0px;
+      --rounded-lg: 0px;
+      --rounded-full: 0px;
+
+      /* Style effects */
+      --top-index-rule: 6px solid var(--primary);
+      --inset-rule: 5px solid var(--tertiary);
+      --inset-success-rule: 5px solid var(--positive);
+      --inset-warn-rule: 5px solid var(--warning);
+      --inset-error-rule: 5px solid var(--error);
+      --button-ground: 0 2px 0 #091526;
+      --button-ground-secondary: 0 2px 0 #858686;
+      --focus-yellow: #ffdd00;
+      --focus-ring: 3px solid var(--focus-yellow);
+      --focus-bar: inset 0 0 0 2px var(--on-surface);
+      --focus-underline: 0 -2px var(--focus-yellow), 0 4px var(--on-surface);
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Type scale */
+      --display-size: clamp(2.2rem, 1.4rem + 3.2vw, 3.75rem);
+      --headline-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.4rem);
+      --subhead-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+      --body-size: clamp(1.02rem, 0.96rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 200ms;
+      --dur-long: 400ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+    }
+    header {
+      position: static !important;
+    }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-md) var(--space-lg) var(--space-3xl);
+      max-width: 1160px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * {
+      min-width: 0;
+    }
+
+    /* Typography & Hierarchy */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm) 0;
+      line-height: 1.18;
+      letter-spacing: -0.015em;
+    }
+    h1 {
+      font-size: var(--display-size);
+      font-weight: 800;
+    }
+    h2 {
+      font-size: var(--headline-size);
+      font-weight: 800;
+      border-bottom: 2px solid var(--outline);
+      padding-bottom: var(--space-xs);
+      margin-top: var(--space-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    h3 {
+      font-size: var(--subhead-size);
+      font-weight: 700;
+      margin-top: var(--space-lg);
+    }
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 75ch;
+    }
+    strong {
+      font-weight: 700;
+    }
+
+    /* Handbook Style Index Header */
+    .top-service-bar {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-xs) var(--space-lg);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--outline);
+    }
+    .top-service-bar .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .top-service-bar .web-url {
+      background-color: var(--sim-brand-navy);
+      padding: 2px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .index-header {
+      border-top: var(--top-index-rule);
+      border-bottom: 1px solid var(--on-surface);
+      padding: var(--space-sm) 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--space-md);
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    /* Badges & Tags */
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: var(--on-primary);
+      font-weight: 800;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+    .status-tag {
+      display: inline-block;
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: 2px 8px;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .status-tag--success {
+      background-color: var(--positive-container);
+      color: var(--tag-succ-text);
+    }
+    .status-tag--warn {
+      background-color: var(--warning-container);
+      color: var(--tag-warn-text);
+    }
+    .status-tag--error {
+      background-color: var(--tag-err-bg);
+      color: var(--tag-err-text);
+    }
+
+    /* Inset Callouts */
+    .inset {
+      border-left: var(--inset-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .inset--success {
+      border-left: var(--inset-success-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .inset--warning {
+      border-left: var(--inset-warn-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .inset--error {
+      border-left: var(--inset-error-rule);
+      background: var(--surface-container-low);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.95rem;
+      line-height: 1.2;
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 0;
+      border-radius: var(--rounded);
+      padding: var(--space-sm) var(--space-md);
+      box-shadow: var(--button-ground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      text-decoration: none;
+      min-height: 44px;
+    }
+    .btn--secondary {
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      box-shadow: var(--button-ground-secondary);
+      border: 1px solid var(--outline-variant);
+    }
+    .btn--action {
+      background: var(--tertiary);
+      color: #ffffff;
+      box-shadow: 0 2px 0 #0d3667;
+    }
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+    .btn:focus-visible, input:focus-visible, select:focus-visible, button:focus-visible {
+      outline: var(--focus-ring);
+      outline-offset: 0;
+      box-shadow: var(--focus-bar);
+    }
+
+    /* Summary & Metadata Bar */
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      background-color: var(--surface-container-low);
+      padding: var(--space-md);
+      border: 1px solid var(--outline-variant);
+      margin-bottom: var(--space-lg);
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--on-surface-variant);
+      letter-spacing: 0.05em;
+    }
+    .meta-value {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--on-surface);
+    }
+
+    /* Quick Jump Nav */
+    .toc-nav {
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-md);
+      margin: var(--space-md) 0 var(--space-xl) 0;
+    }
+    .toc-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-xs) var(--space-md);
+    }
+    .toc-link {
+      color: var(--tertiary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 600;
+      padding: 4px 0;
+      display: block;
+    }
+    .toc-link:hover {
+      color: var(--primary);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin: var(--space-md) 0;
+      border: 1px solid var(--outline);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    th {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      font-weight: 700;
+      padding: var(--space-sm) var(--space-md);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      border-right: 1px solid var(--outline-variant);
+    }
+    tr:nth-child(even) td {
+      background-color: var(--surface-container-low);
+    }
+
+    /* Card Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+    .card-panel {
+      border: 1px solid var(--outline);
+      background-color: var(--background);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+    }
+    .card-panel--highlight {
+      border-top: 4px solid var(--primary);
+    }
+
+    /* Code & Monospace blocks */
+    .code-box {
+      background-color: var(--sim-terminal-bg);
+      color: var(--sim-terminal-text);
+      padding: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      border-left: 4px solid var(--tertiary);
+      margin: var(--space-sm) 0;
+    }
+
+    /* Brand Selector Panel */
+    .brand-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      background-color: var(--outline);
+      padding: 2px;
+      margin-bottom: var(--space-md);
+    }
+    .brand-tab {
+      background-color: var(--surface-container-low);
+      border: 0;
+      color: var(--on-surface);
+      font-weight: 700;
+      font-family: var(--font-label);
+      font-size: 0.9rem;
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      flex: 1;
+      min-width: 90px;
+      text-align: center;
+    }
+    .brand-tab.active {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+
+    /* ---------------------------------------------------- */
+    /* SIMULATOR STYLING - WINDOWS 11 SETUP WORKBENCH       */
+    /* ---------------------------------------------------- */
+    .simulator-container {
+      border: 2px solid var(--outline);
+      background-color: var(--sim-main-bg);
+      color: var(--sim-text-white);
+      margin: var(--space-lg) 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .sim-header {
+      background-color: var(--sim-bar-bg);
+      border-bottom: 2px solid var(--tertiary);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .sim-title {
+      font-family: var(--font-label);
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--sim-text-white);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .sim-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .sim-pill {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--win-footer-border);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+    .sim-pill.active {
+      background-color: var(--tertiary);
+      color: var(--sim-text-white);
+      border-color: var(--sim-text-white);
+      font-weight: 700;
+    }
+    .sim-body {
+      padding: var(--space-lg);
+      min-height: 440px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Windows 11 Classic Setup Window Inside Simulator */
+    .win-window {
+      background-color: var(--background);
+      color: var(--on-surface);
+      border: 1px solid var(--win-border-gray);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 380px;
+    }
+    .win-titlebar {
+      background: var(--win-titlebar);
+      color: var(--sim-text-white);
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .win-content {
+      padding: var(--space-lg);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .win-footer {
+      background-color: var(--win-footer-bg);
+      border-top: 1px solid var(--win-footer-border);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-sm);
+    }
+
+    /* OOBE (Out-Of-Box Experience) Dark UI inside Simulator */
+    .oobe-window {
+      background: linear-gradient(135deg, var(--sim-oobe-grad-1) 0%, var(--sim-oobe-grad-2) 100%);
+      color: var(--sim-text-white);
+      border: 1px solid var(--oobe-border);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--space-xl);
+    }
+
+    /* Interactive Partition Table in Simulator */
+    .part-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      border: 1px solid var(--table-border-light);
+      margin: var(--space-sm) 0;
+    }
+    .part-table th {
+      background-color: var(--table-th-bg);
+      color: var(--table-th-text);
+      border: 1px solid var(--win-footer-border);
+      padding: 6px 8px;
+    }
+    .part-table td {
+      border: 1px solid var(--table-th-bg);
+      padding: 6px 8px;
+      color: var(--table-th-text);
+      cursor: pointer;
+    }
+    .part-table tr.selected td {
+      background-color: var(--sim-sel-part);
+      font-weight: 700;
+    }
+
+    /* Progress bar */
+    .progress-track {
+      background-color: var(--table-th-bg);
+      height: 16px;
+      width: 100%;
+      border: 1px solid var(--table-border-light);
+      margin: var(--space-sm) 0;
+    }
+    .progress-fill {
+      background-color: var(--sim-progress-bar);
+      height: 100%;
+      width: 0%;
+      transition: width var(--dur-long) ease;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: var(--space-md);
+    }
+    .form-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: block;
+      margin-bottom: var(--space-xs);
+    }
+    .form-select, .form-input {
+      width: 100%;
+      padding: var(--space-sm);
+      border: 2px solid var(--outline);
+      background-color: #ffffff;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    /* Checklist interactive component */
+    .checklist-container {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline);
+      padding: var(--space-md);
+      margin: var(--space-md) 0;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-xs) 0;
+      border-bottom: 1px dashed var(--outline-variant);
+      cursor: pointer;
+    }
+    .check-item:last-child {
+      border-bottom: 0;
+    }
+    .check-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+      margin-top: 3px;
+      cursor: pointer;
+    }
+    .check-item.completed span {
+      text-decoration: line-through;
+      color: var(--on-surface-variant);
+    }
+
+    /* Author Zone / Signature */
+    .author-box {
+      border-top: 4px solid var(--primary);
+      background-color: var(--surface-container-low);
+      padding: var(--space-lg);
+      margin: var(--space-2xl) 0 var(--space-lg);
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    .author-avatar {
+      width: 80px;
+      height: 80px;
+      background-color: var(--primary);
+      color: var(--on-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.6rem;
+      border: 2px solid var(--outline);
+    }
+    .author-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 0;
+    }
+    .author-title {
+      font-size: 0.9rem;
+      color: var(--on-surface-variant);
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 2px solid var(--outline);
+      background-color: var(--surface-container-low);
+      padding: var(--space-xl) var(--space-lg);
+      font-size: 0.9rem;
+    }
+    .footer-content {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-lg);
+    }
+    .footer-brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-sm);
+      }
+      .author-box {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+      .sim-body {
+        padding: var(--space-sm);
+      }
+      .win-window, .oobe-window {
+        padding: var(--space-sm);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Bandeau Supérieur Institutionnel -->
+  <header>
+    <div class="top-service-bar">
+      <div class="brand-badge">
+        <span>PC DOCTOR .TN</span>
+        <span style="opacity: 0.7;">| CENTRE DE FORMATION & EXPERTISE TECHNIQUE</span>
+      </div>
+      <div>
+        <a href="/" style="color:inherit; text-decoration:none; font-weight:700;">&larr; Retour à l'accueil PCDOCTOR</a> &nbsp;|&nbsp; PORTAIL OFFICIEL : <span class="web-url">pcdoctor.tn</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-grid">
+
+    <!-- Ligne de Catégorie & Index -->
+    <div class="index-header">
+      <span>GUIDE TECHNIQUE DE RÉFÉRENCE &bull; SYSTÈMES D'EXPLOITATION</span>
+      <span>ÉDITION 2026 &bull; RÉFÉRENCE : PCDOC-WIN11-PRO</span>
+    </div>
+
+    <!-- En-tête du Cours -->
+    <div>
+      <span class="status-tag">Cours Professionnel &bull; Déploiement Matériel</span>
+      <h1 style="margin-top: var(--space-sm);">Maîtriser l'Installation de Windows 11 : Le Guide Complet</h1>
+      <p style="font-size: 1.2rem; font-weight: 400; color: var(--on-surface-variant); max-width: 80ch;">
+        Protocole complet pour techniciens et administrateurs de maintenance informatique : validation matérielle (TPM 2.0, UEFI Secure Boot), création de supports amorçables sans erreur, simulation complète de l'installation et gestion du partitionnement de disque.
+      </p>
+
+      <!-- Métadonnées & Résumé rapide -->
+      <div class="meta-strip">
+        <div class="meta-item">
+          <span class="meta-label">Organisme de formation</span>
+          <span class="meta-value">PC DOCTOR (pcdoctor.tn)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Formateur IT Certifié</span>
+          <span class="meta-value">Mohamed Aissaoui</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Niveau d'expertise</span>
+          <span class="meta-value">Technicien / Support Niveau 1-2</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Version Windows cible</span>
+          <span class="meta-value">Windows 11 (24H2 / 26H2 x64)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Support d'installation</span>
+          <span class="meta-value">Clé USB Flash ≥ 8 Go</span>
+        </div>
+      </div>
+
+      <!-- Supports Numériques IA & Révisions NotebookLM -->
+      <div style="margin-top: 1.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, rgba(22,46,81,0.06), rgba(41,194,231,0.12)); border: 2px solid #29C2E7; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 1.5rem;">🧠</span>
+            <strong style="font-size: 1.15rem; color: var(--primary);">Supports Numériques IA &amp; Cahiers d'Apprentissage (NotebookLM)</strong>
+          </div>
+          <span style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: #29C2E7; color: #0b1120; padding: 0.25rem 0.65rem; border-radius: 4px;">Officiel PCDOCTOR &bull; Mohamed Aissaoui</span>
+        </div>
+        <p style="margin: 0 0 1rem 0; font-size: 0.95rem; color: var(--on-surface-variant); line-height: 1.55;">
+          Renforcez votre apprentissage grâce à l'écosystème interactif NotebookLM spécialement conçu pour accompagner ce cours : diaporamas visuels de déploiement, quiz d'auto-évaluation de 50 questions et cartes mémo pour réviser l'installation et l'administration Windows.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+          <a href="https://notebooklm.link.google/VlqqKc4OiOea" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #162e51; color: #ffffff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; transition: transform 0.15s;">
+            📽️ Diaporama Déploiement Windows &rarr;
+          </a>
+          <a href="https://notebooklm.link.google/EWfhMCuvtCsI" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #0078d4; color: #ffffff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; transition: transform 0.15s;">
+            📖 Slides Installation &amp; Config &rarr;
+          </a>
+          <a href="https://notebooklm.link.google/EtxHNw3vrERM" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #059669; color: #ffffff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; transition: transform 0.15s;">
+            🎯 Grand Quiz Administration (50 Q) &rarr;
+          </a>
+          <a href="https://notebooklm.link.google/JizAOS22yfsB" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #7c3aed; color: #ffffff; text-decoration: none; padding: 0.55rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.88rem; transition: transform 0.15s;">
+            🗂️ Flashcards Révision Windows &rarr;
+          </a>
+          <a href="https://notebooklm.link.google/KQxyIPtJ3Tbm" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.45rem; background: #475569; color: #ffffff; text-decoration: none; padding: 0.55rem 0.85rem; border-radius: 6px; font-weight: 500; font-size: 0.82rem;" title="Lien miroir NotebookLM">
+            🔗 Miroir Installation
+          </a>
+        </div>
+      </div>
+
+      <!-- Sommaire Interactif / Table des Matières -->
+      <nav class="toc-nav" aria-label="Sommaire du cours">
+        <div class="toc-title">
+          <span>&bull;</span> Plan d'apprentissage du cours
+        </div>
+        <div class="toc-grid">
+          <a class="toc-link" href="#module-1">1. Exigences Matérielles & TPM 2.0 / UEFI</a>
+          <a class="toc-link" href="#simulateur-compatibilite">2. Testeur de Compatibilité PC Doctor</a>
+          <a class="toc-link" href="#module-2">3. Comparatif des 3 Méthodes de Déploiement</a>
+          <a class="toc-link" href="#module-3">4. Création de la Clé USB Bootable & ISO</a>
+          <a class="toc-link" href="#module-4">5. Touches Boot Menu par Constructeur</a>
+          <a class="toc-link" href="#module-5">6. Simulateur Interactif Windows 11 Setup</a>
+          <a class="toc-link" href="#module-6">7. Diagnostic des Pannes & Écrans d'Erreur</a>
+          <a class="toc-link" href="#module-7">8. Check-list Post-Installation & Pilotes</a>
+          <a class="toc-link" href="#module-eval" style="font-weight:700; color:var(--tertiary);">9. Auto-évaluation &amp; Quiz NotebookLM (50 Q)</a>
+        </div>
+      </nav>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 1 : PRÉREQUIS MATÉRIELS STRICTS                              -->
+    <!-- =================================================================== -->
+    <section id="module-1">
+      <h2><span class="step-badge">1</span> Les Fondations : Exigences Matérielles Strictes</h2>
+      
+      <p>
+        Contrairement à ses prédécesseurs, Windows 11 impose des exigences de sécurité renforcée au niveau matériel. Il ne s'agit pas de simples recommandations de confort, mais de conditions bloquantes vérifiées dès le démarrage par le programme d'installation Microsoft.
+      </p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Composant</th>
+              <th>Exigence Minimale Requise</th>
+              <th>Recommandation Professionnelle PC Doctor</th>
+              <th>Conséquence si Non Conforme</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Processeur (CPU)</strong></td>
+              <td>1 GHz+, 2 cœurs minimum, architecture 64 bits ou SoC</td>
+              <td>Intel Core 8e génération min. (i5-8250U, i5-8400, etc.) ou AMD Ryzen 2000/3000+</td>
+              <td>Blocage d'installation officiel ("Ce PC ne peut pas exécuter W11")</td>
+            </tr>
+            <tr>
+              <td><strong>TPM (Module de Plateforme Sécurisée)</strong></td>
+              <td>Version 2.0 obligatoire (dTPM puce dédiée ou fTPM/PTT micrologiciel)</td>
+              <td>Puce TPM 2.0 active dans le micrologiciel de la carte mère (Intel PTT / AMD fTPM)</td>
+              <td>Impossible de démarrer l'installation sans contournement registre</td>
+            </tr>
+            <tr>
+              <td><strong>Micrologiciel & Démarrage</strong></td>
+              <td>Mode UEFI avec prise en charge du démarrage sécurisé (Secure Boot)</td>
+              <td>UEFI natif actif avec table de partitionnement GPT (Style GUID)</td>
+              <td>Refus d'installation sur disques formatés en MBR (Master Boot Record)</td>
+            </tr>
+            <tr>
+              <td><strong>Mémoire Vive (RAM)</strong></td>
+              <td>4 Go de mémoire physique</td>
+              <td>8 Go à 16 Go DDR4 / DDR5 pour une réactivité optimale du système</td>
+              <td>Ralentissements sévères et gel pendant le multitâche</td>
+            </tr>
+            <tr>
+              <td><strong>Stockage Système</strong></td>
+              <td>64 Go d'espace disponible minimum</td>
+              <td>SSD NVMe M.2 ou SSD SATA de 256 Go minimum</td>
+              <td>Échec de mise à jour future faute d'espace disque disponible</td>
+            </tr>
+            <tr>
+              <td><strong>Carte Graphique & Écran</strong></td>
+              <td>DirectX 12 ou ultérieur avec pilote WDDM 2.0 ; écran HD 720p 9"</td>
+              <td>Écran Full HD (1080p) avec GPU intégré moderne ou dédié</td>
+              <td>Affichage dégradé ou absence d'accélération matérielle</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="inset">
+        <strong>Pourquoi Microsoft impose-t-il le TPM 2.0 et l'UEFI ?</strong><br>
+        Le module <em>Trusted Platform Module 2.0</em> est un coffre-fort cryptographique matériel soudé sur la carte mère ou intégré au processeur. Il stocke les clés de chiffrement (BitLocker), gère l'authentification biométrique sans mot de passe <em>Windows Hello</em>, et contrôle l'intégrité de la séquence de démarrage contre les rootkits avant même que Windows ne prenne la main.
+      </div>
+    </section>
+
+    <!-- OUTIL INTERACTIF 1 : SIMULATEUR DE COMPATIBILITÉ PC DOCTOR -->
+    <section id="simulateur-compatibilite">
+      <h2><span class="step-badge">2</span> Simulateur Interactif : Diagnostic d'Éligibilité PC Doctor</h2>
+      <p>
+        Testez l'éligibilité de différentes machines réelles ou configurez une fiche personnalisée pour voir le résultat du contrôle d'intégrité en temps réel.
+      </p>
+
+      <div class="card-panel" style="border-top: 4px solid var(--tertiary);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); flex-wrap: wrap; gap: var(--space-xs);">
+          <span class="status-tag">Outil de Simulation Technique</span>
+          <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+            <button class="btn btn--secondary" type="button" onclick="loadConfigPreset('compatible')">Preset : PC Compatible 2023</button>
+            <button class="btn btn--secondary" type="button" onclick="loadConfigPreset('tpm_disabled')">Preset : fTPM Désactivé</button>
+            <button class="btn btn--secondary" type="button" onclick="loadConfigPreset('legacy')">Preset : PC Ancien 2016 (Non éligible)</button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-md);">
+          <!-- Formulaire sélecteurs -->
+          <div>
+            <div class="form-group">
+              <label class="form-label" for="cfg-cpu">Génération du Processeur (CPU)</label>
+              <select id="cfg-cpu" class="form-select" onchange="runCompatibilityCheck()">
+                <option value="intel-11">Intel Core 11e/12e/13e/14e Génération (ex: Core i5-1145G7)</option>
+                <option value="intel-8">Intel Core 8e/9e/10e Génération (ex: Core i5-8365U)</option>
+                <option value="amd-zen2">AMD Ryzen 3000 / 4000 / 5000 / 7000 (Zen 2+)</option>
+                <option value="intel-7">Intel Core 6e ou 7e Génération (ex: Core i5-7200U - Non supporté)</option>
+                <option value="old">Intel Core 2e à 5e Génération / AMD FX (Incompatible)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cfg-ram">Mémoire RAM Détectée</label>
+              <select id="cfg-ram" class="form-select" onchange="runCompatibilityCheck()">
+                <option value="16">16 Go DDR4 / DDR5 (Idéal)</option>
+                <option value="8">8 Go DDR4 (Recommandé)</option>
+                <option value="4">4 Go DDR4 (Seuil strict minimal)</option>
+                <option value="2">2 Go DDR3 (Insuffisant)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cfg-storage">Disque Système de Démarrage</label>
+              <select id="cfg-storage" class="form-select" onchange="runCompatibilityCheck()">
+                <option value="ssd-512">SSD NVMe 512 Go (Optimal)</option>
+                <option value="ssd-256">SSD 256 Go SATA / NVMe</option>
+                <option value="ssd-64">SSD 64 Go (Seuil minimal Microsoft)</option>
+                <option value="hdd-32">Disque eMMC / HDD 32 Go (Insuffisant)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <div class="form-group">
+              <label class="form-label" for="cfg-tpm">Module de Plateforme Sécurisée (TPM)</label>
+              <select id="cfg-tpm" class="form-select" onchange="runCompatibilityCheck()">
+                <option value="2.0">TPM 2.0 Présent & Activé (PTT / fTPM)</option>
+                <option value="disabled">TPM 2.0 Présent mais DÉSACTIVÉ dans le BIOS</option>
+                <option value="1.2">Ancien TPM 1.2 (Non conforme)</option>
+                <option value="none">Aucun module TPM présent</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cfg-boot">Mode de Micrologiciel & Démarrage</label>
+              <select id="cfg-boot" class="form-select" onchange="runCompatibilityCheck()">
+                <option value="uefi-secure">UEFI Natif avec Secure Boot (Démarrage Sécurisé Activé)</option>
+                <option value="uefi-nosecure">UEFI Natif mais Secure Boot Désactivé</option>
+                <option value="legacy">Mode Hérité (Legacy BIOS / CSM) avec MBR</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cfg-gpu">Carte Graphique & Pilote WDDM</label>
+              <select id="cfg-gpu" class="form-select" onchange="runCompatibilityCheck()">
+                <option value="dx12">DirectX 12 Compatible avec pilote WDDM 2.0+</option>
+                <option value="dx11">DirectX 11 / WDDM 1.3 (Ancienne carte)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Résultat du Check -->
+        <div id="compat-verdict-box" class="inset--success" style="margin-top: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="compat-title" style="margin: 0; color: var(--positive);">VERDICT : Ce PC Répond Pleinement aux Critères Windows 11</h3>
+            <span id="compat-score-badge" class="status-tag status-tag--success">SCORE : 6 / 6 CRITÈRES VALIDÉS</span>
+          </div>
+          <p id="compat-desc" style="margin: var(--space-sm) 0 0 0;">
+            Tous les indicateurs matériels sont au vert. L'installation ou la mise à niveau vers Windows 11 peut être exécutée de manière 100% officielle sans modification de la base de registre.
+          </p>
+          <div id="compat-actions" style="margin-top: var(--space-sm); font-size: 0.9rem; font-weight: 600;">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 2 : COMPARATIF DES MÉTHODES D'INSTALLATION                  -->
+    <!-- =================================================================== -->
+    <section id="module-2">
+      <h2><span class="step-badge">3</span> Stratégie : Les 3 Méthodes de Déploiement</h2>
+      <p>
+        Avant d'insérer un média externe, le technicien doit choisir la méthode appropriée selon l'état actuel de la machine, la présence de logiciels métier ou de virus, et l'objectif de conservation des fichiers.
+      </p>
+
+      <div class="card-grid">
+        <div class="card-panel card-panel--highlight">
+          <span class="status-tag">Méthode N°1</span>
+          <h3>Mise à Niveau Windows Update</h3>
+          <p>La solution directe pour un poste sous Windows 10 fonctionnel et compatible.</p>
+          <ul style="padding-left: var(--space-md); margin-bottom: var(--space-md); font-size: 0.95rem;">
+            <li><strong>Conserve les fichiers :</strong> Oui, intégrale (profils, logiciels, favoris).</li>
+            <li><strong>Condition :</strong> Windows 10 version 2004 ou supérieure activé.</li>
+            <li><strong>Espace requis :</strong> Au moins 64 Go d'espace libre sur le disque C:.</li>
+            <li><strong>Processus :</strong> Téléchargement en arrière-plan puis redémarrages.</li>
+          </ul>
+          <span class="status-tag status-tag--success" style="align-self: flex-start;">Idéal pour utilisateur particulier</span>
+        </div>
+
+        <div class="card-panel card-panel--highlight">
+          <span class="status-tag">Méthode N°2</span>
+          <h3>Assistant d'Installation Windows 11</h3>
+          <p>Outil autonome exécutable sur une machine compatible si Windows Update tarde.</p>
+          <ul style="padding-left: var(--space-md); margin-bottom: var(--space-md); font-size: 0.95rem;">
+            <li><strong>Conserve les fichiers :</strong> Oui, conservation paramétrable.</li>
+            <li><strong>Usage :</strong> Force le déploiement immédiat de la dernière version (24H2/26H2).</li>
+            <li><strong>Limitation :</strong> Ne fonctionne que sur architecture x64 (non compatible ARM direct).</li>
+            <li><strong>Fichier source :</strong> Téléchargeable sur microsoft.com.</li>
+          </ul>
+          <span class="status-tag" style="align-self: flex-start;">Idéal pour mise à niveau rapide</span>
+        </div>
+
+        <div class="card-panel card-panel--highlight" style="border-top-color: var(--tertiary);">
+          <span class="status-tag status-tag--warn">Méthode N°3 &bull; Recommandée PC Doctor</span>
+          <h3>Installation Propre via Clé USB</h3>
+          <p>Le standard des professionnels : remise à zéro complète, formatage et partitionnement propre.</p>
+          <ul style="padding-left: var(--space-md); margin-bottom: var(--space-md); font-size: 0.95rem;">
+            <li><strong>Conserve les fichiers :</strong> Non (suppression complète des anciennes partitions).</li>
+            <li><strong>Avantage :</strong> Élimine 100% des malwares, scories et erreurs de registre accumulées.</li>
+            <li><strong>Polyvalence :</strong> Fonctionne sur disque SSD neuf vierge ou machine bloquée.</li>
+            <li><strong>Outil :</strong> Clé USB bootable créée avec Media Creation Tool.</li>
+          </ul>
+          <span class="status-tag status-tag--warn" style="align-self: flex-start;">Gold Standard des Techniciens</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 3 : CRÉATION DE LA CLÉ USB BOOTABLE & FICHIER ISO           -->
+    <!-- =================================================================== -->
+    <section id="module-3">
+      <h2><span class="step-badge">4</span> Préparation du Support : Création de la Clé USB Bootable</h2>
+      <p>
+        Pour installer Windows 11 de zéro, nous créons un média d'installation externe autonome (mémoire flash USB).
+      </p>
+
+      <div class="inset--warning">
+        <strong>AVERTISSEMENT MATÉRIEL IMPORTANT :</strong><br>
+        La clé USB utilisée doit disposer d'une capacité <strong>minimale de 8 Go</strong>. Toutes les données présentes sur cette clé seront <strong>définitivement effacées</strong> lors de la création du support de démarrage. Sauvegardez son contenu au préalable.
+      </div>
+
+      <h3>Procédure Officielle avec le Media Creation Tool</h3>
+      <ol style="padding-left: var(--space-lg); line-height: 1.8;">
+        <li>Munissez-vous d'un ordinateur sous Windows connecté à Internet et branchez la clé USB de 8 Go minimum.</li>
+        <li>Rendez-vous sur le site officiel Microsoft dans la section <em>Téléchargement de logiciels > Télécharger Windows 11</em>.</li>
+        <li>Dans la rubrique <strong>Création d'un support d'installation de Windows 11</strong>, cliquez sur <strong>Télécharger</strong> pour obtenir l'exécutable officiel.</li>
+        <li>Exécutez le fichier téléchargé en tant qu'administrateur et acceptez les termes du contrat de licence.</li>
+        <li>Sur la page <em>Sélection de la langue et de l'édition</em>, laissez cochée la case <em>"Utiliser les options recommandées pour ce PC"</em> (ou choisissez le Français et l'édition 64-bit).</li>
+        <li>À l'écran <em>"Choisissez le média à utiliser"</em>, sélectionnez <strong>Disque mémoire flash USB</strong>.</li>
+        <li>Sélectionnez la clé USB cible dans la liste des lecteurs amovibles, puis cliquez sur <strong>Suivant</strong>.</li>
+        <li>L'utilitaire télécharge l'image système Windows 11 puis écrit les fichiers d'amorçage UEFI sur la clé. À la fin, le message <strong>"Votre disque mémoire flash USB est prêt"</strong> apparaît. Cliquez sur <strong>Terminer</strong>.</li>
+      </ol>
+
+      <h3>Alternative : Vérification de l'Empreinte de l'Image ISO via PowerShell</h3>
+      <p>
+        Si vous téléchargez directement l'image ISO multi-édition pour l'intégrer à un serveur PXE ou une clé multiboot, contrôlez toujours son intégrité cryptographique pour éviter toute altération.
+      </p>
+
+      <div class="code-box">
+# Commande de calcul du hachage SHA-256 sous PowerShell :
+Get-FileHash -Path "C:\Users\Admin\Downloads\Win11_26H2_French_x64.iso" -Algorithm SHA256
+
+# Empreinte SHA256 officielle Microsoft (Version Française 64-bit) :
+# AA515279F02FB2B425EFF341F0A1F158D61288C72CCA5F9D87B79B5A23F7F918
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 4 : TOUCHES BOOT MENU PAR CONSTRUCTEUR                      -->
+    <!-- =================================================================== -->
+    <section id="module-4">
+      <h2><span class="step-badge">5</span> Démarrer sur la Clé : Les Touches Boot Menu par Constructeur</h2>
+      <p>
+        Lorsque l'on allume un ordinateur, celui-ci démarre par défaut sur son disque dur interne. Pour forcer l'ordinateur à démarrer sur votre clé USB d'installation, vous devez déclencher le <strong>Menu de Démarrage (Boot Menu)</strong> dès la mise sous tension.
+      </p>
+
+      <div class="card-panel">
+        <span class="status-tag">Sélecteur de Procédure Constructeur</span>
+        <h3 style="margin-top: var(--space-xs);">Choisissez la marque de votre ordinateur :</h3>
+
+        <div class="brand-tabs" role="tablist">
+          <button class="brand-tab active" type="button" onclick="selectBrand('dell')">DELL</button>
+          <button class="brand-tab" type="button" onclick="selectBrand('hp')">HP</button>
+          <button class="brand-tab" type="button" onclick="selectBrand('lenovo')">LENOVO</button>
+          <button class="brand-tab" type="button" onclick="selectBrand('asus')">ASUS</button>
+          <button class="brand-tab" type="button" onclick="selectBrand('acer')">ACER</button>
+          <button class="brand-tab" type="button" onclick="selectBrand('msi')">MSI / GIGABYTE</button>
+        </div>
+
+        <div id="brand-detail" class="inset" style="margin-top: 0;">
+          <!-- Dynamically populated -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <h3 style="margin: 0; color: var(--primary);">PC Portables & Bureaux DELL (Latitude, OptiPlex, Precision, Vostro)</h3>
+            <span class="status-tag status-tag--success" style="font-size: 1rem; padding: 4px 10px;">TOUCHE : F12</span>
+          </div>
+          <ol style="margin-top: var(--space-sm); padding-left: var(--space-md); line-height: 1.7;">
+            <li>Éteignez complètement l'ordinateur (pas de veille prolongée).</li>
+            <li>Branchez la clé USB bootable sur un port USB direct (évitez les hubs non alimentés).</li>
+            <li>Allumez la machine et <strong>tapotez immédiatement et rapidement la touche F12</strong> du clavier sans interruption jusqu'à l'apparition de l'écran <em>One-Time Boot Menu</em>.</li>
+            <li>À l'aide des flèches directionnelles, descendez dans la section <strong>UEFI BOOT</strong>.</li>
+            <li>Sélectionnez votre clé USB (ex: <code>UEFI: SanDisk Ultra USB 3.0</code>) et appuyez sur la touche <strong>ENTRÉE</strong>.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 5 : LE GRAND SIMULATEUR D'INSTALLATION WINDOWS 11           -->
+    <!-- =================================================================== -->
+    <section id="module-5">
+      <h2><span class="step-badge">6</span> Simulateur Interactif : Installation Propre & Configuration OOBE</h2>
+      <p>
+        Explorez et manipulez directement l'ensemble du processus d'installation de Windows 11 dans ce banc d'essai interactif conçu par <strong>PC Doctor</strong>. Vous pouvez basculer d'une étape à l'autre ou suivre le flux réel pas-à-pas.
+      </p>
+
+      <div class="simulator-container">
+        <!-- Barre de navigation du simulateur -->
+        <div class="sim-header">
+          <div class="sim-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            <span>SIMULATEUR VIRTUEL UEFI &bull; WINDOWS 11 SETUP</span>
+          </div>
+          <div class="sim-nav-pills">
+            <button class="sim-pill active" type="button" onclick="simGoToStep(1)">1. Boot Menu</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(2)">2. Langues</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(3)">3. Démarrage</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(4)">4. Clé Produit</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(5)">5. Édition</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(6)">6. Partitions</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(7)">7. Déploiement</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(8)">8. OOBE</button>
+            <button class="sim-pill" type="button" onclick="simGoToStep(9)">9. Activation</button>
+          </div>
+        </div>
+
+        <!-- Corps du simulateur -->
+        <div class="sim-body" id="sim-viewport">
+
+          <!-- ÉCRAN 1 : BOOT MENU BIOS -->
+          <div id="sim-step-1" class="sim-screen" style="display: block;">
+            <div style="background-color: var(--sim-bios-bg); color: var(--sim-text-white); font-family: var(--font-mono); padding: var(--space-lg); border: 2px solid var(--sim-text-white); max-width: 640px; margin: 0 auto;">
+              <div style="border-bottom: 1px solid var(--sim-text-white); padding-bottom: 6px; font-weight: 700;">
+                BIOS / UEFI ONE-TIME BOOT MENU
+              </div>
+              <p style="margin: var(--space-md) 0 8px 0; font-size: 0.85rem;">Sélectionnez le périphérique d'amorçage :</p>
+              <div style="background: var(--sim-bios-box); padding: var(--space-sm); border: 1px solid var(--sim-bios-border);">
+                <div style="padding: 4px; color: var(--data-context);">&bull; Windows Boot Manager (SSD NVMe 512GB)</div>
+                <div id="sim-boot-usb" style="padding: 6px; background-color: var(--sim-text-white); color: var(--sim-bios-box); font-weight: 700; cursor: pointer;" onclick="simSelectUsbBoot()">
+                  &gt; UEFI : USB Flash Drive 3.0 (Installation Media) [CLIQUEZ ICI]
+                </div>
+                <div style="padding: 4px; color: var(--data-context);">&bull; Onboard NIC (IPv4 / IPv6 PXE Boot)</div>
+                <div style="padding: 4px; color: var(--data-context);">&bull; Diagnostics &amp; BIOS Setup (F2)</div>
+              </div>
+              <div style="margin-top: var(--space-md); font-size: 0.8rem; color: var(--sim-bios-yellow);">
+                [Conseil Formateur PC Doctor] : Sélectionnez toujours l'entrée précédée de la mention <strong>UEFI</strong> pour assurer le partitionnement GPT moderne.
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 2 : OPTIONS LINGUISTIQUES -->
+          <div id="sim-step-2" class="sim-screen" style="display: none;">
+            <div class="win-window">
+              <div class="win-titlebar">
+                <span>Installation de Windows</span>
+                <span>&#10005;</span>
+              </div>
+              <div class="win-content">
+                <div style="display: flex; gap: var(--space-md); align-items: center; margin-bottom: var(--space-md);">
+                  <div style="width: 44px; height: 44px; background: var(--win-blue); display: grid; grid-template-columns: 1fr 1fr; gap: 2px; padding: 4px;">
+                    <div style="background: var(--sim-text-white);"></div><div style="background: var(--sim-text-white);"></div>
+                    <div style="background: var(--sim-text-white);"></div><div style="background: var(--sim-text-white);"></div>
+                  </div>
+                  <div>
+                    <h3 style="margin: 0;">Windows 11</h3>
+                    <div style="font-size: 0.85rem; color: var(--on-surface-variant);">Sélectionnez les paramètres régionaux</div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="sim-lang">Langue à installer :</label>
+                  <select id="sim-lang" class="form-select" style="padding: 4px;">
+                    <option selected>Français (France)</option>
+                    <option>Français (Canada)</option>
+                    <option>English (United States)</option>
+                    <option>Arabe (Tunisie)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="sim-time">Format horaire et monétaire :</label>
+                  <select id="sim-time" class="form-select" style="padding: 4px;">
+                    <option selected>Français (France)</option>
+                    <option>Français (Tunisie)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="sim-kbd">Clavier ou méthode d'entrée :</label>
+                  <select id="sim-kbd" class="form-select" style="padding: 4px;">
+                    <option selected>Français (AZERTY)</option>
+                    <option>Belge (Virgule)</option>
+                    <option>Canadien multilingue</option>
+                  </select>
+                </div>
+              </div>
+              <div class="win-footer">
+                <button class="btn btn--action" type="button" onclick="simGoToStep(3)">Suivant &gt;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 3 : INSTALLER MAINTENANT -->
+          <div id="sim-step-3" class="sim-screen" style="display: none;">
+            <div class="win-window">
+              <div class="win-titlebar">
+                <span>Installation de Windows</span>
+                <span>&#10005;</span>
+              </div>
+              <div class="win-content" style="justify-content: center; align-items: center; text-align: center;">
+                <div style="width: 60px; height: 60px; background: var(--win-blue); display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 6px; margin-bottom: var(--space-md);">
+                  <div style="background: var(--sim-text-white);"></div><div style="background: var(--sim-text-white);"></div>
+                  <div style="background: var(--sim-text-white);"></div><div style="background: var(--sim-text-white);"></div>
+                </div>
+                <h2 style="border: 0; margin-bottom: var(--space-lg);">Windows 11</h2>
+                
+                <button class="btn btn--action" type="button" style="padding: var(--space-md) var(--space-xl); font-size: 1.1rem;" onclick="simGoToStep(4)">
+                  Installer maintenant
+                </button>
+
+                <div style="margin-top: var(--space-xl);">
+                  <button type="button" style="background: none; border: 0; color: var(--win-link); text-decoration: underline; font-weight: 600; cursor: pointer;" onclick="simShowRepairNotice()">
+                    Réparer l'ordinateur
+                  </button>
+                  <div id="repair-notice" style="display: none; font-size: 0.8rem; color: var(--on-surface-variant); margin-top: 6px;">
+                    (Cette option ouvre l'environnement WinRE pour corriger les erreurs de boot, restaurer une image ou lancer l'invite de commande).
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 4 : CLÉ DE PRODUIT -->
+          <div id="sim-step-4" class="sim-screen" style="display: none;">
+            <div class="win-window">
+              <div class="win-titlebar">
+                <span>Activer Windows</span>
+                <span>&#10005;</span>
+              </div>
+              <div class="win-content">
+                <h3 style="margin-top: 0;">Activer Windows</h3>
+                <p style="font-size: 0.9rem;">
+                  Si vous installez Windows pour la première fois sur ce PC, vous devez entrer une clé de produit valide. Si vous réinstallez Windows, cliquez sur le lien ci-dessous :
+                </p>
+
+                <div class="form-group" style="max-width: 420px;">
+                  <label class="form-label" for="sim-key-input">Clé de produit (25 caractères) :</label>
+                  <input type="text" id="sim-key-input" class="form-input" placeholder="XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" style="letter-spacing: 2px; font-family: var(--font-mono);">
+                </div>
+
+                <div style="margin: var(--space-md) 0;">
+                  <button type="button" style="background: none; border: 0; color: var(--win-link); text-decoration: underline; font-weight: 700; cursor: pointer;" onclick="simGoToStep(5)">
+                    &bull; Je n'ai pas de clé de produit (Product Key)
+                  </button>
+                </div>
+
+                <div class="inset" style="font-size: 0.85rem; padding: var(--space-sm) var(--space-md);">
+                  <strong>Note PC Doctor :</strong> Sur les ordinateurs récents (Dell, HP, Lenovo), la licence Windows est intégrée à la carte mère dans la table UEFI ACPI (MSDM). Windows s'activera automatiquement dès la connexion réseau.
+                </div>
+              </div>
+              <div class="win-footer">
+                <button class="btn btn--secondary" type="button" onclick="simGoToStep(3)">&lt; Précédent</button>
+                <button class="btn btn--action" type="button" onclick="simGoToStep(5)">Suivant &gt;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 5 : CHOIX DE L'ÉDITION -->
+          <div id="sim-step-5" class="sim-screen" style="display: none;">
+            <div class="win-window">
+              <div class="win-titlebar">
+                <span>Sélectionner le système d'exploitation</span>
+                <span>&#10005;</span>
+              </div>
+              <div class="win-content">
+                <h3 style="margin-top: 0;">Sélectionnez le système d'exploitation à installer :</h3>
+                
+                <div class="table-container" style="margin: var(--space-sm) 0;">
+                  <table style="font-size: 0.85rem;">
+                    <thead>
+                      <tr>
+                        <th>Édition du système</th>
+                        <th>Architecture</th>
+                        <th>Date de modification</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr id="sim-row-home" style="cursor: pointer;" onclick="simSelectEdition('home')">
+                        <td><strong>Windows 11 Famille</strong></td>
+                        <td>x64</td>
+                        <td>2026-03</td>
+                      </tr>
+                      <tr id="sim-row-pro" style="cursor: pointer; background-color: var(--sim-sel-part);" onclick="simSelectEdition('pro')">
+                        <td><strong>Windows 11 Professionnel</strong></td>
+                        <td>x64</td>
+                        <td>2026-03</td>
+                      </tr>
+                      <tr id="sim-row-edu" style="cursor: pointer;" onclick="simSelectEdition('edu')">
+                        <td>Windows 11 Éducation</td>
+                        <td>x64</td>
+                        <td>2026-03</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div id="edition-desc" class="inset" style="font-size: 0.85rem; padding: var(--space-sm) var(--space-md);">
+                  <strong>Édition Sélectionnée : Windows 11 Professionnel</strong><br>
+                  Intègre le chiffrement matériel de lecteur BitLocker, l'accès au Bureau à distance (RDP Host), l'adhésion au domaine Active Directory / Azure AD et la virtualisation Hyper-V / Sandbox.
+                </div>
+              </div>
+              <div class="win-footer">
+                <button class="btn btn--secondary" type="button" onclick="simGoToStep(4)">&lt; Précédent</button>
+                <button class="btn btn--action" type="button" onclick="simGoToStep(6)">Suivant &gt;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 6 : GESTION DES PARTITIONS -->
+          <div id="sim-step-6" class="sim-screen" style="display: none;">
+            <div class="win-window" style="max-width: 740px;">
+              <div class="win-titlebar">
+                <span>Où souhaitez-vous installer Windows ?</span>
+                <span>&#10005;</span>
+              </div>
+              <div class="win-content">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h3 style="margin: 0; font-size: 1.05rem;">Partitions de disques détectées :</h3>
+                  <div style="display: flex; gap: 4px;">
+                    <button class="btn btn--secondary" type="button" style="padding: 2px 8px; font-size: 0.75rem;" onclick="simResetPartitions('dirty')">Scénario : Ancien Disque à Nettoyer</button>
+                    <button class="btn btn--secondary" type="button" style="padding: 2px 8px; font-size: 0.75rem;" onclick="simResetPartitions('clean')">Scénario : Disque SSD Neuf Vierge</button>
+                  </div>
+                </div>
+
+                <!-- Tableau interactif de partitions -->
+                <table class="part-table" id="sim-partition-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Taille totale</th>
+                      <th>Espace libre</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sim-partition-tbody">
+                    <!-- Rempli par JavaScript -->
+                  </tbody>
+                </table>
+
+                <!-- Boutons d'action sur partitions -->
+                <div style="display: flex; gap: var(--space-sm); margin: var(--space-xs) 0 var(--space-sm) 0; flex-wrap: wrap;">
+                  <button class="btn btn--secondary" type="button" style="font-size: 0.8rem; padding: 4px 10px;" onclick="simDeleteSelectedPartition()">
+                    &#10006; Supprimer
+                  </button>
+                  <button class="btn btn--secondary" type="button" style="font-size: 0.8rem; padding: 4px 10px;" onclick="simFormatPartition()">
+                    &#128465; Formater
+                  </button>
+                  <button class="btn btn--secondary" type="button" style="font-size: 0.8rem; padding: 4px 10px;" onclick="simNewPartition()">
+                    + Nouveau
+                  </button>
+                  <button class="btn btn--secondary" type="button" style="font-size: 0.8rem; padding: 4px 10px;" onclick="simRefreshPartitions()">
+                    &#8635; Actualiser
+                  </button>
+                </div>
+
+                <div id="sim-part-status" class="inset--warning" style="font-size: 0.85rem; padding: 8px 12px; margin: 4px 0;">
+                  <strong>Règle de l'Expert PC Doctor :</strong> Pour une <em>installation propre</em> sans conflit, supprimez toutes les anciennes partitions système (Récupération, EFI, MSR) jusqu'à n'obtenir qu'une seule ligne <strong>"Espace non alloué sur le lecteur 0"</strong>, puis cliquez sur Suivant.
+                </div>
+              </div>
+              <div class="win-footer">
+                <button class="btn btn--secondary" type="button" onclick="simGoToStep(5)">&lt; Précédent</button>
+                <button class="btn btn--action" id="sim-part-next-btn" type="button" onclick="simValidatePartAndDeploy()">Suivant &gt;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 7 : DÉPLOIEMENT & COPIE DES FICHIERS -->
+          <div id="sim-step-7" class="sim-screen" style="display: none;">
+            <div class="win-window">
+              <div class="win-titlebar">
+                <span>Installation de Windows 11</span>
+                <span>&#10005;</span>
+              </div>
+              <div class="win-content">
+                <h3 style="margin-top: 0;">Installation de Windows en cours...</h3>
+                <p style="font-size: 0.85rem; color: var(--on-surface-variant);">
+                  Votre ordinateur va redémarrer à plusieurs reprises. Ne débranchez pas la machine du secteur.
+                </p>
+
+                <div style="margin: var(--space-md) 0; font-size: 0.95rem; line-height: 2;">
+                  <div id="inst-step-1" style="color: var(--positive); font-weight: 700;">&#10004; Copie des fichiers Windows (100%)</div>
+                  <div id="inst-step-2" style="font-weight: 700;">&bull; Préparation des fichiers pour l'installation (<span id="inst-prep-pct">0</span>%)</div>
+                  <div id="inst-step-3" style="color: var(--sim-text-gray);">&bull; Installation des fonctionnalités</div>
+                  <div id="inst-step-4" style="color: var(--sim-text-gray);">&bull; Installation des mises à jour</div>
+                  <div id="inst-step-5" style="color: var(--sim-text-gray);">&bull; Achèvement de l'installation</div>
+                </div>
+
+                <div class="progress-track">
+                  <div class="progress-fill" id="sim-deploy-progress"></div>
+                </div>
+
+                <div id="sim-reboot-box" style="display: none; background: var(--sim-reboot-bg); color: var(--sim-reboot-text); padding: var(--space-sm); border: 1px solid var(--sim-reboot-border); margin-top: var(--space-md); font-weight: 700; font-size: 0.9rem;">
+                  &#9888; Redémarrage automatique dans <span id="sim-reboot-sec">5</span> secondes... Vous pouvez maintenant retirer la clé USB pour éviter de reboucler sur l'installeur.
+                </div>
+              </div>
+              <div class="win-footer">
+                <button class="btn btn--action" id="sim-skip-deploy-btn" type="button" onclick="simFastForwardDeploy()">Accélérer le déploiement &gt;&gt;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 8 : OOBE (OUT OF BOX EXPERIENCE) -->
+          <div id="sim-step-8" class="sim-screen" style="display: none;">
+            <div class="oobe-window">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px;">
+                  <span style="font-size: 0.85rem; font-weight: 700; color: var(--oobe-blue-text); letter-spacing: 1px;">CONFIGURATION WINDOWS 11 &bull; PHASE OOBE</span>
+                  <span class="status-tag status-tag--success" style="font-size: 0.75rem;">SYSTÈME INSTALLÉ</span>
+                </div>
+
+                <h2 style="color: var(--sim-text-white); border: 0; margin-top: var(--space-md); font-size: 1.5rem;">
+                  Commençons par votre région et vos préférences
+                </h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-top: var(--space-md);">
+                  <div>
+                    <label class="form-label" style="color: var(--sim-text-white);">Nom de l'ordinateur :</label>
+                    <input type="text" id="oobe-pc-name" class="form-input" value="PC-TECH-DOCTOR" style="background: var(--sim-input-bg); color: var(--sim-text-white); border-color: var(--oobe-border);">
+                    
+                    <label class="form-label" style="color: var(--sim-text-white); margin-top: var(--space-sm);">Compte utilisateur :</label>
+                    <select id="oobe-account-type" class="form-select" onchange="toggleOobeAccountNotice()" style="background: var(--sim-input-bg); color: var(--sim-text-white); border-color: var(--oobe-border);">
+                      <option value="ms">Compte Microsoft Connecté (Recommandé standard)</option>
+                      <option value="local">Compte d'utilisateur Local Hors-Ligne (Méthode Expert)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="form-label" style="color: var(--sim-text-white);">Options de télémétrie &amp; Confidentialité :</label>
+                    <div style="font-size: 0.85rem; line-height: 1.6;">
+                      <label style="display: flex; gap: 6px; align-items: center;">
+                        <input type="checkbox" id="oobe-loc" checked> Autoriser la localisation
+                      </label>
+                      <label style="display: flex; gap: 6px; align-items: center;">
+                        <input type="checkbox" id="oobe-diag"> Envoyer les données de diagnostic complètes
+                      </label>
+                      <label style="display: flex; gap: 6px; align-items: center;">
+                        <input type="checkbox" id="oobe-ads"> Personnaliser les expériences publicitaires
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Astuce compte local -->
+                <div id="oobe-bypass-tip" class="inset" style="background: var(--sim-card-bg); border-left-color: var(--sim-cyan); color: var(--sim-light-text); font-size: 0.85rem; margin-top: var(--space-md); display: none;">
+                  <strong>Astuce PC Doctor (Contournement du Compte Microsoft Obligatoire) :</strong><br>
+                  Si vous n'avez pas de connexion Internet ou souhaitez un compte local pur : appuyez sur <code>Shift + F10</code> pour ouvrir l'invite de commande, puis saisissez <code>OOBE\BYPASSNRO</code> et appuyez sur Entrée. Le PC redémarrera et proposera l'option <em>"Je n'ai pas Internet"</em>.
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: var(--space-md); margin-top: var(--space-md);">
+                <button class="btn btn--action" type="button" style="background: var(--oobe-btn-bg); color: var(--on-primary);" onclick="simGoToStep(9)">
+                  Finaliser la Configuration et Ouvrir Windows 11 &gt;
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÉCRAN 9 : BUREAU & ACTIVATION -->
+          <div id="sim-step-9" class="sim-screen" style="display: none;">
+            <div style="background: var(--sim-desk-bg); border: 1px solid var(--sim-desk-border); padding: var(--space-md); max-width: 760px; margin: 0 auto; color: var(--sim-text-white);">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--sim-desk-border); padding-bottom: 8px;">
+                <span style="font-weight: 700; color: var(--sim-cyan);">&#10004; INSTALLATION TERMINÉE &bull; BUREAU WINDOWS 11 FONCTIONNEL</span>
+                <span class="status-tag status-tag--success">SYSTÈME OPÉRATIONNEL</span>
+              </div>
+
+              <!-- Simulation de la fenêtre Propriétés Système / Activation -->
+              <div style="background: var(--sim-desk-card); border: 1px solid var(--sim-desk-card-border); padding: var(--space-md); margin: var(--space-md) 0;">
+                <div style="display: flex; gap: var(--space-md); align-items: center;">
+                  <div style="width: 48px; height: 48px; background: var(--sim-icon-bg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800;">
+                    &#9776;
+                  </div>
+                  <div>
+                    <h3 style="margin: 0; color: var(--sim-text-white);">Paramètres &gt; Système &gt; Activation</h3>
+                    <div style="font-size: 0.85rem; color: var(--sim-desk-muted);">État de l'activation Windows 11 Professionnel</div>
+                  </div>
+                </div>
+
+                <div class="inset--success" style="background: var(--sim-success-bg); color: var(--sim-success-text); border-left: 5px solid var(--sim-success-border); margin-top: var(--space-md); padding: var(--space-sm) var(--space-md);">
+                  <div style="font-weight: 800; font-size: 1.05rem;">&#10004; État d'activation : Actif</div>
+                  <div style="font-size: 0.85rem; color: var(--sim-success-light); margin-top: 4px;">
+                    Windows est activé à l'aide d'une licence numérique liée au matériel de votre appareil.
+                  </div>
+                </div>
+
+                <div style="margin-top: var(--space-md); font-size: 0.85rem; color: var(--sim-desk-body); line-height: 1.6;">
+                  <strong>Détails de la machine simulée :</strong>
+                  <ul>
+                    <li>Nom de l'appareil : <span id="res-pc-name">PC-TECH-DOCTOR</span></li>
+                    <li>Système d'exploitation : Windows 11 Pro 64 bits (Build 26100)</li>
+                    <li>Sécurité : TPM 2.0 vérifié &bull; Démarrage sécurisé UEFI actif</li>
+                    <li>Gestionnaire de disques : 1 partition principale NTFS + Partition EFI 100 Mo + MSR 16 Mo</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm);">
+                <button class="btn btn--secondary" type="button" onclick="simGoToStep(1)">&#8634; Recommencer la simulation complète</button>
+                <a href="#module-7" class="btn btn--action">Continuer vers la Check-list Post-Installation &darr;</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 6 : GUIDE DE DÉPANNAGE & ERREURS FRÉQUENTES                 -->
+    <!-- =================================================================== -->
+    <section id="module-6">
+      <h2><span class="step-badge">7</span> Diagnostic des Pannes : Résolution des Erreurs Fréquentes</h2>
+      <p>
+        Durant les déploiements, les techniciens sont fréquemment confrontés à des blocages matériels ou des refus d'installation. Voici les 5 scénarios d'incidents les plus fréquents et leur protocole de résolution.
+      </p>
+
+      <div class="card-panel">
+        <span class="status-tag">Module de Diagnostic Interactif</span>
+        <h3 style="margin-top: var(--space-xs);">Sélectionnez le symptôme rencontré lors de l'installation :</h3>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-xs); margin-bottom: var(--space-md);">
+          <button class="btn btn--secondary" type="button" onclick="showErrorCase('not_supported')">1. "Ce PC ne peut pas exécuter W11"</button>
+          <button class="btn btn--secondary" type="button" onclick="showErrorCase('freeze_99')">2. Blocage à 99% ou freeze Setup</button>
+          <button class="btn btn--secondary" type="button" onclick="showErrorCase('mbr_gpt')">3. "Disque du style de partition MBR"</button>
+          <button class="btn btn--secondary" type="button" onclick="showErrorCase('no_drive')">4. Aucun disque dur détecté</button>
+          <button class="btn btn--secondary" type="button" onclick="showErrorCase('no_usb')">5. Clé USB absente du Boot Menu</button>
+        </div>
+
+        <div id="error-case-detail" class="inset--error">
+          <!-- Dynamically populated -->
+          <h3 style="margin-top: 0; color: var(--error);">Erreur : "Ce PC ne répond pas actuellement à la configuration requise"</h3>
+          <p><strong>Cause Racine :</strong> Le module TPM 2.0 est désactivé dans le BIOS/UEFI, ou le mode Démarrage Sécurisé (Secure Boot) est inactif, ou le processeur est de génération antérieure à Intel Gen 8 / AMD Zen 2.</p>
+          <div style="margin-top: var(--space-sm);">
+            <strong>Protocole de Résolution PC Doctor :</strong>
+            <ol style="padding-left: var(--space-md); margin-top: 4px;">
+              <li>Redémarrez le PC et entrez dans le BIOS Setup (Touche <strong>F2</strong> ou <strong>Suppr</strong>).</li>
+              <li>Allez dans l'onglet <strong>Security</strong> &gt; Activez <strong>Intel PTT</strong> (Platform Trust Technology) ou <strong>AMD fTPM</strong>.</li>
+              <li>Allez dans l'onglet <strong>Boot</strong> &gt; Activez <strong>Secure Boot</strong> et passez en mode <strong>UEFI</strong> (désactivez le mode Legacy/CSM).</li>
+              <li>Sauvegardez en appuyant sur <strong>F10</strong> et relancez l'installation.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- MODULE 7 : CHECK-LIST POST-INSTALLATION & PILOTES                  -->
+    <!-- =================================================================== -->
+    <section id="module-7">
+      <h2><span class="step-badge">8</span> Protocole Post-Installation & Check-list Technique</h2>
+      <p>
+        Une fois l'écran d'accueil Windows 11 affiché, le travail du technicien n'est pas terminé. Pour livrer une machine stable et performante, cochez chaque étape du protocole de conformité :
+      </p>
+
+      <div class="checklist-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); flex-wrap: wrap; gap: var(--space-xs);">
+          <span style="font-weight: 800; text-transform: uppercase; font-size: 0.95rem;">Contrôle Qualité de Sortie d'Atelier :</span>
+          <span id="checklist-counter" class="status-tag status-tag--warn">Progression : 0 / 6 Validés</span>
+        </div>
+
+        <div class="check-item" onclick="toggleTask('chk1')">
+          <input type="checkbox" id="chk1" onchange="updateChecklistProgress()">
+          <div>
+            <strong>1. Mises à Jour Complètes Windows Update :</strong>
+            <span>Accéder aux Paramètres &gt; Windows Update &gt; "Rechercher des mises à jour" et répéter l'opération jusqu'à ce que le système indique "Vous êtes à jour".</span>
+          </div>
+        </div>
+
+        <div class="check-item" onclick="toggleTask('chk2')">
+          <input type="checkbox" id="chk2" onchange="updateChecklistProgress()">
+          <div>
+            <strong>2. Pilotes Graphiques Constructeur Dédiés :</strong>
+            <span>Installer l'utilitaire constructeur officiel pour carte graphique (NVIDIA GeForce Experience ou AMD Radeon Software) afin d'assurer l'accélération matérielle et le bon taux de rafraîchissement.</span>
+          </div>
+        </div>
+
+        <div class="check-item" onclick="toggleTask('chk3')">
+          <input type="checkbox" id="chk3" onchange="updateChecklistProgress()">
+          <div>
+            <strong>3. Vérification du Gestionnaire de Périphériques :</strong>
+            <span>Exécuter <code>devmgmt.msc</code> et s'assurer qu'aucun point d'exclamation jaune ou "Périphérique inconnu" ne subsiste (notamment chipset, Wi-Fi et Bluetooth).</span>
+          </div>
+        </div>
+
+        <div class="check-item" onclick="toggleTask('chk4')">
+          <input type="checkbox" id="chk4" onchange="updateChecklistProgress()">
+          <div>
+            <strong>4. Vérification de l'Activation Numérique :</strong>
+            <span>Contrôler dans <em>Paramètres &gt; Système &gt; Activation</em> que la mention "Actif" est bien présente.</span>
+          </div>
+        </div>
+
+        <div class="check-item" onclick="toggleTask('chk5')">
+          <input type="checkbox" id="chk5" onchange="updateChecklistProgress()">
+          <div>
+            <strong>5. Sécurité & Antivirus Windows Defender :</strong>
+            <span>Vérifier que la protection en temps réel, l'isolation du noyau (Core Isolation) et la sécurité basée sur la virtualisation (VBS) sont opérationnelles.</span>
+          </div>
+        </div>
+
+        <div class="check-item" onclick="toggleTask('chk6')">
+          <input type="checkbox" id="chk6" onchange="updateChecklistProgress()">
+          <div>
+            <strong>6. Nettoyage des Fichiers Temporaires d'Installation :</strong>
+            <span>Lancer l'outil <em>Nettoyage de disque (cleanmgr)</em> pour purger les fichiers d'installation résiduels et l'éventuel dossier <code>Windows.old</code> afin de libérer 15 à 25 Go de stockage.</span>
+          </div>
+        </div>
+
+        <div style="margin-top: var(--space-md); display: flex; justify-content: flex-end;">
+          <button class="btn btn--secondary" type="button" onclick="resetChecklist()">Réinitialiser la check-list</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- SECTION ÉVALUATION & RÉVISION NOTEBOOKLM                           -->
+    <!-- =================================================================== -->
+    <section id="module-eval">
+      <h2><span class="step-badge">★</span> Validation des Acquis &amp; Auto-évaluation NotebookLM</h2>
+      <p>
+        Validez vos compétences acquises tout au long de ce guide grâce à la suite pédagogique interactive créée par <strong>Mohamed Aissaoui</strong> sur NotebookLM. Testez vos réflexes, révisez avec les flashcards et consultez les diaporamas de référence.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: var(--space-md);">
+        
+        <div style="background: var(--surface-container-low); border: 2px solid #059669; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column;">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #065f46; background: #d1fae5; padding: 0.2rem 0.5rem; border-radius: 4px; align-self: flex-start; margin-bottom: 0.5rem;">⭐ Évaluation Officielle</span>
+          <h3 style="margin: 0.25rem 0 0.5rem 0; font-size: 1.15rem; color: var(--on-surface);">Administration Windows Quiz (50 Q)</h3>
+          <p style="font-size: 0.88rem; color: var(--on-surface-variant); flex: 1; line-height: 1.5;">
+            50 questions interactives chronométrées pour tester votre maîtrise du partitionnement, du boot UEFI, des commandes DISM et de la post-installation.
+          </p>
+          <a href="https://notebooklm.link.google/EtxHNw3vrERM" target="_blank" rel="noopener noreferrer" style="margin-top: 0.75rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; background: #059669; color: #ffffff; text-decoration: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.9rem;">
+            🎯 Lancer le Quiz 50 Questions &rarr;
+          </a>
+        </div>
+
+        <div style="background: var(--surface-container-low); border: 2px solid #7c3aed; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column;">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #5b21b6; background: #ede9fe; padding: 0.2rem 0.5rem; border-radius: 4px; align-self: flex-start; margin-bottom: 0.5rem;">🗂️ Mémorisation Active</span>
+          <h3 style="margin: 0.25rem 0 0.5rem 0; font-size: 1.15rem; color: var(--on-surface);">Installation Windows Flashcards</h3>
+          <p style="font-size: 0.88rem; color: var(--on-surface-variant); flex: 1; line-height: 1.5;">
+            Révisez rapidement les définitions essentielles, les tables de correspondances des touches Boot Menu et les codes d'erreurs récurrents.
+          </p>
+          <a href="https://notebooklm.link.google/JizAOS22yfsB" target="_blank" rel="noopener noreferrer" style="margin-top: 0.75rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; background: #7c3aed; color: #ffffff; text-decoration: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.9rem;">
+            🗂️ Réviser avec les Cartes &rarr;
+          </a>
+        </div>
+
+        <div style="background: var(--surface-container-low); border: 2px solid #162e51; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column;">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #1e40af; background: #dbeafe; padding: 0.2rem 0.5rem; border-radius: 4px; align-self: flex-start; margin-bottom: 0.5rem;">📽️ Diaporama de Synthèse</span>
+          <h3 style="margin: 0.25rem 0 0.5rem 0; font-size: 1.15rem; color: var(--on-surface);">Maîtriser le Déploiement Windows</h3>
+          <p style="font-size: 0.88rem; color: var(--on-surface-variant); flex: 1; line-height: 1.5;">
+            Diaporama exhaustif illustré : de la sélection du hardware aux scénarios de capture WIM et déploiement industriel en entreprise.
+          </p>
+          <a href="https://notebooklm.link.google/VlqqKc4OiOea" target="_blank" rel="noopener noreferrer" style="margin-top: 0.75rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; background: #162e51; color: #ffffff; text-decoration: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.9rem;">
+            🖥️ Consulter le Diaporama &rarr;
+          </a>
+        </div>
+
+        <div style="background: var(--surface-container-low); border: 2px solid #0078d4; border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column;">
+          <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #0369a1; background: #e0f2fe; padding: 0.2rem 0.5rem; border-radius: 4px; align-self: flex-start; margin-bottom: 0.5rem;">📖 Support Visuel</span>
+          <h3 style="margin: 0.25rem 0 0.5rem 0; font-size: 1.15rem; color: var(--on-surface);">Installation &amp; Configuration Windows</h3>
+          <p style="font-size: 0.88rem; color: var(--on-surface-variant); flex: 1; line-height: 1.5;">
+            Guide visuel de gestion du déploiement Windows pour techniciens et support informatique d'entreprise.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.75rem;">
+            <a href="https://notebooklm.link.google/EWfhMCuvtCsI" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; background: #0078d4; color: #ffffff; text-decoration: none; padding: 0.6rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.9rem;">
+              📖 Ouvrir la Présentation &rarr;
+            </a>
+            <a href="https://notebooklm.link.google/KQxyIPtJ3Tbm" target="_blank" rel="noopener noreferrer" style="text-align: center; font-size: 0.8rem; color: var(--on-surface-variant); text-decoration: underline;">
+              Lien miroir NotebookLM
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ZONE AUTEUR & SIGNATURE PROFESSIONNELLE                            -->
+    <!-- =================================================================== -->
+    <section>
+      <div class="author-box">
+        <div class="author-avatar" aria-hidden="true">
+          PCD
+        </div>
+        <div>
+          <h3 class="author-name">Équipe Technique &amp; Direction Pédagogique — PC DOCTOR</h3>
+          <div class="author-title">Centre de Maintenance, Diagnostic Matériel &amp; Formation Informatique Professionnelle</div>
+          <p style="margin: 0; font-size: 0.95rem; line-height: 1.5; color: var(--on-surface);">
+            Ce support de formation certifié est édité par l'équipe d'experts de <strong>pcdoctor.tn</strong>, votre partenaire de confiance en Tunisie pour le dépannage, l'optimisation des parcs bureautiques, le reconditionnement d'ordinateurs portables professionnels garantis et le déploiement sécurisé des systèmes d'exploitation Microsoft Windows et Linux.
+          </p>
+          <div style="margin-top: var(--space-sm); font-size: 0.9rem; font-weight: 700;">
+            Site Internet Officiel &amp; Prise en charge : <span style="color: var(--tertiary); text-decoration: underline;">pcdoctor.tn</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div> <!-- Fin de .page-grid -->
+
+  <!-- =================================================================== -->
+  <!-- PIED DE PAGE (FOOTER) INSTITUTIONNEL                               -->
+  <!-- =================================================================== -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">
+          <span>PC DOCTOR .TN</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--on-surface-variant); margin-top: var(--space-xs);">
+          Expertise technique, réparation avancée et maintenance informatique en Tunisie. Formations pratiques aux systèmes Windows 11 et architectures PC modernes.
+        </p>
+        <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary);">
+          Portail web : pcdoctor.tn
+        </div>
+      </div>
+
+      <div>
+        <strong style="text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; color: var(--on-surface-variant);">Navigation &amp; Modules</strong>
+        <ul style="list-style: none; padding: 0; margin: var(--space-xs) 0 0 0; font-size: 0.85rem; line-height: 2;">
+          <li><a href="#module-1" style="color: var(--tertiary); text-decoration: underline;">Prérequis TPM 2.0 &amp; UEFI</a></li>
+          <li><a href="#simulateur-compatibilite" style="color: var(--tertiary); text-decoration: underline;">Simulateur d'éligibilité</a></li>
+          <li><a href="#module-4" style="color: var(--tertiary); text-decoration: underline;">Touches Boot Menu (Dell, HP, Lenovo)</a></li>
+          <li><a href="#module-5" style="color: var(--tertiary); text-decoration: underline;">Simulateur Windows 11 Setup</a></li>
+          <li><a href="#module-6" style="color: var(--tertiary); text-decoration: underline;">Dépannage des erreurs 99% &amp; MBR</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <strong style="text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; color: var(--on-surface-variant);">Mentions &amp; Sources Officielles</strong>
+        <p style="font-size: 0.85rem; color: var(--on-surface); margin-top: var(--space-xs); font-weight:500;">
+          Conception &amp; Encadrement Pédagogique : <strong>Mohamed Aissaoui</strong> — Formateur IT.<br>
+          Guide technique conforme au référentiel de formation des techniciens en maintenance informatique.
+        </p>
+        <p style="font-size: 0.8rem; color: var(--on-surface-variant); margin-top: var(--space-xs);">
+          Spécifications officielles Microsoft &amp; retours d'expérience du laboratoire technique de <strong>pcdoctor.tn</strong>.
+        </p>
+        <p style="font-size: 0.75rem; color: #888888; margin: 0;">
+          &copy; 2026 PC Doctor Tunisie. Tous droits réservés. Reproduction et diffusion autorisées à des fins pédagogiques.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Shim API pour persistance de l'état -->
+  <api-shim></api-shim>
+
+  <!-- Script d'interaction & logique pédagogique -->
+  <script>
+    // État persistant du cours
+    let courseState = {
+      checklist: {
+        chk1: false,
+        chk2: false,
+        chk3: false,
+        chk4: false,
+        chk5: false,
+        chk6: false
+      },
+      currentSimStep: 1,
+      selectedBrand: 'dell',
+      partitionScenario: 'dirty',
+      selectedPartitionIndex: 2
+    };
+
+    // Table de partitions simulée
+    let partitionsList = [
+      { name: 'Lecteur 0 Partition 1 : Récupération', size: '529 Mo', free: '45 Mo', type: 'Récupération' },
+      { name: 'Lecteur 0 Partition 2 : Système (EFI)', size: '100 Mo', free: '70 Mo', type: 'Système' },
+      { name: 'Lecteur 0 Partition 3 : Réservé MSR', size: '16 Mo', free: '0 Mo', type: 'MSR (Réservé)' },
+      { name: 'Lecteur 0 Partition 4 : Windows 10 (C:)', size: '476.3 Go', free: '180.2 Go', type: 'Principal' }
+    ];
+
+    // =========================================================================
+    // 1. GESTION DU SIMULATEUR D'ÉLIGIBILITÉ MATÉRIELLE
+    // =========================================================================
+    function loadConfigPreset(type) {
+      const cpu = document.getElementById('cfg-cpu');
+      const ram = document.getElementById('cfg-ram');
+      const storage = document.getElementById('cfg-storage');
+      const tpm = document.getElementById('cfg-tpm');
+      const boot = document.getElementById('cfg-boot');
+      const gpu = document.getElementById('cfg-gpu');
+
+      if (!cpu || !ram || !storage || !tpm || !boot || !gpu) return;
+
+      if (type === 'compatible') {
+        cpu.value = 'intel-11';
+        ram.value = '16';
+        storage.value = 'ssd-512';
+        tpm.value = '2.0';
+        boot.value = 'uefi-secure';
+        gpu.value = 'dx12';
+      } else if (type === 'tpm_disabled') {
+        cpu.value = 'amd-zen2';
+        ram.value = '16';
+        storage.value = 'ssd-256';
+        tpm.value = 'disabled';
+        boot.value = 'uefi-nosecure';
+        gpu.value = 'dx12';
+      } else if (type === 'legacy') {
+        cpu.value = 'intel-7';
+        ram.value = '4';
+        storage.value = 'ssd-64';
+        tpm.value = 'none';
+        boot.value = 'legacy';
+        gpu.value = 'dx11';
+      }
+      runCompatibilityCheck();
+    }
+
+    function runCompatibilityCheck() {
+      const cpu = document.getElementById('cfg-cpu');
+      const ram = document.getElementById('cfg-ram');
+      const storage = document.getElementById('cfg-storage');
+      const tpm = document.getElementById('cfg-tpm');
+      const boot = document.getElementById('cfg-boot');
+      const gpu = document.getElementById('cfg-gpu');
+
+      const verdictBox = document.getElementById('compat-verdict-box');
+      const title = document.getElementById('compat-title');
+      const badge = document.getElementById('compat-score-badge');
+      const desc = document.getElementById('compat-desc');
+      const actions = document.getElementById('compat-actions');
+
+      if (!cpu || !ram || !storage || !tpm || !boot || !gpu || !verdictBox || !title || !badge || !desc || !actions) return;
+
+      let score = 0;
+      let issues = [];
+
+      // CPU
+      if (cpu.value === 'intel-11' || cpu.value === 'intel-8' || cpu.value === 'amd-zen2') {
+        score++;
+      } else {
+        issues.push(`Processeur non éligible selon la liste officielle Microsoft (Intel 8e gen ou AMD Zen 2 minimum requis).`);
+      }
+
+      // RAM
+      if (ram.value === '16' || ram.value === '8' || ram.value === '4') {
+        score++;
+      } else {
+        issues.push(`Mémoire RAM insuffisante (${ram.value} Go détectés, 4 Go minimum exigés).`);
+      }
+
+      // Storage
+      if (storage.value !== 'hdd-32') {
+        score++;
+      } else {
+        issues.push(`Espace de stockage insuffisant (64 Go minimum requis).`);
+      }
+
+      // TPM
+      if (tpm.value === '2.0') {
+        score++;
+      } else if (tpm.value === 'disabled') {
+        issues.push(`TPM 2.0 présent mais désactivé dans le BIOS (activer Intel PTT ou AMD fTPM).`);
+      } else {
+        issues.push(`Absence de puce TPM 2.0 matérielle.`);
+      }
+
+      // Boot mode
+      if (boot.value === 'uefi-secure') {
+        score++;
+      } else if (boot.value === 'uefi-nosecure') {
+        issues.push(`Mode UEFI actif mais Secure Boot (démarrage sécurisé) désactivé.`);
+      } else {
+        issues.push(`Mode hérité (Legacy BIOS / CSM) incompatible : Windows 11 exige l'UEFI natif.`);
+      }
+
+      // GPU
+      if (gpu.value === 'dx12') {
+        score++;
+      } else {
+        issues.push(`Carte graphique non compatible DirectX 12 / pilote WDDM 2.0.`);
+      }
+
+      badge.textContent = `SCORE : ${score} / 6 CRITÈRES VALIDÉS`;
+
+      if (score === 6) {
+        verdictBox.className = 'inset--success';
+        title.style.color = 'var(--positive)';
+        title.textContent = 'VERDICT : Ce PC Répond Pleinement aux Critères Windows 11';
+        badge.className = 'status-tag status-tag--success';
+        desc.textContent = 'Tous les indicateurs matériels sont conformes. L\'installation peut se dérouler sans aucun message de blocage Microsoft.';
+        actions.innerHTML = '<span style="color: var(--positive);">&#10004; Feu vert technique : Préparez votre clé USB et démarrez la mise à niveau.</span>';
+      } else if (score >= 4 && (tpm.value === 'disabled' || boot.value === 'uefi-nosecure')) {
+        verdictBox.className = 'inset--warning';
+        title.style.color = 'var(--warning)';
+        title.textContent = 'VERDICT : Matériel Compatible mais Paramètres BIOS à Activer';
+        badge.className = 'status-tag status-tag--warn';
+        desc.textContent = 'Votre matériel dispose de la puissance requise, mais des options de sécurité critiques sont désactivées dans votre micrologiciel.';
+        actions.innerHTML = `<span style="color: var(--warning);">&#9888; Actions requises :</span><br>&bull; ${issues.join('<br>&bull; ')}`;
+      } else {
+        verdictBox.className = 'inset--error';
+        title.style.color = 'var(--error)';
+        title.textContent = 'VERDICT : Ce PC ne Répond pas à la Configuration Minimale';
+        badge.className = 'status-tag status-tag--error';
+        desc.textContent = 'Ce système rencontre des limitations bloquantes qui empêcheront l\'installation officielle de Windows 11.';
+        actions.innerHTML = `<span style="color: var(--error);">&#10006; Points bloquants identifiés :</span><br>&bull; ${issues.join('<br>&bull; ')}<br><div style="margin-top: 6px; font-weight: normal;"><em>Conseil PC Doctor (pcdoctor.tn) : Pour un usage sécurisé sans bidouillage, envisagez la mise à niveau vers un PC professionnel reconditionné et garanti.</em></div>`;
+      }
+    }
+
+    // =========================================================================
+    // 2. GESTION DU SÉLECTEUR DE CONSTRUCTEUR (BOOT MENU)
+    // =========================================================================
+    function selectBrand(brand) {
+      courseState.selectedBrand = brand;
+      const tabs = document.querySelectorAll('.brand-tab');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      const brandTabsArr = ['dell', 'hp', 'lenovo', 'asus', 'acer', 'msi'];
+      const index = brandTabsArr.indexOf(brand);
+      if (index !== -1 && tabs[index]) {
+        tabs[index].classList.add('active');
+      }
+
+      const detail = document.getElementById('brand-detail');
+      if (!detail) return;
+
+      if (brand === 'dell') {
+        detail.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <h3 style="margin: 0; color: var(--primary);">PC Portables & Bureaux DELL (Latitude, OptiPlex, Precision, Vostro)</h3>
+            <span class="status-tag status-tag--success" style="font-size: 1rem; padding: 4px 10px;">TOUCHE : F12</span>
+          </div>
+          <ol style="margin-top: var(--space-sm); padding-left: var(--space-md); line-height: 1.7;">
+            <li>Éteignez complètement l'ordinateur.</li>
+            <li>Insérez la clé USB d'installation Windows 11 dans un port USB direct de l'ordinateur Dell.</li>
+            <li>Mettez l'appareil sous tension et <strong>tapotez immédiatement la touche F12</strong> du clavier jusqu'à l'affichage du <em>One-Time Boot Menu</em>.</li>
+            <li>Naviguez avec les flèches vers la section <strong>UEFI BOOT</strong>.</li>
+            <li>Sélectionnez la ligne correspondant à votre clé USB (ex: <code>UEFI: SanDisk USB</code>) et validez avec <strong>ENTRÉE</strong>.</li>
+          </ol>
+        `;
+      } else if (brand === 'hp') {
+        detail.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <h3 style="margin: 0; color: var(--primary);">PC Portables & Bureaux HP (EliteBook, ProBook, ProDesk, Pavilion)</h3>
+            <span class="status-tag status-tag--success" style="font-size: 1rem; padding: 4px 10px;">TOUCHE : F9 (ou ESC puis F9)</span>
+          </div>
+          <ol style="margin-top: var(--space-sm); padding-left: var(--space-md); line-height: 1.7;">
+            <li>Éteignez la machine HP et connectez votre clé USB bootable.</li>
+            <li>Allumez le PC et appuyez de façon répétée sur la touche <strong>F9</strong> (sur certains modèles, tapotez <strong>Échap / Esc</strong> pour ouvrir le menu de démarrage, puis pressez <strong>F9</strong> pour <em>Boot Device Options</em>).</li>
+            <li>Dans la liste des périphériques UEFI Boot Sources, choisissez votre clé mémoire USB.</li>
+            <li>Appuyez sur <strong>ENTRÉE</strong> pour lancer l'installeur Windows.</li>
+          </ol>
+        `;
+      } else if (brand === 'lenovo') {
+        detail.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <h3 style="margin: 0; color: var(--primary);">PC Portables & Bureaux LENOVO (ThinkPad, ThinkCentre, IdeaPad)</h3>
+            <span class="status-tag status-tag--success" style="font-size: 1rem; padding: 4px 10px;">TOUCHE : F12 (ou Fn + F12)</span>
+          </div>
+          <ol style="margin-top: var(--space-sm); padding-left: var(--space-md); line-height: 1.7;">
+            <li>Éteignez le PC et branchez la clé USB d'installation.</li>
+            <li>Allumez le système et appuyez immédiatement plusieurs fois sur <strong>F12</strong> (ou <strong>Fn + F12</strong> sur les claviers compacts ThinkPad).</li>
+            <li>Pour les portables récents dotés du bouton <em>Novo</em> (petit orifice latéral), vous pouvez presser ce bouton avec un trombone PC éteint pour ouvrir directement le menu Boot.</li>
+            <li>Sélectionnez votre clé USB dans l'onglet <strong>Boot Menu</strong> et validez avec <strong>ENTRÉE</strong>.</li>
+          </ol>
+        `;
+      } else if (brand === 'asus') {
+        detail.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <h3 style="margin: 0; color: var(--primary);">PC Portables & Cartes Mères ASUS (ZenBook, Vivobook, ROG, TUF)</h3>
+            <span class="status-tag status-tag--success" style="font-size: 1rem; padding: 4px 10px;">TOUCHE : F8 ou ÉCHAP (ESC)</span>
+          </div>
+          <ol style="margin-top: var(--space-sm); padding-left: var(--space-md); line-height: 1.7;">
+            <li>Éteignez complètement l'ordinateur Asus et branchez la clé USB.</li>
+            <li>Allumez le PC et appuyez de manière cadencée sur la touche <strong>Échap (Esc)</strong> pour les PC portables, ou sur <strong>F8</strong> pour les cartes mères d'ordinateur fixe.</li>
+            <li>Une boîte de dialogue <em>Please select boot device</em> apparaît à l'écran.</li>
+            <li>Sélectionnez votre clé USB portant la mention <code>UEFI: [Nom de la clé]</code> et confirmez avec <strong>ENTRÉE</strong>.</li>
+          </ol>
+        `;
+      } else if (brand === 'acer') {
+        detail.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <h3 style="margin: 0; color: var(--primary);">PC Portables & Bureaux ACER (Aspire, Swift, Predator)</h3>
+            <span class="status-tag status-tag--success" style="font-size: 1rem; padding: 4px 10px;">TOUCHE : F12 (Vérifier activation BIOS)</span>
+          </div>
+          <ol style="margin-top: var(--space-sm); padding-left: var(--space-md); line-height: 1.7;">
+            <li><strong>Attention spécificité Acer :</strong> Par défaut, la touche F12 est parfois désactivée d'usine.</li>
+            <li>Si F12 ne réagit pas, démarrez en tapotant <strong>F2</strong> pour entrer dans le BIOS &gt; onglet <strong>Main</strong> &gt; passez <strong>F12 Boot Menu</strong> sur <em>Enabled</em> &gt; sauvegardez avec <strong>F10</strong>.</li>
+            <li>Au redémarrage, tapotez <strong>F12</strong> pour faire apparaître le <em>Boot Manager</em> et sélectionnez votre support d'installation USB.</li>
+          </ol>
+        `;
+      } else {
+        detail.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-xs);">
+            <h3 style="margin: 0; color: var(--primary);">Cartes Mères MSI, GIGABYTE &amp; PC Assemblés</h3>
+            <span class="status-tag status-tag--success" style="font-size: 1rem; padding: 4px 10px;">TOUCHE : F11 (MSI) ou F12 (GIGABYTE)</span>
+          </div>
+          <ol style="margin-top: var(--space-sm); padding-left: var(--space-md); line-height: 1.7;">
+            <li>Pour les cartes mères <strong>MSI</strong> : Tapotez la touche <strong>F11</strong> au démarrage.</li>
+            <li>Pour les cartes mères <strong>Gigabyte / Aorus</strong> : Tapotez la touche <strong>F12</strong> au démarrage.</li>
+            <li>Pour les cartes mères <strong>ASRock</strong> : Tapotez la touche <strong>F11</strong> au démarrage.</li>
+            <li>Dans l'interface graphique de sélection, cliquez sur la partition UEFI de votre clé USB.</li>
+          </ol>
+        `;
+      }
+      saveAppStateDebounced();
+    }
+
+    // =========================================================================
+    // 3. LOGIQUE DU SIMULATEUR WINDOWS 11 SETUP
+    // =========================================================================
+    function simGoToStep(stepNum) {
+      courseState.currentSimStep = stepNum;
+      
+      // Masquer tous les écrans
+      for (let i = 1; i <= 9; i++) {
+        const el = document.getElementById(`sim-step-${i}`);
+        if (el) el.style.display = 'none';
+      }
+
+      // Afficher l'écran actif
+      const activeEl = document.getElementById(`sim-step-${stepNum}`);
+      if (activeEl) activeEl.style.display = 'block';
+
+      // Mettre à jour les pilules de navigation
+      const pills = document.querySelectorAll('.sim-pill');
+      pills.forEach((p, idx) => {
+        if (idx + 1 === stepNum) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      // Si on arrive sur l'étape 6 (Partitions), render
+      if (stepNum === 6) {
+        renderPartitionsTable();
+      }
+
+      // Si on arrive sur l'étape 7 (Déploiement), lancer la simulation
+      if (stepNum === 7) {
+        startDeploySimulation();
+      }
+
+      saveAppStateDebounced();
+    }
+
+    function simSelectUsbBoot() {
+      const usbRow = document.getElementById('sim-boot-usb');
+      if (usbRow) {
+        usbRow.style.backgroundColor = 'var(--sim-success-border)';
+        usbRow.style.color = 'var(--on-primary)';
+      }
+      setTimeout(() => {
+        simGoToStep(2);
+      }, 500);
+    }
+
+    function simShowRepairNotice() {
+      const el = document.getElementById('repair-notice');
+      if (el) {
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    function simSelectEdition(ed) {
+      const rowHome = document.getElementById('sim-row-home');
+      const rowPro = document.getElementById('sim-row-pro');
+      const rowEdu = document.getElementById('sim-row-edu');
+      const desc = document.getElementById('edition-desc');
+
+      if (!rowHome || !rowPro || !rowEdu || !desc) return;
+
+      rowHome.style.backgroundColor = '';
+      rowPro.style.backgroundColor = '';
+      rowEdu.style.backgroundColor = '';
+
+      if (ed === 'home') {
+        rowHome.style.backgroundColor = 'var(--sim-sel-part)';
+        desc.innerHTML = `<strong>Édition Sélectionnée : Windows 11 Famille (Home)</strong><br>Conçue pour l'usage domestique et le multimédia. Ne dispose pas de BitLocker ni de la jonction de domaine d'entreprise.`;
+      } else if (ed === 'pro') {
+        rowPro.style.backgroundColor = 'var(--sim-sel-part)';
+        desc.innerHTML = `<strong>Édition Sélectionnée : Windows 11 Professionnel (Recommandée)</strong><br>Intègre BitLocker, le Bureau à distance RDP Host, l'adhésion au domaine Active Directory / Entra ID et la virtualisation Hyper-V.`;
+      } else {
+        rowEdu.style.backgroundColor = 'var(--sim-sel-part)';
+        desc.innerHTML = `<strong>Édition Sélectionnée : Windows 11 Éducation</strong><br>Profil orienté pour les établissements d'enseignement avec contrôles stricts de télémétrie.`;
+      }
+    }
+
+    // Gestion des partitions dans le simulateur
+    function renderPartitionsTable() {
+      const tbody = document.getElementById('sim-partition-tbody');
+      const statusBox = document.getElementById('sim-part-status');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      partitionsList.forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        if (idx === courseState.selectedPartitionIndex) {
+          tr.className = 'selected';
+        }
+        tr.onclick = function() {
+          courseState.selectedPartitionIndex = idx;
+          renderPartitionsTable();
+        };
+        tr.innerHTML = `
+          <td>${p.name}</td>
+          <td>${p.size}</td>
+          <td>${p.free}</td>
+          <td>${p.type}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Message d'aide contextuel
+      if (statusBox) {
+        if (partitionsList.length === 1 && partitionsList[0].type === 'Espace non alloué') {
+          statusBox.className = 'inset--success';
+          statusBox.innerHTML = `<strong>Parfait !</strong> Le disque 0 est entièrement vierge (${partitionsList[0].size} d'espace non alloué). Cliquez sur <strong>Suivant</strong> : Windows créera automatiquement les partitions système requises (EFI, MSR, Récupération, Principal).`;
+        } else {
+          statusBox.className = 'inset--warning';
+          statusBox.innerHTML = `<strong>Attention :</strong> Ce disque contient des partitions résiduelles. Pour une <em>installation propre</em> sans conflit, sélectionnez chaque partition et cliquez sur <strong>Supprimer</strong> pour n'avoir qu'un seul espace non alloué.`;
+        }
+      }
+    }
+
+    function simResetPartitions(scenario) {
+      courseState.partitionScenario = scenario;
+      if (scenario === 'dirty') {
+        partitionsList = [
+          { name: 'Lecteur 0 Partition 1 : Récupération', size: '529 Mo', free: '45 Mo', type: 'Récupération' },
+          { name: 'Lecteur 0 Partition 2 : Système (EFI)', size: '100 Mo', free: '70 Mo', type: 'Système' },
+          { name: 'Lecteur 0 Partition 3 : Réservé MSR', size: '16 Mo', free: '0 Mo', type: 'MSR (Réservé)' },
+          { name: 'Lecteur 0 Partition 4 : Ancien Windows (C:)', size: '476.3 Go', free: '180.2 Go', type: 'Principal' }
+        ];
+        courseState.selectedPartitionIndex = 3;
+      } else {
+        partitionsList = [
+          { name: 'Espace non alloué sur le lecteur 0', size: '476.9 Go', free: '476.9 Go', type: 'Espace non alloué' }
+        ];
+        courseState.selectedPartitionIndex = 0;
+      }
+      renderPartitionsTable();
+    }
+
+    function simDeleteSelectedPartition() {
+      if (partitionsList.length === 0) return;
+      if (partitionsList.length === 1 && partitionsList[0].type === 'Espace non alloué') {
+        alert('Cette partition représente déjà la totalité de l\'espace vierge non alloué.');
+        return;
+      }
+
+      // Supprimer la partition sélectionnée
+      partitionsList.splice(courseState.selectedPartitionIndex, 1);
+
+      // Si toutes les partitions ont été supprimées, créer un bloc unique non alloué
+      if (partitionsList.length === 0) {
+        partitionsList = [
+          { name: 'Espace non alloué sur le lecteur 0', size: '476.9 Go', free: '476.9 Go', type: 'Espace non alloué' }
+        ];
+      }
+      courseState.selectedPartitionIndex = 0;
+      renderPartitionsTable();
+    }
+
+    function simFormatPartition() {
+      if (partitionsList.length === 0) return;
+      const part = partitionsList[courseState.selectedPartitionIndex];
+      if (part.type === 'Espace non alloué') {
+        alert('Impossible de formater un espace non alloué. Créez d\'abord une partition ou laissez Windows s\'en charger.');
+        return;
+      }
+      part.free = part.size;
+      renderPartitionsTable();
+      alert(`La partition ${part.name} a été formatée avec succès.`);
+    }
+
+    function simNewPartition() {
+      if (partitionsList.length === 1 && partitionsList[0].type === 'Espace non alloué') {
+        partitionsList = [
+          { name: 'Lecteur 0 Partition 1 : Système (EFI)', size: '100 Mo', free: '70 Mo', type: 'Système' },
+          { name: 'Lecteur 0 Partition 2 : Réservé MSR', size: '16 Mo', free: '0 Mo', type: 'MSR' },
+          { name: 'Lecteur 0 Partition 3 : Principal', size: '476.8 Go', free: '476.8 Go', type: 'Principal' }
+        ];
+        courseState.selectedPartitionIndex = 2;
+        renderPartitionsTable();
+      } else {
+        alert('Espace disque non alloué insuffisant pour créer une nouvelle partition.');
+      }
+    }
+
+    function simRefreshPartitions() {
+      renderPartitionsTable();
+    }
+
+    function simValidatePartAndDeploy() {
+      simGoToStep(7);
+    }
+
+    // Déploiement simulé
+    let deployTimer = null;
+    function startDeploySimulation() {
+      const pFill = document.getElementById('sim-deploy-progress');
+      const pPct = document.getElementById('inst-prep-pct');
+      const step2 = document.getElementById('inst-step-2');
+      const step3 = document.getElementById('inst-step-3');
+      const step4 = document.getElementById('inst-step-4');
+      const step5 = document.getElementById('inst-step-5');
+      const rebootBox = document.getElementById('sim-reboot-box');
+
+      if (!pFill || !pPct) return;
+
+      if (deployTimer) clearInterval(deployTimer);
+
+      pFill.style.width = '10%';
+      pPct.textContent = '10';
+
+      let currentPct = 10;
+      deployTimer = setInterval(() => {
+        currentPct += 15;
+        if (currentPct > 100) currentPct = 100;
+
+        pFill.style.width = `${currentPct}%`;
+        pPct.textContent = `${currentPct}`;
+
+        if (currentPct >= 40 && step3) {
+          step3.innerHTML = '&#10004; Installation des fonctionnalités';
+          step3.style.color = 'var(--positive)';
+        }
+        if (currentPct >= 75 && step4) {
+          step4.innerHTML = '&#10004; Installation des mises à jour';
+          step4.style.color = 'var(--positive)';
+        }
+        if (currentPct >= 100) {
+          clearInterval(deployTimer);
+          if (step2) {
+            step2.innerHTML = '&#10004; Préparation des fichiers terminée (100%)';
+            step2.style.color = 'var(--positive)';
+          }
+          if (step5) {
+            step5.innerHTML = '&#10004; Fin de l\'installation';
+            step5.style.color = 'var(--positive)';
+          }
+          if (rebootBox) {
+            rebootBox.style.display = 'block';
+            let seconds = 4;
+            const rTimer = setInterval(() => {
+              const secEl = document.getElementById('sim-reboot-sec');
+              if (secEl) secEl.textContent = `${seconds}`;
+              seconds--;
+              if (seconds < 0) {
+                clearInterval(rTimer);
+                simGoToStep(8);
+              }
+            }, 1000);
+          }
+        }
+      }, 500);
+    }
+
+    function simFastForwardDeploy() {
+      if (deployTimer) clearInterval(deployTimer);
+      simGoToStep(8);
+    }
+
+    function toggleOobeAccountNotice() {
+      const accSelect = document.getElementById('oobe-account-type');
+      const tip = document.getElementById('oobe-bypass-tip');
+      if (!accSelect || !tip) return;
+
+      if (accSelect.value === 'local') {
+        tip.style.display = 'block';
+      } else {
+        tip.style.display = 'none';
+      }
+    }
+
+    // =========================================================================
+    // 4. MODULE DE DÉPANNAGE / ERREURS FRÉQUENTES
+    // =========================================================================
+    function showErrorCase(caseType) {
+      const box = document.getElementById('error-case-detail');
+      if (!box) return;
+
+      if (caseType === 'not_supported') {
+        box.innerHTML = `
+          <h3 style="margin-top: 0; color: var(--error);">Erreur : "Ce PC ne répond pas actuellement à la configuration requise"</h3>
+          <p><strong>Cause Racine :</strong> Le module TPM 2.0 est désactivé dans le BIOS/UEFI, ou le mode Démarrage Sécurisé (Secure Boot) est inactif, ou le processeur est de génération antérieure à Intel Gen 8 / AMD Zen 2.</p>
+          <div style="margin-top: var(--space-sm);">
+            <strong>Protocole de Résolution PC Doctor :</strong>
+            <ol style="padding-left: var(--space-md); margin-top: 4px;">
+              <li>Redémarrez le PC et entrez dans le BIOS Setup (Touche <strong>F2</strong> ou <strong>Suppr</strong>).</li>
+              <li>Allez dans l'onglet <strong>Security</strong> &gt; Activez <strong>Intel PTT</strong> (Platform Trust Technology) ou <strong>AMD fTPM</strong>.</li>
+              <li>Allez dans l'onglet <strong>Boot</strong> &gt; Activez <strong>Secure Boot</strong> et passez en mode <strong>UEFI</strong> (désactivez le mode Legacy/CSM).</li>
+              <li>Sauvegardez en appuyant sur <strong>F10</strong> et relancez l'installation.</li>
+            </ol>
+          </div>
+        `;
+      } else if (caseType === 'freeze_99') {
+        box.innerHTML = `
+          <h3 style="margin-top: 0; color: var(--error);">Incident : Installation bloquée à 99% ou freeze sur "Préparation des périphériques"</h3>
+          <p><strong>Cause Racine :</strong> Conflit matériel provoqué par un périphérique USB externe (hub, disque externe, dongle Bluetooth/Wi-Fi), un contrôleur SATA/NVMe nécessitant un pilote spécifique, ou un SSD défectueux.</p>
+          <div style="margin-top: var(--space-sm);">
+            <strong>Protocole de Résolution PC Doctor :</strong>
+            <ol style="padding-left: var(--space-md); margin-top: 4px;">
+              <li>Débranchez <strong>tous</strong> les périphériques USB à l'exception stricte de la clé d'installation et de la souris/clavier filaire.</li>
+              <li>Ne pas éteindre immédiatement : patientez 15 minutes car l'initialisation de certains microcodes CPU peut sembler figée.</li>
+              <li>Si le blocage persiste, réinsérez la clé USB sur un port USB 2.0 (noir) à l'arrière de la carte mère plutôt que sur un port façade.</li>
+              <li>Testez l'état de santé SMART du disque SSD s'il s'agit d'un disque réutilisé.</li>
+            </ol>
+          </div>
+        `;
+      } else if (caseType === 'mbr_gpt') {
+        box.innerHTML = `
+          <h3 style="margin-top: 0; color: var(--error);">Erreur : "Windows ne peut pas être installé sur ce disque. Le disque sélectionné est du style de partition MBR"</h3>
+          <p><strong>Cause Racine :</strong> Windows 11 démarre obligatoirement en mode UEFI. Or le mode UEFI refuse de s'installer sur une table de partitionnement MBR (Master Boot Record) réservée à l'ancien BIOS hérité. Le disque doit impérativement être au format <strong>GPT (GUID Partition Table)</strong>.</p>
+          <div style="margin-top: var(--space-sm);">
+            <strong>Protocole de Conversion Directe sans Quitter l'Installeur :</strong>
+            <ol style="padding-left: var(--space-md); margin-top: 4px;">
+              <li>Sur l'écran du choix de disque, appuyez sur <strong>Maj + F10 (Shift + F10)</strong> pour ouvrir la console invite de commande CMD.</li>
+              <li>Tapez <code>diskpart</code> et validez par Entrée.</li>
+              <li>Tapez <code>list disk</code> pour identifier le numéro du disque cible (ex: Disque 0).</li>
+              <li>Tapez <code>select disk 0</code> puis <code>clean</code> (attention : efface toutes les partitions).</li>
+              <li>Tapez <code>convert gpt</code> puis <code>exit</code> et refermez la console.</li>
+              <li>Cliquez sur <strong>Actualiser</strong> : l'erreur disparaît et le disque GPT est prêt.</li>
+            </ol>
+          </div>
+        `;
+      } else if (caseType === 'no_drive') {
+        box.innerHTML = `
+          <h3 style="margin-top: 0; color: var(--error);">Incident : "Nous n'avons trouvé aucun lecteur" (Disque invisible lors du Setup)</h3>
+          <p><strong>Cause Racine :</strong> Très courant sur les PC portables Intel 11e, 12e et 13e génération. Le contrôleur de stockage est géré par la technologie <strong>Intel VMD (Volume Management Device) / Intel RST</strong> dont le pilote n'est pas intégré à l'ISO standard.</p>
+          <div style="margin-top: var(--space-sm);">
+            <strong>Protocole de Résolution PC Doctor :</strong>
+            <ol style="padding-left: var(--space-md); margin-top: 4px;">
+              <li><strong>Solution 1 (Recommandée) :</strong> Entrez dans le BIOS Setup &gt; onglet <em>System Configuration / Storage</em> &gt; passez le contrôleur de <strong>RAID / Intel VMD</strong> à <strong>AHCI / NVMe</strong> &gt; Sauvegardez avec F10.</li>
+              <li><strong>Solution 2 :</strong> Téléchargez le pilote <em>Intel Rapid Storage Technology (IRST) Driver</em> depuis le site du constructeur, décompressez-le sur votre clé USB d'installation, puis cliquez sur <em>"Charger un pilote"</em> lors de l'installation.</li>
+            </ol>
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <h3 style="margin-top: 0; color: var(--error);">Incident : La Clé USB n'apparaît pas dans le Boot Menu</h3>
+          <p><strong>Cause Racine :</strong> La clé a été formatée en NTFS sans prise en charge UEFI, le port USB est défectueux ou sous-alimenté, ou la création du média avec Media Creation Tool a échoué.</p>
+          <div style="margin-top: var(--space-sm);">
+            <strong>Protocole de Résolution PC Doctor :</strong>
+            <ol style="padding-left: var(--space-md); margin-top: 4px;">
+              <li>Branchez la clé sur un port USB situé à l'arrière de l'ordinateur (directement soudé à la carte mère).</li>
+              <li>Vérifiez dans le BIOS que l'option <strong>USB Boot Support</strong> est bien sur <em>Enabled</em>.</li>
+              <li>Si vous utilisez un utilitaire tiers comme Rufus, veillez à sélectionner le schéma de partition <strong>GPT</strong> et le système de destination <strong>UEFI (non CSM)</strong> avec format FAT32.</li>
+            </ol>
+          </div>
+        `;
+      }
+    }
+
+    // =========================================================================
+    // 5. GESTION DE LA CHECK-LIST POST-INSTALLATION
+    // =========================================================================
+    function toggleTask(id) {
+      const checkbox = document.getElementById(id);
+      if (!checkbox) return;
+      checkbox.checked = !checkbox.checked;
+      updateChecklistProgress();
+    }
+
+    function updateChecklistProgress() {
+      let completedCount = 0;
+      const total = 6;
+
+      for (let i = 1; i <= total; i++) {
+        const id = `chk${i}`;
+        const el = document.getElementById(id);
+        const item = el ? el.closest('.check-item') : null;
+
+        if (el && el.checked) {
+          completedCount++;
+          courseState.checklist[id] = true;
+          if (item) item.classList.add('completed');
+        } else {
+          courseState.checklist[id] = false;
+          if (item) item.classList.remove('completed');
+        }
+      }
+
+      const counter = document.getElementById('checklist-counter');
+      if (counter) {
+        counter.textContent = `Progression : ${completedCount} / ${total} Validés`;
+        if (completedCount === total) {
+          counter.className = 'status-tag status-tag--success';
+          counter.textContent = 'CONTRÔLE QUALITÉ : 100% VALIDÉ !';
+        } else {
+          counter.className = 'status-tag status-tag--warn';
+        }
+      }
+
+      saveAppStateDebounced();
+    }
+
+    function resetChecklist() {
+      for (let i = 1; i <= 6; i++) {
+        const id = `chk${i}`;
+        const el = document.getElementById(id);
+        if (el) el.checked = false;
+        courseState.checklist[id] = false;
+      }
+      updateChecklistProgress();
+    }
+
+    // =========================================================================
+    // 6. PERSISTANCE DE L'ÉTAT AVEC NOTEBOOK SHIM API
+    // =========================================================================
+    let debounceTimer = null;
+    function saveAppStateDebounced() {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          try {
+            await window.notebookAppApi.setAppState({
+              checklist: courseState.checklist,
+              currentSimStep: courseState.currentSimStep,
+              selectedBrand: courseState.selectedBrand
+            });
+          } catch (e) {
+            console.warn('Erreur de persistance shim:', e);
+          }
+        }
+      }, 300);
+    }
+
+    async function loadSavedState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          const state = await window.notebookAppApi.getAppState();
+          if (state && typeof state === 'object') {
+            if (state.checklist) {
+              courseState.checklist = Object.assign(courseState.checklist, state.checklist);
+              for (let i = 1; i <= 6; i++) {
+                const id = `chk${i}`;
+                const el = document.getElementById(id);
+                if (el && courseState.checklist[id]) {
+                  el.checked = true;
+                }
+              }
+              updateChecklistProgress();
+            }
+            if (state.selectedBrand) {
+              selectBrand(state.selectedBrand);
+            }
+            if (state.currentSimStep && state.currentSimStep >= 1 && state.currentSimStep <= 9) {
+              simGoToStep(state.currentSimStep);
+            }
+          }
+        } catch (e) {
+          console.warn('Erreur chargement état shim:', e);
+        }
+      }
+    }
+
+    // Initialisation globale
+    window.addEventListener('DOMContentLoaded', async () => {
+      // 1. Initialiser le simulateur de compatibilité sur le preset par défaut
+      loadConfigPreset('compatible');
+
+      // 2. Initialiser la marque par défaut (Dell)
+      selectBrand('dell');
+
+      // 3. Initialiser les partitions
+      simResetPartitions('dirty');
+
+      // 4. Charger l'état sauvegardé si disponible
+      await loadSavedState();
+
+      // 5. Notifier l'environnement que l'application est prête
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+  </script>
+</body>
+</html>

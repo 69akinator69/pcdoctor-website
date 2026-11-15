@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="carbon">
+  <title>Ingénierie &amp; Déploiement de Windows 11 : Masterclass, Simulateurs &amp; Certification | PCDOCTOR — Mohamed Aissaoui</title>
+
+  <!-- Typography: IBM Plex Sans & IBM Plex Mono as per Carbon specification -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons (Exact pinned version from allowed CDNs) -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       CARBON DESIGN SYSTEM TOKENS & RESET
+       ========================================================================== */
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+      --surface-container-highest: #8d8d8d;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+      --on-surface-muted: #6f6f6f;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Semantic states */
+      --positive: #198038;
+      --warning: #f1c21b;
+      --focus: #0f62fe;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Type Scale (Narrative + Technical Density) */
+      --display-size: clamp(2rem, 1.4rem + 2.2vw, 3.25rem);
+      --headline-size: clamp(1.4rem, 1.15rem + 1vw, 2rem);
+      --subhead-size: clamp(1.1rem, 0.95rem + 0.5vw, 1.35rem);
+      --body-size: clamp(0.95rem, 0.9rem + 0.15vw, 1.05rem);
+      --label-size: 0.75rem;
+
+      /* Spacing Scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Shape: Square corners defining Carbon */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Elevation & Rules */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.08);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      overflow-x: clip;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.5;
+      overflow-x: clip;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Carbon Typography */
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      letter-spacing: 0;
+      line-height: 1.2;
+    }
+    .headline strong {
+      font-weight: 600;
+    }
+
+    .label-mono {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--on-surface-variant);
+    }
+
+    .key-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: clamp(1.75rem, 1.2rem + 1.2vw, 2.5rem);
+      line-height: 1.1;
+      color: var(--on-surface);
+    }
+
+    /* Defining Treatment 1: Flat gray layers */
+    .layer {
+      background: var(--surface-container);
+      border-radius: 0;
+      padding: var(--space-md);
+      position: relative;
+    }
+    .layer .layer {
+      background: var(--surface-container-high);
+    }
+
+    /* Defining Treatment 4: Blue indicator bar */
+    .is-active, .key-tile {
+      border-bottom: var(--indicator);
+    }
+
+    /* Defining Treatment 5: Hairline rules */
+    .rule-bottom {
+      border-bottom: var(--rule);
+    }
+    .rule-top {
+      border-top: var(--rule);
+    }
+
+    /* Buttons: Strict Carbon square buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: var(--space-sm);
+      height: 44px;
+      padding: 0 var(--space-lg) 0 var(--space-md);
+      font-family: var(--font-headline);
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      border-radius: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background-color: #0353e9;
+    }
+    .btn-secondary {
+      background-color: transparent;
+      border-color: var(--on-surface);
+      color: var(--on-surface);
+    }
+    .btn-secondary:hover {
+      background-color: var(--surface-container-high);
+    }
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--primary);
+    }
+    .btn-ghost:hover {
+      background-color: var(--surface-container);
+    }
+    .btn-sm {
+      height: 34px;
+      padding: 0 var(--space-md) 0 var(--space-sm);
+      font-size: 0.75rem;
+    }
+
+    /* Carbon Tag / Badge */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      height: 24px;
+      padding: 0 var(--space-sm);
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: var(--rounded-full);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-neutral {
+      background-color: var(--surface-container-high);
+      color: var(--on-surface-variant);
+    }
+    .tag-success {
+      background-color: #defbe6;
+      color: #0e6027;
+    }
+    .tag-warning {
+      background-color: #fef0c7;
+      color: #8f4f00;
+    }
+
+    /* Layout Containers */
+    .app-header {
+      background-color: var(--on-surface);
+      color: #ffffff;
+      padding: var(--space-xs) var(--space-lg);
+      border-bottom: 1px solid #393939;
+    }
+    .app-header-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+    }
+
+    .main-nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--background);
+      border-bottom: var(--rule);
+    }
+    .nav-track {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0 var(--space-md);
+    }
+    .nav-tab-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: var(--space-md) var(--space-lg);
+      font-family: var(--font-headline);
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-tab-btn:hover {
+      color: var(--on-surface);
+    }
+    .nav-tab-btn.active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom: 2px solid var(--primary);
+    }
+    .nav-tab-btn:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: -2px;
+    }
+
+    .page-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-md) var(--space-3xl);
+    }
+
+    /* Grid Layouts */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+    }
+    .grid-8-4 {
+      display: grid;
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      gap: var(--space-xl);
+    }
+
+    /* Callout & Code Boxes */
+    .callout-carbon {
+      border-left: 4px solid var(--primary);
+      background-color: var(--surface-container);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .callout-warning {
+      border-left: 4px solid var(--warning);
+      background-color: #fff9e6;
+    }
+    .callout-success {
+      border-left: 4px solid var(--positive);
+      background-color: #f1f8f3;
+    }
+
+    .cli-box {
+      background-color: #161616;
+      color: #f4f4f4;
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      padding: var(--space-md);
+      position: relative;
+      border-left: 3px solid var(--primary);
+      overflow-x: auto;
+    }
+
+    /* Interactive Terminal Window */
+    .terminal-window {
+      background-color: #121212;
+      border: 1px solid #333333;
+      color: #e0e0e0;
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      line-height: 1.4;
+      box-shadow: var(--shadow-2);
+    }
+    .terminal-bar {
+      background-color: #1f1f1f;
+      padding: var(--space-xs) var(--space-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333333;
+      font-size: 0.75rem;
+      color: #a0a0a0;
+    }
+    .terminal-body {
+      padding: var(--space-md);
+      height: 340px;
+      overflow-y: auto;
+      font-family: var(--font-label);
+    }
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      background-color: #1a1a1a;
+      border-top: 1px solid #333333;
+      padding: var(--space-xs) var(--space-md);
+    }
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      padding: var(--space-xs);
+      outline: none;
+    }
+
+    /* Custom Range Sliders */
+    .slider-input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      background: var(--outline-variant);
+      outline: none;
+      border-radius: 0;
+    }
+    .slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--primary);
+      cursor: pointer;
+      border: none;
+    }
+    .slider-input:focus-visible::-webkit-slider-thumb {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Tabular data Carbon */
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: left;
+    }
+    .carbon-table th {
+      background-color: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+    }
+    .carbon-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      color: var(--on-surface);
+    }
+    .carbon-table tr:nth-child(even) td {
+      background-color: var(--surface-container-low);
+    }
+
+    /* Interactive Partition Bar */
+    .partition-bar {
+      display: flex;
+      height: 52px;
+      width: 100%;
+      background-color: var(--surface-container-high);
+      border: 1px solid var(--outline);
+      margin: var(--space-md) 0;
+      overflow: hidden;
+    }
+    .part-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: var(--space-xs);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: opacity var(--dur-micro) var(--ease-out);
+      border-right: 1px solid #ffffff;
+      color: #ffffff;
+      user-select: none;
+    }
+    .part-block:hover {
+      opacity: 0.85;
+      outline: 2px solid var(--focus);
+    }
+
+    /* Quiz Option Cards */
+    .quiz-option {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border: 1px solid var(--outline-variant);
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-option:hover {
+      background-color: var(--surface-container-high);
+      border-color: var(--outline);
+    }
+    .quiz-option.selected {
+      border: 1px solid var(--primary);
+      background-color: var(--primary-container);
+    }
+    .quiz-option.correct {
+      border: 1px solid var(--positive);
+      background-color: #defbe6;
+    }
+    .quiz-option.incorrect {
+      border: 1px solid var(--error);
+      background-color: #fff1f1;
+    }
+
+    /* IT Technician Checklist checkbox */
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background-color: var(--surface-container);
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .check-item:hover {
+      background-color: var(--surface-container-high);
+    }
+    .check-item.checked {
+      border-left-color: var(--positive);
+      background-color: #f4faf6;
+    }
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--outline);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background-color: #ffffff;
+      margin-top: 2px;
+    }
+    .check-item.checked .custom-checkbox {
+      background-color: var(--positive);
+      border-color: var(--positive);
+      color: #ffffff;
+    }
+
+    /* Certificate Box */
+    .cert-frame {
+      border: 4px solid var(--on-surface);
+      padding: var(--space-xl);
+      background-color: #ffffff;
+      position: relative;
+    }
+    .cert-frame::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--outline);
+      pointer-events: none;
+    }
+
+    /* Responsive Adaptation */
+    @media (max-width: 900px) {
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-8-4 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .grid-4 { grid-template-columns: 1fr; }
+      .page-content { padding: var(--space-md) var(--space-sm); }
+      .btn { width: 100%; justify-content: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Enterprise Branding Bar -->
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div style="display: flex; align-items: center; gap: var(--space-sm);">
+        <a href="/etudiants.html#tsig" style="color: #29C2E7; text-decoration: none; font-weight: 600; font-family: var(--font-label); font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
+          &larr; Espace Étudiants
+        </a>
+        <span style="color: #525252;">|</span>
+        <span class="label-mono" style="color: #ffffff; font-weight: 600; letter-spacing: 0.15em;">PCDOCTOR // TSIG LAB</span>
+        <span style="color: #525252;">|</span>
+        <span class="label-mono" style="color: #c6c6c6;">FORMATION INGÉNIERIE SYSTÈMES</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: var(--space-md);">
+        <span class="tag tag-neutral" style="background-color: #262626; color: #38bdf8;">Encadré par Mohamed Aissaoui</span>
+        <span class="label-mono" style="color: #8d8d8d;">STANDARDS 2026 // LAB WIN11</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Main Navigation with Indicator Bar -->
+  <nav class="main-nav-bar" aria-label="Navigation principale">
+    <div class="nav-track">
+      <button class="nav-tab-btn active" onclick="switchMainTab('section-cours')" id="nav-btn-cours">
+        <i data-lucide="book-open" style="width: 16px; height: 16px;"></i>
+        1. Cours & Architecture
+      </button>
+      <button class="nav-tab-btn" onclick="switchMainTab('section-labs')" id="nav-btn-labs">
+        <i data-lucide="terminal" style="width: 16px; height: 16px;"></i>
+        2. Ateliers & Simulateurs Interactifs
+      </button>
+      <button class="nav-tab-btn" onclick="switchMainTab('section-quiz')" id="nav-btn-quiz">
+        <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+        3. Quiz de Certification
+      </button>
+      <button class="nav-tab-btn" onclick="switchMainTab('section-checklist')" id="nav-btn-checklist">
+        <i data-lucide="list-checks" style="width: 16px; height: 16px;"></i>
+        4. Checklist Technicien IT
+      </button>
+      <button class="nav-tab-btn" onclick="switchMainTab('section-outils')" id="nav-btn-outils">
+        <i data-lucide="wrench" style="width: 16px; height: 16px;"></i>
+        5. Boîte à Outils & Commandes
+      </button>
+    </div>
+  </nav>
+
+  <main class="page-content">
+
+    <!-- Hero Title Block (Carbon Light/Semibold Split) -->
+    <header style="margin-bottom: var(--space-2xl); border-bottom: var(--rule); padding-bottom: var(--space-xl);">
+      <div style="display: flex; gap: var(--space-sm); align-items: center; margin-bottom: var(--space-sm);">
+        <span class="tag">GUIDE TECHNIQUE & FORMATION PRATIQUE</span>
+        <span class="label-mono">VIRTUALBOX 7.0+ &amp; CLEAN INSTALL USB</span>
+      </div>
+      <h1 class="headline" style="font-size: var(--display-size); margin-bottom: var(--space-sm);">
+        Déploiement de Windows 11 : <strong>de l'Hyperviseur à l'Écran d'Accueil</strong>
+      </h1>
+      <p style="color: var(--on-surface-variant); max-width: 78ch; font-size: 1.05rem; margin-bottom: var(--space-sm);">
+        Maîtrisez l'ingénierie de déploiement de Windows 11 Professionnel. Découvrez les réglages critiques de firmware UEFI, l'émulation TPM 2.0, les contournements du registre (<span style="font-family: var(--font-label); font-size: 0.9em;">LabConfig</span>), le bypass de compte Microsoft (<span style="font-family: var(--font-label); font-size: 0.9em;">OOBE\BYPASSNRO</span>), ainsi que la paravirtualisation par les Guest Additions et la préparation d'un poste physique via clé USB.
+      </p>
+      <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: 0.88rem; color: var(--on-surface-variant);">
+        <span>Support conçu et encadré par :</span>
+        <strong style="color: #0284c7;">Mohamed Aissaoui (Formateur IT / IMSET)</strong>
+      </div>
+    </header>
+
+    <!-- Key Metrics / Specification Grid (Carbon Key Figures) -->
+    <section style="margin-bottom: var(--space-2xl);" aria-labelledby="metrics-heading">
+      <h2 id="metrics-heading" class="label-mono" style="margin-bottom: var(--space-md); color: var(--on-surface-variant);">MATRICE DES SPÉCIFICATIONS CLÉS DU LAB</h2>
+      <div class="grid-4">
+        <div class="layer key-tile">
+          <div class="label-mono">MÉMOIRE VIVE (RAM)</div>
+          <div class="key-value" style="margin: var(--space-xs) 0;">8192 Mo</div>
+          <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+            Minimum bloquant installeur : 4096 Mo (4 Go). Allouer 8 Go pour éviter les congestions I/O et Defender.
+          </p>
+        </div>
+        <div class="layer key-tile">
+          <div class="label-mono">PROCESSEUR VIRTUEL</div>
+          <div class="key-value" style="margin: var(--space-xs) 0;">4 vCPU</div>
+          <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+            Minimum requis : 2 cœurs logiques virtuels avec prise en charge formelle de l'extension PAE/NX.
+          </p>
+        </div>
+        <div class="layer key-tile">
+          <div class="label-mono">SÉCURITÉ &amp; FIRMWARE</div>
+          <div class="key-value" style="margin: var(--space-xs) 0;">TPM 2.0</div>
+          <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+            Firmware UEFI natif 64-bit obligatoire + puce TPM 2.0 virtuelle + démarrage sécurisé Secure Boot actif.
+          </p>
+        </div>
+        <div class="layer key-tile">
+          <div class="label-mono">STOCKAGE ALLOUÉ</div>
+          <div class="key-value" style="margin: var(--space-xs) 0;">80 Go VDI</div>
+          <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+            Disque virtuel VDI en allocation dynamique (Thin Provisioning) pour préserver l'espace disque physique hôte.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         ONGLET 1 : COURS MAGISTRAL & ARCHITECTURE
+         ========================================================================== -->
+    <div id="section-cours" class="tab-pane">
+
+      <!-- Course Sub-navigation -->
+      <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-lg); border-bottom: var(--rule); padding-bottom: var(--space-sm); flex-wrap: wrap;">
+        <span class="label-mono" style="align-self: center; margin-right: var(--space-sm);">CHAPITRES :</span>
+        <button class="btn btn-sm btn-secondary" onclick="scrollToElement('ch-hyperviseur')">1. Hyperviseur &amp; Enceinte</button>
+        <button class="btn btn-sm btn-secondary" onclick="scrollToElement('ch-firmware')">2. Firmware UEFI &amp; TPM</button>
+        <button class="btn btn-sm btn-secondary" onclick="scrollToElement('ch-bypasses')">3. Les Deux Contournements</button>
+        <button class="btn btn-sm btn-secondary" onclick="scrollToElement('ch-drivers')">4. Pilotes &amp; Post-Installation</button>
+        <button class="btn btn-sm btn-secondary" onclick="scrollToElement('ch-usb')">5. Clean Install Clé USB</button>
+      </div>
+
+      <!-- Chapitre 1: Hyperviseur & Enceinte Virtuelle -->
+      <article id="ch-hyperviseur" style="margin-bottom: var(--space-2xl);">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="tag">MODULE 01</span>
+          <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+            Création de l'Enceinte Virtuelle : <strong>VirtualBox 7.0+</strong>
+          </h2>
+        </div>
+
+        <div class="grid-8-4">
+          <div>
+            <p style="margin-bottom: var(--space-md);">
+              Dans une architecture de virtualisation de <strong>Type-2</strong> (où l'hyperviseur s'exécute sur un système d'exploitation hôte préexistant comme Windows 10/11 ou Linux), le déploiement de Windows 11 exige une rigueur méticuleuse. Contrairement aux versions précédentes de Windows, l'installeur applique des contrôles matériels bloquants dès les premières secondes de chargement.
+            </p>
+
+            <h3 style="font-size: var(--subhead-size); font-weight: 600; margin-bottom: var(--space-sm);">Paramètres d'identification de la machine virtuelle</h3>
+            <ul style="padding-left: var(--space-lg); margin-bottom: var(--space-md); display: flex; flex-direction: column; gap: var(--space-xs);">
+              <li><strong>Nom explicite :</strong> Définir une convention claire telle que <span style="font-family: var(--font-label); background: var(--surface-container-high); padding: 2px 4px;">VM-WIN11-PRO</span> ou <span style="font-family: var(--font-label); background: var(--surface-container-high); padding: 2px 4px;">LAB-W11-X64</span>.</li>
+              <li><strong>Emplacement physique :</strong> Sélectionner impérativement un répertoire situé sur une partition <strong>SSD NVMe</strong> afin de prévenir tout goulot d'étranglement lors des phases d'E/S intenses.</li>
+              <li><strong>Image ISO :</strong> Sélectionner le fichier officiel de Microsoft (taille moyenne : ~5,2 Go). VirtualBox détectera automatiquement le type <em>Microsoft Windows</em> et la version <em>Windows 11 (64-bit)</em>.</li>
+            </ul>
+
+            <div class="callout-carbon callout-warning">
+              <div style="display: flex; gap: var(--space-sm); align-items: center; margin-bottom: var(--space-xs);">
+                <i data-lucide="alert-triangle" style="width: 18px; height: 18px; color: #8f4f00;"></i>
+                <strong style="color: #8f4f00;">RÈGLE CRITIQUE D'INGÉNIERIE : Skip Unattended Installation</strong>
+              </div>
+              <p style="font-size: 0.875rem;">
+                Lors de l'étape de sélection de l'ISO, VirtualBox active par défaut un mécanisme d'installation automatisée (Unattended). Vous devez <strong>impérativement cocher la case « Ignorer l'installation sans assistance » (Skip Unattended Installation)</strong>. Si vous négligez cette option, l'hyperviseur force des identifiants génériques, écrase le partitionnement et interdit tout paramétrage granulaire des comptes locaux et du réseau.
+              </p>
+            </div>
+          </div>
+
+          <aside class="layer" style="align-self: start;">
+            <div class="label-mono" style="margin-bottom: var(--space-sm);">ARCHITECTURE DU DISQUE VIRTUEL</div>
+            <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-xs);">VDI : Dynamique vs Fixe</h4>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              Un disque de <strong>80 Go</strong> est dimensionné pour accueillir le système d'exploitation (~25 Go), les mises à jour cumulatives et les bibliothèques d'outils d'administration.
+            </p>
+            <div style="border-top: var(--rule); padding-top: var(--space-sm); margin-top: var(--space-sm); font-size: 0.8125rem;">
+              <p><strong>Allocation Dynamique (Recommandée) :</strong> Le fichier .vdi ne consomme que l'espace réellement écrit sur l'hôte (~12 Go au départ), grandissant jusqu'au plafond de 80 Go.</p>
+              <p style="margin-top: var(--space-xs);"><strong>Taille Fixe :</strong> Réquisitionne immédiatement 80 Go réels. À réserver aux serveurs de production à forte charge de base de données.</p>
+            </div>
+          </aside>
+        </div>
+      </article>
+
+      <!-- Chapitre 2: Firmware UEFI & TPM -->
+      <article id="ch-firmware" style="margin-bottom: var(--space-2xl);">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="tag">MODULE 02</span>
+          <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+            Firmware Virtuel : <strong>UEFI, TPM 2.0 &amp; Dépannage EFI Shell</strong>
+          </h2>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <p style="margin-bottom: var(--space-md);">
+              Windows 11 rompt définitivement avec le BIOS hérité (Legacy BIOS / MBR). L'installation exige obligatoirement un environnement <strong>UEFI 64-bit natif</strong> avec partitionnement de disque GPT (GUID Partition Table).
+            </p>
+            <h3 style="font-size: var(--subhead-size); font-weight: 600; margin-bottom: var(--space-sm);">Les composants obligatoires dans VirtualBox 7.0+</h3>
+            <ul style="padding-left: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-md);">
+              <li><strong>Activer EFI (Special OSes only) :</strong> Cette case doit être formellement cochée dans l'onglet <em>Système &gt; Carte mère</em>. En son absence, l'image ISO ne démarre pas.</li>
+              <li><strong>TPM virtuel (Trusted Platform Module) :</strong> Sélectionner la version <strong>2.0</strong> dans le menu déroulant. VirtualBox émule un coprocesseur cryptographique sécurisé pour stocker les clés BitLocker et l'intégrité de la plateforme.</li>
+              <li><strong>Secure Boot :</strong> Activer le démarrage sécurisé pour garantir que seuls les chargeurs de démarrage signés par Microsoft sont autorisés à s'exécuter.</li>
+            </ul>
+          </div>
+
+          <div class="layer">
+            <div class="label-mono" style="margin-bottom: var(--space-xs); color: #8f4f00;">INCIDENT RÉCURRENT DU LAB</div>
+            <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-xs);">L'Écran Jaune « EFI Interactive Shell »</h4>
+            <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              <strong>Symptôme :</strong> Au démarrage de la VM, l'écran reste bloqué sur une invite de commande jaune <span style="font-family: var(--font-label); background: #333333; color: #f1c21b; padding: 1px 4px;">Shell&gt;</span> au lieu de charger l'installateur Windows.
+            </p>
+            <p style="font-size: 0.875rem; margin-bottom: var(--space-sm);">
+              <strong>Cause :</strong> Le message <em>« Press any key to boot from CD or DVD... »</em> n'a pas été validé dans les 5 secondes imparties. L'UEFI a tenté de booter sur le disque dur VDI encore totalement vierge et a basculé sur le shell de secours.
+            </p>
+            <div style="background: #161616; color: #f4f4f4; padding: var(--space-sm); font-family: var(--font-label); font-size: 0.75rem;">
+              <div>// PROCÉDURE DE DÉPANNAGE EN 3 ÉTAPES :</div>
+              <div>1. Saisir : <span style="color: #f1c21b;">exit</span> puis appuyer sur [Entrée]</div>
+              <div>2. Dans l'interface du BIOS VirtualBox, sélectionner : <strong>Boot Manager</strong></div>
+              <div>3. Sélectionner l'entrée du lecteur optique virtuel (CD/DVD ISO)</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Chapitre 3: Les Deux Grands Contournements -->
+      <article id="ch-bypasses" style="margin-bottom: var(--space-2xl);">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="tag">MODULE 03</span>
+          <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+            Contournements Systèmes : <strong>Registre LabConfig &amp; OOBE\BYPASSNRO</strong>
+          </h2>
+        </div>
+
+        <p style="margin-bottom: var(--space-lg);">
+          En environnement de test, d'analyse forensique ou sur des ordinateurs de laboratoire dépourvus de connexion réseau opérationnelle, deux verrous imposés par Microsoft doivent être neutralisés avec précision.
+        </p>
+
+        <div class="grid-2">
+          <!-- Bloc 1: LabConfig -->
+          <div class="layer">
+            <span class="label-mono" style="color: var(--primary);">CONTOURNEMENT MATÉRIEL</span>
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: var(--space-xs) 0;">Le Registre LabConfig (Bypass TPM &amp; RAM)</h3>
+            <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              Lorsque l'installeur affiche le message bloquant : <em>« Ce PC ne répond pas actuellement à la configuration système requise pour Windows 11 »</em>.
+            </p>
+            <ol style="padding-left: var(--space-md); font-size: 0.875rem; display: flex; flex-direction: column; gap: var(--space-xs); margin-bottom: var(--space-md);">
+              <li>Presser simultanément <kbd style="background: #ffffff; border: 1px solid var(--outline); padding: 1px 4px; font-family: var(--font-label);">Shift + F10</kbd> (ou <kbd>Maj + F10</kbd>) pour ouvrir la console d'urgence Windows PE sous le compte <span style="font-family: var(--font-label); font-size: 0.85em;">NT AUTHORITY\SYSTEM</span>.</li>
+              <li>Taper <span style="font-family: var(--font-label); font-weight: 600;">regedit</span> et valider par Entrée.</li>
+              <li>Naviguer jusqu'à la clé :<br><code style="font-size: 0.8em; background: var(--surface-container-high); padding: 2px 4px;">HKEY_LOCAL_MACHINE\SYSTEM\Setup</code></li>
+              <li>Créer une nouvelle clé nommée : <strong>LabConfig</strong></li>
+              <li>Créer les valeurs DWORD 32 bits suivantes avec la valeur <strong>1</strong> :
+                <ul style="margin-top: var(--space-xs); font-family: var(--font-label); font-size: 0.8em;">
+                  <li>BypassTPMCheck = 1</li>
+                  <li>BypassSecureBootCheck = 1</li>
+                  <li>BypassRAMCheck = 1</li>
+                  <li>BypassCPUCheck = 1</li>
+                </ul>
+              </li>
+              <li>Fermer Regedit et CMD, cliquer sur la flèche de retour en haut à gauche de l'installeur : l'installation se débloque immédiatement.</li>
+            </ol>
+          </div>
+
+          <!-- Bloc 2: OOBE Bypass -->
+          <div class="layer">
+            <span class="label-mono" style="color: var(--tertiary);">CONTOURNEMENT RÉSEAU</span>
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin: var(--space-xs) 0;">Bypass OOBE : Forcer le Compte Local</h3>
+            <p style="font-size: 0.875rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              Lors de la phase « Out-Of-Box Experience », Microsoft bloque le processus si aucun réseau actif n'est présent et tente de forcer la création d'un compte Cloud Microsoft (@outlook.com).
+            </p>
+            <div class="callout-carbon" style="margin: var(--space-xs) 0 var(--space-sm); padding: var(--space-sm);">
+              <strong>Pourquoi refuser le compte en ligne en Lab ?</strong>
+              <ul style="font-size: 0.8125rem; margin-top: 4px; padding-left: var(--space-md);">
+                <li><strong>Autonomie complète :</strong> Démarrage direct sans dépendance de connectivité cloud.</li>
+                <li><strong>Dossier utilisateur propre :</strong> Crée <code style="font-size: 0.9em;">C:\Users\AdminLab</code> au lieu des 5 premières lettres imposées par un email.</li>
+                <li><strong>Pas de synchronisation forcée :</strong> Neutralise le rapt des dossiers Bureau et Documents par OneDrive.</li>
+              </ul>
+            </div>
+            <div class="cli-box" style="margin-top: var(--space-sm);">
+              <span style="color: #8d8d8d;">// Sur l'écran « Connectons-nous à un réseau », taper Shift+F10 :</span><br>
+              <span style="color: #69c0ff;">C:\Windows\system32&gt;</span> <strong>OOBE\BYPASSNRO</strong>
+            </div>
+            <p style="font-size: 0.8125rem; margin-top: var(--space-xs); color: var(--on-surface-variant);">
+              Le PC redémarre instantanément. Au retour sur l'écran réseau, le lien <strong>« Je n'ai pas Internet »</strong> apparaît. Cliquer ensuite sur <strong>« Continuer avec l'installation limitée »</strong> pour créer un compte administrateur local indépendant.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Chapitre 4: Guest Additions & Industrialisation -->
+      <article id="ch-drivers" style="margin-bottom: var(--space-2xl);">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="tag">MODULE 04</span>
+          <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+            Pilotes Paravirtualisés : <strong>Guest Additions &amp; Sysprep</strong>
+          </h2>
+        </div>
+
+        <div class="grid-8-4">
+          <div>
+            <p style="margin-bottom: var(--space-md);">
+              Une machine virtuelle fraîchement installée est isolée et bridée : résolution d'écran figée en 1024×768 sans accélération matérielle WDDM, absence d'intégration de la souris, presse-papiers scellé et incapacité de transférer des scripts. Les <strong>Guest Additions</strong> fournissent la couche de pilotes paravirtualisés indispensable.
+            </p>
+
+            <h3 style="font-size: var(--subhead-size); font-weight: 600; margin-bottom: var(--space-sm);">Déploiement pas-à-pas des Guest Additions</h3>
+            <ol style="padding-left: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-xs); margin-bottom: var(--space-md);">
+              <li>Dans la barre de menus VirtualBox de la VM : <em>Périphériques &gt; Insérer l'image CD des Additions invité...</em></li>
+              <li>Dans Windows 11, ouvrir l'Explorateur de fichiers (<kbd>Win + E</kbd>) et se rendre dans <em>Ce PC</em>.</li>
+              <li>Ouvrir le lecteur CD virtuel contenant les additions.</li>
+              <li>Faire un clic droit sur <span style="font-family: var(--font-label); font-weight: 600;">VBoxWindowsAdditions.exe</span> et sélectionner <strong>« Exécuter en tant qu'administrateur »</strong>.</li>
+              <li>Valider l'installation des pilotes de périphériques d'affichage Oracle WDDM et de bus système.</li>
+              <li>Cocher <strong>« Reboot now »</strong> pour redémarrer la machine et charger les pilotes dans le noyau NT.</li>
+              <li>Après redémarrage, activer dans <em>Périphériques</em> :
+                <ul style="margin-top: 4px;">
+                  <li><strong>Presse-papiers partagé :</strong> Bidirectionnel</li>
+                  <li><strong>Glisser-déposer :</strong> Bidirectionnel</li>
+                  <li><strong>Dossiers partagés :</strong> Montage automatique d'un répertoire hôte</li>
+                </ul>
+              </li>
+            </ol>
+          </div>
+
+          <aside class="layer" style="align-self: start;">
+            <div class="label-mono">INDUSTRIALISATION DU POSTE</div>
+            <h4 style="font-size: 1rem; font-weight: 600; margin: var(--space-xs) 0;">Sysprep &amp; Clones Liés</h4>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+              Pour déployer plusieurs machines de lab sans réinstaller le système :
+            </p>
+            <div class="cli-box" style="font-size: 0.75rem; margin-bottom: var(--space-sm);">
+              C:\Windows\System32\Sysprep\sysprep.exe /generalize /oobe /shutdown
+            </div>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+              La commande <strong>Sysprep</strong> réinitialise le SID (Security Identifier) unique. Vous pouvez ensuite créer des <strong>Clones Liés (Linked Clones)</strong> dans VirtualBox, économisant des dizaines de gigaoctets en partageant le disque parent en lecture seule.
+            </p>
+          </aside>
+        </div>
+      </article>
+
+      <!-- Chapitre 5: Clean Install Clé USB -->
+      <article id="ch-usb" style="margin-bottom: var(--space-2xl);">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="tag">MODULE 05</span>
+          <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+            Déploiement Physique : <strong>Clean Install via Clé USB</strong>
+          </h2>
+        </div>
+
+        <p style="margin-bottom: var(--space-md);">
+          Sur une machine physique (PC assemblé neuf ou réinstallation complète de poste de travail), la méthode officielle Microsoft repose sur un support amovible amorçable configuré via l'outil <strong>Media Creation Tool</strong>.
+        </p>
+
+        <div class="grid-3">
+          <div class="layer">
+            <span class="label-mono">PHASE 1 : PRÉREQUIS MATÉRIELS</span>
+            <h3 style="font-size: 1rem; font-weight: 600; margin: var(--space-xs) 0;">Le Choix du Support USB</h3>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+              • Clé USB 3.0 / 3.1 / 3.2 recommandée (connecteur bleu). Éviter l'USB 2.0 qui ralentit considérablement la copie.<br>
+              • Capacité minimale : <strong>8 Go</strong> (16 Go ou 32 Go vivement recommandé).<br>
+              • Formatage automatique en <strong>FAT32 / GPT</strong> compatible firmware UEFI physique.
+            </p>
+          </div>
+
+          <div class="layer">
+            <span class="label-mono">PHASE 2 : L'AMORÇAGE</span>
+            <h3 style="font-size: 1rem; font-weight: 600; margin: var(--space-xs) 0;">Le Boot Menu Temporaire</h3>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+              • Règle d'or du technicien : <strong>Ne pas modifier l'ordre de démarrage permanent du BIOS</strong>.<br>
+              • Tapoter la touche du Boot Menu temporaire (<kbd>F11</kbd> ou <kbd>F12</kbd> selon la carte mère, <kbd>F8</kbd> sur Asus).<br>
+              • Sélectionner le préfixe <em>« UEFI : NomDeLaCléUSB »</em>. Après le premier reboot, le SSD prend le relais sans reboucler sur la clé.
+            </p>
+          </div>
+
+          <div class="layer">
+            <span class="label-mono">PHASE 3 : HYGIÈNE PILOTES</span>
+            <h3 style="font-size: 1rem; font-weight: 600; margin: var(--space-xs) 0;">Pilotes Constructeur vs Windows</h3>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant);">
+              • Vérifier le <em>Gestionnaire de périphériques</em> (<span style="font-family: var(--font-label); font-size: 0.85em;">devmgmt.msc</span>) : aucun triangle jaune.<br>
+              • Installer le pilote GPU dédié officiel (NVIDIA Studio/Game Ready, AMD Adrenalin).<br>
+              • Paramétrer le taux de rafraîchissement d'écran en Hertz maximal dans les paramètres avancés d'affichage.
+            </p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ==========================================================================
+         ONGLET 2 : ATELIERS PRATIQUES & SIMULATEURS INTERACTIFS
+         ========================================================================== -->
+    <div id="section-labs" class="tab-pane" style="display: none;">
+
+      <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-xl);">
+        <span class="tag">LABORATOIRE INTERACTIF D'INGÉNIERIE</span>
+        <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+          Simulateurs Systèmes : <strong>Pratiquez les Gestes Techniques Réels</strong>
+        </h2>
+        <p style="color: var(--on-surface-variant); font-size: 0.95rem;">
+          Expérimentez les commandes critiques d'urgence, dimensionnez votre hyperviseur, inspectez le partitionnement GPT et dépannez le shell EFI en conditions réelles sans risque pour votre machine physique.
+        </p>
+      </div>
+
+      <!-- Atelier 1: Terminal d'Urgence Windows PE / OOBE (Shift+F10) -->
+      <section style="margin-bottom: var(--space-3xl);" aria-labelledby="lab-terminal-heading">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--space-sm); flex-wrap: wrap; gap: var(--space-sm);">
+          <div>
+            <span class="label-mono" style="color: var(--primary);">ATELIER PRATIQUE 01</span>
+            <h3 id="lab-terminal-heading" style="font-size: var(--subhead-size); font-weight: 600;">Console d'Urgence CMD &amp; Contournements (Shift + F10)</h3>
+          </div>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button class="btn btn-sm btn-secondary" onclick="runSimCommand('help')">help</button>
+            <button class="btn btn-sm btn-primary" onclick="runSimCommand('bypassnro')">oobe\bypassnro</button>
+            <button class="btn btn-sm btn-secondary" onclick="runSimCommand('regedit')">regedit</button>
+            <button class="btn btn-sm btn-secondary" onclick="clearSimTerminal()">cls</button>
+          </div>
+        </div>
+
+        <div class="grid-8-4">
+          <!-- Terminal Window Simulation -->
+          <div class="terminal-window" role="region" aria-label="Simulateur Terminal Windows PE">
+            <div class="terminal-bar">
+              <span>Administrateur : X:\windows\system32\cmd.exe (NT AUTHORITY\SYSTEM)</span>
+              <div style="display: flex; gap: 6px;">
+                <span style="display: inline-block; width: 10px; height: 10px; background: #525252;"></span>
+                <span style="display: inline-block; width: 10px; height: 10px; background: #525252;"></span>
+                <span style="display: inline-block; width: 10px; height: 10px; background: #da1e28;"></span>
+              </div>
+            </div>
+            <div class="terminal-body" id="sim-terminal-output" tabindex="0">
+              <div style="color: #8d8d8d;">Microsoft Windows [version 10.0.22631.2861] (Windows PE x64)</div>
+              <div style="color: #8d8d8d;">(c) Microsoft Corporation. Tous droits réservés.</div>
+              <div style="color: #8d8d8d; margin-bottom: var(--space-md);">Session d'administration d'urgence déclenchée via [Shift + F10].</div>
+              <div style="color: #00d97e;">Astuce : Tentez 'oobe\bypassnro' pour contourner le réseau ou 'regedit' pour forcer LabConfig.</div>
+              <div style="margin: var(--space-xs) 0;">C:\Windows\system32&gt;</div>
+            </div>
+            <form class="terminal-input-row" onsubmit="handleTerminalSubmit(event)">
+              <span style="color: #0f62fe; font-family: var(--font-label); margin-right: 4px;">C:\Windows\system32&gt;</span>
+              <input type="text" id="terminal-cmd-input" class="terminal-input" placeholder="Taper une commande (ex. oobe\bypassnro, regedit, ipconfig, help)..." autocomplete="off" spellcheck="false" aria-label="Ligne de commande Windows PE">
+              <button type="submit" class="btn btn-sm btn-primary" style="height: 28px;">Exécuter</button>
+            </form>
+          </div>
+
+          <!-- Écran de Statut OOBE Réactif -->
+          <div class="layer" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="label-mono" style="margin-bottom: var(--space-xs);">ÉTAT DE L'INSTALLATEUR WINDOWS 11</div>
+              <h4 id="oobe-status-title" style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-xs);">Écran OOBE : « Connectons-nous à un réseau »</h4>
+              <p id="oobe-status-desc" style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+                Verrouillé : Aucun pilote Wi-Fi détecté. Le bouton « Suivant » est grisé. Microsoft exige un compte en ligne (@outlook).
+              </p>
+
+              <!-- Mockup UI OOBE -->
+              <div id="oobe-mockup" style="background: #ffffff; border: 1px solid var(--outline-variant); padding: var(--space-md); border-radius: 0;">
+                <div style="display: flex; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-xs);">
+                  <i data-lucide="wifi-off" id="oobe-wifi-icon" style="width: 20px; height: 20px; color: var(--error);"></i>
+                  <span id="oobe-wifi-text" style="font-weight: 600; font-size: 0.875rem;">Aucun réseau disponible</span>
+                </div>
+                <div id="oobe-action-area" style="margin-top: var(--space-md);">
+                  <div style="padding: var(--space-sm); background: var(--surface-container); font-size: 0.75rem; color: var(--on-surface-muted);">
+                    Bouton [Suivant] indisponible. Déclenchez <strong>oobe\bypassnro</strong> dans la console pour forcer le redémarrage.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal / Volet d'Éditeur de Registre LabConfig -->
+            <div id="regedit-panel" style="display: none; margin-top: var(--space-md); background: #ffffff; border: 1px solid var(--primary); padding: var(--space-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
+                <span class="label-mono" style="color: var(--primary);">ÉDITEUR DU REGISTRE (REGEDIT)</span>
+                <span class="tag tag-success" style="height: 18px; font-size: 0.65rem;">ACTIF</span>
+              </div>
+              <p style="font-size: 0.75rem; font-family: var(--font-label); margin-bottom: var(--space-xs);">HKLM\SYSTEM\Setup\LabConfig</p>
+              <div style="font-size: 0.75rem; display: flex; flex-direction: column; gap: 2px; background: var(--surface-container); padding: 4px; font-family: var(--font-label);">
+                <div id="reg-tpm">[+] BypassTPMCheck : DWORD = 0</div>
+                <div id="reg-sb">[+] BypassSecureBootCheck : DWORD = 0</div>
+                <div id="reg-ram">[+] BypassRAMCheck : DWORD = 0</div>
+              </div>
+              <button class="btn btn-sm btn-primary" style="margin-top: var(--space-sm); width: 100%; justify-content: center;" onclick="applyRegeditBypass()">
+                Injecter les Clés LabConfig (Bypass Matériel)
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Atelier 2: Simulateur de Dépannage EFI Interactive Shell -->
+      <section style="margin-bottom: var(--space-3xl);" aria-labelledby="lab-efi-heading">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="label-mono" style="color: var(--primary);">ATELIER PRATIQUE 02</span>
+          <h3 id="lab-efi-heading" style="font-size: var(--subhead-size); font-weight: 600;">Séquenceur de Dépannage : L'Écran Jaune EFI Shell</h3>
+          <p style="color: var(--on-surface-variant); font-size: 0.875rem;">
+            Apprenez à sortir du shell interactif VirtualBox lorsqu'une VM rate le boot initial sur l'image ISO.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <!-- Simulation Visuelle EFI -->
+          <div style="background-color: #000000; color: #f1c21b; font-family: var(--font-label); font-size: 0.8125rem; padding: var(--space-lg); border: 2px solid #333333; min-height: 280px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div id="efi-screen-content">
+              <div>UEFI Interactive Shell v2.2</div>
+              <div>EDK II</div>
+              <div style="color: #8d8d8d;">UEFI v2.70 (Oracle VM VirtualBox 7.0.14 r161095)</div>
+              <div style="margin-top: var(--space-sm); color: #c6c6c6;">Mapping table :</div>
+              <div style="color: #69c0ff;">  FS0: Alias(s):HD0a1b:;BLK1: PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)/HD(1,MBR)</div>
+              <div style="color: #69c0ff;">  BLK0: Alias(s): PciRoot(0x0)/Pci(0x1F,0x2)/Sata(0x0,0xFFFF,0x0)</div>
+              <div style="margin-top: var(--space-md); color: #f1c21b;">Press ESC in 1 seconds to skip startup.nsh or any other key to continue.</div>
+              <div style="margin-top: var(--space-sm); color: #f1c21b;">Shell&gt; <span id="efi-typed-text" style="color: #ffffff;"></span><span style="animation: blink 1s infinite;">_</span></div>
+            </div>
+            <div style="border-top: 1px solid #333333; padding-top: var(--space-xs); font-size: 0.75rem; color: #8d8d8d;">
+              Statut VM : <span id="efi-vm-status" style="color: #f1c21b;">Bloqué sur invite de commande de firmware</span>
+            </div>
+          </div>
+
+          <!-- Panneau d'Actions Séquentielles -->
+          <div class="layer">
+            <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-sm);">Protocole de Reprise d'Amorce</h4>
+            <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <div id="efi-step-1" class="layer" style="background: #ffffff; border-left: 3px solid var(--primary);">
+                <strong>Étape 1 : Quitter le Shell EFI</strong>
+                <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                  Saisir la commande <code style="font-family: var(--font-label); background: var(--surface-container-high); padding: 1px 4px;">exit</code> pour accéder à la configuration UEFI.
+                </p>
+                <button class="btn btn-sm btn-primary" style="margin-top: var(--space-sm);" onclick="solveEfiStep1()">Saisir 'exit' et valider</button>
+              </div>
+
+              <div id="efi-step-2" class="layer" style="background: #ffffff; opacity: 0.5; border-left: 3px solid var(--outline);">
+                <strong>Étape 2 : Accéder au Boot Manager</strong>
+                <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                  Naviguer dans le menu graphique VirtualBox BIOS vers le gestionnaire d'amorce.
+                </p>
+                <button class="btn btn-sm btn-secondary" id="efi-btn-step2" disabled onclick="solveEfiStep2()">Ouvrir 'Boot Manager'</button>
+              </div>
+
+              <div id="efi-step-3" class="layer" style="background: #ffffff; opacity: 0.5; border-left: 3px solid var(--outline);">
+                <strong>Étape 3 : Forcer le Lecteur CD/DVD Virtuel</strong>
+                <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                  Sélectionner l'entrée du lecteur optique contenant l'ISO Windows 11 pour relancer l'installeur.
+                </p>
+                <button class="btn btn-sm btn-secondary" id="efi-btn-step3" disabled onclick="solveEfiStep3()">Amorcer sur lecteur CD/DVD</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Atelier 3: Dimensionneur de Ressources Lab Hyperviseur -->
+      <section style="margin-bottom: var(--space-3xl);" aria-labelledby="lab-calculator-heading">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="label-mono" style="color: var(--primary);">ATELIER PRATIQUE 03</span>
+          <h3 id="lab-calculator-heading" style="font-size: var(--subhead-size); font-weight: 600;">Calculateur &amp; Dimensionneur de Lab Hyperviseur</h3>
+          <p style="color: var(--on-surface-variant); font-size: 0.875rem;">
+            Ajustez les capacités de votre machine hôte physique et vos machines virtuelles cibles pour tester la viabilité architecturale et prévenir les instabilités système.
+          </p>
+        </div>
+
+        <div class="grid-8-4">
+          <!-- Panneau des Contrôles / Sliders -->
+          <div class="layer">
+            <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-md);">Paramètres de l'Infrastructure</h4>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); margin-bottom: var(--space-lg);">
+              <!-- Hôte RAM -->
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <label for="slider-host-ram" class="label-mono">RAM Hôte Physique :</label>
+                  <span id="val-host-ram" style="font-family: var(--font-label); font-weight: 600;">16 Go</span>
+                </div>
+                <input type="range" id="slider-host-ram" class="slider-input" min="8" max="64" step="8" value="16" oninput="updateLabCalc()">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--on-surface-variant); margin-top: 4px;">
+                  <span>8 Go</span><span>32 Go</span><span>64 Go</span>
+                </div>
+              </div>
+
+              <!-- Cœurs CPU Hôte -->
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <label for="slider-host-cpu" class="label-mono">Cœurs CPU Physiques :</label>
+                  <span id="val-host-cpu" style="font-family: var(--font-label); font-weight: 600;">8 Cœurs</span>
+                </div>
+                <input type="range" id="slider-host-cpu" class="slider-input" min="4" max="32" step="2" value="8" oninput="updateLabCalc()">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--on-surface-variant); margin-top: 4px;">
+                  <span>4 cœurs</span><span>16 cœurs</span><span>32 cœurs</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); margin-bottom: var(--space-lg);">
+              <!-- RAM par VM -->
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <label for="slider-vm-ram" class="label-mono">RAM allouée par VM :</label>
+                  <span id="val-vm-ram" style="font-family: var(--font-label); font-weight: 600;">8 Go</span>
+                </div>
+                <input type="range" id="slider-vm-ram" class="slider-input" min="2" max="16" step="2" value="8" oninput="updateLabCalc()">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--on-surface-variant); margin-top: 4px;">
+                  <span style="color: var(--error);">2 Go (Invalide)</span><span>4 Go (Min)</span><span>8 Go (Idéal)</span>
+                </div>
+              </div>
+
+              <!-- vCPU par VM -->
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <label for="slider-vm-cpu" class="label-mono">vCPU alloués par VM :</label>
+                  <span id="val-vm-cpu" style="font-family: var(--font-label); font-weight: 600;">4 vCPU</span>
+                </div>
+                <input type="range" id="slider-vm-cpu" class="slider-input" min="1" max="8" step="1" value="4" oninput="updateLabCalc()">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--on-surface-variant); margin-top: 4px;">
+                  <span style="color: var(--error);">1 vCPU (Rejeté)</span><span>2 (Min)</span><span>4 (Idéal)</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg);">
+              <!-- Nombre de VMs -->
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-xs);">
+                  <label for="slider-vm-count" class="label-mono">Nombre de VMs actives :</label>
+                  <span id="val-vm-count" style="font-family: var(--font-label); font-weight: 600;">1 VM</span>
+                </div>
+                <input type="range" id="slider-vm-count" class="slider-input" min="1" max="5" step="1" value="1" oninput="updateLabCalc()">
+              </div>
+
+              <!-- Mode Disque -->
+              <div>
+                <label class="label-mono" style="display: block; margin-bottom: var(--space-xs);">Mode d'Allocation Disque VDI :</label>
+                <div style="display: flex; gap: var(--space-sm);">
+                  <button type="button" id="btn-disk-thin" class="btn btn-sm btn-primary" onclick="setDiskMode('thin')">Dynamique (Thin)</button>
+                  <button type="button" id="btn-disk-fixed" class="btn btn-sm btn-secondary" onclick="setDiskMode('fixed')">Taille Fixe (80 Go)</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Rendu des Métriques & Verdict -->
+          <div class="layer" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="label-mono" style="margin-bottom: var(--space-xs);">DIAGNOSTIC ARCHITECTURAL DU LAB</div>
+              <div id="calc-verdict-badge" class="tag tag-success" style="margin-bottom: var(--space-md); font-size: 0.8125rem; height: 26px;">
+                CONFIGURATION VIABLE &amp; STABLE
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: var(--space-sm); font-size: 0.875rem;">
+                <div style="display: flex; justify-content: space-between; border-bottom: var(--rule); padding-bottom: 4px;">
+                  <span style="color: var(--on-surface-variant);">Charge Mémoire Vive Hôte :</span>
+                  <strong id="calc-res-ram-pct" style="font-family: var(--font-label);">50% (8 Go / 16 Go)</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: var(--rule); padding-bottom: 4px;">
+                  <span style="color: var(--on-surface-variant);">Ratio Surallocation vCPU / pCPU :</span>
+                  <strong id="calc-res-cpu-ratio" style="font-family: var(--font-label);">0.5:1 (4 vCPU / 8 cœurs)</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: var(--rule); padding-bottom: 4px;">
+                  <span style="color: var(--on-surface-variant);">Empreinte Disque Hôte Estimée :</span>
+                  <strong id="calc-res-disk" style="font-family: var(--font-label);">~22 Go (Thin Initial)</strong>
+                </div>
+              </div>
+
+              <div id="calc-advisory-box" class="callout-carbon" style="margin-top: var(--space-md); font-size: 0.8125rem;">
+                Votre hôte conserve 8 Go de mémoire libre pour son système d'exploitation et ses tâches de fond. L'allocation de 4 vCPU et 8 Go de RAM offre des performances optimales sans congestion de l'ordonnanceur.
+              </div>
+            </div>
+
+            <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: var(--rule); font-size: 0.75rem; color: var(--on-surface-variant);">
+              Normes : Min bloquant = 4096 Mo RAM &amp; 2 vCPU. Réserve système hôte recommandée : &ge; 4 Go libres.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Atelier 4: Matrice de Partitionnement SSD Clean Install (UEFI/GPT) -->
+      <section style="margin-bottom: var(--space-xl);" aria-labelledby="lab-part-heading">
+        <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-md);">
+          <span class="label-mono" style="color: var(--primary);">ATELIER PRATIQUE 04</span>
+          <h3 id="lab-part-heading" style="font-size: var(--subhead-size); font-weight: 600;">Structure des Partitions d'un SSD NVMe sous Windows 11 (GPT)</h3>
+          <p style="color: var(--on-surface-variant); font-size: 0.875rem;">
+            Lorsque vous sélectionnez un espace non alloué lors d'une installation propre, Windows génère automatiquement la structure GPT obligatoire. Cliquez sur chaque partition pour inspecter sa fonction système.
+          </p>
+        </div>
+
+        <div class="partition-bar" role="group" aria-label="Partitions du disque système">
+          <div class="part-block" style="width: 12%; background-color: #0f62fe;" onclick="showPartDetail('esp')">
+            <strong>1. ESP (EFI)</strong>
+            <span>100 Mo</span>
+          </div>
+          <div class="part-block" style="width: 8%; background-color: #6929c4;" onclick="showPartDetail('msr')">
+            <strong>2. MSR</strong>
+            <span>16 Mo</span>
+          </div>
+          <div class="part-block" style="width: 68%; background-color: #005d5d;" onclick="showPartDetail('sys')">
+            <strong>3. Système Windows (C:) - NTFS</strong>
+            <span>~475 Go (Espace Principal)</span>
+          </div>
+          <div class="part-block" style="width: 12%; background-color: #9f1853;" onclick="showPartDetail('winre')">
+            <strong>4. WinRE</strong>
+            <span>650 Mo</span>
+          </div>
+        </div>
+
+        <div id="part-detail-box" class="layer" style="margin-top: var(--space-md); border-left: 4px solid var(--primary);">
+          <div class="label-mono" id="part-detail-label">PARTITION SÉLECTIONNÉE : ESP (EFI SYSTEM PARTITION)</div>
+          <h4 id="part-detail-title" style="font-size: 1.125rem; font-weight: 600; margin: var(--space-xs) 0;">ESP (EFI System Partition) - 100 Mo à 260 Mo</h4>
+          <div class="grid-3" style="margin-top: var(--space-sm); font-size: 0.8125rem;">
+            <div><strong>Système de fichiers :</strong> <span id="part-detail-fs">FAT32 (Obligatoire UEFI)</span></div>
+            <div><strong>GUID de Type :</strong> <span id="part-detail-guid" style="font-family: var(--font-label); font-size: 0.75rem;">c12a7328-f81f-11d2-ba4b-00a0c93ec93b</span></div>
+            <div><strong>Criticité :</strong> <span id="part-detail-crit" style="color: var(--error); font-weight: 600;">Absolue (Système non amorçable sans elle)</span></div>
+          </div>
+          <p id="part-detail-desc" style="font-size: 0.875rem; margin-top: var(--space-sm); color: var(--on-surface-variant);">
+            Héberge les fichiers de démarrage UEFI de Windows (<code style="font-family: var(--font-label);">\EFI\Microsoft\Boot\bootmgfw.efi</code>) et le magasin de données de configuration de démarrage (BCD). Elle n'a pas de lettre de lecteur assignée par défaut pour éviter tout endommagement accidentel.
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ==========================================================================
+         ONGLET 3 : QUIZ DE CERTIFICATION TECHNICIEN IT
+         ========================================================================== -->
+    <div id="section-quiz" class="tab-pane" style="display: none;">
+
+      <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-xl);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: var(--space-sm);">
+          <div>
+            <span class="tag">ÉVALUATION DES COMPÉTENCES</span>
+            <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+              Quiz de Validation Technique : <strong>Déploiement Windows 11</strong>
+            </h2>
+            <p style="color: var(--on-surface-variant); font-size: 0.95rem;">
+              Testez vos connaissances sur l'architecture VirtualBox, les commandes de secours, le partitionnement et le contournement des prérequis. Score requis pour le certificat : <strong>70%</strong>.
+            </p>
+          </div>
+          <div class="layer" style="padding: var(--space-sm) var(--space-md); text-align: right;">
+            <div class="label-mono">SCORE ACTUEL</div>
+            <div id="quiz-live-score" class="key-value" style="font-size: 1.5rem; color: var(--primary);">0 / 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-8-4">
+        <!-- Container du Quiz Interactif -->
+        <div>
+          <div id="quiz-container">
+            <!-- Les questions sont rendues dynamiquement en JavaScript -->
+          </div>
+
+          <!-- Controls du Quiz -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-lg); border-top: var(--rule); padding-top: var(--space-md);">
+            <button class="btn btn-secondary" id="btn-quiz-prev" onclick="navQuiz(-1)" disabled>
+              <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Précédent
+            </button>
+            <div class="label-mono" id="quiz-step-indicator">QUESTION 1 SUR 10</div>
+            <button class="btn btn-primary" id="btn-quiz-next" onclick="navQuiz(1)">
+              Suivant <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Volet Latéral Certificat & Statut -->
+        <aside>
+          <div class="layer" style="margin-bottom: var(--space-md);">
+            <div class="label-mono" style="margin-bottom: var(--space-xs);">PROGRESSION GLOBALE</div>
+            <div style="background-color: var(--surface-container-high); height: 8px; width: 100%; margin: var(--space-xs) 0 var(--space-sm);">
+              <div id="quiz-progress-bar" style="background-color: var(--primary); height: 100%; width: 10%; transition: width 0.3s ease;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--on-surface-variant);">
+              <span id="quiz-answered-count">0 répondu(e)s</span>
+              <span>10 questions au total</span>
+            </div>
+          </div>
+
+          <!-- Encadré du Certificat Déblocable -->
+          <div class="layer" id="cert-preview-card" style="border-top: 3px solid var(--outline);">
+            <div class="label-mono" style="margin-bottom: var(--space-xs);">CERTIFICATION DU LAB</div>
+            <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-xs);">Attestation de Réussite</h4>
+            <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+              Validez au minimum 7 questions correctes pour débloquer votre certificat nominatif téléchargeable au format officiel.
+            </p>
+            <div style="margin-bottom: var(--space-md);">
+              <label for="student-name-input" class="label-mono" style="display: block; margin-bottom: 4px;">Nom de l'Apprenant :</label>
+              <input type="text" id="student-name-input" style="width: 100%; height: 38px; background: #ffffff; border: 1px solid var(--outline); padding: 0 var(--space-sm); font-family: var(--font-body); font-size: 0.875rem;" value="Administrateur Stagiaire" oninput="updateCertName(this.value)">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; justify-content: center;" id="btn-show-cert" disabled onclick="revealCertificate()">
+              <i data-lucide="award" style="width: 18px; height: 18px;"></i> Afficher le Certificat
+            </button>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Certificat Modal / Affichage -->
+      <div id="cert-modal-section" style="display: none; margin-top: var(--space-2xl);">
+        <div class="cert-frame">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--on-surface); padding-bottom: var(--space-md); margin-bottom: var(--space-xl);">
+            <div>
+              <div class="label-mono" style="font-size: 0.8125rem; letter-spacing: 0.2em; color: var(--on-surface);">RÉPUBLIQUE DES SYSTÈMES // ACADÉMIE VIRTUELLE</div>
+              <h3 class="headline" style="font-size: 1.75rem; margin-top: 4px;">CERTIFICAT D'APTITUDE TECHNIQUE</h3>
+              <p style="color: var(--on-surface-variant); font-size: 0.875rem;">Spécialisation : Déploiement &amp; Ingénierie Windows 11</p>
+            </div>
+            <div style="text-align: right;">
+              <span class="tag tag-success" style="font-size: 0.8125rem; height: 28px;">CERTIFIÉ CONFORME</span>
+              <div class="label-mono" id="cert-date-display" style="margin-top: 4px; font-size: 0.75rem;">DATE : 2026-11-06</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin: var(--space-xl) 0;">
+            <p style="font-size: 1rem; color: var(--on-surface-variant);">Ce document atteste que le technicien / ingénieur :</p>
+            <div id="cert-recipient-name" style="font-size: 2rem; font-weight: 600; margin: var(--space-sm) 0; color: var(--primary);">
+              Administrateur Stagiaire
+            </div>
+            <p style="max-width: 65ch; margin: 0 auto; font-size: 0.95rem; color: var(--on-surface);">
+              a démontré avec succès la maîtrise des procédures de configuration de l'hyperviseur VirtualBox 7.0+, l'émulation TPM 2.0 / Secure Boot, les contournements LabConfig et OOBE\BYPASSNRO, le déploiement des Guest Additions et la méthode Clean Install par support USB UEFI.
+            </p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--outline-variant); padding-top: var(--space-md); margin-top: var(--space-xl);">
+            <div>
+              <div class="label-mono">SCORE OBTENU AU LAB :</div>
+              <div id="cert-score-display" style="font-family: var(--font-label); font-size: 1.25rem; font-weight: 600; color: var(--positive);">10 / 10 (100%)</div>
+            </div>
+            <div style="text-align: right;">
+              <div class="label-mono">SCEAU NUMÉRIQUE DU LAB</div>
+              <div style="font-family: var(--font-label); font-size: 0.75rem; color: var(--on-surface-variant);">SHA256: 7F4A-99B1-W11-DEPL-OK</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==========================================================================
+         ONGLET 4 : CHECKLIST DU TECHNICIEN IT VALIDÉE
+         ========================================================================== -->
+    <div id="section-checklist" class="tab-pane" style="display: none;">
+
+      <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-xl);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: var(--space-sm);">
+          <div>
+            <span class="tag">PROCÉDURE QUALITÉ POST-DÉPLOIEMENT</span>
+            <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+              Checklist Officielle : <strong>Validation du Poste Déployé</strong>
+            </h2>
+            <p style="color: var(--on-surface-variant); font-size: 0.95rem;">
+              Points de contrôle obligatoires avant la livraison d'un poste Windows 11 en production ou en laboratoire d'analyse.
+            </p>
+          </div>
+          <div class="layer" style="padding: var(--space-sm) var(--space-md); text-align: right;">
+            <div class="label-mono">CONFORMITÉ DU POSTE</div>
+            <div id="chk-progress-text" class="key-value" style="font-size: 1.5rem; color: var(--primary);">0% (0/8)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-8-4">
+        <!-- Liste Interactive des Contrôles -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-sm);" id="checklist-items-container">
+
+          <div class="check-item" onclick="toggleCheckItem(0)" id="chk-item-0" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">1. Compte Administrateur Local &amp; Confidentialité</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Session créée sans dépendance de compte Microsoft en ligne (@outlook), répertoire utilisateur propre dans <code style="font-family: var(--font-label);">C:\Users\Nom</code> et télémétrie restrictive configurée.
+              </p>
+            </div>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(1)" id="chk-item-1" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">2. Intégrité du Firmware &amp; Table de Partitionnement GPT</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Système démarré en mode UEFI natif (vérifié via <span style="font-family: var(--font-label);">msinfo32</span> : <em>Mode BIOS = UEFI</em>), Secure Boot actif et partitionnement GPT sans vestige MBR.
+              </p>
+            </div>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(2)" id="chk-item-2" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">3. Gestionnaire de Périphériques Vierge (devmgmt.msc)</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Absence formelle de tout triangle jaune d'avertissement ou de périphérique inconnu dans l'arbre matériel.
+              </p>
+            </div>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(3)" id="chk-item-3" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">4. Pilotes Paravirtualisés (Guest Additions sous VirtualBox)</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Package <code style="font-family: var(--font-label);">VBoxWindowsAdditions.exe</code> exécuté en admin, pilote graphique WDDM opérationnel avec adaptation dynamique de la résolution d'écran à la fenêtre hôte.
+              </p>
+            </div>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(4)" id="chk-item-4" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">5. Canaux d'Échange Activés (Presse-papiers &amp; Glisser-Déposer)</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Réglage dans le menu Périphériques de VirtualBox sur <em>« Bidirectionnel »</em> validé par un copier-coller effectif entre l'hôte et la VM.
+              </p>
+            </div>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(5)" id="chk-item-5" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">6. Dossiers Partagés avec Montage Automatique</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Lecteur réseau persistant monté dans l'Explorateur (ex. lecteur <code style="font-family: var(--font-label);">Z:</code>) pour l'échange de scripts et payloads sans passer par le réseau LAN.
+              </p>
+            </div>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(6)" id="chk-item-6" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">7. Mises à Jour Cumulatives Windows Update à 100%</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Exécution complète de Windows Update jusqu'à l'obtention du statut <em>« Vous êtes à jour »</em> pour patcher les vulnérabilités initiales de l'image ISO.
+              </p>
+            </div>
+          </div>
+
+          <div class="check-item" onclick="toggleCheckItem(7)" id="chk-item-7" role="checkbox" aria-checked="false" tabindex="0">
+            <div class="custom-checkbox"><i data-lucide="check" style="width: 14px; height: 14px; display: none;"></i></div>
+            <div>
+              <strong style="font-size: 0.95rem;">8. Hygiène Logicielle &amp; Optimisation Fréquence Écran (Hz)</strong>
+              <p style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-top: 2px;">
+                Aucun antivirus tiers intrusif installé (Windows Defender actif suffit), fréquence de rafraîchissement d'affichage vérifiée à son maximum dans les options avancées.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Volet Récapitulatif -->
+        <aside class="layer" style="align-self: start;">
+          <div class="label-mono" style="margin-bottom: var(--space-xs);">ÉTAT DU LIVRABLE</div>
+          <h4 id="chk-status-heading" style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--space-xs);">Audit en cours...</h4>
+          <p id="chk-status-desc" style="font-size: 0.8125rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+            Cochez les 8 vérifications pour certifier la machine prête à être intégrée au parc de machines ou au lab de cybersécurité.
+          </p>
+
+          <div style="background-color: var(--surface-container-high); height: 10px; width: 100%; margin-bottom: var(--space-md);">
+            <div id="chk-bar" style="background-color: var(--primary); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+          </div>
+
+          <button class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;" onclick="resetChecklist()">
+            Réinitialiser la Checklist
+          </button>
+        </aside>
+      </div>
+
+    </div>
+
+    <!-- ==========================================================================
+         ONGLET 5 : BOÎTE À OUTILS & CHEAT SHEET COMMANDES
+         ========================================================================== -->
+    <div id="section-outils" class="tab-pane" style="display: none;">
+
+      <div style="border-bottom: var(--rule); padding-bottom: var(--space-sm); margin-bottom: var(--space-xl);">
+        <span class="tag">RÉFÉRENCE RAPIDE DU TECHNICIEN</span>
+        <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-xs);">
+          Boîte à Outils : <strong>Commandes d'Urgence &amp; Raccourcis Clés</strong>
+        </h2>
+        <p style="color: var(--on-surface-variant); font-size: 0.95rem;">
+          Copiez instantanément les commandes système essentielles dans votre presse-papiers pour vos interventions de terrain.
+        </p>
+      </div>
+
+      <div class="grid-2">
+
+        <!-- Tableau des Commandes CLI -->
+        <div class="layer">
+          <div class="label-mono" style="margin-bottom: var(--space-sm);">COMMANDES INDISPENSABLES</div>
+          <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <strong style="font-size: 0.875rem;">Bypass de l'exigence réseau OOBE (Compte Local)</strong>
+                <button class="btn btn-sm btn-ghost" onclick="copyCliSnippet('oobe')">
+                  <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copier
+                </button>
+              </div>
+              <div class="cli-box">OOBE\BYPASSNRO</div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <strong style="font-size: 0.875rem;">Injection automatique des clés LabConfig (Bypass TPM/SecureBoot)</strong>
+                <button class="btn btn-sm btn-ghost" onclick="copyCliSnippet('labconfig')">
+                  <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copier
+                </button>
+              </div>
+              <div class="cli-box" style="font-size: 0.75rem;">
+                reg add "HKLM\SYSTEM\Setup\LabConfig" /v BypassTPMCheck /t REG_DWORD /d 1 /f &amp;&amp; reg add "HKLM\SYSTEM\Setup\LabConfig" /v BypassSecureBootCheck /t REG_DWORD /d 1 /f
+              </div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <strong style="font-size: 0.875rem;">Généralisation de l'image système avant clonage (Sysprep)</strong>
+                <button class="btn btn-sm btn-ghost" onclick="copyCliSnippet('sysprep')">
+                  <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copier
+                </button>
+              </div>
+              <div class="cli-box">C:\Windows\System32\Sysprep\sysprep.exe /generalize /oobe /shutdown</div>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <strong style="font-size: 0.875rem;">Sortie du Shell EFI Interactive (VirtualBox)</strong>
+                <button class="btn btn-sm btn-ghost" onclick="copyCliSnippet('exit')">
+                  <i data-lucide="copy" style="width: 14px; height: 14px;"></i> Copier
+                </button>
+              </div>
+              <div class="cli-box">exit</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tableau des Raccourcis et Utilitaires -->
+        <div class="layer">
+          <div class="label-mono" style="margin-bottom: var(--space-sm);">RACCOURCIS CLAVIER &amp; CONSOLES MMC</div>
+          <table class="carbon-table" aria-label="Table des raccourcis et consoles MMC">
+            <thead>
+              <tr>
+                <th>Raccourci / Exécuter</th>
+                <th>Fonction &amp; Utilité Système</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><kbd style="font-family: var(--font-label); background: #ffffff; padding: 2px 4px; border: 1px solid var(--outline);">Shift + F10</kbd></td>
+                <td>Ouvre l'invite de commande d'urgence lors de l'installation ou de l'OOBE (sous NT AUTHORITY\SYSTEM).</td>
+              </tr>
+              <tr>
+                <td><code style="font-family: var(--font-label); font-weight: 600;">devmgmt.msc</code></td>
+                <td>Gestionnaire de périphériques : contrôle des triangles jaunes et pilotes.</td>
+              </tr>
+              <tr>
+                <td><code style="font-family: var(--font-label); font-weight: 600;">msinfo32</code></td>
+                <td>Informations système : vérification du mode BIOS (UEFI) et de l'état Secure Boot.</td>
+              </tr>
+              <tr>
+                <td><code style="font-family: var(--font-label); font-weight: 600;">diskmgmt.msc</code></td>
+                <td>Gestion des disques : inspection des partitions ESP, MSR et NTFS.</td>
+              </tr>
+              <tr>
+                <td><kbd style="font-family: var(--font-label); background: #ffffff; padding: 2px 4px; border: 1px solid var(--outline);">F11 / F12 / F8</kbd></td>
+                <td>Touches standard pour déclencher le <strong>Boot Menu temporaire</strong> sans altérer le BIOS permanent.</td>
+              </tr>
+              <tr>
+                <td><kbd style="font-family: var(--font-label); background: #ffffff; padding: 2px 4px; border: 1px solid var(--outline);">Win + X</kbd></td>
+                <td>Menu de liens rapides d'administration (Terminal Admin, Gestion des disques).</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout-carbon callout-success" style="margin-top: var(--space-md); font-size: 0.8125rem;">
+            <strong>Conseil Pro :</strong> Pour préserver la réactivité de Windows 11 en environnement virtualisé ou sur PC bureautique, évitez les logiciels de nettoyage tiers et les antivirus résidents lourds : <strong>Windows Defender + Windows Update</strong> assurent une sécurité native optimale.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Notification Toast pour copie presse-papiers -->
+  <div id="toast-notify" style="position: fixed; bottom: var(--space-lg); right: var(--space-lg); background-color: var(--on-surface); color: #ffffff; padding: var(--space-sm) var(--space-md); font-family: var(--font-label); font-size: 0.8125rem; display: none; z-index: 1000; box-shadow: var(--shadow-2); border-left: 3px solid var(--primary);">
+    Commande copiée dans le presse-papiers !
+  </div>
+
+  <!-- State persistence shim required before main script -->
+  <api-shim></api-shim>
+
+  <script>
+    /* ==========================================================================
+       APPLICATION STATE & QUIZ DATA MODEL
+       ========================================================================== */
+    const appState = {
+      currentMainTab: 'section-cours',
+      checklist: [false, false, false, false, false, false, false, false],
+      quizIndex: 0,
+      quizAnswers: {},
+      quizScore: 0,
+      quizCompleted: false,
+      studentName: 'Administrateur Stagiaire',
+      labSimStep: 0,
+      labRegeditDone: false,
+      calcParams: {
+        hostRam: 16,
+        hostCpu: 8,
+        vmRam: 8,
+        vmCpu: 4,
+        vmCount: 1,
+        diskType: 'thin'
+      }
+    };
+
+    // 10 Questions rigoureuses basées sur les sources PDF et cours complet
+    const quizQuestions = [
+      {
+        id: 1,
+        question: `Quelle est la quantité minimale absolue de mémoire vive (RAM) requise par l'installeur officiel de Windows 11 sans contournement ?`,
+        options: [
+          `2048 Mo (2 Go)`,
+          `4096 Mo (4 Go)`,
+          `8192 Mo (8 Go)`,
+          `16384 Mo (16 Go)`
+        ],
+        correct: 1,
+        explanation: `4096 Mo (4 Go) est le seuil minimal bloquant programmé dans l'installeur de Windows 11. En deçà, l'installation s'interrompt immédiatement avec un message d'erreur matérielle. Dans un lab, 8 Go sont recommandés pour la fluidité.`
+      },
+      {
+        id: 2,
+        question: `Lors de la création de la VM sous VirtualBox 7.0+, quelle case à cocher est indispensable pour empêcher l'hyperviseur de configurer des comptes et partitions automatisés non désirés ?`,
+        options: [
+          `Activer l'accélération 3D`,
+          `Ignorer l'installation sans assistance (Skip Unattended Installation)`,
+          `Activer le mode PAE/NX`,
+          `Utiliser le réseau par pont`
+        ],
+        correct: 1,
+        explanation: `La case « Skip Unattended Installation » désactive l'assistant automatisé de VirtualBox et vous redonne la pleine maîtrise de l'installeur Windows pour créer un compte local propre et contrôler les partitions.`
+      },
+      {
+        id: 3,
+        question: `Face à l'écran bloquant « Ce PC ne répond pas actuellement à la configuration requise », quelle combinaison de touches ouvre la console d'urgence Windows PE ?`,
+        options: [
+          `Ctrl + Alt + Suppr`,
+          `Shift + F10 (ou Maj + F10)`,
+          `Alt + F4`,
+          `Touche Windows + R`
+        ],
+        correct: 1,
+        explanation: `Shift + F10 ouvre immédiatement une console cmd.exe sous les privilèges suprêmes NT AUTHORITY\\SYSTEM, permettant de lancer regedit ou d'exécuter des scripts de déblocage.`
+      },
+      {
+        id: 4,
+        question: `Quelle commande exacte tapée dans l'invite d'urgence permet de neutraliser l'obligation de connexion Internet lors de l'écran d'accueil OOBE ?`,
+        options: [
+          `netsh interface set interface bypass`,
+          `OOBE\\BYPASSNRO`,
+          `ipconfig /release_microsoft`,
+          `reg add HKLM\\NoCloud /v 1`
+        ],
+        correct: 1,
+        explanation: `OOBE\\BYPASSNRO (Out-Of-Box Experience Bypass Network Requirement Option) modifie temporairement le registre et relance la phase OOBE en faisant apparaître le bouton salutaire « Je n'ai pas Internet » puis « Continuer avec l'installation limitée ».`
+      },
+      {
+        id: 5,
+        question: `Sous quelle clé du registre Windows PE devez-vous créer la sous-clé 'LabConfig' pour contourner les contrôles matériels (BypassTPMCheck, etc.) ?`,
+        options: [
+          `HKEY_CURRENT_USER\\Software\\Microsoft\\Windows`,
+          `HKEY_LOCAL_MACHINE\\SYSTEM\\Setup`,
+          `HKEY_CLASSES_ROOT\\VirtualBox`,
+          `HKEY_LOCAL_MACHINE\\SAM\\Domains`
+        ],
+        correct: 1,
+        explanation: `L'installeur de Windows consulte formellement la clé HKEY_LOCAL_MACHINE\\SYSTEM\\Setup\\LabConfig. En y ajoutant les DWORD BypassTPMCheck, BypassSecureBootCheck, BypassRAMCheck et BypassCPUCheck à 1, l'installation se débloque.`
+      },
+      {
+        id: 6,
+        question: `Lorsque VirtualBox démarre sur l'écran jaune 'UEFI Interactive Shell v2.2', quelle commande devez-vous saisir pour accéder au Boot Manager ?`,
+        options: [
+          `reboot`,
+          `exit`,
+          `cls`,
+          `format c:`
+        ],
+        correct: 1,
+        explanation: `Taper 'exit' dans le shell EFI quitte l'invite jaune et renvoie vers le menu graphique de configuration du firmware VirtualBox, où vous pouvez sélectionner 'Boot Manager' puis forcer l'amorce sur le lecteur CD-ROM virtuel.`
+      },
+      {
+        id: 7,
+        question: `Quel avantage majeur offre le disque virtuel VDI en 'Allocation Dynamique' (Thin Provisioning) pour un lab par rapport à une taille fixe ?`,
+        options: [
+          `Il augmente la vitesse du processeur`,
+          `Il n'occupe sur l'hôte physique que l'espace réellement écrit, évitant de réserver immédiatement 80 Go`,
+          `Il compresse automatiquement la RAM`,
+          `Il active BitLocker nativement`
+        ],
+        correct: 1,
+        explanation: `L'allocation dynamique ne consomme sur votre SSD hôte que les données réelles (environ 12 à 20 Go au début), alors qu'une taille fixe monopolise instantanément les 80 Go d'un coup et allonge considérablement la création de la VM.`
+      },
+      {
+        id: 8,
+        question: `Parmi ces fonctionnalités, laquelle N'EST PAS fournie par l'installation des Guest Additions de VirtualBox ?`,
+        options: [
+          `Adaptation automatique de la résolution d'écran (pilote WDDM)`,
+          `Presse-papiers et glisser-déposer bidirectionnels`,
+          `Overclocking dynamique du processeur physique hôte`,
+          `Partage direct de répertoires physiques montés en lecteurs réseau`
+        ],
+        correct: 2,
+        explanation: `Les Guest Additions fournissent la paravirtualisation d'affichage WDDM, le presse-papiers partagé, le glisser-déposer et les dossiers partagés, mais ne réalisent aucun overclocking physique du matériel.`
+      },
+      {
+        id: 9,
+        question: `Quelle taille minimale de support USB est formellement requise pour créer une clé d'installation officielle Windows 11 via le Media Creation Tool ?`,
+        options: [
+          `2 Go`,
+          `4 Go`,
+          `8 Go (avec 16/32 Go vivement recommandé en USB 3.0)`,
+          `128 Go`
+        ],
+        correct: 2,
+        explanation: `L'outil de création de média Microsoft exige un minimum strict de 8 Go. Une clé USB 3.0 de 16 ou 32 Go est vivement recommandée pour assurer un débit de transfert confortable lors du formatage FAT32/UEFI.`
+      },
+      {
+        id: 10,
+        question: `Sur un PC physique neuf, pourquoi est-il recommandé d'utiliser le Boot Menu temporaire (F11/F12) plutôt que de bouleverser l'ordre de démarrage du BIOS ?`,
+        options: [
+          `Parce que cela efface la clé USB`,
+          `Pour ne changer la priorité d'amorce qu'une seule fois sans risquer de reboucler sur la clé USB après le premier redémarrage automatique`,
+          `Pour contourner la garantie constructeur`,
+          `Pour désactiver le ventilateur CPU`
+        ],
+        correct: 1,
+        explanation: `Le Boot Menu temporaire amorce la clé USB pour la première phase. Lorsque Windows redémarre le PC après la copie des fichiers, le système amorce naturellement le SSD sans recharger la clé USB en boucle.`
+      }
+    ];
+
+    // Données des partitions pour l'Atelier 4
+    const partitionData = {
+      esp: {
+        label: `PARTITION SÉLECTIONNÉE : ESP (EFI SYSTEM PARTITION)`,
+        title: `ESP (EFI System Partition) - 100 Mo à 260 Mo`,
+        fs: `FAT32 (Obligatoire UEFI)`,
+        guid: `c12a7328-f81f-11d2-ba4b-00a0c93ec93b`,
+        crit: `Absolue (Système non amorçable sans elle)`,
+        desc: `Héberge les fichiers de démarrage UEFI de Windows (\\EFI\\Microsoft\\Boot\\bootmgfw.efi) et le magasin de configuration de démarrage (BCD). Elle n'a pas de lettre de lecteur assignée par défaut pour éviter tout endommagement accidentel.`
+      },
+      msr: {
+        label: `PARTITION SÉLECTIONNÉE : MSR (MICROSOFT RESERVED)`,
+        title: `MSR (Microsoft Reserved Partition) - 16 Mo`,
+        fs: `RAW / Réservé non formaté`,
+        guid: `e3c9e310-0b6f-4942-842e-74405a4c4b0e`,
+        crit: `Requise pour la gestion des métadonnées GPT`,
+        desc: `Partition tampon réservée introduite par Microsoft pour aider à la gestion des disques partitionnés en GPT. Elle sert aux opérations de conversion de disques dynamiques et à certains pilotes OEM.`
+      },
+      sys: {
+        label: `PARTITION SÉLECTIONNÉE : SYSTÈME PRINCIPAL (C:)`,
+        title: `Partition Système & Données (C:) - Reste du Disque`,
+        fs: `NTFS (Journalisé)`,
+        guid: `ebd0a0a2-b9e5-4433-87c0-68b6b72699c7`,
+        crit: `Cœur du système d'exploitation`,
+        desc: `Contient les répertoires Windows, Program Files, Users et les registres système. C'est sur cette partition que s'installent les logiciels, les pilotes graphiques et les données de l'administrateur.`
+      },
+      winre: {
+        label: `PARTITION SÉLECTIONNÉE : WINRE (RÉCUPÉRATION)`,
+        title: `Environnement de Récupération (WinRE) - ~650 Mo à 1 Go`,
+        fs: `NTFS`,
+        guid: `de94bba4-06d1-4d40-a16a-bfd50179d6ac`,
+        crit: `Cruciale pour le dépannage sans support externe`,
+        desc: `Héberge l'image WinRE (Windows Recovery Environment). Permet la réinitialisation du PC, la restauration de points de contrôle système, l'accès à l'invite de commande de secours et la réparation automatique du démarrage.`
+      }
+    };
+
+    /* ==========================================================================
+       NAVIGATION & TABS
+       ========================================================================== */
+    function switchMainTab(targetTabId) {
+      const tabs = ['section-cours', 'section-labs', 'section-quiz', 'section-checklist', 'section-outils'];
+      tabs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = (id === targetTabId) ? 'block' : 'none';
+      });
+
+      const navMap = {
+        'section-cours': 'nav-btn-cours',
+        'section-labs': 'nav-btn-labs',
+        'section-quiz': 'nav-btn-quiz',
+        'section-checklist': 'nav-btn-checklist',
+        'section-outils': 'nav-btn-outils'
+      };
+
+      Object.keys(navMap).forEach(key => {
+        const btn = document.getElementById(navMap[key]);
+        if (btn) {
+          if (key === targetTabId) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        }
+      });
+
+      appState.currentMainTab = targetTabId;
+      saveAppState();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToElement(elId) {
+      const el = document.getElementById(elId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    /* ==========================================================================
+       ATELIER 1 : SIMULATEUR TERMINAL CMD & BYPASS OOBE
+       ========================================================================== */
+    function handleTerminalSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('terminal-cmd-input');
+      if (!input) return;
+      const cmd = input.value.trim();
+      input.value = '';
+      if (cmd) {
+        runSimCommand(cmd);
+      }
+    }
+
+    function runSimCommand(rawCmd) {
+      const terminal = document.getElementById('sim-terminal-output');
+      if (!terminal) return;
+
+      const cmd = rawCmd.toLowerCase().trim();
+      const userLine = document.createElement('div');
+      userLine.innerHTML = `<span style="color: #0f62fe;">C:\\Windows\\system32&gt;</span> ${escapeHtml(rawCmd)}`;
+      terminal.appendChild(userLine);
+
+      const respLine = document.createElement('div');
+      respLine.style.marginBottom = 'var(--space-sm)';
+
+      if (cmd === 'help') {
+        respLine.innerHTML = `Commandes reconnues dans ce lab :<br>
+          - <strong>OOBE\\BYPASSNRO</strong> : Déclenche le bypass réseau et redémarre l'OOBE<br>
+          - <strong>regedit</strong> : Ouvre l'éditeur de registre pour injecter LabConfig<br>
+          - <strong>ipconfig</strong> : Affiche l'état des interfaces réseau<br>
+          - <strong>whoami</strong> : Affiche le contexte de sécurité courant<br>
+          - <strong>sysprep</strong> : Rappelle la syntaxe de généralisation système<br>
+          - <strong>cls</strong> : Efface l'écran du terminal`;
+      } else if (cmd.includes('bypassnro') || cmd.includes('oobe')) {
+        respLine.innerHTML = `<span style="color: #f1c21b;">[!] Modification de la clé de registre éphémère HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OOBE\\BypassNRO...</span><br>
+          <span style="color: #00d97e;">[+] Exigence réseau neutralisée. Redémarrage automatique du wizard OOBE en cours...</span>`;
+        terminal.appendChild(respLine);
+        terminal.scrollTop = terminal.scrollHeight;
+
+        triggerOobeBypassAnimation();
+        return;
+      } else if (cmd === 'regedit') {
+        respLine.innerHTML = `<span style="color: #00d97e;">Lancement de l'Éditeur du Registre (Registry Editor)...</span><br>
+          Volet d'injection de la clé <strong>HKLM\\SYSTEM\\Setup\\LabConfig</strong> déployé sur le panneau droit.`;
+        const regPanel = document.getElementById('regedit-panel');
+        if (regPanel) regPanel.style.display = 'block';
+      } else if (cmd === 'whoami') {
+        respLine.innerHTML = `<span style="color: #69c0ff;">nt authority\\system</span> (Privilèges administratifs système complets)`;
+      } else if (cmd === 'ipconfig') {
+        respLine.innerHTML = `Configuration IP de Windows PE<br>
+          Carte Ethernet Ethernet0 : Statut média déconnecté.<br>
+          Carte réseau sans fil Wi-Fi : Aucun pilote présent. Média déconnecté.`;
+      } else if (cmd === 'sysprep') {
+        respLine.innerHTML = `Utilitaire de préparation système (Sysprep)<br>
+          Syntaxe recommandée : sysprep.exe /generalize /oobe /shutdown`;
+      } else if (cmd === 'cls') {
+        terminal.innerHTML = `<div style="color: #8d8d8d;">Microsoft Windows [version 10.0.22631.2861] (Windows PE x64)</div>
+          <div style="color: #00d97e;">Tapez 'help', 'oobe\\bypassnro', ou 'regedit'.</div>`;
+        return;
+      } else {
+        respLine.innerHTML = `'${escapeHtml(rawCmd)}' n'est pas reconnu comme commande interne ou externe.<br>Tapez <strong>help</strong> pour la liste des commandes.`;
+      }
+
+      terminal.appendChild(respLine);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function clearSimTerminal() {
+      const terminal = document.getElementById('sim-terminal-output');
+      if (terminal) {
+        terminal.innerHTML = `<div style="color: #8d8d8d;">Terminal effacé. Tapez 'help', 'oobe\\bypassnro', ou 'regedit'.</div>`;
+      }
+    }
+
+    function triggerOobeBypassAnimation() {
+      const title = document.getElementById('oobe-status-title');
+      const desc = document.getElementById('oobe-status-desc');
+      const mockAction = document.getElementById('oobe-action-area');
+      const wifiIcon = document.getElementById('oobe-wifi-icon');
+      const wifiText = document.getElementById('oobe-wifi-text');
+
+      if (title) title.innerText = 'Redémarrage du processus OOBE...';
+      if (desc) desc.innerText = 'Application des drapeaux de bypass et réinitialisation de la session d\'accueil...';
+      if (mockAction) mockAction.innerHTML = '<span style="color: #0f62fe;">Reboot simulé en cours (2 secondes)...</span>';
+
+      setTimeout(() => {
+        if (title) title.innerText = 'Écran OOBE Réseau DÉBLOQUÉ !';
+        if (desc) desc.innerText = 'L\'option de contournement hors-connexion est désormais visible et active.';
+        if (wifiIcon) {
+          wifiIcon.setAttribute('data-lucide', 'shield-check');
+          wifiIcon.style.color = '#198038';
+        }
+        if (wifiText) {
+          wifiText.innerText = 'Option hors-connexion disponible';
+        }
+        if (mockAction) {
+          mockAction.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+              <button class="btn btn-sm btn-primary" onclick="completeOobeLocalSetup()">
+                <i data-lucide="check" style="width: 14px; height: 14px;"></i> Cliquer sur « Je n'ai pas Internet »
+              </button>
+              <span style="font-size: 0.75rem; color: var(--on-surface-variant);">
+                Puis : « Continuer avec l'installation limitée » &rarr; Créer l'utilisateur local.
+              </span>
+            </div>
+          `;
+        }
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+      }, 1500);
+    }
+
+    function completeOobeLocalSetup() {
+      const mockAction = document.getElementById('oobe-action-area');
+      const desc = document.getElementById('oobe-status-desc');
+      if (desc) {
+        desc.innerText = 'Succès : Vous avez déployé un compte local "AdminLab" protégé, indépendant de tout compte Cloud et sans télémétrie abusive.';
+      }
+      if (mockAction) {
+        mockAction.innerHTML = `
+          <div style="background: #defbe6; border: 1px solid #198038; padding: var(--space-sm); font-size: 0.8125rem; color: #0e6027;">
+            <strong>FÉLICITATIONS : Compte Local « AdminLab » créé !</strong><br>
+            Le dossier utilisateur sera <code style="font-family: var(--font-label);">C:\\Users\\AdminLab</code>. Aucun compte en ligne n'a été requis.
+          </div>
+        `;
+      }
+      showToast('Compte local validé avec succès !');
+    }
+
+    function applyRegeditBypass() {
+      const tpm = document.getElementById('reg-tpm');
+      const sb = document.getElementById('reg-sb');
+      const ram = document.getElementById('reg-ram');
+      if (tpm) tpm.innerHTML = `<span style="color: #198038;">[OK] BypassTPMCheck : DWORD = 1</span>`;
+      if (sb) sb.innerHTML = `<span style="color: #198038;">[OK] BypassSecureBootCheck : DWORD = 1</span>`;
+      if (ram) ram.innerHTML = `<span style="color: #198038;">[OK] BypassRAMCheck : DWORD = 1</span>`;
+
+      appState.labRegeditDone = true;
+      showToast('Clés LabConfig injectées avec succès !');
+
+      const terminal = document.getElementById('sim-terminal-output');
+      if (terminal) {
+        const line = document.createElement('div');
+        line.innerHTML = `<span style="color: #00d97e;">[REGEDIT SUCCESS] Les vérifications de TPM 2.0, Secure Boot et RAM sont désormais neutralisées.</span>`;
+        terminal.appendChild(line);
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    }
+
+    /* ==========================================================================
+       ATELIER 2 : SIMULATEUR EFI SHELL
+       ========================================================================== */
+    function solveEfiStep1() {
+      const typed = document.getElementById('efi-typed-text');
+      const vmStatus = document.getElementById('efi-vm-status');
+      const btn2 = document.getElementById('efi-btn-step2');
+      const step1 = document.getElementById('efi-step-1');
+      const step2 = document.getElementById('efi-step-2');
+
+      if (typed) typed.innerText = 'exit';
+      if (vmStatus) {
+        vmStatus.innerText = 'Fermeture du Shell EFI... Chargement de l\'écran VirtualBox BIOS';
+        vmStatus.style.color = '#00d97e';
+      }
+
+      if (step1) step1.style.opacity = '0.6';
+      if (step2) {
+        step2.style.opacity = '1';
+        step2.style.borderLeftColor = 'var(--primary)';
+      }
+      if (btn2) btn2.disabled = false;
+
+      const screen = document.getElementById('efi-screen-content');
+      if (screen) {
+        setTimeout(() => {
+          screen.innerHTML = `
+            <div style="color: #ffffff; font-weight: 600; border-bottom: 1px solid #333; padding-bottom: 4px;">
+              Oracle VM VirtualBox - Configuration du Firmware (UEFI 2.70)
+            </div>
+            <div style="margin-top: var(--space-md); color: #00d97e;">
+              &gt; Continue<br>
+              &gt; <strong style="color: #f1c21b; background: #262626; padding: 1px 4px;">Boot Manager [SELECTIONNABLE]</strong><br>
+              &gt; Device Manager<br>
+              &gt; Boot Maintenance Manager<br>
+              &gt; Reset
+            </div>
+            <div style="margin-top: var(--space-md); color: #8d8d8d;">
+              Utiliser les touches fléchées pour naviguer ou cliquer sur l'étape 2.
+            </div>
+          `;
+        }, 500);
+      }
+    }
+
+    function solveEfiStep2() {
+      const btn2 = document.getElementById('efi-btn-step2');
+      const btn3 = document.getElementById('efi-btn-step3');
+      const step2 = document.getElementById('efi-step-2');
+      const step3 = document.getElementById('efi-step-3');
+
+      if (btn2) btn2.disabled = true;
+      if (step2) step2.style.opacity = '0.6';
+      if (step3) {
+        step3.style.opacity = '1';
+        step3.style.borderLeftColor = 'var(--primary)';
+      }
+      if (btn3) btn3.disabled = false;
+
+      const screen = document.getElementById('efi-screen-content');
+      if (screen) {
+        screen.innerHTML = `
+          <div style="color: #ffffff; font-weight: 600; border-bottom: 1px solid #333; padding-bottom: 4px;">
+            Boot Manager - Sélection du Périphérique d'Amorce
+          </div>
+          <div style="margin-top: var(--space-md); display: flex; flex-direction: column; gap: 4px;">
+            <div style="color: #8d8d8d;">1. UEFI VBOX HARDDISK VB001 (Disque vierge - Échec)</div>
+            <div style="color: #00d97e; font-weight: 600; background: #262626; padding: 2px 4px;">
+              2. UEFI VBOX CD-ROM VB1-CD01 [ISO Windows 11 Détectée]
+            </div>
+            <div style="color: #8d8d8d;">3. EFI Internal Shell</div>
+          </div>
+          <div style="margin-top: var(--space-md); color: #f1c21b;">
+            Action requise : Forcer le démarrage sur le lecteur CD-ROM virtuel (Étape 3).
+          </div>
+        `;
+      }
+    }
+
+    function solveEfiStep3() {
+      const btn3 = document.getElementById('efi-btn-step3');
+      const step3 = document.getElementById('efi-step-3');
+      const vmStatus = document.getElementById('efi-vm-status');
+
+      if (btn3) btn3.disabled = true;
+      if (step3) {
+        step3.style.opacity = '1';
+        step3.style.borderLeftColor = 'var(--positive)';
+      }
+      if (vmStatus) {
+        vmStatus.innerText = 'Démarrage du programme d\'installation de Windows 11 avec succès !';
+        vmStatus.style.color = '#198038';
+      }
+
+      const screen = document.getElementById('efi-screen-content');
+      if (screen) {
+        screen.innerHTML = `
+          <div style="text-align: center; padding: var(--space-xl) 0;">
+            <div style="color: #0f62fe; font-size: 1.5rem; font-weight: 600; margin-bottom: var(--space-sm);">
+              [INSTALLATION DE WINDOWS 11 LANCÉE]
+            </div>
+            <p style="color: #ffffff; font-size: 0.875rem;">
+              Le chargeur <code style="color: #69c0ff;">\\EFI\\BOOT\\BOOTX64.EFI</code> a été exécuté. Le programme d'installation graphique de Windows 11 démarre.
+            </p>
+            <div style="margin-top: var(--space-md); color: #00d97e;">
+              Incidence résolue sans avoir besoin de redémarrer la machine virtuelle !
+            </div>
+          </div>
+        `;
+      }
+      showToast('Amorce ISO rétablie avec succès !');
+    }
+
+    /* ==========================================================================
+       ATELIER 3 : DIMENSIONNEUR DE RESSOURCES DU LAB
+       ========================================================================== */
+    function setDiskMode(mode) {
+      appState.calcParams.diskType = mode;
+      const btnThin = document.getElementById('btn-disk-thin');
+      const btnFixed = document.getElementById('btn-disk-fixed');
+      if (btnThin && btnFixed) {
+        if (mode === 'thin') {
+          btnThin.className = 'btn btn-sm btn-primary';
+          btnFixed.className = 'btn btn-sm btn-secondary';
+        } else {
+          btnThin.className = 'btn btn-sm btn-secondary';
+          btnFixed.className = 'btn btn-sm btn-primary';
+        }
+      }
+      updateLabCalc();
+    }
+
+    function updateLabCalc() {
+      const hostRamEl = document.getElementById('slider-host-ram');
+      const hostCpuEl = document.getElementById('slider-host-cpu');
+      const vmRamEl = document.getElementById('slider-vm-ram');
+      const vmCpuEl = document.getElementById('slider-vm-cpu');
+      const vmCountEl = document.getElementById('slider-vm-count');
+
+      if (!hostRamEl || !hostCpuEl || !vmRamEl || !vmCpuEl || !vmCountEl) return;
+
+      const hostRam = parseInt(hostRamEl.value, 10);
+      const hostCpu = parseInt(hostCpuEl.value, 10);
+      const vmRam = parseInt(vmRamEl.value, 10);
+      const vmCpu = parseInt(vmCpuEl.value, 10);
+      const vmCount = parseInt(vmCountEl.value, 10);
+
+      appState.calcParams.hostRam = hostRam;
+      appState.calcParams.hostCpu = hostCpu;
+      appState.calcParams.vmRam = vmRam;
+      appState.calcParams.vmCpu = vmCpu;
+      appState.calcParams.vmCount = vmCount;
+
+      // Update displayed labels
+      const vHostRam = document.getElementById('val-host-ram');
+      const vHostCpu = document.getElementById('val-host-cpu');
+      const vVmRam = document.getElementById('val-vm-ram');
+      const vVmCpu = document.getElementById('val-vm-cpu');
+      const vVmCount = document.getElementById('val-vm-count');
+
+      if (vHostRam) vHostRam.innerText = `${hostRam} Go`;
+      if (vHostCpu) vHostCpu.innerText = `${hostCpu} Cœurs`;
+      if (vVmRam) vVmRam.innerText = `${vmRam} Go`;
+      if (vVmCpu) vVmCpu.innerText = `${vmCpu} vCPU`;
+      if (vVmCount) vVmCount.innerText = `${vmCount} VM${vmCount > 1 ? 's' : ''}`;
+
+      // Calculations
+      const totalAllocatedRam = vmRam * vmCount;
+      const ramPercent = Math.round((totalAllocatedRam / hostRam) * 100);
+      const remainingRam = hostRam - totalAllocatedRam;
+
+      const totalAllocatedCpu = vmCpu * vmCount;
+      const cpuRatio = (totalAllocatedCpu / hostCpu).toFixed(1);
+
+      const isThin = (appState.calcParams.diskType === 'thin');
+      const diskPerVm = isThin ? 22 : 80;
+      const totalDisk = diskPerVm * vmCount;
+
+      // Update metric displays
+      const rRam = document.getElementById('calc-res-ram-pct');
+      const rCpu = document.getElementById('calc-res-cpu-ratio');
+      const rDisk = document.getElementById('calc-res-disk');
+      const badge = document.getElementById('calc-verdict-badge');
+      const advisory = document.getElementById('calc-advisory-box');
+
+      if (rRam) rRam.innerText = `${ramPercent}% (${totalAllocatedRam} Go / ${hostRam} Go)`;
+      if (rCpu) rCpu.innerText = `${cpuRatio}:1 (${totalAllocatedCpu} vCPU / ${hostCpu} cœurs)`;
+      if (rDisk) rDisk.innerText = `${totalDisk} Go (${isThin ? 'Thin initial' : 'Fixe réservé'})`;
+
+      // Architectural Verdict & Advisory
+      if (!badge || !advisory) return;
+
+      if (vmRam < 4) {
+        badge.className = 'tag tag-warning';
+        badge.style.backgroundColor = '#fef0c7';
+        badge.style.color = '#8f4f00';
+        badge.innerText = 'ÉCHEC : RAM INFÉRIEURE AU MINIMAL (4 GO)';
+        advisory.innerHTML = `<strong style="color: var(--error);">Blocage matériel assuré :</strong> Windows 11 exige au moins 4 Go (4096 Mo) de RAM. L'installeur refusera de s'exécuter sauf si vous appliquez le bypass LabConfig.`;
+      } else if (vmCpu < 2) {
+        badge.className = 'tag tag-warning';
+        badge.style.backgroundColor = '#fef0c7';
+        badge.style.color = '#8f4f00';
+        badge.innerText = 'ÉCHEC : 1 SEUL vCPU (2 MINIMUM)';
+        advisory.innerHTML = `<strong style="color: var(--error);">Blocage processeur :</strong> Windows 11 ne s'installe pas sur un seul cœur virtuel. Veuillez allouer au minimum 2 vCPU.`;
+      } else if (remainingRam < 2) {
+        badge.className = 'tag tag-warning';
+        badge.style.backgroundColor = '#ffd7d9';
+        badge.style.color = '#da1e28';
+        badge.innerText = 'DANGER CRITIQUE : SATURATION HÔTE';
+        advisory.innerHTML = `<strong style="color: var(--error);">Risque de freeze de l'hôte physique :</strong> Il ne reste que ${remainingRam} Go de RAM pour le système d'exploitation hôte. Réduisez le nombre de VMs ou la RAM par VM pour garder au moins 4 Go de réserve.`;
+      } else if (parseFloat(cpuRatio) > 2.0) {
+        badge.className = 'tag tag-warning';
+        badge.style.backgroundColor = '#fef0c7';
+        badge.style.color = '#8f4f00';
+        badge.innerText = 'ATTENTION : SURALLOCATION vCPU ÉLEVÉE';
+        advisory.innerHTML = `Le ratio vCPU/pCPU dépasse 2:1 (${cpuRatio}:1). La machine virtuelle fonctionnera, mais la contention sur l'ordonnanceur de threads pourra entraîner des latences perceptibles.`;
+      } else {
+        badge.className = 'tag tag-success';
+        badge.innerText = 'CONFIGURATION VIABLE & OPTIMALE';
+        advisory.innerHTML = `Dimensionnement exemplaire : L'hôte conserve <strong>${remainingRam} Go</strong> de RAM libre. Le ratio CPU (${cpuRatio}:1) préserve la réactivité de l'hyperviseur et Windows 11 dispose des 8 Go recommandés.`;
+      }
+
+      saveAppState();
+    }
+
+    /* ==========================================================================
+       ATELIER 4 : DÉTAIL DES PARTITIONS GPT
+       ========================================================================== */
+    function showPartDetail(partKey) {
+      const data = partitionData[partKey];
+      if (!data) return;
+
+      const label = document.getElementById('part-detail-label');
+      const title = document.getElementById('part-detail-title');
+      const fs = document.getElementById('part-detail-fs');
+      const guid = document.getElementById('part-detail-guid');
+      const crit = document.getElementById('part-detail-crit');
+      const desc = document.getElementById('part-detail-desc');
+      const box = document.getElementById('part-detail-box');
+
+      if (label) label.innerText = data.label;
+      if (title) title.innerText = data.title;
+      if (fs) fs.innerText = data.fs;
+      if (guid) guid.innerText = data.guid;
+      if (crit) crit.innerText = data.crit;
+      if (desc) desc.innerText = data.desc;
+
+      if (box) {
+        const borderColors = {
+          esp: '#0f62fe',
+          msr: '#6929c4',
+          sys: '#005d5d',
+          winre: '#9f1853'
+        };
+        box.style.borderLeftColor = borderColors[partKey] || 'var(--primary)';
+      }
+    }
+
+    /* ==========================================================================
+       QUIZ DE VALIDATION TECHNIQUE (10 QUESTIONS)
+       ========================================================================== */
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      if (!container) return;
+
+      const q = quizQuestions[appState.quizIndex];
+      const selected = appState.quizAnswers[q.id];
+      const isAnswered = (selected !== undefined);
+
+      let optionsHtml = '';
+      q.options.forEach((opt, idx) => {
+        let optClass = 'quiz-option';
+        if (isAnswered) {
+          if (idx === q.correct) {
+            optClass += ' correct';
+          } else if (idx === selected) {
+            optClass += ' incorrect';
+          }
+        } else if (selected === idx) {
+          optClass += ' selected';
+        }
+
+        optionsHtml += `
+          <div class="${optClass}" onclick="selectQuizOption(${q.id}, ${idx})">
+            <span style="font-family: var(--font-label); font-weight: 600; width: 24px;">${String.fromCharCode(65 + idx)}.</span>
+            <div style="flex: 1;">${escapeHtml(opt)}</div>
+            ${isAnswered && idx === q.correct ? '<i data-lucide="check" style="width: 18px; height: 18px; color: var(--positive);"></i>' : ''}
+            ${isAnswered && idx === selected && idx !== q.correct ? '<i data-lucide="x" style="width: 18px; height: 18px; color: var(--error);"></i>' : ''}
+          </div>
+        `;
+      });
+
+      let explanationHtml = '';
+      if (isAnswered) {
+        explanationHtml = `
+          <div class="callout-carbon ${selected === q.correct ? 'callout-success' : 'callout-warning'}" style="margin-top: var(--space-md); font-size: 0.875rem;">
+            <strong>${selected === q.correct ? 'Bonne réponse !' : 'Explication technique :'}</strong>
+            <p style="margin-top: 4px;">${escapeHtml(q.explanation)}</p>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="layer" style="margin-bottom: var(--space-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+            <span class="label-mono">QUESTION ${q.id} // THÉORIE &amp; PRATIQUE</span>
+            ${isAnswered ? (selected === q.correct ? '<span class="tag tag-success">CORRECT</span>' : '<span class="tag tag-warning" style="background:#ffd7d9; color:#da1e28;">INCORRECT</span>') : ''}
+          </div>
+          <h3 style="font-size: 1.15rem; font-weight: 600; margin-bottom: var(--space-lg); line-height: 1.35;">
+            ${escapeHtml(q.question)}
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            ${optionsHtml}
+          </div>
+          ${explanationHtml}
+        </div>
+      `;
+
+      // Update Buttons & Indicator
+      const stepIndicator = document.getElementById('quiz-step-indicator');
+      const prevBtn = document.getElementById('btn-quiz-prev');
+      const nextBtn = document.getElementById('btn-quiz-next');
+
+      if (stepIndicator) stepIndicator.innerText = `QUESTION ${q.id} SUR ${quizQuestions.length}`;
+      if (prevBtn) prevBtn.disabled = (appState.quizIndex === 0);
+      if (nextBtn) {
+        if (appState.quizIndex === quizQuestions.length - 1) {
+          nextBtn.innerHTML = `Terminer &amp; Récapituler <i data-lucide="award" style="width: 16px; height: 16px;"></i>`;
+        } else {
+          nextBtn.innerHTML = `Suivant <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>`;
+        }
+      }
+
+      updateQuizScore();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    function selectQuizOption(qId, optIndex) {
+      if (appState.quizAnswers[qId] !== undefined) return; // Prevent changing after answered
+      appState.quizAnswers[qId] = optIndex;
+      renderQuiz();
+      saveAppState();
+    }
+
+    function navQuiz(direction) {
+      const nextIndex = appState.quizIndex + direction;
+      if (nextIndex >= 0 && nextIndex < quizQuestions.length) {
+        appState.quizIndex = nextIndex;
+        renderQuiz();
+      } else if (nextIndex >= quizQuestions.length) {
+        // Finalized
+        revealCertificate();
+      }
+    }
+
+    function updateQuizScore() {
+      let score = 0;
+      let answeredCount = 0;
+      quizQuestions.forEach(q => {
+        if (appState.quizAnswers[q.id] !== undefined) {
+          answeredCount++;
+          if (appState.quizAnswers[q.id] === q.correct) {
+            score++;
+          }
+        }
+      });
+
+      appState.quizScore = score;
+      const scoreEl = document.getElementById('quiz-live-score');
+      const answeredEl = document.getElementById('quiz-answered-count');
+      const barEl = document.getElementById('quiz-progress-bar');
+      const certBtn = document.getElementById('btn-show-cert');
+
+      if (scoreEl) scoreEl.innerText = `${score} / 10`;
+      if (answeredEl) answeredEl.innerText = `${answeredCount} répondu(e)s`;
+      if (barEl) barEl.style.width = `${(answeredCount / quizQuestions.length) * 100}%`;
+
+      if (certBtn) {
+        if (score >= 7) {
+          certBtn.disabled = false;
+        } else {
+          certBtn.disabled = true;
+        }
+      }
+    }
+
+    function updateCertName(val) {
+      appState.studentName = val || 'Administrateur Stagiaire';
+      const el = document.getElementById('cert-recipient-name');
+      if (el) el.innerText = appState.studentName;
+      saveAppState();
+    }
+
+    function revealCertificate() {
+      const modalSec = document.getElementById('cert-modal-section');
+      const scoreDisp = document.getElementById('cert-score-display');
+      const nameDisp = document.getElementById('cert-recipient-name');
+      const dateDisp = document.getElementById('cert-date-display');
+
+      if (nameDisp) nameDisp.innerText = appState.studentName;
+      if (scoreDisp) scoreDisp.innerText = `${appState.quizScore} / 10 (${appState.quizScore * 10}%)`;
+
+      const today = new Date().toISOString().split('T')[0];
+      if (dateDisp) dateDisp.innerText = `DATE : ${today}`;
+
+      if (modalSec) {
+        modalSec.style.display = 'block';
+        modalSec.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      showToast(`Certificat débloqué ! Score : ${appState.quizScore}/10`);
+    }
+
+    /* ==========================================================================
+       CHECKLIST DU TECHNICIEN IT
+       ========================================================================== */
+    function toggleCheckItem(index) {
+      if (index >= 0 && index < appState.checklist.length) {
+        appState.checklist[index] = !appState.checklist[index];
+        renderChecklist();
+        saveAppState();
+      }
+    }
+
+    function resetChecklist() {
+      appState.checklist = [false, false, false, false, false, false, false, false];
+      renderChecklist();
+      saveAppState();
+      showToast('Checklist réinitialisée.');
+    }
+
+    function renderChecklist() {
+      let count = 0;
+      appState.checklist.forEach((checked, idx) => {
+        const itemEl = document.getElementById(`chk-item-${idx}`);
+        if (!itemEl) return;
+        const icon = itemEl.querySelector('i');
+        if (checked) {
+          count++;
+          itemEl.classList.add('checked');
+          itemEl.setAttribute('aria-checked', 'true');
+          if (icon) icon.style.display = 'inline-block';
+        } else {
+          itemEl.classList.remove('checked');
+          itemEl.setAttribute('aria-checked', 'false');
+          if (icon) icon.style.display = 'none';
+        }
+      });
+
+      const total = appState.checklist.length;
+      const pct = Math.round((count / total) * 100);
+
+      const progText = document.getElementById('chk-progress-text');
+      const bar = document.getElementById('chk-bar');
+      const head = document.getElementById('chk-status-heading');
+      const desc = document.getElementById('chk-status-desc');
+
+      if (progText) progText.innerText = `${pct}% (${count}/${total})`;
+      if (bar) bar.style.width = `${pct}%`;
+
+      if (head && desc) {
+        if (count === total) {
+          head.innerText = 'Station 100% Conforme !';
+          desc.innerText = 'Tous les contrôles qualité, de paravirtualisation et de sécurité sont validés. Le poste est apte à entrer en production ou en exercice.';
+        } else if (count > 0) {
+          head.innerText = `Audit en cours (${count}/${total} validés)`;
+          desc.innerText = `Poursuivez la validation des points de contrôle pour garantir la pérennité du système.`;
+        } else {
+          head.innerText = 'Audit non commencé';
+          desc.innerText = 'Cochez les 8 vérifications pour certifier la machine prête à l\'emploi.';
+        }
+      }
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+    }
+
+    /* ==========================================================================
+       UTILITAIRES, COPIE PRESSE-PAPIERS & TOAST
+       ========================================================================== */
+    const cliSnippets = {
+      oobe: 'OOBE\\BYPASSNRO',
+      labconfig: 'reg add "HKLM\\SYSTEM\\Setup\\LabConfig" /v BypassTPMCheck /t REG_DWORD /d 1 /f && reg add "HKLM\\SYSTEM\\Setup\\LabConfig" /v BypassSecureBootCheck /t REG_DWORD /d 1 /f',
+      sysprep: 'C:\\Windows\\System32\\Sysprep\\sysprep.exe /generalize /oobe /shutdown',
+      exit: 'exit'
+    };
+
+    function copyCliSnippet(key) {
+      if (cliSnippets[key]) {
+        copyCliText(cliSnippets[key]);
+      }
+    }
+
+    function copyCliText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Commande copiée dans le presse-papiers !');
+        }).catch(() => {
+          fallbackCopyText(text);
+        });
+      } else {
+        fallbackCopyText(text);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Commande copiée dans le presse-papiers !');
+      } catch (err) {
+        showToast('Échec de la copie automatique.');
+      }
+      document.body.removeChild(textArea);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notify');
+      if (!toast) return;
+      toast.innerText = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /* ==========================================================================
+       GESTION PERSISTANTE DE L'ÉTAT (NOTEBOOK SHIM API)
+       ========================================================================== */
+    async function loadSavedState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            if (Array.isArray(saved.checklist)) {
+              appState.checklist = saved.checklist;
+            }
+            if (saved.quizAnswers && typeof saved.quizAnswers === 'object') {
+              appState.quizAnswers = saved.quizAnswers;
+            }
+            if (typeof saved.quizIndex === 'number') {
+              appState.quizIndex = saved.quizIndex;
+            }
+            if (typeof saved.studentName === 'string') {
+              appState.studentName = saved.studentName;
+              const nameInput = document.getElementById('student-name-input');
+              if (nameInput) nameInput.value = saved.studentName;
+            }
+            if (saved.calcParams && typeof saved.calcParams === 'object') {
+              appState.calcParams = Object.assign(appState.calcParams, saved.calcParams);
+              const hostRamEl = document.getElementById('slider-host-ram');
+              const hostCpuEl = document.getElementById('slider-host-cpu');
+              const vmRamEl = document.getElementById('slider-vm-ram');
+              const vmCpuEl = document.getElementById('slider-vm-cpu');
+              const vmCountEl = document.getElementById('slider-vm-count');
+              if (hostRamEl) hostRamEl.value = appState.calcParams.hostRam;
+              if (hostCpuEl) hostCpuEl.value = appState.calcParams.hostCpu;
+              if (vmRamEl) vmRamEl.value = appState.calcParams.vmRam;
+              if (vmCpuEl) vmCpuEl.value = appState.calcParams.vmCpu;
+              if (vmCountEl) vmCountEl.value = appState.calcParams.vmCount;
+            }
+            if (typeof saved.currentMainTab === 'string') {
+              switchMainTab(saved.currentMainTab);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Erreur lors du chargement de l\'état persistant :', err);
+      }
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    async function saveAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          const payload = {
+            checklist: appState.checklist,
+            quizAnswers: appState.quizAnswers,
+            quizIndex: appState.quizIndex,
+            studentName: appState.studentName,
+            calcParams: appState.calcParams,
+            currentMainTab: appState.currentMainTab
+          };
+          await window.notebookAppApi.setAppState(payload);
+        }
+      } catch (err) {
+        console.warn('Erreur lors de la sauvegarde de l\'état persistant :', err);
+      }
+    }
+
+    /* ==========================================================================
+       INITIALISATION AU CHARGEMENT DE LA PAGE
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', async () => {
+      // 1. Initialiser les icônes Lucide
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+
+      // 2. Rendre le quiz
+      renderQuiz();
+
+      // 3. Rendre la checklist
+      renderChecklist();
+
+      // 4. Initialiser le calculateur de lab
+      updateLabCalc();
+
+      // 5. Charger l'état persistant si disponible
+      await loadSavedState();
+    });
+  </script>
+</body>
+</html>

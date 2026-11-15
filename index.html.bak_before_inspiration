@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PCDOCTOR | Dépannage, Réparation Ordinateur & Maintenance IT à Tunis</title>
+  <meta name="description" content="PCDOCTOR Computer Service Center à Tunis : réparation PC portable & bureau, changement d'écran, passage au SSD, dépannage système, récupération de données et maintenance pour professionnels. Contact : +216 98 484 569.">
+  <meta name="keywords" content="réparation pc tunis, dépannage informatique tunisie, changement écran pc portable, réparation ordinateur, maintenance informatique tpe, pcdoc, pcdoctor tn, mohamed aissaoui ">
+  <meta name="theme-color" content="#29C2E7">
+  <meta name="color-scheme" content="light dark">
+  
+  <!-- Open Graph / WhatsApp / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pcdoctor.tn/">
+  <meta property="og:title" content="PCDOCTOR | Centre de Réparation & Maintenance Informatique à Tunis">
+  <meta property="og:description" content="Dépannage rapide, réparation matérielle, boost SSD et maintenance informatique par un spécialiste certifié. Appelez le +216 98 484 569.">
+  <meta property="og:image" content="https://pcdoctor.tn/assets/logo.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Script Thème Clair / Sombre immédiat anti-flicker -->
+  <script>
+    try{
+      var t = localStorage.getItem("theme");
+      if(t) document.documentElement.setAttribute("data-theme", t);
+    }catch(e){}
+  </script>
+
+  <!-- Schema.org Données Structurées -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "PCDOCTOR Computer Service Center",
+    "image": "https://pcdoctor.tn/assets/logo.png",
+    "telephone": "+21698484569",
+    "email": "contact@pcdoctor.tn",
+    "url": "https://pcdoctor.tn/",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Tunis",
+      "addressCountry": "TN"
+    },
+    "priceRange": "370526",
+    "openingHours": "Mo-Sa 08:30-18:30",
+    "description": "Service professionnel de dépannage, réparation de matériel informatique et maintenance à Tunis."
+  }
+  </script>
+</head>
+<body>
+
+  <!-- En-tête / Barre de navigation -->
+  <header class="top">
+    <a href="#" aria-label="PCDOCTOR Accueil">
+      <img class="logo logo-light" src="assets/logo.png" alt="PCDOCTOR Computer Service Center" width="2211" height="426">
+      <img class="logo logo-dark" src="assets/logo-dark.png" alt="PCDOCTOR Computer Service Center" aria-hidden="true" width="2211" height="426">
+    </a>
+
+    <div class="nav-group">
+      <nav aria-label="Navigation principale">
+        <ul class="nav-menu">
+          <li><a href="#services" class="nav-link">Nos Services</a></li>
+          <li><a href="#apropos" class="nav-link">À propos</a></li>
+          <li><a href="#engagements" class="nav-link">Nos Points Forts</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+                  </ul>
+      </nav>
+
+      <div class="lang-switch" aria-label="Langue / Language">
+        <span class="lang-item active">FR</span>
+        <span class="lang-sep">|</span>
+        <a href="/en/" class="lang-item" title="Switch to English">EN</a>
+      </div>
+
+      <button class="theme" id="theme" type="button" aria-pressed="false" aria-label="Activer le mode sombre">
+        <svg class="i-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+        <span class="theme-label">Mode sombre</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Section Héro -->
+    <section class="hero">
+      <div class="copy">
+        <p class="status"><span class="dot" aria-hidden="true"></span>Diagnostic &amp; Prise en charge rapide</p>
+        <h1>Votre ordinateur réparé par un spécialiste.</h1>
+        <p class="lead">Dépannage, maintenance préventive et assistance informatique à Tunis : PC portables, ordinateurs fixes, dalles écrans, boost SSD et assistance aux professionnels.</p>
+        <div class="contact">
+          <a class="btn btn-whatsapp" href="https://wa.me/21698484569" target="_blank" rel="noopener" aria-label="Contacter sur WhatsApp">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.11.82.83-3.03-.19-.31a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.29z"/></svg>
+            Écrire sur WhatsApp
+          </a>
+          <a class="tel" href="tel:+21698484569">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +216 98 484 569
+          </a>
+          <a class="tel" href="mailto:contact@pcdoctor.tn">contact@pcdoctor.tn</a>
+        </div>
+      </div>
+    <div class="art">
+      <svg role="img" aria-label="Illustration : un technicien devant son ordinateur"
+            viewBox="0 0 834 690"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="undraw_dev_productivity_umsq 1" clip-path="url(#clip0)">
+              <g id="man">
+                <path
+                  id="Vector"
+                  d="M435.922 191.941C476.534 191.941 509.458 159.018 509.458 118.405C509.458 77.7923 476.534 44.869 435.922 44.869C395.309 44.869 362.385 77.7923 362.385 118.405C362.385 159.018 395.309 191.941 435.922 191.941Z"
+                  fill="#A0616A"
+                />
+                <path
+                  id="Vector_2"
+                  d="M381.036 155.173C381.036 155.173 394.891 259.616 373.576 271.339C352.261 283.062 500.399 284.128 500.399 284.128C500.399 284.128 467.361 193.54 482.281 165.831L381.036 155.173Z"
+                  fill="#A0616A"
+                />
+                <path
+                  id="Vector_3"
+                  d="M608.57 284.656L596.25 340.756L570.2 459.446L569.42 465.946L560.43 541.196L554.45 591.186L550.44 624.766C526.06 637.296 508.39 645.946 508.39 645.946C508.39 645.946 506.87 638.326 504.42 628.576C487.31 633.706 455.65 642.216 428.82 643.916C438.59 654.806 443.08 665.036 436.99 672.586C418.61 695.346 342.73 647.666 316.19 629.886C315.572 634.143 315.338 638.447 315.49 642.746L295.18 627.126L297.19 591.186L300.58 530.376L304.84 454.116C303.497 450.851 302.371 447.5 301.47 444.086C295.25 421.966 287.7 377.796 281.91 340.756C277.25 310.946 273.75 285.756 273.01 280.396C272.91 279.696 272.86 279.336 272.86 279.336L385.29 229.656C393.28 248.186 430.59 253.756 430.59 253.756C461.5 251.626 485.73 235.326 485.73 235.326L608.57 284.656Z"
+                  fill="#D0CDE1"
+                />
+                <path
+                  id="Vector_4"
+                  d="M374.746 48.8468L360.997 43.3423C360.997 43.3423 389.746 11.6915 429.744 14.4439L418.494 2.05865C418.494 2.05865 445.993 -8.95021 470.992 19.9482C484.134 35.1394 499.339 52.996 508.817 73.1112H523.542L517.396 86.643L538.906 100.175L516.828 97.7442C518.144 105.154 518.346 112.719 517.428 120.189C516.48 127.661 512.667 134.473 506.793 139.187C506.793 139.187 489.741 103.891 489.741 98.387V112.148C489.741 112.148 475.992 99.7631 475.992 91.5065L468.492 101.139L464.742 86.0019L418.494 101.139L425.994 88.7543L397.245 92.8826L408.495 77.7452C408.495 77.7452 375.997 95.6348 374.746 110.772C373.497 125.909 363.984 140.253 363.984 140.253C363.984 140.253 338.498 69.4885 374.746 48.8468Z"
+                  fill="#2F2E41"
+                />
+                <g id="rightHand">
+                  <path
+                    id="Vector_5"
+                    d="M516.92 624.636C516.92 624.636 512.16 626.266 504.42 628.576C487.31 633.706 455.65 642.216 428.82 643.916C405.72 645.396 386.2 641.836 382.63 626.766C381.1 620.286 383.27 614.956 388 610.576C402.12 597.486 439 592.796 468.25 591.186C476.51 590.736 484.15 590.526 490.51 590.446C501.31 590.306 508.39 590.526 508.39 590.526L508.56 591.186L516.92 624.636Z"
+                    fill="#A0616A"
+                  />
+                  <path
+                    id="Vector_6"
+                    d="M688.5 542.566C681.01 550.686 662.45 562.916 639.95 576.156C631.58 581.076 622.67 586.146 613.58 591.186C591.89 603.216 569.18 615.136 550.44 624.766C526.06 637.296 508.39 645.946 508.39 645.946C508.39 645.946 506.87 638.326 504.42 628.576C501.14 615.526 496.2 598.656 491.05 591.186C490.87 590.926 490.69 590.686 490.51 590.446C489.01 588.476 487.5 587.326 486.01 587.326L560.43 541.196L592.59 521.256L569.42 465.946L540.36 396.566L557.9 340.756L575.53 284.656H608.57C608.57 284.656 619.51 308.536 633.5 341.836C635.59 346.816 637.75 352.006 639.95 357.366C668.73 427.366 704.61 525.116 688.5 542.566Z"
+                    fill="#D0CDE1"
+                  />
+                </g>
+                <g id="leftHand">
+                  <path
+                    id="Vector_7"
+                    d="M436.99 672.586C418.61 695.346 342.73 647.666 316.19 629.886C310.41 626.016 306.97 623.566 306.97 623.566L331.25 591.186L338.94 580.936C338.94 580.936 345.82 584.586 355.99 590.526C356.36 590.746 356.73 590.966 357.11 591.186C365.88 596.336 376.89 603.066 388 610.576C403.33 620.946 418.83 632.776 428.82 643.916C438.59 654.806 443.08 665.036 436.99 672.586Z"
+                    fill="#A0616A"
+                  />
+                  <path
+                    id="Vector_8"
+                    d="M355.99 590.526C353.276 590.516 350.567 590.736 347.89 591.186C324.9 595.136 318.12 615.946 316.19 629.886C315.572 634.143 315.338 638.447 315.49 642.746L295.18 627.126L287.78 621.436C269.97 615.226 254.1 604.196 240.34 591.186C228.403 579.7 217.695 567.001 208.39 553.296C199.122 539.788 190.86 525.616 183.67 510.896C181.664 506.788 180.586 502.29 180.512 497.719C180.437 493.148 181.369 488.617 183.24 484.446L208.39 428.396L245.15 346.476C245.42 344.526 245.717 342.619 246.04 340.756C253.33 298.956 272.86 280.396 272.86 280.396H287.78L297.76 340.756L310.16 415.746L301.47 444.086L281.39 509.536L300.58 530.376L355.99 590.526Z"
+                    fill="#D0CDE1"
+                  />
+                </g>
+                <path
+                  id="Vector_9"
+                  d="M372.877 415.806L385.631 430.687C390.37 429.783 395.319 428.721 400.416 427.529L396.752 415.806L405.71 426.256C459.707 412.976 526.637 387.155 526.637 387.155C526.637 387.155 454.38 392.453 400.428 380.666C376.558 375.451 351.998 387.284 342.202 409.669C336.509 422.679 337.403 433.952 357.596 433.952C364.419 433.835 371.224 433.195 377.949 432.037L372.877 415.806Z"
+                  fill="#29C2E7"
+                />
+              </g>
+              <g id="allOther">
+                <path
+                  id="Vector_10"
+                  d="M663.65 660.386V666.456C663.654 668.122 663.345 669.774 662.74 671.326C662.472 672.018 662.147 672.687 661.77 673.326C660.579 675.327 658.887 676.983 656.863 678.133C654.838 679.283 652.549 679.887 650.22 679.886H203.67C201.342 679.887 199.053 679.283 197.028 678.133C195.003 676.983 193.312 675.327 192.12 673.326C191.743 672.687 191.419 672.018 191.15 671.326C190.546 669.774 190.237 668.122 190.24 666.456V660.386C190.24 658.622 190.587 656.876 191.262 655.246C191.936 653.616 192.926 652.136 194.173 650.889C195.42 649.641 196.901 648.652 198.53 647.977C200.16 647.303 201.907 646.956 203.67 646.956H229.41V644.126C229.41 644.053 229.425 643.98 229.453 643.912C229.481 643.844 229.522 643.782 229.574 643.73C229.626 643.678 229.688 643.637 229.756 643.608C229.824 643.58 229.897 643.566 229.97 643.566H243.4C243.474 643.566 243.547 643.58 243.615 643.608C243.683 643.637 243.745 643.678 243.797 643.73C243.849 643.782 243.89 643.844 243.918 643.912C243.946 643.98 243.96 644.053 243.96 644.126V646.956H252.35V644.126C252.35 644.053 252.365 643.98 252.393 643.912C252.421 643.844 252.462 643.782 252.514 643.73C252.566 643.678 252.628 643.637 252.696 643.608C252.764 643.58 252.837 643.566 252.91 643.566H266.34C266.414 643.566 266.487 643.58 266.555 643.608C266.623 643.637 266.684 643.678 266.736 643.73C266.789 643.782 266.83 643.844 266.858 643.912C266.886 643.98 266.9 644.053 266.9 644.126V646.956H275.3V644.126C275.3 644.053 275.315 643.98 275.343 643.912C275.371 643.844 275.412 643.782 275.464 643.73C275.516 643.678 275.578 643.637 275.646 643.608C275.714 643.58 275.787 643.566 275.86 643.566H289.29C289.364 643.566 289.437 643.58 289.505 643.608C289.573 643.637 289.634 643.678 289.687 643.73C289.739 643.782 289.78 643.844 289.808 643.912C289.836 643.98 289.85 644.053 289.85 644.126V646.956H298.24V644.126C298.24 644.053 298.255 643.98 298.283 643.912C298.311 643.844 298.352 643.782 298.404 643.73C298.456 643.678 298.518 643.637 298.586 643.608C298.654 643.58 298.727 643.566 298.8 643.566H312.23C312.304 643.566 312.377 643.58 312.445 643.608C312.513 643.637 312.574 643.678 312.626 643.73C312.679 643.782 312.72 643.844 312.748 643.912C312.776 643.98 312.79 644.053 312.79 644.126V646.956H321.18V644.126C321.18 644.053 321.195 643.98 321.223 643.912C321.251 643.844 321.292 643.782 321.344 643.73C321.396 643.678 321.458 643.637 321.526 643.608C321.594 643.58 321.667 643.566 321.74 643.566H335.17C335.244 643.566 335.317 643.58 335.385 643.608C335.453 643.637 335.514 643.678 335.566 643.73C335.619 643.782 335.66 643.844 335.688 643.912C335.716 643.98 335.73 644.053 335.73 644.126V646.956H344.13V644.126C344.13 644.053 344.145 643.98 344.173 643.912C344.201 643.844 344.242 643.782 344.294 643.73C344.346 643.678 344.408 643.637 344.476 643.608C344.544 643.58 344.617 643.566 344.69 643.566H358.12C358.194 643.566 358.267 643.58 358.335 643.608C358.403 643.637 358.464 643.678 358.516 643.73C358.569 643.782 358.61 643.844 358.638 643.912C358.666 643.98 358.68 644.053 358.68 644.126V646.956H367.07V644.126C367.07 644.053 367.085 643.98 367.113 643.912C367.141 643.844 367.182 643.782 367.234 643.73C367.286 643.678 367.348 643.637 367.416 643.608C367.484 643.58 367.557 643.566 367.63 643.566H472.83C472.904 643.566 472.977 643.58 473.045 643.608C473.113 643.637 473.174 643.678 473.227 643.73C473.279 643.782 473.32 643.844 473.348 643.912C473.376 643.98 473.39 644.053 473.39 644.126V646.956H481.79V644.126C481.79 644.053 481.805 643.98 481.833 643.912C481.861 643.844 481.902 643.782 481.954 643.73C482.006 643.678 482.068 643.637 482.136 643.608C482.204 643.58 482.277 643.566 482.35 643.566H495.78C495.928 643.568 496.07 643.627 496.175 643.732C496.279 643.836 496.339 643.978 496.34 644.126V646.956H504.73V644.126C504.73 644.053 504.745 643.98 504.773 643.912C504.801 643.844 504.842 643.782 504.894 643.73C504.946 643.678 505.008 643.637 505.076 643.608C505.144 643.58 505.217 643.566 505.29 643.566H518.72C518.794 643.566 518.867 643.58 518.935 643.608C519.003 643.637 519.065 643.678 519.117 643.73C519.169 643.782 519.21 643.844 519.238 643.912C519.266 643.98 519.28 644.053 519.28 644.126V646.956H527.67V644.126C527.67 644.053 527.685 643.98 527.713 643.912C527.741 643.844 527.782 643.782 527.834 643.73C527.886 643.678 527.948 643.637 528.016 643.608C528.084 643.58 528.157 643.566 528.23 643.566H541.66C541.734 643.566 541.807 643.58 541.875 643.608C541.943 643.637 542.005 643.678 542.057 643.73C542.109 643.782 542.15 643.844 542.178 643.912C542.206 643.98 542.22 644.053 542.22 644.126V646.956H550.62V644.126C550.62 644.053 550.635 643.98 550.663 643.912C550.691 643.844 550.732 643.782 550.784 643.73C550.836 643.678 550.898 643.637 550.966 643.608C551.034 643.58 551.107 643.566 551.18 643.566H564.61C564.757 643.568 564.898 643.628 565.001 643.733C565.104 643.838 565.161 643.979 565.16 644.126V646.956H573.56V644.126C573.56 644.053 573.575 643.98 573.603 643.912C573.631 643.844 573.672 643.782 573.724 643.73C573.776 643.678 573.838 643.637 573.906 643.608C573.974 643.58 574.047 643.566 574.12 643.566H587.55C587.624 643.566 587.697 643.58 587.765 643.608C587.833 643.637 587.895 643.678 587.947 643.73C587.999 643.782 588.04 643.844 588.068 643.912C588.096 643.98 588.111 644.053 588.11 644.126V646.956H596.5V644.126C596.5 644.053 596.515 643.98 596.543 643.912C596.571 643.844 596.612 643.782 596.664 643.73C596.716 643.678 596.778 643.637 596.846 643.608C596.914 643.58 596.987 643.566 597.06 643.566H610.49C610.564 643.566 610.637 643.58 610.705 643.608C610.773 643.637 610.835 643.678 610.887 643.73C610.939 643.782 610.98 643.844 611.008 643.912C611.036 643.98 611.051 644.053 611.05 644.126V646.956H650.22C651.984 646.956 653.731 647.303 655.36 647.977C656.99 648.652 658.471 649.641 659.718 650.889C660.965 652.136 661.954 653.616 662.629 655.246C663.304 656.876 663.651 658.622 663.65 660.386Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_11"
+                  d="M833.5 671.326H60.5002V673.326H833.5V671.326Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_12"
+                  d="M627.695 404.757H461.252V401.326H385.78V404.757H218.651C215.665 404.757 212.801 405.943 210.69 408.054C208.579 410.166 207.392 413.029 207.392 416.015V643.927C207.392 646.913 208.578 649.776 210.69 651.888C212.801 653.999 215.665 655.185 218.651 655.185H627.695C630.68 655.185 633.544 653.999 635.656 651.888C637.767 649.776 638.953 646.913 638.953 643.927V416.015C638.953 414.537 638.662 413.073 638.096 411.707C637.53 410.341 636.701 409.1 635.656 408.054C634.61 407.009 633.369 406.179 632.003 405.614C630.637 405.048 629.173 404.757 627.695 404.757Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_13"
+                  d="M108.446 661.223H80.446V689.223H108.446V661.223Z"
+                  fill="#D0CDE1"
+                />
+                <path
+                  id="Vector_14"
+                  d="M91.45 639.223V673.223H125.45V639.223H91.45ZM123.97 671.743H92.92V640.703H123.97V671.743Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_15"
+                  d="M756.446 661.223H728.446V689.223H756.446V661.223Z"
+                  fill="#D0CDE1"
+                />
+                <path
+                  id="Vector_16"
+                  d="M739.45 639.223V673.223H773.45V639.223H739.45ZM771.97 671.743H740.92V640.703H771.97V671.743Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_17"
+                  d="M94.5801 230.113C138.399 230.113 173.921 194.591 173.921 150.773C173.921 106.954 138.399 71.4324 94.5801 71.4324C50.7616 71.4324 15.2396 106.954 15.2396 150.773C15.2396 194.591 50.7616 230.113 94.5801 230.113Z"
+                  fill="#29C2E7"
+                />
+                <path
+                  id="Vector_18"
+                  d="M122.229 56.49C115.045 55.5764 107.775 55.5764 100.591 56.49C84.5863 58.5914 69.5206 65.2399 57.1812 75.6466C44.8419 86.0533 35.747 99.7814 30.9756 115.202C28.8056 122.229 27.5767 129.514 27.3211 136.864C27.2851 137.886 27.261 138.92 27.261 139.954C27.2833 162.265 36.1561 183.655 51.9323 199.431C67.7084 215.208 89.0991 224.08 111.41 224.103C113.201 224.103 114.992 224.043 116.759 223.934C120.908 223.674 125.03 223.103 129.093 222.227C148.495 218.055 165.798 207.161 177.947 191.468C190.096 175.776 196.308 156.295 195.487 136.467C194.666 116.638 186.864 97.7381 173.459 83.104C160.054 68.4699 141.909 59.0436 122.229 56.49H122.229ZM137.748 217.347H137.736C130.959 219.659 123.905 221.062 116.759 221.518C114.992 221.638 113.201 221.698 111.41 221.698C89.7379 221.672 68.9613 213.051 53.6369 197.727C38.3126 182.402 29.6917 161.626 29.6652 139.954C29.6652 138.92 29.6892 137.886 29.7253 136.864C30.5517 115.744 39.5159 95.7617 54.7414 81.1009C69.9669 66.4401 90.2733 58.2371 111.41 58.209C130.776 58.2101 149.513 65.0866 164.283 77.6132C179.052 90.1399 188.895 107.503 192.057 126.61C195.22 145.716 191.496 165.325 181.55 181.942C171.604 198.559 156.082 211.106 137.748 217.347H137.748Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_19"
+                  d="M112.612 63.0175H110.208V79.8473H112.612V63.0175Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_20"
+                  d="M57.8578 84.7016L56.1577 86.4017L68.0582 98.3021L69.7582 96.6021L57.8578 84.7016Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_21"
+                  d="M34.4738 138.752V141.156H51.3035V138.752H34.4738Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_22"
+                  d="M56.1577 193.506L57.8578 195.206L69.7582 183.305L68.0582 181.605L56.1577 193.506Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_23"
+                  d="M153.061 96.602L154.762 98.3021L166.662 86.4016L164.962 84.7016L153.061 96.602Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_24"
+                  d="M171.516 138.752V141.156H188.346V138.752H171.516Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_25"
+                  d="M154.762 181.605L153.061 183.305L164.962 195.206L166.662 193.506L154.762 181.605Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_26"
+                  d="M112.612 200.06H110.208V216.89H112.612V200.06Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_27"
+                  d="M122.229 35.3686H100.591V57.0069H122.229V35.3686Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_28"
+                  d="M111.41 38.975C127.344 38.975 140.261 34.4002 140.261 28.7569C140.261 23.1136 127.344 18.5388 111.41 18.5388C95.4759 18.5388 82.5588 23.1136 82.5588 28.7569C82.5588 34.4002 95.4759 38.975 111.41 38.975Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_29"
+                  d="M226 220.44H0V222.844H226V220.44Z"
+                  fill="#3F3D56"
+                />
+              </g>
+              <g id="clock">
+                <path
+                  id="Vector_30"
+                  d="M115.016 94.2729H107.803V135.145H115.016V94.2729Z"
+                  fill="#3F3D56"
+                />
+                <path
+                  id="Vector_31"
+                  d="M115.016 135.145C113.976 134.365 112.71 133.943 111.41 133.943C110.109 133.943 108.844 134.365 107.803 135.145C107.091 135.686 106.505 136.375 106.084 137.165C105.552 138.181 105.322 139.329 105.421 140.473C105.52 141.616 105.944 142.707 106.643 143.617C107.343 144.527 108.288 145.218 109.368 145.608C110.447 145.998 111.616 146.07 112.735 145.817C113.855 145.564 114.878 144.996 115.685 144.179C116.492 143.363 117.048 142.333 117.288 141.211C117.528 140.088 117.441 138.921 117.039 137.846C116.636 136.771 115.934 135.834 115.016 135.145H115.016ZM111.41 143.56C110.454 143.557 109.539 143.176 108.863 142.501C108.187 141.825 107.806 140.909 107.803 139.954C107.808 139.224 108.03 138.513 108.441 137.91C108.793 137.4 109.271 136.989 109.828 136.718C110.385 136.447 111.003 136.324 111.622 136.361C112.241 136.398 112.84 136.595 113.361 136.931C113.881 137.267 114.306 137.732 114.595 138.281C114.883 138.83 115.025 139.444 115.007 140.063C114.988 140.683 114.811 141.288 114.49 141.818C114.17 142.349 113.718 142.788 113.179 143.093C112.639 143.399 112.03 143.559 111.41 143.56V143.56Z"
+                  fill="#3F3D56"
+                />
+              </g>
+              <g id="leftTree">
+                <path
+                  id="Vector_32"
+                  d="M150.594 599.754C151.527 631.704 132.859 643.413 109.43 644.097C108.886 644.113 108.345 644.123 107.805 644.126C106.719 644.135 105.643 644.117 104.577 644.072C83.3891 643.193 66.6173 631.945 65.7495 602.232C64.8515 571.482 103.018 531.529 105.882 528.574L105.887 528.571C105.996 528.458 106.052 528.402 106.052 528.402C106.052 528.402 149.661 567.807 150.594 599.754Z"
+                  fill="#D0CDE1"
+                />
+                <path
+                  id="Vector_33"
+                  d="M107.744 639.255L122.626 617.124L107.774 641.636L107.805 644.126C106.719 644.135 105.643 644.117 104.577 644.072L105.316 612.06L105.295 611.813L105.323 611.766L105.393 608.741L89.0953 585.078L105.374 606.477L105.432 607.116L105.989 582.93L91.9123 558.397L106.029 578.681L105.882 528.574L105.882 528.407L105.887 528.571L106.822 568.062L119.651 552.021L106.864 571.464L107.144 593.098L118.949 571.984L107.187 596.279L107.343 608.309L124.512 578.897L107.395 612.505L107.744 639.255Z"
+                  fill="#3F3D56"
+                />
+              </g>
+              <g id="righTree">
+                <path
+                  id="Vector_34"
+                  d="M798.594 599.754C799.527 631.704 780.859 643.413 757.43 644.097C756.886 644.113 756.345 644.123 755.805 644.126C754.719 644.135 753.643 644.117 752.577 644.072C731.389 643.193 714.617 631.945 713.75 602.232C712.852 571.482 751.018 531.529 753.882 528.574L753.887 528.571C753.996 528.458 754.052 528.402 754.052 528.402C754.052 528.402 797.661 567.807 798.594 599.754Z"
+                  fill="#D0CDE1"
+                />
+                <path
+                  id="Vector_35"
+                  d="M755.744 639.255L770.626 617.124L755.774 641.636L755.805 644.126C754.719 644.135 753.643 644.117 752.577 644.072L753.316 612.06L753.295 611.813L753.323 611.766L753.393 608.741L737.095 585.078L753.374 606.477L753.432 607.116L753.989 582.93L739.912 558.397L754.029 578.681L753.882 528.574L753.882 528.407L753.887 528.571L754.822 568.062L767.651 552.021L754.864 571.464L755.144 593.098L766.949 571.984L755.187 596.279L755.343 608.309L772.512 578.897L755.395 612.505L755.744 639.255Z"
+                  fill="#3F3D56"
+                />
+              </g>
+              <g id="pc-circle">
+                <path
+                  id="Vector_36"
+                  d="M422.5 512.326C436.307 512.326 447.5 501.133 447.5 487.326C447.5 473.519 436.307 462.326 422.5 462.326C408.693 462.326 397.5 473.519 397.5 487.326C397.5 501.133 408.693 512.326 422.5 512.326Z"
+                  fill="#3F3D56"
+                />
+              </g>
+            </g>
+            <defs>
+              <clipPath id="clip0">
+                <rect width="833.5" height="689.223" fill="white" />
+              </clipPath>
+            </defs>
+          </svg>
+    </div>
+
+    </section>
+
+    <!-- Section 1 : Nos Services Express -->
+    <section class="section" id="services">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Nos Prestations</span>
+          <h2 class="section-title">Des solutions complètes pour votre matériel informatique.</h2>
+          <p class="section-subtitle">Que vous soyez un particulier ou une entreprise, nous intervenons avec professionnalisme et transparence sur tous types d'équipements.</p>
+        </div>
+
+        <div class="services-grid">
+          <!-- Service 1 -->
+          <article class="service-card">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3 class="service-title">Réparation Matérielle (Hardware)</h3>
+            <p class="service-desc">Remplacement de dalles écran cassées (LCD / LED), claviers, ventilateurs, connecteurs de charge dessoudés et micro-soudures sur carte mère.</p>
+            <div class="service-tags">
+              <span class="service-tag">Dalle écran LCD</span>
+              <span class="service-tag">Connecteur de charge</span>
+              <span class="service-tag">Clavier &amp; Charnières</span>
+            </div>
+          </article>
+
+          <!-- Service 2 -->
+          <article class="service-card">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3 class="service-title">Boost &amp; Passage au SSD</h3>
+            <p class="service-desc">Votre ordinateur est lent ? Rajeunissez-le instantanément grâce au clonage vers un SSD ultra-rapide (NVMe / SATA) et l'ajout de mémoire RAM.</p>
+            <div class="service-tags">
+              <span class="service-tag">Démarrage en 10s</span>
+              <span class="service-tag">Clonage sans perte</span>
+              <span class="service-tag">Extension RAM</span>
+            </div>
+          </article>
+
+          <!-- Service 3 -->
+          <article class="service-card">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="service-title">Système &amp; Suppression Virus</h3>
+            <p class="service-desc">Installation propre de Windows 11 / 10 ou Linux, suppression définitive des virus, malwares et spywares, configuration des pilotes officiels.</p>
+            <div class="service-tags">
+              <span class="service-tag">Windows 11 / 10</span>
+              <span class="service-tag">Désinfection totale</span>
+              <span class="service-tag">Pilotes certifiés</span>
+            </div>
+          </article>
+
+          <!-- Service 4 -->
+          <article class="service-card">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <h3 class="service-title">Récupération de Données</h3>
+            <p class="service-desc">Disque dur défaillant, PC bloqué ou clé USB non reconnue : nous récupérons vos documents cruciaux, photos et bases de données en toute confidentialité.</p>
+            <div class="service-tags">
+              <span class="service-tag">Disque dur &amp; SSD</span>
+              <span class="service-tag">Sauvegarde sécurisée</span>
+              <span class="service-tag">Confidentialité garantie</span>
+            </div>
+          </article>
+
+          <!-- Service 5 -->
+          <article class="service-card">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            </div>
+            <h3 class="service-title">Maintenance TPE / PME &amp; Réseau</h3>
+            <p class="service-desc">Contrats de maintenance préventive et curative, sécurisation de parc, réseau local Ethernet / Wi-Fi, partage d'imprimantes et téléassistance réactive.</p>
+            <div class="service-tags">
+              <span class="service-tag">Contrat entreprise</span>
+              <span class="service-tag">Réseau Wi-Fi / LAN</span>
+              <span class="service-tag">Téléassistance</span>
+            </div>
+          </article>
+
+          <!-- Service 6 -->
+          <article class="service-card">
+            <div class="service-icon-box">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <h3 class="service-title">Dépannage &amp; Déplacement</h3>
+            <p class="service-desc">Intervention à domicile ou en entreprise dans le Grand Tunis. Dépannage sur site, installation de nouveau matériel informatique et mise en route complète.</p>
+            <div class="service-tags">
+              <span class="service-tag">Grand Tunis</span>
+              <span class="service-tag">À domicile / Bureau</span>
+              <span class="service-tag">Accompagnement</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section : À propos de nous -->
+    <section class="section" id="apropos">
+      <div class="section-container">
+        <span class="section-tag">À propos de nous</span>
+        <h2 class="section-title">Plus de 15 ans d'expérience à votre service</h2>
+        
+        <div class="about-highlight-box">
+          <p class="about-main-text">
+            « Nous avons plus de 15 ans d'expérience dans le domaine de maintenance informatique.<br>
+            Réparation des ordinateurs de bureau et des laptops. »
+          </p>
+        </div>
+
+        <p class="about-sub-text">
+          PCDOCTOR Computer Service Center met à votre disposition un savoir-faire éprouvé pour le dépannage, la maintenance préventive et l'assistance informatique à Tunis. Sous la direction technique de <strong>Mohamed Aissaoui</strong> (Formateur IT / ), notre centre garantit un diagnostic rigoureux, des pièces de qualité et une totale transparence sur chaque intervention.
+        </p>
+
+        <div class="about-stats">
+          <div class="stat-item">
+            <span class="stat-number">15+</span>
+            <span class="stat-label">Années d'expérience</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Diagnostic &amp; Devis clair</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">PC &amp; Mac</span>
+            <span class="stat-label">Fixes &amp; Laptops</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">Express</span>
+            <span class="stat-label">Atelier &amp; Sur site</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 : Pourquoi PCDOCTOR -->
+    <section class="section section-alt" id="engagements">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">La Garantie PCDOCTOR</span>
+          <h2 class="section-title">Pourquoi nous confier votre matériel ?</h2>
+          <p class="section-subtitle">Nous privilégions la compétence technique, l'honnêteté et la satisfaction client à chaque intervention.</p>
+        </div>
+
+        <div class="trust-grid">
+          <div class="trust-card">
+            <div class="trust-icon">⚡</div>
+            <h3>Diagnostic Précis &amp; Rapide</h3>
+            <p>Analyse rigoureuse de la panne avant intervention. Devis clair et validé avec vous sans mauvaise surprise.</p>
+          </div>
+          <div class="trust-card">
+            <div class="trust-icon">🛠️</div>
+            <h3>Pièces Certifiées &amp; Testées</h3>
+            <p>Composants de rechange rigoureusement testés. Nous restituons systématiquement vos pièces défectueuses remplacées.</p>
+          </div>
+          <div class="trust-card">
+            <div class="trust-icon">👨‍🏫</div>
+            <h3>Expertise &amp; Conseil Pédagogique</h3>
+            <p>Centre supervisé par Mohamed Aissaoui, formateur IT certifié avec plus de 15 ans d'expérience terrain.</p>
+          </div>
+          <div class="trust-card">
+            <div class="trust-icon">🤝</div>
+            <h3>Suivi Personnalisé &amp; Proximité</h3>
+            <p>Un seul interlocuteur dédié, joignable par téléphone et WhatsApp pour suivre l'état de votre réparation en temps réel.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 : Contact Rapide -->
+    <section class="section section-alt" id="contact">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Nous Contacter</span>
+          <h2 class="section-title">Une question ou une panne urgente ?</h2>
+          <p class="section-subtitle">Contactez-nous directement pour une estimation immédiate ou pour planifier un dépôt en atelier.</p>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center;">
+          <a class="btn btn-whatsapp" href="https://wa.me/21698484569" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.11.82.83-3.03-.19-.31a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.29z"/></svg>
+            Écrire sur WhatsApp
+          </a>
+          <a class="btn" href="tel:+21698484569">
+            📞 Appeler le +216 98 484 569
+          </a>
+          <a class="tel" href="mailto:contact@pcdoctor.tn" style="font-size:1.1rem;">
+            ✉️ contact@pcdoctor.tn
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bouton Flottant WhatsApp -->
+  <a href="https://wa.me/21698484569" class="floating-whatsapp" target="_blank" rel="noopener" aria-label="Discuter sur WhatsApp avec un technicien">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.11.82.83-3.03-.19-.31a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.29z"/></svg>
+    <span>WhatsApp Express</span>
+  </a>
+
+  <!-- Pied de page -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <img class="logo logo-light" src="assets/logo.png" alt="PCDOCTOR" style="width:180px; margin-bottom:1rem;">
+        <img class="logo logo-dark" src="assets/logo-dark.png" alt="PCDOCTOR" style="width:180px; margin-bottom:1rem;" aria-hidden="true">
+        <p>Centre de service et d'assistance informatique à Tunis. Dépannage matériel, optimisation système et accompagnement technique de proximité.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Réparation dalles écrans &amp; claviers</a></li>
+          <li><a href="#services">Boost PC &amp; Passage au SSD</a></li>
+          <li><a href="#services">Suppression virus &amp; Réinstallation</a></li>
+          <li><a href="#services">Récupération de données disque dur</a></li>
+          <li><a href="#services">Maintenance informatique TPE / PME</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Ressources</h4>
+        <ul>
+          <li><a href="#etudiants">Espace Étudiants </a></li>
+          <li><a href="/tmmi/1.html" target="_blank">Support TMMI : Anatomie PC</a></li>
+          <li><a href="/tmmi/3.html" target="_blank">Support TMMI : Diagnostic</a></li>
+          <li><a href="#engagements">Nos engagements de qualité</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact Direct</h4>
+        <ul>
+          <li>📞 Téléphone : <a href="tel:+21698484569">+216 98 484 569</a></li>
+          <li>💬 WhatsApp : <a href="https://wa.me/21698484569" target="_blank">+216 98 484 569</a></li>
+          <li>✉️ Email : <a href="mailto:contact@pcdoctor.tn">contact@pcdoctor.tn</a></li>
+          <li>📍 Tunis, Tunisie</li>
+          <li>🕒 Lun - Sam : 08h30 - 18h30</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="y">2026</span> <strong>PCDOCTOR Computer Service Center</strong> — Tous droits réservés.</p>
+      <p style="font-size:.9rem;">Direction technique : <strong>Mohamed Aissaoui</strong> (Formateur &amp; Consultant IT) &nbsp;|&nbsp; <a href="/etudiants.html" style="color:var(--muted); text-decoration:none; opacity:0.8; font-size:.85rem;">Accès Portail Étudiants &rarr;</a></p>
+    </div>
+  </footer>
+
+  <!-- Scripts Thème & Année -->
+  <script>
+    (function(){
+      var root = document.documentElement;
+      var btn = document.getElementById("theme");
+      var label = btn.querySelector(".theme-label");
+      var mq = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function current(){
+        return root.getAttribute("data-theme") || (mq.matches ? "dark" : "light");
+      }
+
+      function render(){
+        var dark = current() === "dark";
+        btn.setAttribute("aria-pressed", dark);
+        btn.setAttribute("aria-label", dark ? "Activer le mode clair" : "Activer le mode sombre");
+        label.textContent = dark ? "Mode clair" : "Mode sombre";
+      }
+
+      btn.addEventListener("click", function(){
+        var next = current() === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try{ localStorage.setItem("theme", next); }catch(e){}
+        render();
+      });
+
+      render();
+    })();
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="carbon">
+  <title>Programmation BIOS/UEFI avec CH341A — Portail Pédagogique 2e Année TMMI</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* Shared semantic & focus tokens */
+      --positive: #198038;
+      --positive-container: #defbe6;
+      --warning: #8a5300;
+      --warning-container: #fff1c2;
+      --error-container: #fff1f1;
+      --focus: #0f62fe;
+
+      /* Schematic & terminal surface tokens */
+      --terminal-bg: #161616;
+      --terminal-fg: #f4f4f4;
+      --terminal-muted: #a8a8a8;
+      --terminal-ok: #42be65;
+      --terminal-warn: #f1c21b;
+      --terminal-err: #ff8389;
+      --pcb-body: #262626;
+      --pcb-chip: #161616;
+      --pin-metal: #c6c6c6;
+
+      /* Type scale (Narrative) */
+      --display-size: clamp(2.125rem, 1.4rem + 2.4vw, 3.25rem);
+      --headline-size: clamp(1.5rem, 1.15rem + 1.2vw, 2rem);
+      --subhead-size: clamp(1.125rem, 1rem + 0.4vw, 1.3125rem);
+      --body-size: clamp(1rem, 0.96rem + 0.15vw, 1.0625rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography helpers */
+    .label-mono {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--on-surface-variant);
+    }
+
+    .display-title {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 300;
+      line-height: 1.15;
+      margin: var(--space-sm) 0 var(--space-md) 0;
+      color: var(--on-surface);
+    }
+    .display-title strong {
+      font-weight: 600;
+    }
+
+    .section-head {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 300;
+      line-height: 1.2;
+      margin: 0;
+    }
+    .section-title strong {
+      font-weight: 600;
+    }
+
+    .sub-title {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 0 0 var(--space-sm) 0;
+    }
+
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 68ch;
+    }
+
+    /* Header & top nav */
+    .doc-header {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-lg);
+    }
+    .doc-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+      margin-bottom: var(--space-md);
+    }
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .jump-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-top: var(--space-lg);
+      border-top: var(--rule);
+      padding-top: var(--space-sm);
+    }
+    .jump-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      text-decoration: none;
+      color: var(--on-surface);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background-color: var(--surface-container-low);
+      border-bottom: 2px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .jump-link:hover {
+      background-color: var(--surface-container-high);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Carbon flat layers & tiles */
+    .layer {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-radius: 0;
+    }
+    .layer .layer {
+      background-color: var(--surface-container-high);
+    }
+    .layer-bordered {
+      background-color: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .kpi-tile {
+      background-color: var(--surface-container);
+      padding: var(--space-md);
+      border-bottom: var(--indicator);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .kpi-value {
+      font-family: var(--font-label);
+      font-size: 1.75rem;
+      font-weight: 300;
+      color: var(--on-surface);
+      line-height: 1.15;
+    }
+    .kpi-desc {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Asymmetric 8 + 4 split */
+    .split-8-4 {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .split-6-6 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Buttons (Carbon sharp corners, left-aligned text) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg) var(--space-sm) var(--space-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 400;
+      border-radius: 0;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--primary), var(--on-surface) 22%);
+    }
+    .btn-secondary {
+      background-color: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background-color: var(--surface-container-high);
+    }
+    .btn-danger {
+      background-color: var(--background);
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .btn-danger:hover:not(:disabled) {
+      background-color: var(--error-container);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Tags (only elements with --rounded-full) */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      height: 24px;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-full);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 500;
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .tag-ok {
+      background-color: var(--positive-container);
+      color: var(--positive);
+    }
+    .tag-warn {
+      background-color: var(--warning-container);
+      color: var(--warning);
+    }
+    .tag-err {
+      background-color: var(--error-container);
+      color: var(--error);
+    }
+
+    /* Notifications / callouts */
+    .notice {
+      background-color: var(--surface-container-low);
+      border-left: 3px solid var(--primary);
+      padding: var(--space-md);
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+    .notice-ok { border-left-color: var(--positive); }
+    .notice-warn { border-left-color: var(--warning); }
+    .notice-err { border-left-color: var(--error); background-color: var(--error-container); }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: var(--rule);
+      margin-bottom: var(--space-md);
+      gap: var(--space-xs);
+    }
+    .tab-btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      transition: color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .tab-btn:hover {
+      color: var(--on-surface);
+      background-color: var(--surface-container-low);
+    }
+    .tab-btn.is-active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom: var(--indicator);
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: var(--rule);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    thead tr {
+      background-color: var(--surface-container-high);
+      border-bottom: 1px solid var(--outline);
+    }
+    th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      color: var(--on-surface);
+    }
+    td {
+      padding: var(--space-sm) var(--space-md);
+      border-top: var(--rule);
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) {
+      background-color: var(--surface-container-low);
+    }
+    .mono-cell {
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+    }
+
+    /* Interactive SVG panels */
+    .schematic-box {
+      background-color: var(--surface-container-low);
+      border: var(--rule);
+      padding: var(--space-md);
+    }
+    .schematic-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Pin interactive list */
+    .pin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .pin-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-md);
+      min-height: 44px;
+      background-color: var(--background);
+      border: var(--rule);
+      border-left: 3px solid var(--outline-variant);
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-body);
+    }
+    .pin-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+    .pin-btn.is-selected {
+      border-left-color: var(--primary);
+      background-color: var(--primary-container);
+    }
+
+    /* Terminal simulator */
+    .terminal-window {
+      background-color: var(--terminal-bg);
+      color: var(--terminal-fg);
+      font-family: var(--font-label);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      padding: var(--space-md);
+      min-height: 260px;
+      max-height: 380px;
+      overflow-y: auto;
+      border-left: 3px solid var(--primary);
+    }
+    .term-line { margin-bottom: var(--space-xs); word-break: break-word; }
+    .term-cmd { color: var(--terminal-fg); font-weight: 600; }
+    .term-ok { color: var(--terminal-ok); }
+    .term-warn { color: var(--terminal-warn); }
+    .term-err { color: var(--terminal-err); }
+    .term-muted { color: var(--terminal-muted); }
+
+    .step-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .cmd-step-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      width: 100%;
+      min-height: 48px;
+      padding: var(--space-sm) var(--space-md);
+      background-color: var(--surface-container-low);
+      border: var(--rule);
+      border-left: 3px solid var(--outline-variant);
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      color: var(--on-surface);
+    }
+    .cmd-step-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+    .cmd-step-btn.is-done {
+      border-left-color: var(--positive);
+    }
+    .cmd-step-btn.is-current {
+      border-left-color: var(--primary);
+      background-color: var(--primary-container);
+    }
+
+    /* Troubleshooting matrix */
+    .trouble-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .symptom-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .symptom-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+      width: 100%;
+      padding: var(--space-md);
+      min-height: 44px;
+      background-color: var(--surface-container-low);
+      border: 0;
+      border-left: 3px solid var(--outline-variant);
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      color: var(--on-surface);
+    }
+    .symptom-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+    .symptom-btn.is-active {
+      border-left-color: var(--primary);
+      background-color: var(--primary-container);
+    }
+
+    /* TP Checklist */
+    .checklist-row {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-top: var(--rule);
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .checklist-row:first-child { border-top: 0; }
+    .checklist-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    /* Flashcards */
+    .flashcard-stage {
+      background-color: var(--surface-container-low);
+      border: var(--rule);
+      padding: var(--space-lg);
+    }
+    .flashcard-face {
+      background-color: var(--background);
+      border: var(--rule);
+      border-top: 3px solid var(--primary);
+      padding: var(--space-xl) var(--space-lg);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-md);
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      font-family: var(--font-body);
+      color: var(--on-surface);
+    }
+    .flashcard-face.is-back {
+      border-top-color: var(--positive);
+      background-color: var(--surface-container-low);
+    }
+    .flashcard-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    /* Quiz */
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      width: 100%;
+      min-height: 48px;
+      padding: var(--space-md);
+      background-color: var(--background);
+      border: var(--rule);
+      border-left: 3px solid var(--outline-variant);
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      margin-bottom: var(--space-sm);
+    }
+    .quiz-option:hover:not(:disabled) {
+      background-color: var(--surface-container-low);
+      border-left-color: var(--primary);
+    }
+    .quiz-option.is-correct {
+      background-color: var(--positive-container);
+      border-left-color: var(--positive);
+    }
+    .quiz-option.is-wrong {
+      background-color: var(--error-container);
+      border-left-color: var(--error);
+    }
+    .quiz-option:disabled {
+      cursor: default;
+    }
+
+    /* Progress bar */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--surface-container-high);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* List separators */
+    .divided-list > * + * {
+      border-top: var(--rule);
+      padding-top: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .code-inline {
+      font-family: var(--font-label);
+      font-size: 0.875em;
+      background-color: var(--surface-container-high);
+      padding: 0.125rem 0.375rem;
+      color: var(--on-surface);
+    }
+
+    .footer-sources {
+      border-top: var(--rule);
+      padding-top: var(--space-lg);
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 820px) {
+      .split-8-4, .split-6-6, .trouble-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .btn, .jump-link {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+
+    <!-- EN-TÊTE DU MODULE -->
+    <header class="doc-header">
+      <div style="margin-bottom: var(--space-sm);">
+        <a href="/etudiants.html#tmmi" style="display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none; color:var(--primary); font-weight:600; font-size:0.95rem;">
+          &larr; Retour à l'Espace Étudiants (Portail TMMI)
+        </a>
+      </div>
+      <div class="doc-meta-bar">
+        <span class="label-mono">Filière TMMI · 2e Année · Maintenance Matérielle Bas Niveau | Enseignant : Mohamed Aissaoui</span>
+        <span class="tag" id="global-progress-tag">Progression atelier : 0%</span>
+      </div>
+
+      <h1 class="display-title">
+        Programmation et reflashage BIOS/UEFI <strong>avec le programmateur CH341A</strong>
+      </h1>
+      <p>
+        Portail pédagogique unifié pour les travaux pratiques TMMI : architecture du BIOS et du POST, repérage de la broche 1, alignement de la pince SOIC8, gestion critique des tensions 1.8V et 3.3V, workflow <span class="code-inline">flashrom</span> sous Linux, matrice de dépannage et modules d'entraînement.
+      </p>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-primary" onclick="scrollToSection('entrainement')">
+          <i data-lucide="graduation-cap" aria-hidden="true"></i>
+          <span>Accéder aux révisions et quiz</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="exportProgressReport()">
+          <i data-lucide="download" aria-hidden="true"></i>
+          <span>Exporter le bilan de TP (.txt)</span>
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-reset-all" onclick="resetAllProgress(this)">
+          <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+          <span>Réinitialiser la progression</span>
+        </button>
+        <span class="label-mono" id="status-banner" aria-live="polite"></span>
+      </div>
+
+      <nav class="jump-nav" aria-label="Navigation des sections du cours">
+        <a class="jump-link" href="#fondamentaux">01 · Fondamentaux BIOS</a>
+        <a class="jump-link" href="#syntheses-visuelles">02 · Brochage &amp; Tensions</a>
+        <a class="jump-link" href="#protocole-flash">03 · Protocole &amp; flashrom</a>
+        <a class="jump-link" href="#depannage">04 · Matrice Dépannage &amp; TP</a>
+        <a class="jump-link" href="#entrainement">05 · Flashcards &amp; Quiz</a>
+      </nav>
+    </header>
+
+    <!-- INDICATEURS CLÉS DE RÉFÉRENCE -->
+    <section aria-label="Repères techniques critiques">
+      <div class="kpi-grid">
+        <div class="kpi-tile">
+          <span class="label-mono">Tensions EEPROM SPI</span>
+          <div class="kpi-value">3.3V / 1.8V</div>
+          <p class="kpi-desc">Le CH341A délivre 3.3V nativement : un adaptateur 1.8V est obligatoire pour les puces récentes (ex. Macronix MX25U).</p>
+        </div>
+        <div class="kpi-tile">
+          <span class="label-mono">Règle d'or maintenance</span>
+          <div class="kpi-value">2× DUMP + MD5</div>
+          <p class="kpi-desc">Extraire deux sauvegardes du BIOS d'origine et comparer leur empreinte avant tout effacement de la puce.</p>
+        </div>
+        <div class="kpi-tile">
+          <span class="label-mono">Brochage SOIC8 / SOP8</span>
+          <div class="kpi-value">PIN 1 = /CS</div>
+          <p class="kpi-desc">Le fil rouge de la pince SOIC8 doit toujours correspondre au point gravé sur la puce et au côté levier du support ZIF.</p>
+        </div>
+        <div class="kpi-tile">
+          <span class="label-mono">Diagnostic terrain</span>
+          <div class="kpi-value">4 SCÉNARIOS</div>
+          <p class="kpi-desc">Faux contact de pince, interférence carte mère, surtension 3.3V/1.8V et nettoyage de région Intel ME.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 01 : FONDAMENTAUX DU BIOS -->
+    <section id="fondamentaux">
+      <div class="section-head">
+        <h2 class="section-title">01 · <strong>Fondamentaux</strong> : BIOS, POST, RAM CMOS et cas de panne</h2>
+        <span class="label-mono">Prérequis théoriques TMMI</span>
+      </div>
+
+      <div class="split-8-4">
+        <div class="divided-list">
+          <div>
+            <h3 class="sub-title">Le BIOS de la carte mère et ses quatre fonctions</h3>
+            <p>
+              Le <strong>BIOS</strong> (<em>Basic Input / Output System</em>) est un microprogramme bas niveau stocké dans une mémoire Flash EPROM / EEPROM SPI soudée sur la carte mère. Il assure l'interface entre le matériel et le système d'exploitation depuis la mise sous tension jusqu'au chargement complet de l'OS.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Composante</th>
+                    <th>Rôle matériel et logiciel</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1. Fonctions d'E/S de base</strong></td>
+                    <td>Gestion élémentaire de l'écran, du clavier, des disques, de l'horloge et des ports d'entrées/sorties.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2. Le POST</strong></td>
+                    <td><em>Power On Self Test</em> : autotest au démarrage vérifiant CPU, RAM, clavier et carte graphique. Sans affichage, les erreurs fatales sont signalées par <strong>bips sonores</strong> (codes constructeurs) ou cartes de diagnostic hexadécimales (PCI, RS232, parallèle, USB).</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. Programme Setup</strong></td>
+                    <td>Interface de configuration des lecteurs, date/heure, mots de passe, gestion d'énergie et options de carte mère (remplaçant les anciens cavaliers et micro-interrupteurs).</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4. Programme d'amorçage</strong></td>
+                    <td>Recherche sur les disques ou le réseau un système d'exploitation à charger en mémoire et lui passe la main.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="sub-title">Quand recourir à la programmation externe par CH341A ?</h3>
+            <p>
+              Sur les cartes mères modernes, la plupart des BIOS sont personnalisés par les constructeurs à partir des noyaux d'éditeurs historiques (<strong>AMI</strong>, <strong>Award</strong> et <strong>Phoenix</strong>). Lorsqu'une mise à jour échoue, qu'une corruption spontanée survient ou qu'une puce est protégée en écriture contre la réécriture logicielle, le PC ne démarre plus son POST : il s'allume, les tensions d'alimentation sont présentes, mais aucun affichage n'apparaît (avec parfois coupure automatique après une minute). Le programmateur USB CH341A permet alors une intervention directe sur la puce SPI sans passer par l'OS.
+            </p>
+          </div>
+        </div>
+
+        <aside class="layer" aria-label="Mémo RAM CMOS et identification">
+          <span class="label-mono">Mémo architecture</span>
+          <h3 class="sub-title" style="margin-top: var(--space-xs);">RAM CMOS (RTC/NVRAM)</h3>
+          <p style="font-size: 0.9375rem;">
+            Le composant RTC/NVRAM combine l'horloge temps réel (<em>Real Time Clock</em>) et une mémoire non volatile composée de transistors CMOS à très faible consommation. Alimentée en permanence par une pile au lithium (ou accumulateur), elle conserve les paramètres du Setup hors secteur.
+          </p>
+
+          <div class="layer" style="margin-top: var(--space-md);">
+            <span class="label-mono">Sur PC fonctionnel</span>
+            <h4 class="sub-title" style="font-size: 1rem; margin-top: var(--space-xs);">Identifier la version du BIOS</h4>
+            <ul style="margin: 0; padding-left: 1.15rem; font-size: 0.9375rem;">
+              <li style="margin-bottom: var(--space-xs);"><strong>Écran de démarrage</strong> : touche <span class="code-inline">PAUSE</span> pour figer l'affichage fugace du POST.</li>
+              <li style="margin-bottom: var(--space-xs);"><strong>Informations Système</strong> : commande <span class="code-inline">msinfo32</span>.</li>
+              <li><strong>Registre Windows</strong> : clé <span class="code-inline">HKLM\HARDWARE\DESCRIPTION\System</span>, valeur <span class="code-inline">SystemBiosVersion</span>.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 02 : SYNTHÈSES VISUELLES INTERACTIVES -->
+    <section id="syntheses-visuelles">
+      <div class="section-head">
+        <h2 class="section-title">02 · <strong>Synthèses visuelles</strong> : repérage broche 1, pince SOIC8 et tensions 1.8V / 3.3V</h2>
+        <span class="label-mono">Diapositives techniques interactives</span>
+      </div>
+
+      <!-- Synthèse A : Broche 1 & Pince SOIC8 -->
+      <div style="margin-bottom: var(--space-xl);">
+        <h3 class="sub-title">Synthèse A — Repérage de la broche 1, alignement de la pince SOIC8 et support ZIF</h3>
+        <p>
+          Une inversion de 180° sur la pince ou sur le support ZIF empêche toute détection de l'EEPROM et peut endommager la puce ou le port USB. Explorez les trois vues de montage ci-dessous et cliquez sur chaque broche pour vérifier son rôle sur le bus SPI.
+        </p>
+
+        <div class="tab-bar" role="tablist" aria-label="Vues du montage SOIC8 et CH341A">
+          <button type="button" class="tab-btn is-active" id="tab-pin-1" role="tab" aria-selected="true" onclick="setPinDiagramView('chip')">
+            1. Repérage Broche 1 sur EEPROM SOIC8
+          </button>
+          <button type="button" class="tab-btn" id="tab-pin-2" role="tab" aria-selected="false" onclick="setPinDiagramView('clip')">
+            2. Alignement Pince SOIC8 (Fil Rouge)
+          </button>
+          <button type="button" class="tab-btn" id="tab-pin-3" role="tab" aria-selected="false" onclick="setPinDiagramView('zif')">
+            3. Emplacement ZIF CH341A (25 SPI vs 24 EEPROM)
+          </button>
+        </div>
+
+        <div class="split-6-6">
+          <div class="schematic-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); gap: var(--space-sm); flex-wrap: wrap;">
+              <span class="label-mono" id="pin-diagram-caption">Vue 1/3 · Boîtier SOIC8 / SOP8 standard</span>
+              <span class="tag tag-ok" id="pin-diagram-status">Repère : Point gravé = Broche 1</span>
+            </div>
+
+            <!-- SVG Schéma dynamique SOIC8 / Pince / ZIF -->
+            <svg id="svg-pinout" class="schematic-svg" viewBox="0 0 560 320" role="img" aria-labelledby="svg-pinout-title">
+              <title id="svg-pinout-title">Schéma technique du repérage broche 1 et alignement CH341A</title>
+              <!-- Contenu rendu dynamiquement par renderPinDiagram() -->
+            </svg>
+
+            <div id="zif-test-controls" style="display: none; margin-top: var(--space-md); padding-top: var(--space-sm); border-top: var(--rule);">
+              <span class="label-mono">Simulation d'erreur d'insertion ZIF :</span>
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-xs);">
+                <button type="button" class="btn btn-primary" onclick="setZifSlotMode('25spi')">Placer sur 25 SPI BIOS (Correct)</button>
+                <button type="button" class="btn btn-danger" onclick="setZifSlotMode('24eeprom')">Placer sur 24 EEPROM (Erreur)</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="layer" id="pin-detail-panel">
+              <span class="label-mono">Inspecteur de brochage SPI (Série 25xx)</span>
+              <h4 class="sub-title" id="pin-detail-title" style="margin-top: var(--space-xs);">Broche 1 — /CS (Chip Select) · Fil Rouge</h4>
+              <p id="pin-detail-desc" style="margin-bottom: var(--space-sm);">
+                Toujours située à côté du point en creux ou de l'encoche du boîtier SOIC8. Le conducteur rouge du câble plat de la pince de test et la broche 1 de la carte adaptatrice doivent impérativement être alignés sur cette patte.
+              </p>
+              <div class="notice notice-ok" id="pin-detail-rule">
+                <i data-lucide="check-circle-2" aria-hidden="true"></i>
+                <div><strong>Contrôle visuel :</strong> Utiliser le mode macro du téléphone ou un microscope pour relever la référence exacte gravée sur la puce avant de poser la pince.</div>
+              </div>
+            </div>
+
+            <div class="pin-grid" aria-label="Sélection des 8 broches de la puce">
+              <button type="button" class="pin-btn is-selected" data-pin="1" onclick="selectPin(1)">
+                <span class="label-mono">Pin 1 · Fil Rouge</span>
+                <strong>/CS (Chip Select)</strong>
+              </button>
+              <button type="button" class="pin-btn" data-pin="2" onclick="selectPin(2)">
+                <span class="label-mono">Pin 2</span>
+                <strong>DO / MISO</strong>
+              </button>
+              <button type="button" class="pin-btn" data-pin="3" onclick="selectPin(3)">
+                <span class="label-mono">Pin 3</span>
+                <strong>/WP (Write Protect)</strong>
+              </button>
+              <button type="button" class="pin-btn" data-pin="4" onclick="selectPin(4)">
+                <span class="label-mono">Pin 4</span>
+                <strong>GND (Masse)</strong>
+              </button>
+              <button type="button" class="pin-btn" data-pin="5" onclick="selectPin(5)">
+                <span class="label-mono">Pin 5</span>
+                <strong>DI / MOSI</strong>
+              </button>
+              <button type="button" class="pin-btn" data-pin="6" onclick="selectPin(6)">
+                <span class="label-mono">Pin 6</span>
+                <strong>CLK (Horloge)</strong>
+              </button>
+              <button type="button" class="pin-btn" data-pin="7" onclick="selectPin(7)">
+                <span class="label-mono">Pin 7</span>
+                <strong>/HOLD</strong>
+              </button>
+              <button type="button" class="pin-btn" data-pin="8" onclick="selectPin(8)">
+                <span class="label-mono">Pin 8 · Alim</span>
+                <strong>VCC (3.3V ou 1.8V)</strong>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Synthèse B : Gestion des tensions 3.3V vs 1.8V -->
+      <div style="border-top: var(--rule); padding-top: var(--space-xl);">
+        <h3 class="sub-title">Synthèse B — Gestion des tensions : 3.3V natif vs adaptateur 1.8V</h3>
+        <p>
+          Le programmateur USB CH341A délivre nativement du <strong>3.3V</strong>. Si la datasheet de la puce identifiée (par exemple une série récente Macronix <span class="code-inline">MX25U...</span>) indique une tension nominale de <strong>1.8V</strong>, il faut impérativement intercaler l'adaptateur abaisseur de tension 1.8V entre le support ZIF et le convertisseur de la pince.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <button type="button" class="btn btn-primary" id="btn-volt-33" onclick="setVoltageMode('3.3v')">
+            Scénario A : Puce 3.3V (ex. Winbond W25Q64.V)
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-volt-18" onclick="setVoltageMode('1.8v')">
+            Scénario B : Puce 1.8V avec adaptateur (ex. MX25U...)
+          </button>
+          <button type="button" class="btn btn-danger" id="btn-volt-danger" onclick="setVoltageMode('danger')">
+            Scénario C : Oubli adaptateur sur puce 1.8V
+          </button>
+        </div>
+
+        <div class="schematic-box">
+          <svg id="svg-voltage" class="schematic-svg" viewBox="0 0 880 210" role="img" aria-labelledby="svg-voltage-title">
+            <title id="svg-voltage-title">Chaîne de liaison électrique CH341A selon la tension de l'EEPROM</title>
+            <!-- Rendu dynamique par setVoltageMode() -->
+          </svg>
+          <div id="voltage-feedback" class="notice notice-ok" style="margin-top: var(--space-md);">
+            <!-- Mis à jour par JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 03 : PROTOCOLE COMPLET & SIMULATEUR FLASHROM -->
+    <section id="protocole-flash">
+      <div class="section-head">
+        <h2 class="section-title">03 · <strong>Protocole d'intervention</strong> : préparation, terminal Linux <span class="code-inline">flashrom</span> et Windows</h2>
+        <span class="label-mono">Procédure opératoire normalisée</span>
+      </div>
+
+      <div class="split-8-4" style="margin-bottom: var(--space-xl);">
+        <div>
+          <h3 class="sub-title">Phases 1 et 2 — Préparation de la carte mère et raccordement</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Phase</th>
+                  <th>Opération de laboratoire</th>
+                  <th>Point de vigilance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="mono-cell">1.1</td>
+                  <td><strong>Mise hors tension totale</strong> : retirer batterie principale, alimentation secteur et pile CMOS.</td>
+                  <td>Maintenir le bouton Power appuyé <strong>10 secondes</strong> pour décharger les condensateurs résiduels.</td>
+                </tr>
+                <tr>
+                  <td class="mono-cell">1.2</td>
+                  <td><strong>Localisation de la puce SPI</strong> sous <strong>OpenBoardView</strong>.</td>
+                  <td>Située généralement proche du chipset, du Super I/O, ou repérée par une tache de peinture.</td>
+                </tr>
+                <tr>
+                  <td class="mono-cell">1.3</td>
+                  <td><strong>Nettoyage des broches</strong> et relevé de la référence.</td>
+                  <td>Appliquer de l'<strong>alcool isopropylique</strong> sur les broches pour supprimer toute oxydation.</td>
+                </tr>
+                <tr>
+                  <td class="mono-cell">2.1</td>
+                  <td><strong>Raccordement physique</strong> : pince SOIC8 (fil rouge sur pin 1) + adaptateur 1.8V si requis + insertion ZIF (pin 1 côté levier).</td>
+                  <td>Au branchement USB, la <strong>LED rouge d'alimentation</strong> du CH341A s'allume. La 2e LED clignote durant la lecture/écriture.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="layer">
+          <span class="label-mono">Obtention du fichier .bin sain</span>
+          <h3 class="sub-title" style="margin-top: var(--space-xs);">Source du firmware de remplacement</h3>
+          <p style="font-size: 0.9375rem;">
+            La programmation nécessite un fichier image binaire (<span class="code-inline">.bin</span> ou <span class="code-inline">.rom</span>) exact. Vérifiez d'abord le site du fabricant de la carte mère (si seul un installeur exécutable est fourni, il faut en extraire le <span class="code-inline">.bin</span>). Sur certaines plateformes Intel, il peut être nécessaire de transférer ou nettoyer la région Intel ME à partir du dump d'origine.
+          </p>
+        </aside>
+      </div>
+
+      <!-- Simulateur Terminal Linux flashrom -->
+      <div style="margin-bottom: var(--space-xl);">
+        <h3 class="sub-title">Phase 3 — Atelier interactif : Workflow terminal Linux avec <span class="code-inline">flashrom</span></h3>
+        <p>
+          Sous Linux (Ubuntu / Kali Linux), l'utilitaire <span class="code-inline">flashrom</span> garantit une rigueur d'exécution totale. Exécutez les étapes dans l'ordre réglementaire sur le poste ci-dessous — le simulateur vous empêchera d'effacer la puce tant que la double sauvegarde et la vérification d'intégrité n'auront pas été effectuées.
+        </p>
+
+        <div class="split-6-6">
+          <div class="step-stack" id="flashrom-steps">
+            <button type="button" class="cmd-step-btn is-current" id="fstep-detect" onclick="runFlashromStep('detect')">
+              <div>
+                <span class="label-mono">Étape A · Détection SPI</span>
+                <div class="mono-cell">sudo flashrom -p ch341a_spi</div>
+              </div>
+              <span class="tag" id="fbadge-detect">À exécuter</span>
+            </button>
+
+            <button type="button" class="cmd-step-btn" id="fstep-dump1" onclick="runFlashromStep('dump1')">
+              <div>
+                <span class="label-mono">Étape B1 · Premier Dump (Sauvegarde)</span>
+                <div class="mono-cell">sudo flashrom -p ch341a_spi -r backup_original_1.bin</div>
+              </div>
+              <span class="tag" id="fbadge-dump1">En attente</span>
+            </button>
+
+            <button type="button" class="cmd-step-btn" id="fstep-dump2" onclick="runFlashromStep('dump2')">
+              <div>
+                <span class="label-mono">Étape B2 · Second Dump + Vérification MD5</span>
+                <div class="mono-cell">sudo flashrom -p ch341a_spi -r backup_original_2.bin &amp;&amp; md5sum backup_original_*.bin</div>
+              </div>
+              <span class="tag" id="fbadge-dump2">En attente</span>
+            </button>
+
+            <button type="button" class="cmd-step-btn" id="fstep-erase" onclick="runFlashromStep('erase')">
+              <div>
+                <span class="label-mono">Étape C · Effacement EEPROM</span>
+                <div class="mono-cell">sudo flashrom -p ch341a_spi -E</div>
+              </div>
+              <span class="tag" id="fbadge-erase">En attente</span>
+            </button>
+
+            <button type="button" class="cmd-step-btn" id="fstep-write" onclick="runFlashromStep('write')">
+              <div>
+                <span class="label-mono">Étape D &amp; E · Écriture + Vérification automatique</span>
+                <div class="mono-cell">sudo flashrom -p ch341a_spi -w nouveau_bios.bin</div>
+              </div>
+              <span class="tag" id="fbadge-write">En attente</span>
+            </button>
+
+            <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-xs);">
+              <button type="button" class="btn btn-ghost" onclick="resetTerminalSim()">
+                <i data-lucide="terminal" aria-hidden="true"></i>
+                <span>Réinitialiser la session terminal</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="terminal-window" id="terminal-output" aria-live="polite">
+              <div class="term-line term-muted">poste-tmmi@kali-atelier:~/bios_tp$ # Prêt. Cliquez sur l'étape A pour interroger le bus SPI via CH341A.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparatif Windows NeoProgrammer / AsProgrammer -->
+      <div>
+        <h3 class="sub-title">Équivalence sous environnement Windows (NeoProgrammer / AsProgrammer)</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Étape du processus</th>
+                <th>Linux (Terminal <span class="code-inline">flashrom</span>)</th>
+                <th>Windows (<span class="code-inline">NeoProgrammer / AsProgrammer</span>)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Prérequis système</strong></td>
+                <td>Paquet <span class="code-inline">flashrom</span> + droits <span class="code-inline">sudo</span></td>
+                <td>Installation du pilote USB CH341A spécifique</td>
+              </tr>
+              <tr>
+                <td><strong>Détection de l'EEPROM</strong></td>
+                <td class="mono-cell">flashrom -p ch341a_spi</td>
+                <td>Bouton <strong>Detect IC</strong> puis sélection du modèle exact et vérification tension (3.3V / 1.8V)</td>
+              </tr>
+              <tr>
+                <td><strong>Sauvegarde d'origine</strong></td>
+                <td class="mono-cell">-r backup_original_1.bin (×2 + md5sum)</td>
+                <td>Bouton <strong>Read IC</strong> (barre de progression en bas à gauche) puis <strong>Save</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Effacement</strong></td>
+                <td class="mono-cell">-E</td>
+                <td>Bouton <strong>Erase chip</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Écriture &amp; Contrôle</strong></td>
+                <td class="mono-cell">-w nouveau_bios.bin (vérification auto)</td>
+                <td><strong>Open file</strong> (<span class="code-inline">.bin</span>) puis <strong>Write IC</strong> et <strong>Verify</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 04 : MATRICE DE DÉPANNAGE & CHECKLIST TP -->
+    <section id="depannage">
+      <div class="section-head">
+        <h2 class="section-title">04 · <strong>Matrice de dépannage</strong> et validation pratique TP</h2>
+        <span class="label-mono">Diagnostic des incidents en atelier</span>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);" role="group" aria-label="Filtrer les pannes par catégorie">
+        <button type="button" class="btn btn-primary" data-tfilter="all" onclick="filterTroubleshooting('all')">Tous les incidents (4)</button>
+        <button type="button" class="btn btn-ghost" data-tfilter="contact" onclick="filterTroubleshooting('contact')">Contact &amp; Détection</button>
+        <button type="button" class="btn btn-ghost" data-tfilter="integrity" onclick="filterTroubleshooting('integrity')">Lecture instable</button>
+        <button type="button" class="btn btn-ghost" data-tfilter="voltage" onclick="filterTroubleshooting('voltage')">Tension &amp; Surchauffe</button>
+        <button type="button" class="btn btn-ghost" data-tfilter="boot" onclick="filterTroubleshooting('boot')">Post-Flash &amp; ME</button>
+      </div>
+
+      <div class="trouble-grid" style="margin-bottom: var(--space-xl);">
+        <div class="symptom-list" id="symptom-list">
+          <!-- Peuplé par JS -->
+        </div>
+
+        <div class="layer" id="symptom-detail">
+          <!-- Peuplé par JS -->
+        </div>
+      </div>
+
+      <!-- Grille de validation TP TMMI -->
+      <div class="layer-bordered">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div>
+            <span class="label-mono">Évaluation pratique · Filière TMMI</span>
+            <h3 class="sub-title" style="margin-top: var(--space-xs); margin-bottom: 0;">Grille de suivi de manipulation sur carte mère réformée</h3>
+          </div>
+          <span class="tag" id="tp-checklist-count">0 / 6 validées</span>
+        </div>
+
+        <div id="tp-checklist-container">
+          <!-- Peuplé par JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 05 : MODULES D'ENTRAÎNEMENT (FLASHCARDS & QUIZ) -->
+    <section id="entrainement">
+      <div class="section-head">
+        <h2 class="section-title">05 · <strong>Modules d'entraînement</strong> : flashcards de révision et quiz TMMI</h2>
+        <span class="label-mono">Auto-évaluation avec sauvegarde de progression</span>
+      </div>
+
+      <!-- Flashcards -->
+      <div style="margin-bottom: var(--space-2xl);">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div>
+            <h3 class="sub-title" style="margin-bottom: var(--space-xs);">Flashcards de révision active (10 cartes)</h3>
+            <p style="margin: 0;">Cliquez sur la carte pour révéler la réponse technique, puis marquez votre niveau de maîtrise.</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: var(--space-sm);">
+            <span class="label-mono" id="fc-mastery-label">Maîtrisées : 0 / 10</span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-bottom: var(--space-md);" role="group" aria-label="Filtrer les flashcards par thème">
+          <button type="button" class="btn btn-primary" data-fcfilter="all" onclick="setFlashcardFilter('all')">Toutes (10)</button>
+          <button type="button" class="btn btn-ghost" data-fcfilter="bios" onclick="setFlashcardFilter('bios')">Fondamentaux BIOS</button>
+          <button type="button" class="btn btn-ghost" data-fcfilter="hardware" onclick="setFlashcardFilter('hardware')">Brochage &amp; 1.8V</button>
+          <button type="button" class="btn btn-ghost" data-fcfilter="software" onclick="setFlashcardFilter('software')">Terminal flashrom</button>
+          <button type="button" class="btn btn-ghost" data-fcfilter="trouble" onclick="setFlashcardFilter('trouble')">Dépannage</button>
+        </div>
+
+        <div class="flashcard-stage">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm); gap: var(--space-sm);">
+            <span class="label-mono" id="fc-counter">Carte 1 sur 10 · Thème</span>
+            <span class="tag" id="fc-status-tag">À réviser</span>
+          </div>
+
+          <button type="button" class="flashcard-face" id="fc-card-btn" onclick="flipFlashcard()">
+            <span class="label-mono" id="fc-side-label">RECTO · QUESTION (Cliquer pour retourner)</span>
+            <div id="fc-card-text" style="font-size: 1.25rem; font-weight: 500; line-height: 1.4;"></div>
+            <span class="label-mono" id="fc-hint-label">Appuyez ou cliquez sur la carte pour afficher la réponse</span>
+          </button>
+
+          <div class="flashcard-controls">
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <button type="button" class="btn btn-ghost" onclick="prevFlashcard()">
+                <i data-lucide="arrow-left" aria-hidden="true"></i>
+                <span>Précédente</span>
+              </button>
+              <button type="button" class="btn btn-ghost" onclick="nextFlashcard()">
+                <span>Suivante</span>
+                <i data-lucide="arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <button type="button" class="btn btn-secondary" id="btn-fc-master" onclick="toggleFlashcardMastery()">
+                <i data-lucide="check" aria-hidden="true"></i>
+                <span>Marquer comme maîtrisée</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz -->
+      <div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div>
+            <h3 class="sub-title" style="margin-bottom: var(--space-xs);">Quiz d'évaluation TMMI (10 questions de mise en situation)</h3>
+            <p style="margin: 0;">Validez vos réflexes avant l'intervention sur carte mère réelle.</p>
+          </div>
+          <span class="tag" id="quiz-score-tag">Score : 0 / 10</span>
+        </div>
+
+        <div class="progress-track" style="margin-bottom: var(--space-md);">
+          <div class="progress-fill" id="quiz-progress-bar" style="width: 0%;"></div>
+        </div>
+
+        <div class="layer" id="quiz-container">
+          <!-- Peuplé par JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCES PÉDAGOGIQUES -->
+    <footer class="footer-sources">
+      <span class="label-mono">Sources documentaires intégrées</span>
+      <p style="margin-top: var(--space-xs); margin-bottom: 0; max-width: 90ch;">
+        Module de formation : Programmation et Flashage BIOS/UEFI via CH341A (filières TMMI / TSIG / IG) · Support théorique Le BIOS / POST / RAM CMOS (courstechinfo.be) · Guides pratiques et dépannage CH341A (a1easter, Electronics&amp;Computers, Khumulwng Infotech, Miyconst Personal Blog).
+      </p>
+      <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 1px solid var(--outline-variant); font-size: 0.85rem; color: var(--on-surface-variant); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <span>Support pédagogique officiel conçu et encadré par <strong>Mohamed Aissaoui</strong> (Formateur IT / IMSET)</span>
+        <a href="https://pcdoctor.tn" style="color:var(--primary); text-decoration:none; font-weight:600;">PCDOCTOR.TN</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    /* ======================== DONNÉES PÉDAGOGIQUES ======================== */
+    const PIN_DATA = {
+      1: {
+        title: `Broche 1 — /CS (Chip Select) · Fil Rouge`,
+        desc: `Toujours identifiée par un point gravé en creux ou une encoche sur le boîtier SOIC8. Le conducteur rouge de la pince SOIC8 et la broche 1 du convertisseur doivent impérativement être alignés sur cette patte.`,
+        rule: `Contrôle visuel : repérer le point sur le boîtier et utiliser la photo macro ou le microscope avant la pose de la pince.`
+      },
+      2: {
+        title: `Broche 2 — DO / MISO (Data Output)`,
+        desc: `Ligne de sortie des données de l'EEPROM vers le programmateur CH341A lors des phases de lecture (Read IC / -r) et de vérification.`,
+        rule: `Si les données lues sont incohérentes (0xFF ou 0x00), vérifier la propreté de cette patte à l'alcool isopropylique.`
+      },
+      3: {
+        title: `Broche 3 — /WP (Write Protect)`,
+        desc: `Entrée de protection matérielle contre l'écriture. Maintenue à l'état haut par le programmateur pour autoriser l'effacement et le flashage.`,
+        rule: `En cas d'échec d'effacement, vérifier le contact mécanique de cette broche sur la mâchoire de la pince.`
+      },
+      4: {
+        title: `Broche 4 — GND (Masse 0V)`,
+        desc: `Référence de masse commune entre la carte mère, la pince SOIC8, l'éventuel adaptateur 1.8V et le programmateur CH341A.`,
+        rule: `Toujours décharger les condensateurs de la carte mère (10s bouton Power sans pile CMOS ni secteur) avant connexion.`
+      },
+      5: {
+        title: `Broche 5 — DI / MOSI (Data Input)`,
+        desc: `Ligne d'entrée des instructions et des octets du firmware envoyés par le CH341A vers la mémoire Flash SPI.`,
+        rule: `Une pince légèrement décalée interrompt le signal MOSI et déclenche l'erreur "No EEPROM/flash device found".`
+      },
+      6: {
+        title: `Broche 6 — CLK (Horloge SPI)`,
+        desc: `Signal d'horloge synchrone cadencé par le contrôleur CH341A pour rythmer le transfert bit à bit sur le bus SPI.`,
+        rule: `Des pistes adjacentes sur la carte mère peuvent parasiter l'horloge en lecture in-circuit : dessouder si la lecture fluctue.`
+      },
+      7: {
+        title: `Broche 7 — /HOLD (Pause bus SPI)`,
+        desc: `Permet de suspendre temporairement la communication série sans relâcher /CS. Tirée au niveau logique actif par l'adaptateur.`,
+        rule: `Ne pas tordre les pattes latérales de la pince lors du retrait après flashage.`
+      },
+      8: {
+        title: `Broche 8 — VCC (Alimentation 3.3V ou 1.8V)`,
+        desc: `Alimentation directe de l'EEPROM. Le CH341A injecte 3.3V sur cette broche : l'adaptateur 1.8V abaisse cette tension pour les puces basse consommation.`,
+        rule: `DANGER : 3.3V sur une broche VCC prévue pour 1.8V provoque une surchauffe immédiate et la destruction de la puce.`
+      }
+    };
+
+    const TROUBLESHOOTING_DATA = [
+      {
+        id: `t1`,
+        category: `contact`,
+        catLabel: `Contact & Détection`,
+        symptom: `Puce non détectée (« No EEPROM/flash device found » / « IC not responding »)`,
+        cause: `Mauvais contact mécanique des mors de la pince SOIC8 sur les pattes, oxydation des broches ou inversion du fil rouge / positionnement ZIF.`,
+        reflex: `Ne pas forcer sur la pince au risque de tordre les pattes de l'EEPROM.`,
+        solution: `1. Débrancher l'USB. 2. Nettoyer les broches de la puce avec un peu d'alcool isopropylique. 3. Vérifier la position du fil rouge sur la broche 1 (point gravé) et l'insertion sur le côté "25 SPI BIOS" du ZIF (pin 1 côté levier). 4. Repositionner fermement la pince et relancer Detect.`
+      },
+      {
+        id: `t2`,
+        category: `integrity`,
+        catLabel: `Lecture instable`,
+        symptom: `Lecture aléatoire ou corruption des données (deux dumps avec empreintes MD5 différentes)`,
+        cause: `Interférence électrique avec d'autres composants actifs ou passifs de la carte mère alimentés en retour par les 3.3V du CH341A lors de la lecture in-circuit.`,
+        reflex: `Ne JAMAIS effacer ni écrire tant que deux lectures successives ne produisent pas exactement le même hash MD5.`,
+        solution: `Passer en micro-soudure hors-circuit : dessouder proprement la puce SPI à la station à air chaud avec du flux de soudure, la souder sur un adaptateur DIP8 dédié, effectuer le double dump + flash + verify, puis la ressouder sur la carte mère.`
+      },
+      {
+        id: `t3`,
+        category: `voltage`,
+        catLabel: `Tension & Surchauffe`,
+        symptom: `La puce chauffe anormalement dès le branchement USB`,
+        cause: `Injection directe du 3.3V natif du CH341A dans une EEPROM conçue pour 1.8V (ex. Macronix MX25U...) ou inversion totale de polarité.`,
+        reflex: `DÉBRANCHER IMMÉDIATEMENT le câble USB du PC de diagnostic !`,
+        solution: `Contrôler le marquage exact de la puce (macro/microscope) et sa datasheet. Si la tension nominale est 1.8V, intercaler obligatoirement l'adaptateur abaisseur 1.8V entre le programmateur CH341A et la pince SOIC8 avant toute nouvelle tentative.`
+      },
+      {
+        id: `t4`,
+        category: `boot`,
+        catLabel: `Post-Flash & ME`,
+        symptom: `Le PC s'allume après le flashage (VERIFIED OK) mais reste sans affichage`,
+        cause: `Fichier .bin incompatible avec la révision exacte de la carte mère ou région Intel ME (Management Engine) non nettoyée / désynchronisée.`,
+        reflex: `Conserver précieusement le backup_original_1.bin extrait avant l'effacement.`,
+        solution: `Vérifier la référence exacte de la carte mère et initier un nettoyage de la région Intel ME ("Clean ME") à partir du dump d'origine pour reconstruire une image saine, puis effacer, réécrire et vérifier la puce.`
+      }
+    ];
+
+    const TP_CHECKLIST_ITEMS = [
+      `Mise hors tension complète : retrait batterie, secteur, pile CMOS et décharge 10s sur Power`,
+      `Localisation de la puce SPI sur OpenBoardView et relevé de la référence exacte (tension 3.3V ou 1.8V)`,
+      `Nettoyage des broches à l'alcool isopropylique et alignement du fil rouge sur la broche 1`,
+      `Détection réussie et double dump comparé par hash MD5 / diff hexadécimal avant effacement`,
+      `Effacement, écriture du firmware sain et validation "Verifying flash... VERIFIED"`,
+      `Propreté de la manipulation (ou dessoudage/ressoudage propre sur adaptateur DIP8 à l'air chaud)`
+    ];
+
+    const FLASHCARDS_DATA = [
+      {
+        id: `fc1`,
+        theme: `bios`,
+        themeLabel: `Fondamentaux BIOS`,
+        q: `Quelles sont les quatre fonctions principales contenues dans le BIOS d'une carte mère ?`,
+        a: `1. Les fonctions d'E/S de base · 2. Le POST (Power On Self Test) · 3. Le programme Setup de configuration · 4. Le programme d'amorçage (Bootloader) qui charge l'OS.`
+      },
+      {
+        id: `fc2`,
+        theme: `bios`,
+        themeLabel: `Fondamentaux BIOS`,
+        q: `Comment le POST signale-t-il une erreur fatale lorsque l'affichage écran n'est pas encore fonctionnel ?`,
+        a: `Par des bips sonores codés (longueur et fréquence selon l'éditeur/constructeur) ou via des codes hexadécimaux sur une carte de diagnostic (PCI, RS232, parallèle ou USB).`
+      },
+      {
+        id: `fc3`,
+        theme: `bios`,
+        themeLabel: `Fondamentaux BIOS`,
+        q: `Quelle est la fonction de la RAM CMOS (RTC/NVRAM) et qu'est-ce qui maintient son contenu hors secteur ?`,
+        a: `Elle conserve l'horloge temps réel (RTC) et les paramètres du Setup grâce à des transistors CMOS basse consommation alimentés en permanence par une pile au lithium (ou accumulateur).`
+      },
+      {
+        id: `fc4`,
+        theme: `hardware`,
+        themeLabel: `Brochage & 1.8V`,
+        q: `Comment repérer la broche 1 d'une EEPROM SOIC8 et quel câble de la pince y connecter ?`,
+        a: `La broche 1 est marquée par un petit point en creux ou une encoche sur le boîtier. On y aligne impérativement le fil rouge de la pince SOIC8.`
+      },
+      {
+        id: `fc5`,
+        theme: `hardware`,
+        themeLabel: `Brochage & 1.8V`,
+        q: `Sur un CH341A à support ZIF divisé en deux zones, dans quelle section et dans quel sens placer l'adaptateur 25xx ?`,
+        a: `Dans la section marquée "25 SPI BIOS" (et non 24 EEPROM), avec la broche 1 orientée côté levier conformément au schéma sérigraphié sur le PCB.`
+      },
+      {
+        id: `fc6`,
+        theme: `hardware`,
+        themeLabel: `Brochage & 1.8V`,
+        q: `Quel est le risque critique si l'on connecte directement une puce Macronix MX25U (1.8V) sur le CH341A sans adaptateur ?`,
+        a: `Le CH341A délivre nativement du 3.3V : la puce 1.8V va chauffer anormalement et risque de griller définitivement. Il faut intercaler l'adaptateur 1.8V.`
+      },
+      {
+        id: `fc7`,
+        theme: `software`,
+        themeLabel: `Terminal flashrom`,
+        q: `Quelle est la règle d'or de la maintenance avant d'effacer une EEPROM avec flashrom -E ?`,
+        a: `Réaliser deux dumps complets du BIOS d'origine (-r backup_original_1.bin et backup_original_2.bin) et vérifier leur identité parfaite via un hash MD5 ou un diff hexadécimal.`
+      },
+      {
+        id: `fc8`,
+        theme: `software`,
+        themeLabel: `Terminal flashrom`,
+        q: `Quelle commande Linux permet de détecter automatiquement l'EEPROM SPI sur le programmateur CH341A ?`,
+        a: `sudo flashrom -p ch341a_spi`
+      },
+      {
+        id: `fc9`,
+        theme: `trouble`,
+        themeLabel: `Dépannage`,
+        q: `Que faire si la lecture in-circuit donne deux dumps avec des empreintes MD5 différentes ?`,
+        a: `Des composants de la carte mère parasitent la lecture : il faut dessouder la puce à la station à air chaud avec du flux et la souder sur un adaptateur DIP8 pour travailler hors-circuit.`
+      },
+      {
+        id: `fc10`,
+        theme: `trouble`,
+        themeLabel: `Dépannage`,
+        q: `Le PC s'allume après un flashage validé VERIFIED mais n'affiche rien à l'écran. Quelle piste logicielle privilégier ?`,
+        a: `Vérifier la compatibilité du fichier .bin ou procéder au nettoyage de la région Intel ME ("Clean ME") à partir du dump d'origine avant de reflasher.`
+      }
+    ];
+
+    const QUIZ_DATA = [
+      {
+        q: `Lors de la préparation d'une carte mère avant de poser la pince SOIC8, pourquoi appuie-t-on 10 secondes sur le bouton Power après avoir retiré batterie, secteur et pile CMOS ?`,
+        options: [
+          `Pour réinitialiser automatiquement le microprogramme de l'EEPROM`,
+          `Pour vider les condensateurs résiduels de la carte mère`,
+          `Pour activer le mode détection du port USB CH341A`,
+          `Pour déverrouiller la protection /WP de la puce SPI`
+        ],
+        correct: 1,
+        explanation: `Retirer toutes les sources d'alimentation et maintenir le bouton Power pendant 10 secondes permet de décharger les condensateurs résiduels avant de raccorder la pince.`
+      },
+      {
+        q: `Sur un boîtier SOIC8 / SOP8, que signale le petit point en creux (ou l'encoche) près d'une des pattes ?`,
+        options: [
+          `La broche 8 (alimentation VCC)`,
+          `La broche 4 (masse GND)`,
+          `La broche 1 (/CS), où doit être placé le fil rouge de la pince`,
+          `La broche 6 (horloge SPI CLK)`
+        ],
+        correct: 2,
+        explanation: `Le détrompeur indique la broche 1 de l'EEPROM. Le fil rouge de la pince SOIC8 et la broche 1 du convertisseur doivent impérativement être alignés sur cette broche.`
+      },
+      {
+        q: `Vous relevez la référence "Macronix MX25U..." sur la puce BIOS et sa datasheet indique 1.8V. Quelle précaution matérielle est indispensable avec un CH341A ?`,
+        options: [
+          `Placer l'adaptateur sur la zone "24 EEPROM" du support ZIF`,
+          `Intercaler un adaptateur 1.8V entre le programmateur CH341A et la pince`,
+          `Passer sous NeoProgrammer Windows qui abaisse la tension par logiciel`,
+          `Retirer le fil rouge de la pince pour limiter l'intensité`
+        ],
+        correct: 1,
+        explanation: `Le CH341A délivre nativement du 3.3V matériel : aucun logiciel ne peut abaisser sa tension. Un adaptateur 1.8V physique est obligatoire pour éviter de griller la puce.`
+      },
+      {
+        q: `Si la puce BIOS chauffe anormalement dès le branchement du CH341A sur le port USB, quel est le premier réflexe immédiat ?`,
+        options: [
+          `Lancer immédiatement sudo flashrom -p ch341a_spi -r pour lire avant panne`,
+          `Débrancher immédiatement le programmateur USB`,
+          `Appuyer sur le levier ZIF pour améliorer le contact`,
+          `Appliquer de l'alcool isopropylique sur la puce chaude`
+        ],
+        correct: 1,
+        explanation: `Une chauffe anormale signale une surtension (3.3V dans une puce 1.8V) ou une inversion de polarité : il faut débrancher l'USB immédiatement.`
+      },
+      {
+        q: `Sous Linux, quelle commande permet de sauvegarder le BIOS actuel dans un fichier nommé backup_original_1.bin ?`,
+        options: [
+          `sudo flashrom -p ch341a_spi -w backup_original_1.bin`,
+          `sudo flashrom -p ch341a_spi -E backup_original_1.bin`,
+          `sudo flashrom -p ch341a_spi -r backup_original_1.bin`,
+          `sudo flashrom -p ch341a_spi --detect backup_original_1.bin`
+        ],
+        correct: 2,
+        explanation: `L'option -r (read) extrait le contenu de la mémoire flash vers le fichier indiqué. -E efface et -w écrit.`
+      },
+      {
+        q: `Pourquoi le cours TMMI impose-t-il de réaliser deux dumps successifs et de comparer leurs hash MD5 avant d'effacer ?`,
+        options: [
+          `Parce que flashrom découpe les puces de plus de 4 Mo en deux fichiers`,
+          `Pour vérifier que la lecture in-circuit est stable et exempte d'interférences`,
+          `Pour nettoyer automatiquement la région Intel ME`,
+          `Pour comparer les tensions 3.3V et 1.8V`
+        ],
+        correct: 1,
+        explanation: `Si les deux dumps ont des empreintes MD5 différentes, cela prouve un faux contact de la pince ou une interférence avec la carte mère : il ne faut surtout pas effacer la puce.`
+      },
+      {
+        q: `Lorsqu'une lecture in-circuit échoue ou reste aléatoire malgré le nettoyage à l'alcool isopropylique, quelle solution d'atelier appliquer ?`,
+        options: [
+          `Forcer l'écriture avec l'option -f`,
+          `Dessouder la puce à la station à air chaud et la souder sur un adaptateur DIP8 hors-circuit`,
+          `Alimenter la carte mère avec son chargeur secteur pendant la lecture`,
+          `Déplacer la pince sur la zone 24 EEPROM du CH341A`
+        ],
+        correct: 1,
+        explanation: `La micro-soudure sur adaptateur DIP8 isole complètement l'EEPROM des composants environnants de la carte mère.`
+      },
+      {
+        q: `Quel outil logiciel aide le technicien TMMI à localiser rapidement la puce BIOS SPI sur le schéma d'une carte mère ?`,
+        options: [
+          `msinfo32`,
+          `OpenBoardView`,
+          `Regedit (SystemBiosVersion)`,
+          `NeoProgrammer`
+        ],
+        correct: 1,
+        explanation: `OpenBoardView permet de visualiser l'implantation des composants de la carte mère pour localiser l'EEPROM SPI (souvent proche du chipset ou du Super I/O).`
+      },
+      {
+        q: `Sur un PC qui démarre normalement sous Windows, quel outil système permet d'afficher la version actuelle du BIOS sans ouvrir le boîtier ?`,
+        options: [
+          `La commande msinfo32 (Informations Système) ou la clé SystemBiosVersion dans Regedit`,
+          `Le logiciel flashrom -p ch341a_spi`,
+          `Le retrait de la pile CMOS`,
+          `La carte de diagnostic PCI`
+        ],
+        correct: 0,
+        explanation: `Sur un PC fonctionnel, msinfo32, le registre HKLM\\HARDWARE\\DESCRIPTION\\System (SystemBiosVersion) ou la touche PAUSE au POST donnent la version du BIOS.`
+      },
+      {
+        q: `Après un flashage terminé par le message "Verifying flash... VERIFIED", le PC s'allume mais reste sans affichage. Quelle cause spécifique est à vérifier ?`,
+        options: [
+          `La pile CMOS est neuve`,
+          `Un fichier .bin incompatible ou une région Intel ME nécessitant un nettoyage ("Clean ME")`,
+          `La LED rouge du CH341A est restée allumée`,
+          `Le programme Setup a remplacé les cavaliers`
+        ],
+        correct: 1,
+        explanation: `Même avec une écriture vérifiée bit à bit, un fichier .bin inadapté ou une région Intel ME non nettoyée bloque l'initialisation vidéo. Il faut reconstruire l'image à partir du dump d'origine.`
+      }
+    ];
+
+    /* ======================== ÉTAT APPLICATIF ======================== */
+    const DEFAULT_STATE = {
+      pinDiagramView: `chip`,
+      selectedPin: 1,
+      zifSlotMode: `25spi`,
+      voltageMode: `3.3v`,
+      terminalStage: 0,
+      troubleFilter: `all`,
+      selectedTroubleId: `t1`,
+      tpChecked: [false, false, false, false, false, false],
+      fcFilter: `all`,
+      fcIndex: 0,
+      fcFlipped: false,
+      fcMastered: [],
+      quizAnswers: {}
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        // Ignorer silencieusement hors hôte
+      }
+      updateGlobalProgress();
+    }
+
+    function updateGlobalProgress() {
+      const tpDone = appState.tpChecked.filter(Boolean).length;
+      const fcDone = appState.fcMastered.length;
+      const qDone = Object.keys(appState.quizAnswers).length;
+      const total = TP_CHECKLIST_ITEMS.length + FLASHCARDS_DATA.length + QUIZ_DATA.length;
+      const pct = Math.round(((tpDone + fcDone + qDone) / total) * 100);
+      const tag = document.getElementById(`global-progress-tag`);
+      if (tag) tag.textContent = `Progression atelier : ${pct}%`;
+    }
+
+    /* ======================== NAVIGATION & UTILITAIRES ======================== */
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: `smooth` });
+    }
+
+    function setStatusBanner(msg) {
+      const banner = document.getElementById(`status-banner`);
+      if (banner) banner.textContent = msg;
+    }
+
+    function exportProgressReport() {
+      const tpDone = appState.tpChecked.filter(Boolean).length;
+      const qAnswered = Object.keys(appState.quizAnswers).length;
+      let qCorrect = 0;
+      QUIZ_DATA.forEach(function (q, idx) {
+        if (appState.quizAnswers[idx] === q.correct) qCorrect++;
+      });
+
+      const lines = [
+        `BILAN PÉDAGOGIQUE TMMI 2E ANNÉE — PROGRAMMATION BIOS CH341A`,
+        `================================================================`,
+        `Date d'export : ${new Date().toLocaleDateString('fr-FR')}`,
+        ``,
+        `1. GRILLE DE SUIVI TP (${tpDone} / ${TP_CHECKLIST_ITEMS.length} étapes validées)`
+      ];
+      TP_CHECKLIST_ITEMS.forEach(function (item, idx) {
+        lines.push(`  [${appState.tpChecked[idx] ? 'X' : ' '}] ${item}`);
+      });
+      lines.push(``);
+      lines.push(`2. FLASHCARDS DE RÉVISION : ${appState.fcMastered.length} / ${FLASHCARDS_DATA.length} maîtrisées`);
+      lines.push(`3. QUIZ D'ÉVALUATION TMMI : ${qCorrect} / ${QUIZ_DATA.length} bonnes réponses (${qAnswered} question(s) traitée(s))`);
+
+      const content = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `bilan_tp_ch341a_tmmi.txt`
+        });
+        setStatusBanner(`Bilan exporté : bilan_tp_ch341a_tmmi.txt`);
+      } else {
+        setStatusBanner(`Export prêt (${qCorrect}/${QUIZ_DATA.length} au quiz, ${tpDone}/${TP_CHECKLIST_ITEMS.length} étapes TP).`);
+      }
+    }
+
+    async function resetAllProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Cliquer à nouveau pour confirmer`;
+        setStatusBanner(`Confirmation requise pour réinitialiser la progression.`);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.innerHTML = `<i data-lucide="rotate-ccw" aria-hidden="true"></i><span>Réinitialiser la progression</span>`;
+      if (window.lucide) window.lucide.createIcons();
+
+      appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      await persistState();
+      renderAllViews();
+      setStatusBanner(`Progression réinitialisée.`);
+    }
+
+    /* ======================== SYNTHÈSE A : BROCHE 1 & ZIF ======================== */
+    function setPinDiagramView(view) {
+      appState.pinDiagramView = view;
+      const tabs = { chip: `tab-pin-1`, clip: `tab-pin-2`, zif: `tab-pin-3` };
+      Object.keys(tabs).forEach(function (k) {
+        const el = document.getElementById(tabs[k]);
+        if (el) {
+          el.classList.toggle(`is-active`, k === view);
+          el.setAttribute(`aria-selected`, k === view ? `true` : `false`);
+        }
+      });
+      const zifControls = document.getElementById(`zif-test-controls`);
+      if (zifControls) zifControls.style.display = view === `zif` ? `block` : `none`;
+
+      renderPinDiagram();
+      persistState();
+    }
+
+    function setZifSlotMode(mode) {
+      appState.zifSlotMode = mode;
+      renderPinDiagram();
+      persistState();
+    }
+
+    function selectPin(pinNum) {
+      appState.selectedPin = pinNum;
+      const buttons = document.querySelectorAll(`.pin-btn`);
+      buttons.forEach(function (btn) {
+        btn.classList.toggle(`is-selected`, Number(btn.dataset.pin) === pinNum);
+      });
+
+      const info = PIN_DATA[pinNum];
+      const titleEl = document.getElementById(`pin-detail-title`);
+      const descEl = document.getElementById(`pin-detail-desc`);
+      const ruleEl = document.getElementById(`pin-detail-rule`);
+      if (info && titleEl && descEl && ruleEl) {
+        titleEl.textContent = info.title;
+        descEl.textContent = info.desc;
+        ruleEl.innerHTML = `<i data-lucide="check-circle-2" aria-hidden="true"></i><div><strong>Point de contrôle :</strong> ${info.rule}</div>`;
+        if (window.lucide) window.lucide.createIcons();
+      }
+      renderPinDiagram();
+      persistState();
+    }
+
+    function renderPinDiagram() {
+      const svg = document.getElementById(`svg-pinout`);
+      const caption = document.getElementById(`pin-diagram-caption`);
+      const status = document.getElementById(`pin-diagram-status`);
+      if (!svg || !caption || !status) return;
+
+      const view = appState.pinDiagramView;
+      const sel = appState.selectedPin;
+
+      if (view === `chip`) {
+        caption.textContent = `Vue 1/3 · Boîtier SOIC8 / SOP8 (sens de numérotation anti-horaire)`;
+        status.className = `tag tag-ok`;
+        status.textContent = `Repère : Point gravé = Broche 1`;
+
+        const leftPins = [1, 2, 3, 4];
+        const rightPins = [8, 7, 6, 5];
+        const names = { 1: `/CS`, 2: `DO`, 3: `/WP`, 4: `GND`, 5: `DI`, 6: `CLK`, 7: `/HOLD`, 8: `VCC` };
+
+        let markup = `
+          <rect x="20" y="20" width="520" height="280" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <text x="36" y="46" font-family="var(--font-label)" font-size="12" fill="var(--on-surface-variant)">CARTE MÈRE · EMPREINTE SOIC8</text>
+          <rect x="200" y="75" width="160" height="190" fill="var(--pcb-chip)" stroke="var(--outline)" stroke-width="2"/>
+          <path d="M 262 75 A 18 18 0 0 0 298 75" fill="none" stroke="var(--pin-metal)" stroke-width="2"/>
+          <circle cx="222" cy="102" r="9" fill="var(--error)" stroke="var(--on-error)" stroke-width="1.5"/>
+          <text x="280" y="165" text-anchor="middle" font-family="var(--font-label)" font-size="14" font-weight="600" fill="var(--terminal-fg)">25Q64 / 25U</text>
+          <text x="280" y="185" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--terminal-muted)">EEPROM SPI</text>
+        `;
+
+        leftPins.forEach(function (p, i) {
+          const y = 95 + i * 44;
+          const active = sel === p;
+          const fill = active ? `var(--primary)` : (p === 1 ? `var(--error)` : `var(--pin-metal)`);
+          markup += `
+            <rect x="166" y="${y}" width="34" height="16" fill="${fill}" stroke="var(--on-surface)" stroke-width="1"/>
+            <text x="156" y="${y + 12}" text-anchor="end" font-family="var(--font-label)" font-size="12" font-weight="600" fill="${active ? 'var(--primary)' : 'var(--on-surface)'}">Pin ${p} (${names[p]})</text>
+          `;
+        });
+
+        rightPins.forEach(function (p, i) {
+          const y = 95 + i * 44;
+          const active = sel === p;
+          const fill = active ? `var(--primary)` : `var(--pin-metal)`;
+          markup += `
+            <rect x="360" y="${y}" width="34" height="16" fill="${fill}" stroke="var(--on-surface)" stroke-width="1"/>
+            <text x="404" y="${y + 12}" text-anchor="start" font-family="var(--font-label)" font-size="12" font-weight="600" fill="${active ? 'var(--primary)' : 'var(--on-surface)'}">Pin ${p} (${names[p]})</text>
+          `;
+        });
+
+        markup += `
+          <line x1="222" y1="102" x2="100" y2="282" stroke="var(--error)" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="36" y="286" font-family="var(--font-label)" font-size="11" fill="var(--error)">DÉTROMPEUR : POINT EN CREUX = PIN 1</text>
+        `;
+        svg.innerHTML = markup;
+      } else if (view === `clip`) {
+        caption.textContent = `Vue 2/3 · Pose de la pince SOIC8 et orientation du câble plat`;
+        status.className = `tag tag-ok`;
+        status.textContent = `Alignement : Fil rouge sur Broche 1`;
+
+        svg.innerHTML = `
+          <rect x="20" y="20" width="520" height="280" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <text x="36" y="46" font-family="var(--font-label)" font-size="12" fill="var(--on-surface-variant)">RACCORDEMENT PINCE SOIC8 → CONVERTISSEUR 8-PIN</text>
+
+          <!-- Nappe de fils -->
+          <line x1="90" y1="120" x2="215" y2="120" stroke="var(--error)" stroke-width="5"/>
+          <line x1="90" y1="138" x2="215" y2="138" stroke="var(--pin-metal)" stroke-width="3"/>
+          <line x1="90" y1="154" x2="215" y2="154" stroke="var(--pin-metal)" stroke-width="3"/>
+          <line x1="90" y1="170" x2="215" y2="170" stroke="var(--pin-metal)" stroke-width="3"/>
+          <line x1="90" y1="186" x2="215" y2="186" stroke="var(--pin-metal)" stroke-width="3"/>
+          <line x1="90" y1="202" x2="215" y2="202" stroke="var(--pin-metal)" stroke-width="3"/>
+          <line x1="90" y1="218" x2="215" y2="218" stroke="var(--pin-metal)" stroke-width="3"/>
+          <line x1="90" y1="234" x2="215" y2="234" stroke="var(--pin-metal)" stroke-width="3"/>
+
+          <!-- Pince SOIC8 -->
+          <rect x="215" y="102" width="120" height="150" fill="var(--pcb-body)" stroke="var(--on-surface)" stroke-width="2"/>
+          <circle cx="242" cy="120" r="8" fill="var(--error)"/>
+          <text x="275" y="168" text-anchor="middle" font-family="var(--font-label)" font-size="12" fill="var(--terminal-fg)">PINCE SOIC8</text>
+          <text x="275" y="186" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--terminal-muted)">In-circuit</text>
+
+          <!-- Convertisseur 8 broches -->
+          <rect x="395" y="102" width="115" height="150" fill="var(--surface-container-high)" stroke="var(--on-surface)" stroke-width="2"/>
+          <rect x="335" y="116" width="60" height="8" fill="var(--error)"/>
+          <text x="452" y="166" text-anchor="middle" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--on-surface)">ADAPTATEUR</text>
+          <text x="452" y="184" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)">8-Pin (1 sur rouge)</text>
+
+          <rect x="36" y="70" width="170" height="28" fill="var(--error-container)" stroke="var(--error)" stroke-width="1"/>
+          <text x="46" y="88" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--error)">FIL ROUGE = BROCHE 1</text>
+          <text x="36" y="280" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)">Vérifier la correspondance du chiffre "1" sur l'adaptateur 8-Pin.</text>
+        `;
+      } else {
+        const isOk = appState.zifSlotMode === `25spi`;
+        caption.textContent = `Vue 3/3 · Support ZIF 16 broches du CH341A (2 zones distinctes)`;
+        status.className = isOk ? `tag tag-ok` : `tag tag-err`;
+        status.textContent = isOk ? `Correct : Zone 25 SPI BIOS, Pin 1 côté levier` : `ERREUR : Zone 24 EEPROM réservée aux puces I2C`;
+
+        const box25Fill = isOk ? `var(--positive-container)` : `var(--surface-container-low)`;
+        const box25Stroke = isOk ? `var(--positive)` : `var(--outline-variant)`;
+        const box24Fill = !isOk ? `var(--error-container)` : `var(--surface-container-low)`;
+        const box24Stroke = !isOk ? `var(--error)` : `var(--outline-variant)`;
+
+        svg.innerHTML = `
+          <rect x="20" y="20" width="520" height="280" fill="var(--background)" stroke="var(--outline-variant)" stroke-width="1"/>
+          <text x="36" y="46" font-family="var(--font-label)" font-size="12" fill="var(--on-surface-variant)">PROGRAMMATEUR USB CH341A · SUPPORT ZIF</text>
+
+          <!-- Corps CH341A -->
+          <rect x="110" y="72" width="340" height="190" fill="var(--pcb-body)" stroke="var(--on-surface)" stroke-width="2"/>
+          <!-- Port USB -->
+          <rect x="450" y="132" width="44" height="70" fill="var(--pin-metal)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="472" y="171" text-anchor="middle" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--on-surface)">USB</text>
+
+          <!-- Levier ZIF à gauche -->
+          <rect x="122" y="138" width="22" height="60" fill="var(--pin-metal)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <circle cx="133" cy="148" r="5" fill="var(--error)"/>
+          <text x="133" y="218" text-anchor="middle" font-family="var(--font-label)" font-size="10" fill="var(--terminal-fg)">LEVIER</text>
+          <text x="133" y="232" text-anchor="middle" font-family="var(--font-label)" font-size="10" fill="var(--terminal-err)">PIN 1</text>
+
+          <!-- Zone 24 EEPROM (haut) -->
+          <rect x="170" y="92" width="160" height="66" fill="${box24Fill}" stroke="${box24Stroke}" stroke-width="2"/>
+          <text x="250" y="122" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">24 EEPROM (I2C)</text>
+          <text x="250" y="140" text-anchor="middle" font-family="var(--font-label)" font-size="10" fill="var(--on-surface-variant)">Ne pas utiliser pour BIOS SPI</text>
+
+          <!-- Zone 25 SPI BIOS (bas) -->
+          <rect x="170" y="174" width="160" height="68" fill="${box25Fill}" stroke="${box25Stroke}" stroke-width="2"/>
+          <circle cx="184" cy="190" r="6" fill="var(--error)"/>
+          <text x="250" y="205" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">25 SPI BIOS</text>
+          <text x="250" y="223" text-anchor="middle" font-family="var(--font-label)" font-size="10" fill="var(--on-surface-variant)">Pin 1 orienté côté levier</text>
+
+          <!-- LEDs -->
+          <circle cx="402" cy="105" r="7" fill="var(--error)"/>
+          <text x="390" y="109" text-anchor="end" font-family="var(--font-label)" font-size="10" fill="var(--terminal-fg)">LED PWR</text>
+          <circle cx="402" cy="130" r="7" fill="var(--terminal-ok)"/>
+          <text x="390" y="134" text-anchor="end" font-family="var(--font-label)" font-size="10" fill="var(--terminal-fg)">LED R/W</text>
+
+          <text x="36" y="286" font-family="var(--font-label)" font-size="11" fill="${isOk ? 'var(--positive)' : 'var(--error)'}">
+            ${isOk ? 'VALIDATION : Adaptateur inséré sur 25 SPI BIOS, broche 1 côté levier.' : 'ALERTE : Emplacement 24 EEPROM sélectionné — aucune puce BIOS SPI ne répondra.'}
+          </text>
+        `;
+      }
+    }
+
+    /* ======================== SYNTHÈSE B : TENSIONS 3.3V / 1.8V ======================== */
+    function setVoltageMode(mode) {
+      appState.voltageMode = mode;
+
+      const b33 = document.getElementById(`btn-volt-33`);
+      const b18 = document.getElementById(`btn-volt-18`);
+      const bdg = document.getElementById(`btn-volt-danger`);
+      if (b33) b33.className = mode === `3.3v` ? `btn btn-primary` : `btn btn-secondary`;
+      if (b18) b18.className = mode === `1.8v` ? `btn btn-primary` : `btn btn-secondary`;
+      if (bdg) bdg.className = mode === `danger` ? `btn btn-primary` : `btn btn-danger`;
+
+      const svg = document.getElementById(`svg-voltage`);
+      const fb = document.getElementById(`voltage-feedback`);
+      if (!svg || !fb) return;
+
+      if (mode === `3.3v`) {
+        svg.innerHTML = `
+          <rect x="20" y="55" width="130" height="90" fill="var(--background)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="85" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">PC LABO</text>
+          <text x="85" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)">Port USB 5V</text>
+
+          <line x1="150" y1="100" x2="210" y2="100" stroke="var(--primary)" stroke-width="3"/>
+
+          <rect x="210" y="55" width="160" height="90" fill="var(--background)" stroke="var(--primary)" stroke-width="2"/>
+          <text x="290" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">CH341A ZIF</text>
+          <text x="290" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--primary)">Sortie native 3.3V</text>
+
+          <line x1="370" y1="100" x2="470" y2="100" stroke="var(--positive)" stroke-width="3"/>
+          <text x="420" y="88" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--positive)">3.3V DIRECT</text>
+
+          <rect x="470" y="55" width="160" height="90" fill="var(--background)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="550" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">PINCE SOIC8</text>
+          <text x="550" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)">Fil rouge sur Pin 1</text>
+
+          <line x1="630" y1="100" x2="690" y2="100" stroke="var(--positive)" stroke-width="3"/>
+
+          <rect x="690" y="55" width="165" height="90" fill="var(--positive-container)" stroke="var(--positive)" stroke-width="2"/>
+          <text x="772" y="94" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--positive)">W25Q64.V (3.3V)</text>
+          <text x="772" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface)">Tension conforme</text>
+        `;
+        fb.className = `notice notice-ok`;
+        fb.innerHTML = `<i data-lucide="check-circle-2" aria-hidden="true"></i><div><strong>Montage 3.3V conforme :</strong> La majorité des puces 25Qxx standard fonctionnent en 3.3V. Le raccordement direct sur la section 25 SPI BIOS du CH341A est nominal.</div>`;
+      } else if (mode === `1.8v`) {
+        svg.innerHTML = `
+          <rect x="16" y="55" width="110" height="90" fill="var(--background)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="71" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">PC LABO</text>
+          <text x="71" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)">USB 5V</text>
+
+          <line x1="126" y1="100" x2="164" y2="100" stroke="var(--primary)" stroke-width="3"/>
+
+          <rect x="164" y="55" width="136" height="90" fill="var(--background)" stroke="var(--primary)" stroke-width="2"/>
+          <text x="232" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">CH341A</text>
+          <text x="232" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--primary)">3.3V natif</text>
+
+          <line x1="300" y1="100" x2="342" y2="100" stroke="var(--primary)" stroke-width="3"/>
+
+          <rect x="342" y="45" width="166" height="110" fill="var(--primary-container)" stroke="var(--primary)" stroke-width="2.5"/>
+          <text x="425" y="90" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-primary-container)">ADAPTATEUR 1.8V</text>
+          <text x="425" y="110" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-primary-container)">Régulation 3.3V → 1.8V</text>
+          <text x="425" y="130" text-anchor="middle" font-family="var(--font-label)" font-size="10" fill="var(--on-primary-container)">OBLIGATOIRE</text>
+
+          <line x1="508" y1="100" x2="554" y2="100" stroke="var(--positive)" stroke-width="3"/>
+
+          <rect x="554" y="55" width="126" height="90" fill="var(--background)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="617" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">PINCE SOIC8</text>
+          <text x="617" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)">1.8V régulé</text>
+
+          <line x1="680" y1="100" x2="718" y2="100" stroke="var(--positive)" stroke-width="3"/>
+
+          <rect x="718" y="55" width="146" height="90" fill="var(--positive-container)" stroke="var(--positive)" stroke-width="2"/>
+          <text x="791" y="94" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--positive)">MX25U (1.8V)</text>
+          <text x="791" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface)">Protégée</text>
+        `;
+        fb.className = `notice notice-ok`;
+        fb.innerHTML = `<i data-lucide="shield-check" aria-hidden="true"></i><div><strong>Montage 1.8V sécurisé :</strong> L'adaptateur abaisseur est intercalé entre le ZIF du CH341A et l'adaptateur de la pince SOIC8. La datasheet est respectée.</div>`;
+      } else {
+        svg.innerHTML = `
+          <rect x="20" y="55" width="130" height="90" fill="var(--background)" stroke="var(--on-surface)" stroke-width="1.5"/>
+          <text x="85" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">PC LABO</text>
+          <text x="85" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--on-surface-variant)">Port USB 5V</text>
+
+          <line x1="150" y1="100" x2="210" y2="100" stroke="var(--error)" stroke-width="3"/>
+
+          <rect x="210" y="55" width="160" height="90" fill="var(--background)" stroke="var(--error)" stroke-width="2"/>
+          <text x="290" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">CH341A ZIF</text>
+          <text x="290" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--error)">Envoie 3.3V !</text>
+
+          <line x1="370" y1="100" x2="470" y2="100" stroke="var(--error)" stroke-width="3.5" stroke-dasharray="6 4"/>
+          <text x="420" y="86" text-anchor="middle" font-family="var(--font-label)" font-size="11" font-weight="600" fill="var(--error)">SURTENSION +1.5V</text>
+
+          <rect x="470" y="55" width="160" height="90" fill="var(--background)" stroke="var(--error)" stroke-width="1.5"/>
+          <text x="550" y="96" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--on-surface)">PINCE SOIC8</text>
+          <text x="550" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--error)">Sans adaptateur 1.8V</text>
+
+          <line x1="630" y1="100" x2="690" y2="100" stroke="var(--error)" stroke-width="3.5"/>
+
+          <rect x="690" y="55" width="165" height="90" fill="var(--error-container)" stroke="var(--error)" stroke-width="2.5"/>
+          <text x="772" y="94" text-anchor="middle" font-family="var(--font-label)" font-size="12" font-weight="600" fill="var(--error)">MX25U (1.8V)</text>
+          <text x="772" y="114" text-anchor="middle" font-family="var(--font-label)" font-size="11" fill="var(--error)">SURCHAUFFE / GRILLÉE</text>
+        `;
+        fb.className = `notice notice-err`;
+        fb.innerHTML = `<i data-lucide="alert-triangle" aria-hidden="true"></i><div><strong>DANGER MATÉRIEL :</strong> Injecter du 3.3V dans une EEPROM de 1.8V provoque un échauffement brutal et détruit la puce. Débranchez immédiatement le câble USB et intercalez l'adaptateur 1.8V.</div>`;
+      }
+
+      if (window.lucide) window.lucide.createIcons();
+      persistState();
+    }
+
+    /* ======================== SIMULATEUR TERMINAL FLASHROM ======================== */
+    function runFlashromStep(stepName) {
+      const term = document.getElementById(`terminal-output`);
+      if (!term) return;
+
+      const stage = appState.terminalStage;
+
+      if (stepName === `detect`) {
+        appState.terminalStage = Math.max(stage, 1);
+        appendTermLines([
+          `<div class="term-line term-cmd">poste-tmmi@kali-atelier:~/bios_tp$ sudo flashrom -p ch341a_spi</div>`,
+          `<div class="term-line term-muted">flashrom v1.3.0 on Linux 6.6 (x86_64)</div>`,
+          `<div class="term-line term-ok">Found Winbond flash chip "W25Q64.V" (8192 kB, SPI) on ch341a_spi.</div>`,
+          `<div class="term-line term-muted">No operations were specified. Puce prête pour extraction.</div>`
+        ]);
+      } else if (stepName === `dump1`) {
+        if (stage < 1) {
+          appendTermLines([`<div class="term-line term-warn">[AVERTISSEMENT] Exécutez d'abord l'étape A (détection) pour identifier la puce.</div>`]);
+          return;
+        }
+        appState.terminalStage = Math.max(stage, 2);
+        appendTermLines([
+          `<div class="term-line term-cmd">poste-tmmi@kali-atelier:~/bios_tp$ sudo flashrom -p ch341a_spi -r backup_original_1.bin</div>`,
+          `<div class="term-line term-muted">Reading flash... done.</div>`,
+          `<div class="term-line term-ok">[OK] Sauvegarde #1 enregistrée : backup_original_1.bin (8 388 608 octets).</div>`
+        ]);
+      } else if (stepName === `dump2`) {
+        if (stage < 2) {
+          appendTermLines([`<div class="term-line term-warn">[AVERTISSEMENT] Réalisez d'abord le premier dump (Étape B1).</div>`]);
+          return;
+        }
+        appState.terminalStage = Math.max(stage, 3);
+        appendTermLines([
+          `<div class="term-line term-cmd">poste-tmmi@kali-atelier:~/bios_tp$ sudo flashrom -p ch341a_spi -r backup_original_2.bin &amp;&amp; md5sum backup_original_*.bin</div>`,
+          `<div class="term-line term-muted">Reading flash... done.</div>`,
+          `<div class="term-line term-ok">e4d909c290d0fb1ca068ffaddf22cbd0  backup_original_1.bin</div>`,
+          `<div class="term-line term-ok">e4d909c290d0fb1ca068ffaddf22cbd0  backup_original_2.bin</div>`,
+          `<div class="term-line term-ok">[RÈGLE D'OR VALIDÉE] Empreintes MD5 strictement identiques : lecture stable.</div>`
+        ]);
+      } else if (stepName === `erase`) {
+        if (stage < 3) {
+          appendTermLines([
+            `<div class="term-line term-err">[BLOCAGE SÉCURITÉ TMMI] Effacement refusé ! Vous devez d'abord extraire et comparer DEUX dumps de sauvegarde (Étapes B1 et B2) avant d'écraser le BIOS d'origine.</div>`
+          ]);
+          return;
+        }
+        appState.terminalStage = Math.max(stage, 4);
+        appendTermLines([
+          `<div class="term-line term-cmd">poste-tmmi@kali-atelier:~/bios_tp$ sudo flashrom -p ch341a_spi -E</div>`,
+          `<div class="term-line term-muted">Erasing and writing flash chip... Erase/write done.</div>`,
+          `<div class="term-line term-ok">[OK] Mémoire EEPROM vierge (0xFF sur toute la plage).</div>`
+        ]);
+      } else if (stepName === `write`) {
+        if (stage < 4) {
+          appendTermLines([
+            `<div class="term-line term-warn">[AVERTISSEMENT] Veuillez effacer la puce (Étape C) après double sauvegarde avant d'écrire le nouveau firmware.</div>`
+          ]);
+          return;
+        }
+        appState.terminalStage = 5;
+        appendTermLines([
+          `<div class="term-line term-cmd">poste-tmmi@kali-atelier:~/bios_tp$ sudo flashrom -p ch341a_spi -w nouveau_bios.bin</div>`,
+          `<div class="term-line term-muted">Erasing and writing flash chip... Erase/write done.</div>`,
+          `<div class="term-line term-ok">Verifying flash... VERIFIED.</div>`,
+          `<div class="term-line term-ok">[SUCCÈS] Flashage matériel validé bit à bit. Vous pouvez débrancher le CH341A.</div>`
+        ]);
+      }
+
+      updateTerminalUI();
+      persistState();
+    }
+
+    function appendTermLines(htmlArray) {
+      const term = document.getElementById(`terminal-output`);
+      if (!term) return;
+      term.insertAdjacentHTML(`beforeend`, htmlArray.join(``));
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function updateTerminalUI() {
+      const s = appState.terminalStage;
+      const steps = [
+        { id: `detect`, req: 1 },
+        { id: `dump1`, req: 2 },
+        { id: `dump2`, req: 3 },
+        { id: `erase`, req: 4 },
+        { id: `write`, req: 5 }
+      ];
+      steps.forEach(function (st, idx) {
+        const btn = document.getElementById(`fstep-${st.id}`);
+        const badge = document.getElementById(`fbadge-${st.id}`);
+        if (!btn || !badge) return;
+        btn.classList.remove(`is-done`, `is-current`);
+        badge.className = `tag`;
+        if (s >= st.req) {
+          btn.classList.add(`is-done`);
+          badge.classList.add(`tag-ok`);
+          badge.textContent = `Validée`;
+        } else if (s === idx) {
+          btn.classList.add(`is-current`);
+          badge.textContent = `À exécuter`;
+        } else {
+          badge.textContent = `En attente`;
+        }
+      });
+    }
+
+    function resetTerminalSim() {
+      appState.terminalStage = 0;
+      const term = document.getElementById(`terminal-output`);
+      if (term) {
+        term.innerHTML = `<div class="term-line term-muted">poste-tmmi@kali-atelier:~/bios_tp$ # Session réinitialisée. Cliquez sur l'étape A pour détecter la puce.</div>`;
+      }
+      updateTerminalUI();
+      persistState();
+    }
+
+    /* ======================== MATRICE DE DÉPANNAGE & TP ======================== */
+    function filterTroubleshooting(cat) {
+      appState.troubleFilter = cat;
+      const btns = document.querySelectorAll(`[data-tfilter]`);
+      btns.forEach(function (b) {
+        b.className = b.dataset.tfilter === cat ? `btn btn-primary` : `btn btn-ghost`;
+      });
+
+      const visible = TROUBLESHOOTING_DATA.filter(function (item) {
+        return cat === `all` || item.category === cat;
+      });
+      if (visible.length > 0 && !visible.some(function (i) { return i.id === appState.selectedTroubleId; })) {
+        appState.selectedTroubleId = visible[0].id;
+      }
+      renderTroubleshooting();
+      persistState();
+    }
+
+    function selectTroubleItem(id) {
+      appState.selectedTroubleId = id;
+      renderTroubleshooting();
+      persistState();
+    }
+
+    function renderTroubleshooting() {
+      const listEl = document.getElementById(`symptom-list`);
+      const detailEl = document.getElementById(`symptom-detail`);
+      if (!listEl || !detailEl) return;
+
+      const visible = TROUBLESHOOTING_DATA.filter(function (item) {
+        return appState.troubleFilter === `all` || item.category === appState.troubleFilter;
+      });
+
+      listEl.innerHTML = visible.map(function (item) {
+        const active = item.id === appState.selectedTroubleId;
+        return `
+          <button type="button" class="symptom-btn ${active ? 'is-active' : ''}" onclick="selectTroubleItem('${item.id}')">
+            <span class="label-mono">${item.catLabel}</span>
+            <strong>${item.symptom}</strong>
+          </button>
+        `;
+      }).join(``);
+
+      const current = TROUBLESHOOTING_DATA.find(function (i) { return i.id === appState.selectedTroubleId; }) || visible[0];
+      if (current) {
+        detailEl.innerHTML = `
+          <span class="label-mono">${current.catLabel} · Fiche de résolution atelier</span>
+          <h3 class="sub-title" style="margin-top: var(--space-xs);">${current.symptom}</h3>
+          <div class="divided-list">
+            <div>
+              <span class="label-mono">Cause probable</span>
+              <p style="margin-top: var(--space-xs); margin-bottom: 0;">${current.cause}</p>
+            </div>
+            <div>
+              <span class="label-mono">Réflexe immédiat</span>
+              <div class="notice notice-warn" style="margin-top: var(--space-xs);">
+                <i data-lucide="alert-circle" aria-hidden="true"></i>
+                <div>${current.reflex}</div>
+              </div>
+            </div>
+            <div>
+              <span class="label-mono">Solution technique en atelier</span>
+              <p style="margin-top: var(--space-xs); margin-bottom: 0;">${current.solution}</p>
+            </div>
+          </div>
+        `;
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+
+    function toggleTpCheck(idx) {
+      appState.tpChecked[idx] = !appState.tpChecked[idx];
+      renderTpChecklist();
+      persistState();
+    }
+
+    function renderTpChecklist() {
+      const container = document.getElementById(`tp-checklist-container`);
+      const countEl = document.getElementById(`tp-checklist-count`);
+      if (!container || !countEl) return;
+
+      const doneCount = appState.tpChecked.filter(Boolean).length;
+      countEl.textContent = `${doneCount} / ${TP_CHECKLIST_ITEMS.length} validées`;
+      countEl.className = doneCount === TP_CHECKLIST_ITEMS.length ? `tag tag-ok` : `tag`;
+
+      container.innerHTML = TP_CHECKLIST_ITEMS.map(function (label, idx) {
+        const checked = !!appState.tpChecked[idx];
+        return `
+          <label class="checklist-row">
+            <input type="checkbox" ${checked ? `checked` : ``} onchange="toggleTpCheck(${idx})">
+            <span>${label}</span>
+          </label>
+        `;
+      }).join(``);
+    }
+
+    /* ======================== FLASHCARDS ======================== */
+    function getFilteredFlashcards() {
+      return FLASHCARDS_DATA.filter(function (c) {
+        return appState.fcFilter === `all` || c.theme === appState.fcFilter;
+      });
+    }
+
+    function setFlashcardFilter(filter) {
+      appState.fcFilter = filter;
+      appState.fcIndex = 0;
+      appState.fcFlipped = false;
+
+      document.querySelectorAll(`[data-fcfilter]`).forEach(function (b) {
+        b.className = b.dataset.fcfilter === filter ? `btn btn-primary` : `btn btn-ghost`;
+      });
+
+      renderFlashcard();
+      persistState();
+    }
+
+    function flipFlashcard() {
+      appState.fcFlipped = !appState.fcFlipped;
+      renderFlashcard();
+    }
+
+    function prevFlashcard() {
+      const list = getFilteredFlashcards();
+      if (list.length === 0) return;
+      appState.fcIndex = (appState.fcIndex - 1 + list.length) % list.length;
+      appState.fcFlipped = false;
+      renderFlashcard();
+      persistState();
+    }
+
+    function nextFlashcard() {
+      const list = getFilteredFlashcards();
+      if (list.length === 0) return;
+      appState.fcIndex = (appState.fcIndex + 1) % list.length;
+      appState.fcFlipped = false;
+      renderFlashcard();
+      persistState();
+    }
+
+    function toggleFlashcardMastery() {
+      const list = getFilteredFlashcards();
+      if (list.length === 0) return;
+      const card = list[appState.fcIndex];
+      const pos = appState.fcMastered.indexOf(card.id);
+      if (pos === -1) {
+        appState.fcMastered.push(card.id);
+      } else {
+        appState.fcMastered.splice(pos, 1);
+      }
+      renderFlashcard();
+      persistState();
+    }
+
+    function renderFlashcard() {
+      const list = getFilteredFlashcards();
+      const counter = document.getElementById(`fc-counter`);
+      const statusTag = document.getElementById(`fc-status-tag`);
+      const cardBtn = document.getElementById(`fc-card-btn`);
+      const sideLabel = document.getElementById(`fc-side-label`);
+      const textEl = document.getElementById(`fc-card-text`);
+      const hintEl = document.getElementById(`fc-hint-label`);
+      const masterBtn = document.getElementById(`btn-fc-master`);
+      const masteryLabel = document.getElementById(`fc-mastery-label`);
+      if (!counter || !statusTag || !cardBtn || !sideLabel || !textEl || !hintEl || !masterBtn || !masteryLabel) return;
+
+      masteryLabel.textContent = `Maîtrisées : ${appState.fcMastered.length} / ${FLASHCARDS_DATA.length}`;
+
+      if (appState.fcIndex >= list.length) appState.fcIndex = 0;
+      const card = list[appState.fcIndex];
+      const isMastered = appState.fcMastered.indexOf(card.id) !== -1;
+
+      counter.textContent = `Carte ${appState.fcIndex + 1} sur ${list.length} · ${card.themeLabel}`;
+      statusTag.className = isMastered ? `tag tag-ok` : `tag`;
+      statusTag.textContent = isMastered ? `Maîtrisée` : `À réviser`;
+
+      cardBtn.classList.toggle(`is-back`, appState.fcFlipped);
+      if (appState.fcFlipped) {
+        sideLabel.textContent = `VERSO · RÉPONSE TECHNIQUE (Cliquer pour revenir à la question)`;
+        textEl.textContent = card.a;
+        hintEl.textContent = `Marquez cette notion comme maîtrisée si vous l'avez retenue.`;
+      } else {
+        sideLabel.textContent = `RECTO · QUESTION (Cliquer pour retourner)`;
+        textEl.textContent = card.q;
+        hintEl.textContent = `Appuyez ou cliquez sur la carte pour afficher la réponse.`;
+      }
+
+      masterBtn.innerHTML = isMastered
+        ? `<i data-lucide="rotate-ccw" aria-hidden="true"></i><span>Remettre à réviser</span>`
+        : `<i data-lucide="check" aria-hidden="true"></i><span>Marquer comme maîtrisée</span>`;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    /* ======================== QUIZ TMMI ======================== */
+    function answerQuiz(qIdx, optIdx) {
+      if (typeof appState.quizAnswers[qIdx] !== `undefined`) return;
+      appState.quizAnswers[qIdx] = optIdx;
+      renderQuiz();
+      persistState();
+    }
+
+    function resetQuiz(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Confirmer la réinitialisation du quiz`;
+        return;
+      }
+      appState.quizAnswers = {};
+      renderQuiz();
+      persistState();
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById(`quiz-container`);
+      const scoreTag = document.getElementById(`quiz-score-tag`);
+      const progBar = document.getElementById(`quiz-progress-bar`);
+      if (!container || !scoreTag || !progBar) return;
+
+      let answered = 0;
+      let correct = 0;
+
+      const html = QUIZ_DATA.map(function (item, qIdx) {
+        const userChoice = appState.quizAnswers[qIdx];
+        const isAnswered = typeof userChoice !== `undefined`;
+        if (isAnswered) {
+          answered++;
+          if (userChoice === item.correct) correct++;
+        }
+
+        const optsHtml = item.options.map(function (optText, oIdx) {
+          let cls = `quiz-option`;
+          if (isAnswered) {
+            if (oIdx === item.correct) cls += ` is-correct`;
+            else if (oIdx === userChoice) cls += ` is-wrong`;
+          }
+          const letter = [`A`, `B`, `C`, `D`][oIdx];
+          return `
+            <button type="button" class="${cls}" ${isAnswered ? `disabled` : ``} onclick="answerQuiz(${qIdx}, ${oIdx})">
+              <span class="label-mono" style="min-width: 1.5rem;">${letter}.</span>
+              <span>${optText}</span>
+            </button>
+          `;
+        }).join(``);
+
+        const fbHtml = isAnswered ? `
+          <div class="notice ${userChoice === item.correct ? 'notice-ok' : 'notice-err'}" style="margin-top: var(--space-sm);">
+            <i data-lucide="${userChoice === item.correct ? 'check-circle-2' : 'x-circle'}" aria-hidden="true"></i>
+            <div><strong>${userChoice === item.correct ? 'Exact.' : 'À revoir.'}</strong> ${item.explanation}</div>
+          </div>
+        ` : ``;
+
+        return `
+          <div style="padding-bottom: var(--space-lg); margin-bottom: var(--space-lg); border-bottom: var(--rule);">
+            <span class="label-mono">Question ${qIdx + 1} / ${QUIZ_DATA.length}</span>
+            <p style="font-weight: 600; margin-top: var(--space-xs); margin-bottom: var(--space-sm); max-width: 75ch;">${item.q}</p>
+            <div>${optsHtml}</div>
+            ${fbHtml}
+          </div>
+        `;
+      }).join(``);
+
+      scoreTag.textContent = `Score : ${correct} / ${QUIZ_DATA.length}`;
+      scoreTag.className = answered === QUIZ_DATA.length && correct >= 8 ? `tag tag-ok` : `tag`;
+      progBar.style.width = `${Math.round((answered / QUIZ_DATA.length) * 100)}%`;
+
+      const summaryHtml = `
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-md);">
+          <div>
+            <span class="label-mono">Bilan d'entraînement</span>
+            <div style="font-weight: 600; margin-top: var(--space-xs);">
+              ${answered === QUIZ_DATA.length
+                ? `Quiz terminé : ${correct} / ${QUIZ_DATA.length} bonnes réponses.`
+                : `${answered} question(s) complétée(s) sur ${QUIZ_DATA.length}.`}
+            </div>
+          </div>
+          <button type="button" class="btn btn-ghost" onclick="resetQuiz(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+            <span>Recommencer le quiz</span>
+          </button>
+        </div>
+      `;
+
+      container.innerHTML = html + summaryHtml;
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    /* ======================== INITIALISATION ======================== */
+    function renderAllViews() {
+      setPinDiagramView(appState.pinDiagramView);
+      selectPin(appState.selectedPin);
+      setVoltageMode(appState.voltageMode);
+      updateTerminalUI();
+      filterTroubleshooting(appState.troubleFilter);
+      renderTpChecklist();
+      setFlashcardFilter(appState.fcFilter);
+      renderQuiz();
+      updateGlobalProgress();
+    }
+
+    document.addEventListener(`DOMContentLoaded`, async function () {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), saved);
+          }
+        }
+      } catch (err) {
+        // Démarrage sur l'état par défaut
+      }
+
+      renderAllViews();
+      if (window.lucide) window.lucide.createIcons();
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+          window.notebookAppApi.notifyAppReady();
+        }
+      } catch (err) {
+        // Ignorer hors hôte
+      }
+    });
+  </script>
+</body>
+</html>

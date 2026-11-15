@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="carbon">
+  <title>L'Épopée du Stockage : De la Carte Perforée aux Puces 3D NAND</title>
+  
+  <!-- Polices Google Fonts recommandées pour le style Carbon -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Icônes Lucide -->
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces - Palette Carbon */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Semantic tokens */
+      --positive: #198038;
+      --warning: #b28600;
+      --focus: #0f62fe;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgba(0, 0, 0, 0.1);
+      --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* Narrative Typography Scale */
+      --display-size: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
+      --headline-size: clamp(1.6rem, 1.2rem + 1.5vw, 2.25rem);
+      --subhead-size: clamp(1.15rem, 1rem + 0.4vw, 1.35rem);
+      --body-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+      --label-size: 0.75rem;
+
+      /* Spacing Scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-2xl);
+      padding: var(--space-xl) var(--space-lg);
+      max-width: 1240px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Accessibility */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Carbon Typography & Components */
+    .headline-display {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      font-size: var(--display-size);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin: 0 0 var(--space-md) 0;
+    }
+    .headline-display strong {
+      font-weight: 600;
+      color: var(--on-surface);
+    }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      font-size: var(--headline-size);
+      line-height: 1.25;
+      margin: 0 0 var(--space-sm) 0;
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .section-title strong {
+      font-weight: 600;
+    }
+
+    .subhead {
+      font-size: var(--subhead-size);
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-lg) 0;
+      max-width: 75ch;
+      line-height: 1.5;
+    }
+
+    .label-mono {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+      display: inline-block;
+      margin-bottom: var(--space-xs);
+    }
+
+    .layer {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-lg);
+      border: 1px solid transparent;
+    }
+    .layer-nested {
+      background: var(--surface-container-high);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+    }
+
+    .key-tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-bottom: var(--indicator);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .key-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: 2.2rem;
+      line-height: 1.1;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0;
+    }
+    .key-value strong {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-size: 0.75rem;
+      font-family: var(--font-label);
+      padding: 0.2rem var(--space-sm);
+      border-radius: var(--rounded-full);
+      height: 24px;
+      font-weight: 500;
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 400;
+      height: 44px;
+      padding: 0 var(--space-lg);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      text-decoration: none;
+      border: none;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background: #0353e9;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    .btn-secondary:hover {
+      background: var(--primary-container);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--outline-variant);
+    }
+    .btn-ghost:hover {
+      background: var(--surface-container-high);
+    }
+    .btn-sm {
+      height: 32px;
+      padding: 0 var(--space-md);
+      font-size: 0.8125rem;
+    }
+
+    /* Inputs & Form Controls */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .form-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .form-input, .form-select {
+      height: 40px;
+      background: var(--surface-container-low);
+      border: none;
+      border-bottom: var(--field-rule);
+      border-radius: var(--rounded);
+      padding: 0 var(--space-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus {
+      outline: 2px solid var(--focus);
+    }
+    .form-range {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+      height: 6px;
+    }
+
+    /* Grids & Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-lg);
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-md);
+    }
+    .grid-split-3-9 {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .grid-split-3-9 { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .grid-2, .grid-4 { grid-template-columns: 1fr; }
+      .page-grid { padding: var(--space-md) var(--space-sm); gap: var(--space-xl); }
+    }
+
+    /* Callout & Notes */
+    .callout {
+      border-left: 3px solid var(--primary);
+      background: var(--surface-container);
+      padding: var(--space-md) var(--space-lg);
+      margin: var(--space-md) 0;
+    }
+    .callout-warning {
+      border-left-color: var(--warning);
+    }
+    .callout-success {
+      border-left-color: var(--tertiary);
+    }
+
+    /* Custom Interactive Elements */
+    .timeline-nav {
+      display: flex;
+      gap: var(--space-xs);
+      overflow-x: auto;
+      padding-bottom: var(--space-xs);
+      border-bottom: var(--rule);
+      scrollbar-width: thin;
+    }
+    .timeline-tab {
+      background: transparent;
+      border: none;
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-label);
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+      transition: color var(--dur-micro) var(--ease-out);
+    }
+    .timeline-tab:hover {
+      color: var(--on-surface);
+      background: var(--surface-container);
+    }
+    .timeline-tab.active {
+      color: var(--primary);
+      font-weight: 600;
+      border-bottom: var(--indicator);
+    }
+
+    /* Canvas Containers */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      background: #0e1117;
+      border-radius: var(--rounded);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Tables */
+    .carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .carbon-table th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: var(--space-sm) var(--space-md);
+      text-align: left;
+      border-bottom: var(--rule);
+      color: var(--on-surface);
+    }
+    .carbon-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      color: var(--on-surface);
+    }
+    .carbon-table tr:nth-child(even) {
+      background: var(--surface-container-low);
+    }
+    .carbon-table tr:hover {
+      background: var(--primary-container);
+    }
+
+    /* Quiz Styling */
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container);
+      border: 1px solid transparent;
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+      text-align: left;
+      width: 100%;
+    }
+    .quiz-option:hover {
+      background: var(--surface-container-high);
+    }
+    .quiz-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-container);
+    }
+    .quiz-option.correct {
+      border-color: var(--positive);
+      background: #defbe6;
+    }
+    .quiz-option.incorrect {
+      border-color: var(--error);
+      background: #fff1f1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-grid">
+
+  <!-- ========================================== -->
+  <!-- EN-TÊTE DU COURS & TITRE MAJEUR            -->
+  <!-- ========================================== -->
+  <header>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-sm);">
+      <span class="label-mono">Cours Magistral &middot; Architecture Matérielle &middot; 2026</span>
+      <span class="tag"><i data-lucide="cpu" style="width: 14px; height: 14px;"></i> Informatique Fondamentale</span>
+    </div>
+    <h1 class="headline-display">
+      L'Épopée du Stockage : <strong>De la Carte Perforée aux Puces 3D NAND</strong>
+    </h1>
+    <p class="subhead">
+      Une exploration didactique et interactive retraçant plus d'un siècle d'ingéniosité humaine : comment nous sommes passés de trous perforés dans du carton à des têtes magnétiques volant à quelques nanomètres d'un disque en rotation, puis au piégeage quantique des électrons.
+    </p>
+
+    <!-- Métriques Clés en Bandeau -->
+    <div class="grid-4" style="margin-top: var(--space-lg);">
+      <div class="key-tile">
+        <span class="label-mono">Facteur d'évolution</span>
+        <div class="key-value">&times; <strong>300M</strong></div>
+        <span style="font-size: 0.8125rem; color: var(--on-surface-variant);">Hausse de densité entre l'IBM RAMAC (1956) et un HDD moderne.</span>
+      </div>
+      <div class="key-tile">
+        <span class="label-mono">Espace tête-disque HDD</span>
+        <div class="key-value"><strong>5 à 10</strong> nm</div>
+        <span style="font-size: 0.8125rem; color: var(--on-surface-variant);">5 000 fois plus mince qu'un cheveu, porté par un coussin d'air.</span>
+      </div>
+      <div class="key-tile">
+        <span class="label-mono">Écart temporel d'accès</span>
+        <div class="key-value"><strong>30&nbsp;000&nbsp;000</strong> &times;</div>
+        <span style="font-size: 0.8125rem; color: var(--on-surface-variant);">Entre le registre processeur (0,33 ns) et le disque mécanique (10 ms).</span>
+      </div>
+      <div class="key-tile">
+        <span class="label-mono">Densité Flash 3D</span>
+        <div class="key-value">&gt; <strong>200</strong> couches</div>
+        <span style="font-size: 0.8125rem; color: var(--on-surface-variant);">Empilement vertical nanométrique de cellules à piège de charge (CTF).</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- SECTION 1 : FONDEMENTS DU STOCKAGE         -->
+  <!-- ========================================== -->
+  <section id="fondements">
+    <h2 class="section-title">01. <strong>Qu'est-ce que l'information physique ?</strong> Le Bit &amp; L'Octet</h2>
+    <p class="subhead">
+      Au cœur de tout ordinateur moderne ou antique se trouve un état bistable : une grandeur physique qui ne peut adopter que deux valeurs interprétées comme 0 ou 1.
+    </p>
+
+    <div class="grid-split-3-9">
+      <div class="layer">
+        <span class="label-mono">Principes Fondamentaux</span>
+        <h3 style="font-size: 1.15rem; margin-top: var(--space-xs); margin-bottom: var(--space-md); font-weight: 600;">Les Deux États Logiques</h3>
+        <p style="font-size: 0.9rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+          En électronique et en informatique, un <strong>bit</strong> (abréviation de <em>binary digit</em>) est la plus petite unité d'information :
+        </p>
+        <ul style="padding-left: var(--space-md); font-size: 0.875rem; margin-bottom: var(--space-md);">
+          <li><strong>0 logique :</strong> Absence de courant, trou absent, pôle Sud, cellule déchargée.</li>
+          <li><strong>1 logique :</strong> Courant passant, trou présent, pôle Nord, électrons piégés.</li>
+        </ul>
+        <p style="font-size: 0.9rem; color: var(--on-surface-variant);">
+          Un <strong>octet</strong> (ou <em>byte</em> en anglais) regroupe exactement <strong>8 bits</strong>, permettant de coder \(2^8 = 256\) valeurs distinctes (comme un caractère typographique ASCII standard).
+        </p>
+      </div>
+
+      <div class="layer">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-sm);">
+          <span class="label-mono">Calculateur Didactique d'Ordre de Grandeur</span>
+          <span class="tag">La métaphore des cartes</span>
+        </div>
+        <p style="font-size: 0.9375rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+          Pour matérialiser l'immensité des volumes modernes par rapport aux premiers supports physiques, choisissez un fichier du quotidien et découvrez son équivalent en <strong>cartes perforées IBM standard de 80 colonnes</strong> (soit 80 octets par carte).
+        </p>
+
+        <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: var(--space-md);">
+          <button class="btn btn-ghost btn-sm" onclick="setBitCalculatorPreset(5)">Photo HD (5 Mo)</button>
+          <button class="btn btn-ghost btn-sm" onclick="setBitCalculatorPreset(10)">Chanson MP3 (10 Mo)</button>
+          <button class="btn btn-ghost btn-sm" onclick="setBitCalculatorPreset(250)">Vidéo 4K 1 min (250 Mo)</button>
+          <button class="btn btn-ghost btn-sm" onclick="setBitCalculatorPreset(50000)">Jeu Récent (50 Go)</button>
+        </div>
+
+        <div class="form-group" style="margin-bottom: var(--space-md);">
+          <label class="form-label" for="calc-megabytes">Taille du fichier sélectionné : <span id="calc-size-display" style="font-family: var(--font-label); color: var(--primary); font-weight: 600;">10 Mo</span></label>
+          <input type="range" id="calc-megabytes" class="form-range" min="1" max="1000" value="10" oninput="updateBitCalculator(this.value)">
+        </div>
+
+        <div class="grid-3">
+          <div class="layer-nested">
+            <span class="label-mono">Nombre de Cartes</span>
+            <div id="res-cards" style="font-family: var(--font-label); font-size: 1.4rem; font-weight: 600; color: var(--primary);">125 000</div>
+            <span style="font-size: 0.8rem; color: var(--on-surface-variant);">cartes perforées de 80 octets</span>
+          </div>
+          <div class="layer-nested">
+            <span class="label-mono">Poids du Carton</span>
+            <div id="res-weight" style="font-family: var(--font-label); font-size: 1.4rem; font-weight: 600; color: var(--on-surface);">312,5 kg</div>
+            <span style="font-size: 0.8rem; color: var(--on-surface-variant);">environ 2,5 g par carte</span>
+          </div>
+          <div class="layer-nested">
+            <span class="label-mono">Hauteur de la Pile</span>
+            <div id="res-height" style="font-family: var(--font-label); font-size: 1.4rem; font-weight: 600; color: var(--on-surface);">21,8 m</div>
+            <span style="font-size: 0.8rem; color: var(--on-surface-variant);">un immeuble de 7 étages</span>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top: var(--space-md);">
+          <strong>Constat pédagogique :</strong> Ce qu'un minuscule smartphone ou une clé USB de quelques grammes stocke aujourd'hui en une fraction de seconde nécessitait autrefois des entrepôts entiers et des tonnes de papier !
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 2 : FRISE HISTORIQUE INTERACTIVE   -->
+  <!-- ========================================== -->
+  <section id="histoire">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <h2 class="section-title">02. <strong>Frise Chronologique :</strong> Les 8 Âges du Stockage</h2>
+      <span class="label-mono">1890 &mdash; 2026+</span>
+    </div>
+    <p class="subhead">
+      Explorez l'évolution des technologies de mémoire de masse : du carton perforé au stockage moléculaire, chaque saut technologique a résolu une contrainte de densité, de vitesse d'accès ou de fiabilité.
+    </p>
+
+    <!-- Filtres rapides -->
+    <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); flex-wrap: wrap;">
+      <span class="label-mono" style="align-self: center; margin-right: var(--space-sm);">Filtrer par nature :</span>
+      <button class="btn btn-sm btn-primary" id="filter-all" onclick="filterTimeline('all')">Tous les jalons (8)</button>
+      <button class="btn btn-sm btn-ghost" id="filter-mag" onclick="filterTimeline('mag')">Magnétique &amp; Mécanique</button>
+      <button class="btn btn-sm btn-ghost" id="filter-opt" onclick="filterTimeline('opt')">Optique Laser</button>
+      <button class="btn btn-sm btn-ghost" id="filter-elec" onclick="filterTimeline('elec')">Électronique &amp; Flash</button>
+    </div>
+
+    <!-- Onglets de la Frise -->
+    <div class="timeline-nav" id="timeline-tabs-container">
+      <!-- Rempli par JavaScript -->
+    </div>
+
+    <!-- Conteneur d'affichage de la fiche sélectionnée -->
+    <div id="timeline-detail-card" class="layer" style="margin-top: var(--space-md); border-top: var(--indicator);">
+      <!-- Contenu injecté dynamiquement -->
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 3 : HIÉRARCHIE MÉMOIRE & ANALOGIE -->
+  <!-- ========================================== -->
+  <section id="hierarchie">
+    <h2 class="section-title">03. <strong>La Hiérarchie Mémoire :</strong> L'Incroyable Analogie Spatiale</h2>
+    <p class="subhead">
+      Pourquoi un ordinateur ne possède-t-il pas qu'un seul type de mémoire ? Parce qu'aucun composant ne peut être simultanément ultra-rapide, gigantesque et économique. Pour comprendre les écarts de latence, visualisons-les en distances physiques (selon l'analogie de Branch Éducation : 1 nanoseconde = 20 centimètres).
+    </p>
+
+    <div class="grid-split-3-9">
+      <!-- Colonne Sélecteur d'Étage de Pyramide -->
+      <div class="layer" style="display: flex; flex-direction: column; gap: var(--space-xs);">
+        <span class="label-mono">La Pyramide des Mémoires</span>
+        <p style="font-size: 0.85rem; color: var(--on-surface-variant); margin-bottom: var(--space-sm);">
+          Cliquez sur un niveau pour inspecter sa technologie, sa latence et son équivalent spatial :
+        </p>
+        
+        <button class="quiz-option" id="pyr-btn-0" onclick="selectPyramidTier(0)">
+          <div style="font-family: var(--font-label); font-weight: 600; color: var(--primary);">01. Registres CPU</div>
+          <div style="font-size: 0.8rem; color: var(--on-surface-variant);">~0,33 ns &middot; Bascules D</div>
+        </button>
+
+        <button class="quiz-option" id="pyr-btn-1" onclick="selectPyramidTier(1)">
+          <div style="font-family: var(--font-label); font-weight: 600; color: var(--primary);">02. Caches L1 / L2 / L3</div>
+          <div style="font-size: 0.8rem; color: var(--on-surface-variant);">1 à 7,5 ns &middot; SRAM 6T</div>
+        </button>
+
+        <button class="quiz-option" id="pyr-btn-2" onclick="selectPyramidTier(2)">
+          <div style="font-family: var(--font-label); font-weight: 600; color: var(--primary);">03. Mémoire Vive DRAM</div>
+          <div style="font-size: 0.8rem; color: var(--on-surface-variant);">~45 ns &middot; Condensateur 1T1C</div>
+        </button>
+
+        <button class="quiz-option" id="pyr-btn-3" onclick="selectPyramidTier(3)">
+          <div style="font-family: var(--font-label); font-weight: 600; color: var(--primary);">04. SSD NVMe (3D NAND)</div>
+          <div style="font-size: 0.8rem; color: var(--on-surface-variant);">~80 &micro;s &middot; Cellules CTF</div>
+        </button>
+
+        <button class="quiz-option" id="pyr-btn-4" onclick="selectPyramidTier(4)">
+          <div style="font-family: var(--font-label); font-weight: 600; color: var(--primary);">05. Disque Dur HDD</div>
+          <div style="font-size: 0.8rem; color: var(--on-surface-variant);">~10 ms &middot; Plateaux magnétiques</div>
+        </button>
+
+        <button class="quiz-option" id="pyr-btn-5" onclick="selectPyramidTier(5)">
+          <div style="font-family: var(--font-label); font-weight: 600; color: var(--primary);">06. Cloud / Internet</div>
+          <div style="font-size: 0.8rem; color: var(--on-surface-variant);">12 à 250 ms &middot; Réseau mondial</div>
+        </button>
+      </div>
+
+      <!-- Colonne Contenu Détaillé du Niveau -->
+      <div class="layer" id="pyramid-detail-box">
+        <!-- Rempli par JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 4 : SIMULATEUR DU DISQUE DUR (HDD) -->
+  <!-- ========================================== -->
+  <section id="simulateur-hdd">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <h2 class="section-title">04. <strong>Au Cœur du Disque Dur Mécanique :</strong> L'Exploit Nanométrique</h2>
+      <span class="tag"><i data-lucide="disc" style="width: 14px; height: 14px;"></i> Mécanique &amp; Magnétisme</span>
+    </div>
+    <p class="subhead">
+      Un disque dur est un prodige d'ingénierie électromécanique : des plateaux recouverts de grains magnétiques tournent jusqu'à 15 000 tr/min, tandis qu'un bras articulé positionne des têtes de lecture sur un coussin d'air <strong>5 000 fois plus mince qu'un cheveu</strong>. Selon l'analogie célèbre : <em>c'est l'équivalent d'un Boeing 747 volant à 1 millimètre du sol à 100 km/h en comptant chaque brin d'herbe !</em>
+    </p>
+
+    <!-- Panneau Simulateur Interactif HDD -->
+    <div class="layer">
+      <div class="grid-split-3-9" style="align-items: stretch;">
+        <!-- Commandes du Simulateur -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-md); justify-content: space-between;">
+          <div>
+            <span class="label-mono">Tableau de Bord du Disque</span>
+            <div class="form-group" style="margin-top: var(--space-sm);">
+              <label class="form-label" for="hdd-rpm-select">Vitesse de rotation du moteur :</label>
+              <select id="hdd-rpm-select" class="form-select" onchange="setHddRpm(this.value)">
+                <option value="0">Arrêt (0 RPM)</option>
+                <option value="5400">5 400 tr/min (Disque standard)</option>
+                <option value="7200" selected>7 200 tr/min (Performance bureautique)</option>
+                <option value="15000">15 000 tr/min (Disque Entreprise SCSI)</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-top: var(--space-md);">
+              <label class="form-label" for="hdd-track-slider">Piste Cible (0 = Extérieur, 10 = Centre) : <span id="hdd-track-val" style="font-family: var(--font-label); color: var(--primary);">4</span></label>
+              <input type="range" id="hdd-track-slider" class="form-range" min="0" max="10" value="4" oninput="setHddTrack(this.value)">
+            </div>
+
+            <div class="form-group" style="margin-top: var(--space-md);">
+              <label class="form-label" for="hdd-sector-slider">Secteur Cible (0 à 15) : <span id="hdd-sector-val" style="font-family: var(--font-label); color: var(--primary);">7</span></label>
+              <input type="range" id="hdd-sector-slider" class="form-range" min="0" max="15" value="7" oninput="setHddSector(this.value)">
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+            <button class="btn btn-primary" onclick="triggerHddRead()">
+              <i data-lucide="play" style="width: 16px; height: 16px;"></i> Lancer la Lecture du Bloc
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="triggerRandomHddRead()">
+              <i data-lucide="shuffle" style="width: 14px; height: 14px;"></i> Secteur Aléatoire
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas d'Animation Graphique du Disque Dur -->
+        <div>
+          <div class="canvas-container">
+            <canvas id="hdd-canvas" width="600" height="380" style="width: 100%; height: 100%; display: block;"></canvas>
+            <div id="hdd-status-badge" style="position: absolute; top: var(--space-sm); left: var(--space-sm); background: rgba(0,0,0,0.75); color: #fff; font-family: var(--font-label); font-size: 0.75rem; padding: 0.2rem var(--space-sm); border-radius: var(--rounded); border-left: 2px solid var(--primary);">
+              STATUT : PRÊT
+            </div>
+          </div>
+          
+          <!-- Décomposition en direct du temps d'accès -->
+          <div class="grid-4" style="margin-top: var(--space-sm);">
+            <div class="layer-nested">
+              <span class="label-mono">1. Seek Time (Recherche)</span>
+              <div id="val-seek" style="font-family: var(--font-label); font-size: 1.1rem; font-weight: 600; color: var(--on-surface);">4,2 ms</div>
+              <span style="font-size: 0.75rem; color: var(--on-surface-variant);">Déplacement mécanique du bras</span>
+            </div>
+            <div class="layer-nested">
+              <span class="label-mono">2. Latence Rotationnelle</span>
+              <div id="val-latency" style="font-family: var(--font-label); font-size: 1.1rem; font-weight: 600; color: var(--on-surface);">4,16 ms</div>
+              <span style="font-size: 0.75rem; color: var(--on-surface-variant);">Attente du passage du secteur</span>
+            </div>
+            <div class="layer-nested">
+              <span class="label-mono">3. Transfert</span>
+              <div id="val-transfer" style="font-family: var(--font-label); font-size: 1.1rem; font-weight: 600; color: var(--on-surface);">0,04 ms</div>
+              <span style="font-size: 0.75rem; color: var(--on-surface-variant);">Lecture magnétique du bloc</span>
+            </div>
+            <div class="layer-nested" style="border-left: 2px solid var(--primary);">
+              <span class="label-mono">Temps d'Accès Total</span>
+              <div id="val-total-time" style="font-family: var(--font-label); font-size: 1.1rem; font-weight: 600; color: var(--primary);">8,40 ms</div>
+              <span style="font-size: 0.75rem; color: var(--on-surface-variant);">Temps total écoulé</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zoom Microscopique sur la Matière Magnétique -->
+      <div style="margin-top: var(--space-xl); border-top: var(--rule); padding-top: var(--space-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-sm);">
+          <span class="label-mono">Échelle Nanoscopique : Les Domaines Magnétiques (Albert Fert &amp; Peter Grünberg - Prix Nobel 2007)</span>
+          <span class="tag">GMR &amp; PMR</span>
+        </div>
+        <p style="font-size: 0.9375rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+          Sur la couche d'alliage ferromagnétique du disque, chaque bit est constitué d'un groupe de quelques dizaines de grains d'environ 10 nm. Cliquez sur un bit pour simuler l'impulsion électrique de l'électro-aimant qui inverse l'orientation du dipôle magnétique.
+        </p>
+
+        <!-- Rangée interactive de bits magnétiques -->
+        <div id="magnetic-bits-row" style="display: flex; gap: var(--space-xs); overflow-x: auto; padding: var(--space-sm) 0;">
+          <!-- Injecté par JS -->
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-sm); font-size: 0.8125rem; color: var(--on-surface-variant);">
+          <span>Pôle Nord vers le haut (\(\uparrow\)) = <strong>1 logique</strong> &middot; Pôle Sud vers le haut (\(\downarrow\)) = <strong>0 logique</strong></span>
+          <button class="btn btn-ghost btn-sm" onclick="randomizeMagneticBits()">
+            <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Inverser l'Orientation Aléatoirement
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 5 : SIMULATEUR FLASH SSD & CTF     -->
+  <!-- ========================================== -->
+  <section id="simulateur-ssd">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <h2 class="section-title">05. <strong>La Révolution Flash SSD :</strong> Emprisonner les Électrons (Cellule CTF)</h2>
+      <span class="tag"><i data-lucide="zap" style="width: 14px; height: 14px;"></i> Silicium &amp; Effet Tunnel</span>
+    </div>
+    <p class="subhead">
+      Fini la mécanique, les moteurs et les têtes fragiles ! Dans un SSD moderne (NAND 3D), les données sont conservées pendant des années sans alimentation grâce à des <strong>cellules à piège de charge (Charge Trap Flash - CTF)</strong>. En appliquant une tension élevée, des électrons franchissent une barrière isolante par <em>effet tunnel quantique</em> et y restent captifs.
+    </p>
+
+    <div class="layer">
+      <div class="grid-split-3-9">
+        <!-- Contrôles Cellule Flash -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+          <span class="label-mono">Opérations de Contrôle</span>
+          <p style="font-size: 0.85rem; color: var(--on-surface-variant);">
+            Manipulez la grille de contrôle pour charger ou vider le piège de charge en nitrure de silicium :
+          </p>
+
+          <button class="btn btn-primary" onclick="pulseFlashProgram()">
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i> Programmer (+18V, Injecter)
+          </button>
+          
+          <button class="btn btn-secondary" onclick="pulseFlashErase()">
+            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i> Effacer Bloc (-18V, Vider)
+          </button>
+
+          <button class="btn btn-ghost" onclick="pulseFlashRead()">
+            <i data-lucide="eye" style="width: 16px; height: 16px;"></i> Mesurer Tension de Seuil (Vt)
+          </button>
+
+          <div class="layer-nested" style="margin-top: var(--space-sm);">
+            <span class="label-mono">État TLC Décodé (3 bits)</span>
+            <div id="flash-decoded-bits" style="font-family: var(--font-label); font-size: 1.8rem; font-weight: 600; color: var(--primary);">111</div>
+            <span id="flash-decoded-desc" style="font-size: 0.8rem; color: var(--on-surface-variant);">Cellule vierge (aucun électron piégé)</span>
+          </div>
+
+          <div class="layer-nested">
+            <span class="label-mono">Cycle d'Usure (Endurance)</span>
+            <div style="display: flex; align-items: baseline; gap: var(--space-sm);">
+              <span id="flash-wear-val" style="font-family: var(--font-label); font-weight: 600; color: var(--on-surface);">12 / 3000</span>
+              <span style="font-size: 0.75rem; color: var(--on-surface-variant);">cycles P/E</span>
+            </div>
+            <div style="width: 100%; height: 4px; background: var(--surface-container-high); margin-top: var(--space-xs); border-radius: var(--rounded);">
+              <div id="flash-wear-bar" style="width: 0.4%; height: 100%; background: var(--tertiary);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Animation Visuelle de la Cellule CTF -->
+        <div>
+          <div class="canvas-container" style="background: #11151c;">
+            <canvas id="flash-canvas" width="600" height="380" style="width: 100%; height: 100%; display: block;"></canvas>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-xs); font-size: 0.8125rem; color: var(--on-surface-variant);">
+            <span>Grille de Contrôle &rarr; Isolant &rarr; <strong>Piège de Charge (SiN)</strong> &rarr; Oxyde Tunnel &rarr; Canal Silicium</span>
+            <span id="flash-anim-status" style="font-family: var(--font-label); color: var(--primary);">Tension de grille : 0 V</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 6 : LABORATOIRE COMPARATIF         -->
+  <!-- ========================================== -->
+  <section id="comparatif">
+    <h2 class="section-title">06. <strong>Tableau Comparatif &amp; Simulateur</strong> de Projet</h2>
+    <p class="subhead">
+      Mettez en perspective les caractéristiques de chaque support pour choisir la technologie appropriée selon les impératifs de capacité, de latence et de coût.
+    </p>
+
+    <!-- Tableau Comparatif -->
+    <div class="layer" style="overflow-x: auto; margin-bottom: var(--space-xl);">
+      <table class="carbon-table">
+        <thead>
+          <tr>
+            <th>Support de Stockage</th>
+            <th>Période Roi</th>
+            <th>Capacité Typique</th>
+            <th>Temps d'Accès</th>
+            <th>Débit Typique</th>
+            <th>Principe Physique</th>
+            <th>Vulnérabilité Principale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Carte Perforée</strong></td>
+            <td>1890 - 1960</td>
+            <td>80 octets</td>
+            <td>10 000 ms (mécanique)</td>
+            <td>~100 octets/s</td>
+            <td>Trous physiques (balais/relais)</td>
+            <td>Humidité, feu, déformation</td>
+          </tr>
+          <tr>
+            <td><strong>Bande Magnétique (LTO)</strong></td>
+            <td>1951 - Aujourd'hui</td>
+            <td>1,4 Mo à 18 To</td>
+            <td>10 à 60 secondes (séquentiel)</td>
+            <td>~300 Mo/s</td>
+            <td>Oxyde ferromagnétique sur ruban</td>
+            <td>Démagnétisation, étirement</td>
+          </tr>
+          <tr>
+            <td><strong>Disquette 3,5"</strong></td>
+            <td>1981 - 2000</td>
+            <td>1,44 Mo</td>
+            <td>150 - 300 ms</td>
+            <td>~0,06 Mo/s</td>
+            <td>Disque souple en mylar magnétisé</td>
+            <td>Champs magnétiques, poussière</td>
+          </tr>
+          <tr>
+            <td><strong>Disque Dur (HDD)</strong></td>
+            <td>1956 - Aujourd'hui</td>
+            <td>5 Mo à 24 To</td>
+            <td>8 - 15 ms</td>
+            <td>150 - 260 Mo/s</td>
+            <td>Plateaux rigides + têtes volantes</td>
+            <td>Chocs mécaniques, chute (crash)</td>
+          </tr>
+          <tr>
+            <td><strong>Disque Optique (DVD/BD)</strong></td>
+            <td>1995 - 2015</td>
+            <td>4,7 Go à 50 Go</td>
+            <td>100 - 150 ms</td>
+            <td>~20 - 54 Mo/s</td>
+            <td>Laser focalisé sur micro-cuvettes</td>
+            <td>Rayures de surface, UV</td>
+          </tr>
+          <tr>
+            <td><strong>SSD NVMe (3D NAND)</strong></td>
+            <td>2015 - Aujourd'hui</td>
+            <td>500 Go à 8 To</td>
+            <td>0,05 - 0,1 ms (50-80 &micro;s)</td>
+            <td>3 500 à 14 000 Mo/s</td>
+            <td>Piège de charge quantique (CTF)</td>
+            <td>Usure d'écriture (cycles P/E)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Simulateur de Projet de Sauvegarde -->
+    <div class="layer">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-sm);">
+        <span class="label-mono">Simulateur de Transfert &amp; Dimensionnement</span>
+        <span class="tag">Planification d'Infrastructure</span>
+      </div>
+      <p style="font-size: 0.9375rem; color: var(--on-surface-variant); margin-bottom: var(--space-md);">
+        Choisissez un volume de données à sauvegarder ou archiver pour comparer concrètement les exigences de transfert physique :
+      </p>
+
+      <div class="grid-split-3-9" style="align-items: center;">
+        <div class="form-group">
+          <label class="form-label" for="project-volume-select">Jeu de données à sauvegarder :</label>
+          <select id="project-volume-select" class="form-select" onchange="updateProjectSimulator(this.value)">
+            <option value="64">Photothèque personnelle (64 Go)</option>
+            <option value="500">Installation Jeu Vidéo AAA (500 Go)</option>
+            <option value="2000" selected>Serveur d'entreprise PME (2 To = 2 000 Go)</option>
+            <option value="50000">Archives audiovisuelles (50 To = 50 000 Go)</option>
+          </select>
+        </div>
+
+        <div class="grid-3" id="project-results-grid">
+          <!-- Injecté par JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- SECTION 7 : QUIZ PÉDAGOGIQUE D'ÉVALUATION  -->
+  <!-- ========================================== -->
+  <section id="evaluation">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <h2 class="section-title">07. <strong>Évaluation des Connaissances :</strong> Le Grand Quiz</h2>
+      <span class="label-mono">10 Questions Didactiques</span>
+    </div>
+    <p class="subhead">
+      Testez votre maîtrise des concepts abordés : fonctionnement physique du disque dur, cellule à piège de charge, hiérarchie mémoire et repères historiques majeurs.
+    </p>
+
+    <div class="layer">
+      <!-- Barre de progression du quiz -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+        <span class="label-mono" id="quiz-question-counter">Question 1 sur 10</span>
+        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+          <span class="label-mono">Score actuel :</span>
+          <span id="quiz-score-badge" style="font-family: var(--font-label); font-weight: 600; color: var(--primary);">0 / 10</span>
+        </div>
+      </div>
+      <div style="width: 100%; height: 4px; background: var(--surface-container-high); border-radius: var(--rounded); margin-bottom: var(--space-lg);">
+        <div id="quiz-progress-bar" style="width: 10%; height: 100%; background: var(--primary); transition: width var(--dur-short) var(--ease-out);"></div>
+      </div>
+
+      <!-- Zone de la Question -->
+      <div id="quiz-question-container">
+        <h3 id="quiz-question-title" style="font-size: 1.25rem; font-weight: 600; margin-bottom: var(--space-md); color: var(--on-surface);">
+          <!-- Titre injecté dynamiquement -->
+        </h3>
+        <div id="quiz-options-list" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+          <!-- Options injectées par JS -->
+        </div>
+      </div>
+
+      <!-- Explication didactique après réponse -->
+      <div id="quiz-feedback-box" class="callout" style="display: none; margin-top: var(--space-lg);">
+        <div id="quiz-feedback-title" style="font-weight: 600; margin-bottom: var(--space-xs);"></div>
+        <div id="quiz-feedback-text" style="font-size: 0.9375rem; color: var(--on-surface-variant);"></div>
+      </div>
+
+      <!-- Boutons de Navigation du Quiz -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-lg); border-top: var(--rule); padding-top: var(--space-md);">
+        <button class="btn btn-ghost" id="quiz-prev-btn" onclick="prevQuizQuestion()" disabled>
+          <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Précédent
+        </button>
+        <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display: none;">
+          Suivant <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <!-- Bilan Final (Caché au départ) -->
+      <div id="quiz-summary-box" style="display: none; margin-top: var(--space-lg); text-align: center;">
+        <span class="label-mono">Résultat de la session</span>
+        <div id="quiz-final-score" style="font-family: var(--font-label); font-size: 3rem; font-weight: 600; color: var(--primary); margin: var(--space-sm) 0;">
+          -- / 10
+        </div>
+        <h4 id="quiz-final-title" style="font-size: 1.25rem; margin-bottom: var(--space-sm);"></h4>
+        <p id="quiz-final-desc" style="color: var(--on-surface-variant); max-width: 60ch; margin: 0 auto var(--space-lg) auto;"></p>
+        <button class="btn btn-primary" onclick="restartQuiz()">
+          <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Recommencer le Quiz
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- PIED DE PAGE & CRÉDITS SCIENTIFIQUES       -->
+  <!-- ========================================== -->
+  <footer style="border-top: var(--rule); padding-top: var(--space-lg); margin-top: var(--space-xl); display: flex; flex-direction: column; gap: var(--space-sm); font-size: 0.85rem; color: var(--on-surface-variant);">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-md);">
+      <div>
+        <strong>Module d'Enseignement : Histoire et Physique des Supports de Stockage</strong><br>
+        Conçu selon les données des publications scientifiques du CNRS, d'Unisciel, de Branch Éducation, de TED-Ed (Kanawat Senanan) et des archives historiques de l'informatique.
+      </div>
+      <div style="font-family: var(--font-label); text-align: right;">
+        État de la session : <span id="session-sync-status" style="color: var(--tertiary);">Prêt &amp; Synchronisé</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- API Shim pour la persistance d'état dans le bac à sable -->
+<api-shim></api-shim>
+
+<script>
+/* ==========================================================================
+   DONNÉES HISTORIQUES & PÉDAGOGIQUES DU COURS
+   ========================================================================== */
+
+const TIMELINE_DATA = [
+  {
+    id: `carte`,
+    category: `mag`,
+    period: `1890 - 1950`,
+    title: `La Carte Perforée (Herman Hollerith & Jacquard)`,
+    subtitle: `Le premier traitement mécanographique des données de masse`,
+    capacity: `80 octets (1 bit par perforation)`,
+    throughput: `~100 octets / seconde`,
+    latency: `Plusieurs secondes par lot`,
+    description: `Développée par Herman Hollerith pour le recensement américain de 1890 (qui donnera naissance à IBM), la carte perforée code les caractères sous forme de trous rectangulaires disposés en 80 colonnes. Lors de son passage dans la tabulatrice, des aiguilles métalliques traversent les perforations et plongent dans des godets de mercure pour fermer un circuit électrique et actionner des compteurs à relais. Le stockage est purement physique, séquentiel et vulnérable à l'humidité.`,
+    curiosity: `Une boîte standard contenait 2 000 cartes. Échapper une boîte au sol détruisait l'ordre d'un programme entier !`
+  },
+  {
+    id: `bande`,
+    category: `mag`,
+    period: `1951`,
+    title: `La Bande Magnétique (UNIVAC I / IBM 726)`,
+    subtitle: `L'apparition de l'enregistrement magnétique souple`,
+    capacity: `~1,4 Mo par bobine de 700 mètres`,
+    throughput: `~7 500 octets / seconde`,
+    latency: `10 à 60 secondes (rembobinage nécessaire)`,
+    description: `En 1951, l'ordinateur UNIVAC I introduit les bandes magnétiques métalliques, rapidement remplacées par des rubans en plastique Mylar recouverts d'oxyde ferrique (IBM 726). La bande défile devant une tête d'enregistrement inductive qui oriente les dipôles magnétiques. Si la capacité augmente considérablement, l'accès reste strictement séquentiel : pour lire une donnée à la fin de la bande, il faut dérouler l'intégralité du ruban.`,
+    curiosity: `Les bandes magnétiques modernes (norme LTO-9) restent le support d'archivage à froid le plus économique au monde avec 18 To par cartouche.`
+  },
+  {
+    id: `ramac`,
+    category: `mag`,
+    period: `1956`,
+    title: `L'IBM 305 RAMAC : Le Premier Disque Dur`,
+    subtitle: `La révolution absolue de l'accès direct (aléatoire)`,
+    capacity: `5 Mo (3,75 Mo utiles)`,
+    throughput: `8,8 Ko / seconde`,
+    latency: `~600 ms`,
+    description: `Le 4 septembre 1956, IBM dévoile le 305 RAMAC (Random Access Method of Accounting and Control). Il est constitué de 50 plateaux géants en aluminium de 24 pouces (61 cm de diamètre) tournant à 1 200 tr/min. Deux têtes de lecture se déplacent verticalement pour atteindre le bon plateau puis glissent horizontalement vers la piste. Pour la première fois, il n'est plus nécessaire de lire toutes les données antérieures pour accéder à un enregistrement.`,
+    curiosity: `L'appareil pesait plus d'une tonne et devait être transporté par avion cargo militaire cargo Douglas C-124.`
+  },
+  {
+    id: `floppy`,
+    category: `mag`,
+    period: `1971 - 1982`,
+    title: `L'Ère des Disquettes Amovibles (Floppy Disk)`,
+    subtitle: `De 8 pouces à la disquette 3,5 pouces rigide de Sony`,
+    capacity: `80 Ko (8") &rarr; 360 Ko (5,25") &rarr; 1,44 Mo (3,5")`,
+    throughput: `~30 à 60 Ko / seconde`,
+    latency: `150 à 300 ms`,
+    description: `Inventée chez IBM par Alan Shugart en 1971 sous forme d'un disque souple de 8 pouces pour charger le microcode des mainframes, la disquette devient le média universel de l'informatique personnelle. En 1981, Sony conçoit la mythique disquette 3,5 pouces dotée d'une coque plastique rigide et d'un volet métallique protecteur. Elle régnera en maître jusqu'à la fin des années 1990.`,
+    curiosity: `L'icône universelle de "Sauvegarder" dans les logiciels actuels représente toujours une disquette 3,5 pouces.`
+  },
+  {
+    id: `optique`,
+    category: `opt`,
+    period: `1982 - 2006`,
+    title: `Le Disque Optique Laser (CD, DVD & Blu-ray)`,
+    subtitle: `La lecture sans contact mécanique par faisceau lumineux`,
+    capacity: `650 Mo (CD) &rarr; 4,7 Go (DVD) &rarr; 25 Go (Blu-ray)`,
+    throughput: `0,15 Mo/s (CD 1x) à 54 Mo/s (BD)`,
+    latency: `100 à 150 ms`,
+    description: `Développé conjointement par Sony et Philips, le disque compact (CD) repose sur une spirale de 5 km gravée de micro-cuvettes ("pits") et de méplats ("lands") espacés de moins d'un micromètre. Un faisceau laser rouge (780 nm) lit les transitions par différence de réflexion optique. Le DVD augmentera la densité avec un laser à 650 nm, puis le Blu-ray franchira un cap grâce à un laser bleu-violet de 405 nm dont la courte longueur d'onde permet de focaliser un spot bien plus étroit.`,
+    curiosity: `La capacité originelle du CD audio (74 minutes) aurait été choisie par Norio Ohga (Sony) pour faire tenir la 9e Symphonie de Beethoven sans coupure.`
+  },
+  {
+    id: `gmr`,
+    category: `mag`,
+    period: `1990 - 2005`,
+    title: `Le Disque Dur Moderne & La GMR (Prix Nobel 2007)`,
+    subtitle: `L'enregistrement magnétique perpendiculaire & les nanosciences`,
+    capacity: `500 Mo &rarr; Plusieurs Téraoctets`,
+    throughput: `50 à 250 Mo / seconde`,
+    latency: `8 à 12 ms`,
+    description: `La découverte de la Magnétorésistance Géante (GMR) par le Français Albert Fert et l'Allemand Peter Grünberg (Prix Nobel de physique 2007) a révolutionné la sensibilité des têtes de lecture. En remplaçant les bobines inductives par des multicouches nanométriques dont la résistance électrique varie considérablement sous l'effet du champ magnétique des grains, la densité a été multipliée par 10 000. L'enregistrement est ensuite passé de longitudinal à perpendiculaire (PMR) pour contrer la limite superparamagnétique.`,
+    curiosity: `Dans un disque dur à 7 200 tr/min, la tête survole le plateau à moins de 10 nm, sustentée par un film d'air aérodynamique sous pression.`
+  },
+  {
+    id: `flash`,
+    category: `elec`,
+    period: `2000 - Présent`,
+    title: `La Révolution Flash & Les SSD 3D NAND (CTF)`,
+    subtitle: `La suppression intégrale des pièces mécaniques en mouvement`,
+    capacity: `8 Mo (premières clés USB) &rarr; 8 To (SSD M.2)`,
+    throughput: `500 Mo/s (SATA) à 14 000 Mo/s (PCIe 5.0)`,
+    latency: `0,05 à 0,08 ms (50 à 80 microsecondes)`,
+    description: `La mémoire flash à grille flottante puis à piège de charge (CTF - Charge Trap Flash) élimine toute inertie mécanique. Les bits sont encodés en injectant des électrons par effet tunnel quantique à travers un isolant d'oxyde dans une couche de nitrure de silicium. La technologie 3D NAND empile aujourd'hui plus de 200 couches de cellules verticalement dans un volume plus petit qu'un ongle, tout en stockant 3 bits (TLC, 8 niveaux de tension) ou 4 bits (QLC, 16 niveaux) par cellule.`,
+    curiosity: `Un SSD NVMe moderne est capable de traiter jusqu'à 1 000 000 d'opérations d'E/S par seconde (IOPS), contre ~150 pour un disque dur mécanique.`
+  },
+  {
+    id: `futur`,
+    category: `mag`,
+    period: `Futur & Recherche`,
+    title: `HAMR, MAMR & Stockage Moléculaire ADN`,
+    subtitle: `Repousser les frontières thermiques et chimiques de la matière`,
+    capacity: `30+ To (HDD HAMR) &middot; 215 Po / gramme (ADN)`,
+    throughput: `Plusieurs Go/s`,
+    latency: `Quelques ms (HAMR) à plusieurs heures (synthèse ADN)`,
+    description: `Pour dépasser la limite superparamagnétique où l'agitation thermique ambiante retourne spontanément le magnétisme des grains, la technologie HAMR (Heat-Assisted Magnetic Recording) chauffe localement le plateau à 400°C en une nanoseconde à l'aide d'un laser nanophotonique pour réduire temporairement sa coercitivité. En laboratoire, le stockage sur molécules d'ADN synthétique permet de conserver l'équivalent de tous les films jamais créés dans une fiole d'un gramme pendant des millénaires.`,
+    curiosity: `Des chercheurs ont déjà stocké l'intégralité de l'encyclopédie Wikipédia et un système d'exploitation complet dans des brins d'ADN synthétique.`
+  }
+];
+
+const PYRAMID_TIERS = [
+  {
+    title: `01. Registres Processeur (CPU)`,
+    latencyReal: `0,33 nanoseconde (1 cycle d'horloge à 3 GHz)`,
+    distanceAnalogy: `6,6 centimètres (sur la table, à portée immédiate de votre main)`,
+    capacity: `Quelques kilo-octets (ex: 32 registres 64 bits par cœur)`,
+    technology: `Bascules D statiques constituées d'environ 16 transistors par bit`,
+    bandwidth: `Plusieurs téraoctets par seconde (> 1 000 Go/s)`,
+    cost: `Extrêmement élevé (occupent une fraction précieuse du silicium processeur)`,
+    description: `Les registres constituent la mémoire la plus rapide de l'univers informatique. Situés immédiatement au sein des unités arithmétiques et logiques (ALU), ils contiennent les opérandes des calculs en cours d'exécution. Ils ne subissent aucun délai de bus mémoire.`
+  },
+  {
+    title: `02. Caches Mémoire L1, L2, L3`,
+    latencyReal: `1 ns (L1) &rarr; 3 ns (L2) &rarr; 7,5 ns (L3 partagé)`,
+    distanceAnalogy: `20 cm à 1,5 mètre (l'autre bout de la table de bibliothèque)`,
+    capacity: `De quelques mégaoctets à une centaine de mégaoctets (ex: 36 à 68 Mo)`,
+    technology: `SRAM (Static RAM) utilisant 6 transistors par bit (cellule 6T)`,
+    bandwidth: `500 à 1 000 Go/s`,
+    cost: `Très coûteux en nombre de transistors (représente souvent 30% de la surface du CPU)`,
+    description: `La mémoire cache anticipe et stocke les instructions et données les plus fréquemment utilisées grâce aux principes de localité spatiale et temporelle. La SRAM maintient son information tant qu'elle est sous tension sans nécessiter de rafraîchissement périodique.`
+  },
+  {
+    title: `03. Mémoire Vive Principale (DRAM)`,
+    latencyReal: `~45 nanosecondes`,
+    distanceAnalogy: `9 mètres (le casier de fiches de bibliothèque juste à côté)`,
+    capacity: `16 Go à 128 Go sur PC standard`,
+    technology: `DRAM dynamique (cellule 1T1C : 1 transistor + 1 condensateur microscopique)`,
+    bandwidth: `30 à 60 Go/s (DDR4 / DDR5)`,
+    cost: `Modéré (~3 à 5 € par gigaoctet)`,
+    description: `La DRAM stocke temporairement le système d'exploitation et les applications en cours d'exécution. Comme chaque condensateur perd sa charge en une fraction de seconde, il doit être 'rafraîchi' des milliers de fois par seconde. Si l'alimentation est coupée, toutes les données sont instantanément perdues.`
+  },
+  {
+    title: `04. Disque SSD NVMe (3D NAND CTF)`,
+    latencyReal: `~80 microsecondes (80 000 nanosecondes)`,
+    distanceAnalogy: `16 kilomètres (la ville voisine !)`,
+    capacity: `1 To à 4 To couramment`,
+    technology: `Mémoire flash non-volatile à piège de charge (Charge Trap Flash) empilée en 3D`,
+    bandwidth: `3 500 à 7 000 Mo/s (PCIe 4.0) &middot; jusqu'à 14 000 Mo/s (PCIe 5.0)`,
+    cost: `Très économique (~0,07 € par gigaoctet)`,
+    description: `Bien que le SSD soit qualifié d'ultra-rapide par rapport au disque dur, son temps d'accès intrinsèque (80 &micro;s) représente une éternité pour le processeur. Le contrôleur du SSD doit appliquer des tensions pour lire la charge quantique piégée sans dégrader les cellules.`
+  },
+  {
+    title: `05. Disque Dur Mécanique (HDD)`,
+    latencyReal: `~10 millisecondes (10 000 000 nanosecondes)`,
+    distanceAnalogy: `2 000 kilomètres (de Paris à Alger ou Moscou !)`,
+    capacity: `4 To à 24 To par unité`,
+    technology: `Plateaux ferromagnétiques rigides en rotation + bras à bobine mobile`,
+    bandwidth: `150 à 260 Mo/s`,
+    cost: `Le plus bas du marché de masse (~0,015 € par gigaoctet)`,
+    description: `C'est le gouffre mécanique : attendre qu'un bras physique se déplace et qu'un plateau en rotation amène le bon secteur prend 10 millisecondes. Si un cycle d'horloge CPU durait 1 seconde humaine, un accès disque dur équivaudrait à attendre... 4 mois !`
+  },
+  {
+    title: `06. Stockage Cloud & Réseau Internet`,
+    latencyReal: `12 ms (ville voisine) à 250 ms (serveur à l'autre bout de la planète)`,
+    distanceAnalogy: `50 000 kilomètres (plus d'un tour complet de la Terre)`,
+    capacity: `Quasi-infinie à l'échelle de l'utilisateur (> 500 Exaoctets mondiaux)`,
+    technology: `Centres de données distribués reliés par câbles sous-marins et fibre optique`,
+    bandwidth: `Dépend de la connexion (100 Mb/s à 10 Gb/s)`,
+    cost: `Facturation au gigaoctet par mois (modèle locatif)`,
+    description: `La latence est ici dictée par la vitesse de propagation de la lumière dans le verre des fibres optiques (~200 000 km/s) et le temps de traitement des routeurs réseau à chaque saut.`
+  }
+];
+
+const QUIZ_QUESTIONS = [
+  {
+    question: `Pourquoi les têtes de lecture et d'écriture d'un disque dur mécanique ne touchent-elles jamais les plateaux en rotation ?`,
+    options: [
+      `Elles sont maintenues à distance par des aimants répulsifs fixés sur le couvercle.`,
+      `La vitesse de rotation des plateaux crée un coussin d'air dynamique sur lequel la tête flotte par sustentation aérodynamique.`,
+      `Elles touchent en réalité la surface, mais un lubrifiant à base d'huile moteur évite l'usure.`,
+      `Un capteur laser ajuste en permanence un micromoteur piézoélectrique de recul.`
+    ],
+    answer: 1,
+    explanation: `Exact ! À 7 200 tr/min, la vitesse linéaire des plateaux génère un flux d'air puissant. La forme aérodynamique de la tête crée une force de portance qui équilibre exactement la pression du ressort du bras, maintenant la tête à quelques nanomètres au-dessus du disque sans aucun frottement.`
+  },
+  {
+    question: `Quelle analogie célèbre de Kanawat Senanan illustre la précision stupéfiante du vol de la tête d'un disque dur ?`,
+    options: [
+      `Une formule 1 roulant sur un fil de rasoir sans dévier.`,
+      `Un Boeing 747 volant à 1 mm du sol à 100 km/h tout en comptant chaque brin d'herbe.`,
+      `Une fusée lunaire se posant au sommet d'une aiguille à coudre.`,
+      `Un microscope électronique opérant pendant un séisme de magnitude 8.`
+    ],
+    answer: 1,
+    explanation: `Parfait ! Cette métaphore d'échelle saisissante met en lumière le miracle mécanique : ramenée à la taille d'un avion géant, la tête vole à une fraction infinitésimale de millimètre de la piste sans jamais s'écraser (ce qui constituerait un redoutable 'head crash').`
+  },
+  {
+    question: `Quelle découverte en physique a valu le prix Nobel 2007 à Albert Fert et Peter Grünberg et a décuplé la capacité des disques durs ?`,
+    options: [
+      `La supraconductivité à haute température.`,
+      `L'enregistrement optique par laser bleu.`,
+      `La Magnétorésistance Géante (GMR).`,
+      `L'effet photoélectrique appliqué au silicium.`
+    ],
+    answer: 2,
+    explanation: `Exactement. La Magnétorésistance Géante (GMR) exploite le spin quantique des électrons dans des couches nanométriques de métaux magnétiques. Cette découverte a permis de créer des têtes de lecture des milliers de fois plus sensibles que les anciennes têtes à bobine inductive.`
+  },
+  {
+    question: `Quel était le poids approximatif et la capacité du premier disque dur commercial, l'IBM 305 RAMAC de 1956 ?`,
+    options: [
+      `50 kg pour 1,44 Mo de données.`,
+      `Plus d'une tonne (nécessitant un avion cargo) pour seulement 5 Mo de données.`,
+      `250 kg pour 1 Go de mémoire à tambours.`,
+      `10 kg pour 100 Ko répartis sur ruban.`
+    ],
+    answer: 1,
+    explanation: `C'est exact ! L'IBM 305 RAMAC comptait 50 disques de 61 cm de diamètre, pesait plus de 1 000 kg et offrait une capacité totale de 5 Mo (dont 3,75 Mo accessibles pour l'utilisateur).`
+  },
+  {
+    question: `Dans l'analogie de la bibliothèque (Branch Éducation), si le temps d'accès au registre CPU équivaut à la main sur la table (0,33 ns), à quelle distance se trouve le disque dur mécanique (10 ms) ?`,
+    options: [
+      `À 10 mètres dans le couloir voisin.`,
+      `À environ 16 kilomètres dans la ville d'à côté.`,
+      `À environ 2 000 kilomètres (comme de Paris à Alger ou Moscou).`,
+      `Sur la Lune (384 000 kilomètres).`
+    ],
+    answer: 2,
+    explanation: `Absolument ! 10 millisecondes correspondent à 10 000 000 de nanosecondes. Avec un facteur de conversion de 20 cm par nanoseconde, cela équivaut à 2 000 km, démontrant le gouffre vertigineux entre la vitesse électronique du silicium et la lenteur mécanique.`
+  },
+  {
+    question: `Comment la cellule Charge Trap Flash (CTF) d'un SSD moderne conserve-t-elle des informations sans alimentation ?`,
+    options: [
+      `Grâce à une pile bouton au lithium dissimulée dans le boîtier du SSD.`,
+      `En emprisonnant des électrons dans un piège en nitrure de silicium entouré d'isolants diélectriques par effet tunnel.`,
+      `En chauffant le silicium pour créer une micro-gravure thermique permanente.`,
+      `En modifiant la polarité magnétique de micro-domaines de cuivre.`
+    ],
+    answer: 1,
+    explanation: `Correct ! Les électrons traversent l'oxyde tunnel par effet tunnel Fowler-Nordheim sous forte tension, puis demeurent captifs dans le piège de charge sans pouvoir fuir pendant des années, même hors tension.`
+  },
+  {
+    question: `Combien d'états de charge électrique distincts une cellule TLC (Triple-Level Cell) doit-elle pouvoir mesurer pour stocker 3 bits ?`,
+    options: [
+      `3 états distincts.`,
+      `6 états distincts.`,
+      `8 états distincts (2³ = 8).`,
+      `16 états distincts (2⁴ = 16).`
+    ],
+    answer: 2,
+    explanation: `Exact ! 3 bits permettent de représenter 2³ = 8 combinaisons binaires différentes (de 000 à 111). La cellule doit donc programmer et discriminer avec une précision nanométrique 8 paliers de tension de seuil différents.`
+  },
+  {
+    question: `Quel est l'inconvénient majeur de la bande magnétique face au disque dur apparu en 1956 ?`,
+    options: [
+      `La bande magnétique s'efface automatiquement toutes les 24 heures.`,
+      `Elle impose un accès séquentiel : il faut dérouler tout le ruban pour lire une donnée distante.`,
+      `Elle ne peut stocker que des chiffres et aucun texte.`,
+      `Elle consomme 100 fois plus d'électricité qu'un disque dur.`
+    ],
+    answer: 1,
+    explanation: `Tout à fait. La bande magnétique exige un défilement physique linéaire. Le disque dur a inauguré l'accès direct (aléatoire) où la tête saute immédiatement à n'importe quelle piste.`
+  },
+  {
+    question: `Pourquoi les fabricants de disques durs ont-ils développé les technologies PMR puis HAMR ?`,
+    options: [
+      `Pour éliminer les moteurs électriques au profit de lasers.`,
+      `Pour surmonter la limite superparamagnétique où l'agitation thermique perturbe les minuscules grains magnétiques.`,
+      `Pour permettre aux disques durs de lire également les CD-ROM.`,
+      `Pour réduire le bruit des têtes lors des transferts de fichiers.`
+    ],
+    answer: 1,
+    explanation: `Précisément ! Lorsque les grains magnétiques deviennent trop minuscules pour densifier le disque, l'énergie thermique ambiante suffit à faire basculer spontanément leur aimantation. L'enregistrement perpendiculaire (PMR) puis assisté par laser (HAMR) résolvent cette barrière physique.`
+  },
+  {
+    question: `Qu'appelle-t-on le "Seek Time" (temps de recherche de piste) dans un disque dur ?`,
+    options: [
+      `Le temps nécessaire au système d'exploitation pour trouver le fichier dans la table d'allocation.`,
+      `Le délai mécanique indispensable au bras électromagnétique pour déplacer la tête sur le bon cylindre/piste.`,
+      `Le temps d'un demi-tour de rotation du plateau à 7 200 tr/min.`,
+      `La durée de conversion du signal magnétique en bits logiques dans le contrôleur.`
+    ],
+    answer: 1,
+    explanation: `Exact ! Le Seek Time représente l'effort mécanique physique du moteur à bobine mobile pour accélérer, déplacer et freiner le bras porte-tête au-dessus de la piste concentrique désirée (généralement 3 à 8 ms).`
+  }
+];
+
+/* ==========================================================================
+   VARIABLES D'ÉTAT DE L'APPLICATION
+   ========================================================================== */
+
+let currentTimelineIndex = 0;
+let currentPyramidIndex = 0;
+let hddRpm = 7200;
+let hddTrack = 4;
+let hddSector = 7;
+let hddIsSpinning = true;
+let hddPlatterAngle = 0;
+let hddArmAngle = 0.45;
+let hddTargetArmAngle = 0.45;
+let hddIsReading = false;
+let hddReadStartTime = 0;
+
+// État de la simulation Flash CTF
+let flashElectronsCount = 0; // 0 à 7 correspondant aux 8 états TLC
+let flashGateVoltage = 0; // en Volts
+let flashWearCount = 12;
+
+// Tableau de bits magnétiques interactifs (Section 4)
+let magneticBits = [1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1];
+
+// État du Quiz
+let quizCurrentIndex = 0;
+let quizUserAnswers = new Array(QUIZ_QUESTIONS.length).fill(null);
+let quizScore = 0;
+
+/* ==========================================================================
+   INITIALISATION ET GESTION DU CYCLE DE VIE
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // 1. Initialiser la frise chronologique
+  renderTimelineTabs();
+  renderTimelineCard(0);
+
+  // 2. Initialiser la pyramide des mémoires
+  selectPyramidTier(0);
+
+  // 3. Initialiser les bits magnétiques
+  renderMagneticBits();
+
+  // 4. Initialiser le simulateur de projet
+  updateProjectSimulator(2000);
+
+  // 5. Initialiser le simulateur Flash
+  updateFlashDisplay();
+
+  // 6. Initialiser le Quiz
+  renderQuizQuestion(0);
+
+  // 7. Initialiser les boucles de rendu Canvas
+  initHddCanvas();
+  initFlashCanvas();
+
+  // 8. Restaurer l'état persistant si disponible
+  if (window.notebookAppApi) {
+    try {
+      const savedState = await window.notebookAppApi.getAppState();
+      if (savedState) {
+        restoreAppState(savedState);
+      }
+    } catch (err) {
+      console.warn('Erreur lors du chargement de l\'état persistant :', err);
+    }
+    // Signaler à l'hôte que l'application est prête
+    window.notebookAppApi.notifyAppReady();
+  }
+
+  // 9. Initialiser les icônes Lucide
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+});
+
+/* ==========================================================================
+   SECTION 1 : CALCULATEUR D'ORDRE DE GRANDEUR
+   ========================================================================== */
+
+function setBitCalculatorPreset(megabytes) {
+  const slider = document.getElementById('calc-megabytes');
+  if (slider) {
+    slider.value = megabytes;
+    updateBitCalculator(megabytes);
+  }
+}
+
+function updateBitCalculator(megabytes) {
+  const mb = parseFloat(megabytes) || 1;
+  const disp = document.getElementById('calc-size-display');
+  if (disp) {
+    disp.textContent = mb >= 1000 ? `${(mb / 1000).toFixed(1)} Go (${mb} Mo)` : `${mb} Mo`;
+  }
+
+  // 1 carte = 80 octets
+  const bytes = mb * 1024 * 1024;
+  const cards = Math.round(bytes / 80);
+  const weightKg = (cards * 0.0025); // 2,5 g par carte
+  const heightM = (cards * 0.000174); // 0,174 mm d'épaisseur par carte
+
+  const resCards = document.getElementById('res-cards');
+  const resWeight = document.getElementById('res-weight');
+  const resHeight = document.getElementById('res-height');
+
+  if (resCards) resCards.textContent = cards.toLocaleString('fr-FR');
+  if (resWeight) {
+    resWeight.textContent = weightKg > 1000 ? `${(weightKg / 1000).toFixed(1)} tonnes` : `${weightKg.toFixed(1)} kg`;
+  }
+  if (resHeight) {
+    resHeight.textContent = heightM > 1000 ? `${(heightM / 1000).toFixed(1)} km` : `${heightM.toFixed(1)} m`;
+  }
+}
+
+/* ==========================================================================
+   SECTION 2 : FRISE CHRONOLOGIQUE INTERACTIVE
+   ========================================================================== */
+
+function renderTimelineTabs(filter = 'all') {
+  const container = document.getElementById('timeline-tabs-container');
+  if (!container) return;
+
+  container.innerHTML = '';
+  TIMELINE_DATA.forEach((item, index) => {
+    if (filter !== 'all' && item.category !== filter) return;
+
+    const btn = document.createElement('button');
+    btn.className = `timeline-tab ${index === currentTimelineIndex ? 'active' : ''}`;
+    btn.id = `tab-item-${index}`;
+    btn.textContent = `${item.period} : ${item.title.split('(')[0]}`;
+    btn.onclick = () => selectTimelineItem(index);
+    container.appendChild(btn);
+  });
+}
+
+function selectTimelineItem(index) {
+  currentTimelineIndex = index;
+  // Mettre à jour l'apparence des onglets
+  document.querySelectorAll('.timeline-tab').forEach((el) => {
+    el.classList.remove('active');
+  });
+  const activeTab = document.getElementById(`tab-item-${index}`);
+  if (activeTab) activeTab.classList.add('active');
+
+  renderTimelineCard(index);
+}
+
+function filterTimeline(category) {
+  ['filter-all', 'filter-mag', 'filter-opt', 'filter-elec'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) {
+      b.className = 'btn btn-sm btn-ghost';
+    }
+  });
+
+  const activeBtn = document.getElementById(`filter-${category}`);
+  if (activeBtn) activeBtn.className = 'btn btn-sm btn-primary';
+
+  renderTimelineTabs(category);
+  // Trouver le premier élément valide du filtre
+  const firstValidIndex = TIMELINE_DATA.findIndex(item => category === 'all' || item.category === category);
+  if (firstValidIndex !== -1) {
+    selectTimelineItem(firstValidIndex);
+  }
+}
+
+function renderTimelineCard(index) {
+  const item = TIMELINE_DATA[index];
+  const container = document.getElementById('timeline-detail-card');
+  if (!item || !container) return;
+
+  container.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md);">
+      <div>
+        <span class="label-mono">${item.period} &middot; Jalon N°${index + 1}</span>
+        <h3 style="font-size: 1.5rem; margin: var(--space-xs) 0; font-weight: 600;">${item.title}</h3>
+        <p style="color: var(--primary); font-size: 1rem; margin: 0; font-weight: 500;">${item.subtitle}</p>
+      </div>
+      <span class="tag"><i data-lucide="calendar" style="width: 14px; height: 14px;"></i> ${item.period}</span>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: var(--space-lg);">
+      <div class="layer-nested">
+        <span class="label-mono">Capacité Typique</span>
+        <div style="font-family: var(--font-label); font-size: 1.25rem; font-weight: 600; color: var(--on-surface);">${item.capacity}</div>
+      </div>
+      <div class="layer-nested">
+        <span class="label-mono">Débit de Transfert</span>
+        <div style="font-family: var(--font-label); font-size: 1.25rem; font-weight: 600; color: var(--on-surface);">${item.throughput}</div>
+      </div>
+      <div class="layer-nested">
+        <span class="label-mono">Temps d'Accès Typique</span>
+        <div style="font-family: var(--font-label); font-size: 1.25rem; font-weight: 600; color: var(--primary);">${item.latency}</div>
+      </div>
+    </div>
+
+    <p style="font-size: 1rem; line-height: 1.6; margin-bottom: var(--space-md);">
+      ${item.description}
+    </p>
+
+    <div class="callout callout-warning">
+      <strong>Le saviez-vous ?</strong> ${item.curiosity}
+    </div>
+  `;
+
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+}
+
+/* ==========================================================================
+   SECTION 3 : PYRAMIDE DES MÉMOIRES & ANALOGIE SPATIALE
+   ========================================================================== */
+
+function selectPyramidTier(index) {
+  currentPyramidIndex = index;
+  for (let i = 0; i < PYRAMID_TIERS.length; i++) {
+    const btn = document.getElementById(`pyr-btn-${i}`);
+    if (btn) {
+      if (i === index) {
+        btn.classList.add('selected');
+      } else {
+        btn.classList.remove('selected');
+      }
+    }
+  }
+
+  const tier = PYRAMID_TIERS[index];
+  const box = document.getElementById('pyramid-detail-box');
+  if (!tier || !box) return;
+
+  box.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-sm);">
+      <span class="label-mono">Niveau Hiérarchique ${index + 1} sur 6</span>
+      <span class="tag">Latence : ${tier.latencyReal}</span>
+    </div>
+    <h3 style="font-size: 1.4rem; margin: var(--space-xs) 0 var(--space-md) 0; font-weight: 600;">${tier.title}</h3>
+
+    <div class="callout" style="border-left-width: 4px; margin-bottom: var(--space-lg);">
+      <span class="label-mono" style="color: var(--primary);">Distance dans l'analogie de la bibliothèque</span>
+      <div style="font-size: 1.2rem; font-weight: 600; color: var(--on-surface); margin-top: var(--space-xs);">
+        &rarr; ${tier.distanceAnalogy}
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: var(--space-md);">
+      <div class="layer-nested">
+        <span class="label-mono">Technologie Physique</span>
+        <div style="font-size: 0.9375rem; font-weight: 500; margin-top: var(--space-xs);">${tier.technology}</div>
+      </div>
+      <div class="layer-nested">
+        <span class="label-mono">Capacité d'un Système Ordinaire</span>
+        <div style="font-size: 0.9375rem; font-weight: 500; margin-top: var(--space-xs);">${tier.capacity}</div>
+      </div>
+      <div class="layer-nested">
+        <span class="label-mono">Bande Passante / Débit</span>
+        <div style="font-size: 0.9375rem; font-weight: 500; margin-top: var(--space-xs);">${tier.bandwidth}</div>
+      </div>
+      <div class="layer-nested">
+        <span class="label-mono">Coût par Bit &amp; Densité</span>
+        <div style="font-size: 0.9375rem; font-weight: 500; margin-top: var(--space-xs);">${tier.cost}</div>
+      </div>
+    </div>
+
+    <p style="font-size: 0.9375rem; color: var(--on-surface-variant); line-height: 1.6;">
+      ${tier.description}
+    </p>
+  `;
+}
+
+/* ==========================================================================
+   SECTION 4 : SIMULATEUR DU DISQUE DUR (CANVAS 2D & INTERACTION)
+   ========================================================================== */
+
+function setHddRpm(val) {
+  hddRpm = parseInt(val, 10);
+  hddIsSpinning = hddRpm > 0;
+  const status = document.getElementById('hdd-status-badge');
+  if (status) {
+    status.textContent = hddIsSpinning ? `STATUT : ${hddRpm} TR/MIN` : `STATUT : ARRÊTÉ`;
+  }
+}
+
+function setHddTrack(val) {
+  hddTrack = parseInt(val, 10);
+  const disp = document.getElementById('hdd-track-val');
+  if (disp) disp.textContent = hddTrack;
+
+  // Calcul de l'angle du bras en fonction de la piste (0 = piste extérieure, 10 = centre)
+  // Piste 0 -> angle ~0.55 rad, Piste 10 -> angle ~0.35 rad
+  hddTargetArmAngle = 0.55 - (hddTrack / 10) * 0.22;
+}
+
+function setHddSector(val) {
+  hddSector = parseInt(val, 10);
+  const disp = document.getElementById('hdd-sector-val');
+  if (disp) disp.textContent = hddSector;
+}
+
+function triggerRandomHddRead() {
+  const randomTrack = Math.floor(Math.random() * 11);
+  const randomSector = Math.floor(Math.random() * 16);
+  
+  const trackSlider = document.getElementById('hdd-track-slider');
+  const sectorSlider = document.getElementById('hdd-sector-slider');
+  if (trackSlider) trackSlider.value = randomTrack;
+  if (sectorSlider) sectorSlider.value = randomSector;
+
+  setHddTrack(randomTrack);
+  setHddSector(randomSector);
+  triggerHddRead();
+}
+
+function triggerHddRead() {
+  if (hddRpm === 0) {
+    alert("Veuillez d'abord démarrer la rotation du disque dur (sélectionnez 5 400 ou 7 200 tr/min).");
+    return;
+  }
+
+  hddIsReading = true;
+  hddReadStartTime = performance.now();
+  const status = document.getElementById('hdd-status-badge');
+  if (status) status.textContent = `RECHERCHE CYLINDRE & SECTEUR...`;
+
+  // Calcul théorique des composantes de latence
+  // Seek time : ~2 ms à 7 ms selon l'amplitude du mouvement
+  const seekTime = (2.5 + Math.abs(hddArmAngle - hddTargetArmAngle) * 20).toFixed(2);
+  // Latence rotationnelle moyenne = 1/2 rotation
+  // À 7200 RPM -> 1 rotation = 8.33 ms -> moyenne = 4.16 ms
+  const oneRotationMs = (60000 / hddRpm);
+  const rotLatency = (oneRotationMs / 2).toFixed(2);
+  // Transfer time pour 4 Ko = ~0.03 ms
+  const transferTime = 0.04;
+  const totalAccess = (parseFloat(seekTime) + parseFloat(rotLatency) + transferTime).toFixed(2);
+
+  const valSeek = document.getElementById('val-seek');
+  const valLat = document.getElementById('val-latency');
+  const valTrans = document.getElementById('val-transfer');
+  const valTotal = document.getElementById('val-total-time');
+
+  if (valSeek) valSeek.textContent = `${seekTime} ms`;
+  if (valLat) valLat.textContent = `${rotLatency} ms`;
+  if (valTrans) valTrans.textContent = `${transferTime} ms`;
+  if (valTotal) valTotal.textContent = `${totalAccess} ms`;
+
+  setTimeout(() => {
+    hddIsReading = false;
+    const badge = document.getElementById('hdd-status-badge');
+    if (badge) badge.textContent = `BLOC LU AVEC SUCCÈS (Piste ${hddTrack}, Secteur ${hddSector})`;
+  }, 1200);
+}
+
+function initHddCanvas() {
+  const canvas = document.getElementById('hdd-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let lastTime = performance.now();
+
+  function animate(now) {
+    const dt = (now - lastTime) / 1000;
+    lastTime = now;
+
+    // Mise à jour de l'angle du plateau
+    if (hddIsSpinning) {
+      const rotPerSec = hddRpm / 60;
+      hddPlatterAngle += rotPerSec * 2 * Math.PI * dt;
+    }
+
+    // Déplacement fluide du bras articulé
+    const armDiff = hddTargetArmAngle - hddArmAngle;
+    hddArmAngle += armDiff * Math.min(1, dt * 12);
+
+    // Dessin
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Centre du plateau
+    const platterCenterX = w * 0.45;
+    const platterCenterY = h * 0.52;
+    const platterRadius = Math.min(w, h) * 0.42;
+
+    // 1. Fond du châssis métallique
+    ctx.fillStyle = '#161a22';
+    ctx.fillRect(10, 10, w - 20, h - 20);
+
+    // 2. Plateau en rotation (dégradé métallique circulaire)
+    ctx.save();
+    ctx.translate(platterCenterX, platterCenterY);
+
+    const grad = ctx.createRadialGradient(0, 0, platterRadius * 0.2, 0, 0, platterRadius);
+    grad.addColorStop(0, '#2c3340');
+    grad.addColorStop(0.5, '#414b5c');
+    grad.addColorStop(0.85, '#282f3c');
+    grad.addColorStop(1, '#1b2029');
+
+    ctx.beginPath();
+    ctx.arc(0, 0, platterRadius, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#48546a';
+    ctx.stroke();
+
+    // Dessin des pistes concentriques
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
+    for (let r = platterRadius * 0.35; r < platterRadius * 0.95; r += 12) {
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Dessin des rayons de secteurs en rotation
+    ctx.rotate(hddPlatterAngle);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    for (let s = 0; s < 16; s++) {
+      const angle = (s / 16) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(platterRadius * 0.35 * Math.cos(angle), platterRadius * 0.35 * Math.sin(angle));
+      ctx.lineTo(platterRadius * 0.95 * Math.cos(angle), platterRadius * 0.95 * Math.sin(angle));
+      ctx.stroke();
+    }
+
+    // Mise en évidence du secteur cible
+    const targetAngle = (hddSector / 16) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, platterRadius * 0.4 + (10 - hddTrack) * 6, targetAngle, targetAngle + (Math.PI * 2 / 16));
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = hddIsReading ? '#0f62fe' : 'rgba(15, 98, 254, 0.5)';
+    ctx.stroke();
+
+    // Axe central (Spindle)
+    ctx.beginPath();
+    ctx.arc(0, 0, platterRadius * 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = '#1c212a';
+    ctx.fill();
+    ctx.strokeStyle = '#5f6f8c';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.restore();
+
+    // 3. Moteur à bobine mobile (Voice Coil Motor)
+    const pivotX = w * 0.84;
+    const pivotY = h * 0.22;
+
+    ctx.beginPath();
+    ctx.arc(pivotX, pivotY, 26, 0, Math.PI * 2);
+    ctx.fillStyle = '#222834';
+    ctx.fill();
+    ctx.strokeStyle = '#414d64';
+    ctx.stroke();
+
+    // Aimants néodyme du VCM
+    ctx.beginPath();
+    ctx.arc(pivotX + 18, pivotY - 10, 20, 0, Math.PI);
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = '#d0e2ff';
+    ctx.stroke();
+
+    // 4. Bras articulé (Actuator Arm) orienté vers le plateau
+    ctx.save();
+    ctx.translate(pivotX, pivotY);
+    ctx.rotate(Math.PI + hddArmAngle);
+
+    const armLength = platterRadius * 1.05;
+
+    // Corps du bras en aluminium biseauté
+    ctx.beginPath();
+    ctx.moveTo(0, -6);
+    ctx.lineTo(armLength, -2);
+    ctx.lineTo(armLength + 14, 0); // Tête de lecture (Slider)
+    ctx.lineTo(armLength, 2);
+    ctx.lineTo(0, 6);
+    ctx.closePath();
+    ctx.fillStyle = '#8d99ae';
+    ctx.fill();
+    ctx.strokeStyle = '#edf2f4';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Tête de lecture (GMR Head / Slider)
+    ctx.fillStyle = hddIsReading ? '#0f62fe' : '#e0e0e0';
+    ctx.fillRect(armLength + 8, -3, 8, 6);
+
+    ctx.restore();
+
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+/* ==========================================================================
+   ZOOM MAGNÉTIQUE NANOSCOPIQUE (SECTION 4)
+   ========================================================================== */
+
+function renderMagneticBits() {
+  const container = document.getElementById('magnetic-bits-row');
+  if (!container) return;
+
+  container.innerHTML = '';
+  magneticBits.forEach((bit, idx) => {
+    const el = document.createElement('button');
+    el.className = 'layer-nested';
+    el.style.display = 'flex';
+    el.style.flexDirection = 'column';
+    el.style.alignItems = 'center';
+    el.style.justifyContent = 'center';
+    el.style.minWidth = '48px';
+    el.style.padding = 'var(--space-sm)';
+    el.style.cursor = 'pointer';
+    el.style.border = bit === 1 ? '1px solid var(--primary)' : '1px solid var(--outline-variant)';
+    el.style.background = bit === 1 ? 'var(--primary-container)' : 'var(--surface-container)';
+
+    el.innerHTML = `
+      <span style="font-family: var(--font-label); font-size: 1.1rem; font-weight: 600; color: ${bit === 1 ? 'var(--primary)' : 'var(--on-surface)'};">
+        ${bit === 1 ? '&uarr; N' : '&darr; S'}
+      </span>
+      <span style="font-family: var(--font-label); font-size: 0.75rem; color: var(--on-surface-variant); margin-top: 2px;">
+        ${bit}
+      </span>
+    `;
+    el.onclick = () => toggleMagneticBit(idx);
+    container.appendChild(el);
+  });
+}
+
+function toggleMagneticBit(idx) {
+  magneticBits[idx] = magneticBits[idx] === 1 ? 0 : 1;
+  renderMagneticBits();
+}
+
+function randomizeMagneticBits() {
+  magneticBits = magneticBits.map(() => (Math.random() > 0.5 ? 1 : 0));
+  renderMagneticBits();
+}
+
+/* ==========================================================================
+   SECTION 5 : SIMULATEUR FLASH SSD (CANVAS & CELLULE CTF)
+   ========================================================================== */
+
+function pulseFlashProgram() {
+  if (flashElectronsCount < 7) {
+    flashElectronsCount++;
+    flashWearCount++;
+    flashGateVoltage = 18;
+    updateFlashDisplay();
+    setTimeout(() => {
+      flashGateVoltage = 0;
+      updateFlashDisplay();
+    }, 400);
+  } else {
+    alert("Cellule saturée (7/7 niveaux de charge atteints, état TLC 000). Effectuez un effacement de bloc pour libérer la cellule.");
+  }
+}
+
+function pulseFlashErase() {
+  flashElectronsCount = 0;
+  flashWearCount++;
+  flashGateVoltage = -18;
+  updateFlashDisplay();
+  setTimeout(() => {
+    flashGateVoltage = 0;
+    updateFlashDisplay();
+  }, 400);
+}
+
+function pulseFlashRead() {
+  flashGateVoltage = 3.3;
+  updateFlashDisplay();
+  setTimeout(() => {
+    flashGateVoltage = 0;
+    updateFlashDisplay();
+  }, 400);
+}
+
+function updateFlashDisplay() {
+  // Décodage des 3 bits selon le palier TLC (0 à 7)
+  const bitPatterns = [
+    { bits: '111', desc: 'Niveau 0 : Cellule vierge (aucun électron)' },
+    { bits: '110', desc: 'Niveau 1 : Faible charge piégée' },
+    { bits: '101', desc: 'Niveau 2 : Charge modérée' },
+    { bits: '100', desc: 'Niveau 3 : Charge moyenne' },
+    { bits: '011', desc: 'Niveau 4 : Charge intermédiaire haute' },
+    { bits: '010', desc: 'Niveau 5 : Forte charge' },
+    { bits: '001', desc: 'Niveau 6 : Très forte charge' },
+    { bits: '000', desc: 'Niveau 7 : Saturation maximale du piège' }
+  ];
+
+  const current = bitPatterns[flashElectronsCount];
+  const bitsEl = document.getElementById('flash-decoded-bits');
+  const descEl = document.getElementById('flash-decoded-desc');
+  const wearValEl = document.getElementById('flash-wear-val');
+  const wearBarEl = document.getElementById('flash-wear-bar');
+  const statusEl = document.getElementById('flash-anim-status');
+
+  if (bitsEl) bitsEl.textContent = current.bits;
+  if (descEl) descEl.textContent = current.desc;
+  if (wearValEl) wearValEl.textContent = `${flashWearCount} / 3000`;
+  if (wearBarEl) wearBarEl.style.width = `${Math.min(100, (flashWearCount / 3000) * 100)}%`;
+  if (statusEl) {
+    statusEl.textContent = `Tension de grille : ${flashGateVoltage > 0 ? '+' : ''}${flashGateVoltage} V &middot; Électrons piégés : ${flashElectronsCount * 12}`;
+  }
+}
+
+function initFlashCanvas() {
+  const canvas = document.getElementById('flash-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  function render() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Couches physiques de la cellule CTF
+    const layerH = 36;
+    const startY = h * 0.18;
+
+    // 1. Grille de Contrôle (Metal Gate)
+    ctx.fillStyle = '#4a5568';
+    ctx.fillRect(w * 0.15, startY, w * 0.7, layerH);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '12px IBM Plex Mono';
+    ctx.fillText('GRILLE DE CONTRÔLE EN MÉTAL (CONTROL GATE)', w * 0.18, startY + 22);
+
+    // 2. Diélectrique de blocage (Blocking Oxide)
+    ctx.fillStyle = '#2d3748';
+    ctx.fillRect(w * 0.15, startY + layerH, w * 0.7, layerH * 0.7);
+    ctx.fillStyle = '#a0aec0';
+    ctx.fillText('Isolant de Blocage (Blocking Oxide - SiO2)', w * 0.18, startY + layerH + 16);
+
+    // 3. Piège de charge en nitrure de silicium (Charge Trap Layer - SiN)
+    const trapY = startY + layerH * 1.7;
+    const trapH = layerH * 1.2;
+    ctx.fillStyle = '#1a202c';
+    ctx.fillRect(w * 0.15, trapY, w * 0.7, trapH);
+    ctx.strokeStyle = '#0f62fe';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(w * 0.15, trapY, w * 0.7, trapH);
+
+    ctx.fillStyle = '#d0e2ff';
+    ctx.fillText('PIÈGE DE CHARGE (SiN - Charge Trap Layer)', w * 0.18, trapY + 24);
+
+    // Dessin des électrons captifs dans le piège
+    const totalDrawnElectrons = flashElectronsCount * 12;
+    ctx.fillStyle = '#f1c21b';
+    for (let i = 0; i < totalDrawnElectrons; i++) {
+      const ex = w * 0.18 + (i % 24) * ((w * 0.64) / 24) + Math.sin(i) * 4;
+      const ey = trapY + 12 + Math.floor(i / 24) * 14;
+      ctx.beginPath();
+      ctx.arc(ex, ey, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 4. Oxyde Tunnel (Tunnel Oxide)
+    const tunnelY = trapY + trapH;
+    const tunnelH = layerH * 0.6;
+    ctx.fillStyle = '#2d3748';
+    ctx.fillRect(w * 0.15, tunnelY, w * 0.7, tunnelH);
+    ctx.fillStyle = '#a0aec0';
+    ctx.fillText('Oxyde Tunnel Nanométrique (Tunnel Barrier)', w * 0.18, tunnelY + 14);
+
+    // 5. Substrat Silicium (Canal Source-Drain)
+    const subY = tunnelY + tunnelH;
+    ctx.fillStyle = '#2b6cb0';
+    ctx.fillRect(w * 0.15, subY, w * 0.7, layerH * 1.5);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('CANAL SILICIUM DE CONDUCTION (SUBSTRAT)', w * 0.18, subY + 28);
+
+    // Flèches d'effet tunnel quand la tension est appliquée
+    if (flashGateVoltage > 0) {
+      ctx.strokeStyle = '#f1c21b';
+      ctx.lineWidth = 3;
+      for (let x = w * 0.25; x < w * 0.8; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, subY + 5);
+        ctx.lineTo(x, trapY + trapH - 5);
+        ctx.stroke();
+      }
+    } else if (flashGateVoltage < 0) {
+      ctx.strokeStyle = '#da1e28';
+      ctx.lineWidth = 3;
+      for (let x = w * 0.25; x < w * 0.8; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, trapY + 5);
+        ctx.lineTo(x, subY + 5);
+        ctx.stroke();
+      }
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+/* ==========================================================================
+   SECTION 6 : SIMULATEUR DE PROJET DE SAUVEGARDE
+   ========================================================================== */
+
+function updateProjectSimulator(volumeGb) {
+  const gb = parseFloat(volumeGb) || 2000;
+  const container = document.getElementById('project-results-grid');
+  if (!container) return;
+
+  // Calculs :
+  // Disquettes 1.44 Mo
+  const floppyCount = Math.round((gb * 1024) / 1.44);
+  // Disques durs 4 To
+  const hddCount = Math.ceil(gb / 4000);
+  // SSD 2 To
+  const ssdCount = Math.ceil(gb / 2000);
+
+  // Temps de transfert théorique :
+  // Bande/Disquette : impensable
+  // HDD à 200 Mo/s
+  const hddTransferSec = (gb * 1024) / 200;
+  const hddTransferMin = (hddTransferSec / 60).toFixed(1);
+  // SSD NVMe à 5000 Mo/s
+  const ssdTransferSec = ((gb * 1024) / 5000).toFixed(1);
+
+  container.innerHTML = `
+    <div class="layer-nested">
+      <span class="label-mono">En Disquettes 3,5"</span>
+      <div style="font-family: var(--font-label); font-size: 1.3rem; font-weight: 600; color: var(--on-surface);">
+        ${floppyCount.toLocaleString('fr-FR')}
+      </div>
+      <span style="font-size: 0.75rem; color: var(--on-surface-variant);">disquettes de 1,44 Mo (~${(floppyCount * 0.02).toFixed(0)} kg)</span>
+    </div>
+
+    <div class="layer-nested">
+      <span class="label-mono">En Disques HDD 4 To</span>
+      <div style="font-family: var(--font-label); font-size: 1.3rem; font-weight: 600; color: var(--on-surface);">
+        ${hddCount} disque(s)
+      </div>
+      <span style="font-size: 0.75rem; color: var(--on-surface-variant);">Temps de copie : ~${hddTransferMin} min</span>
+    </div>
+
+    <div class="layer-nested" style="border-left: 2px solid var(--primary);">
+      <span class="label-mono">En SSD NVMe 2 To</span>
+      <div style="font-family: var(--font-label); font-size: 1.3rem; font-weight: 600; color: var(--primary);">
+        ${ssdCount} module(s) M.2
+      </div>
+      <span style="font-size: 0.75rem; color: var(--on-surface-variant);">Temps de copie : ~${ssdTransferSec} s</span>
+    </div>
+  `;
+}
+
+/* ==========================================================================
+   SECTION 7 : GRAND QUIZ PÉDAGOGIQUE
+   ========================================================================== */
+
+function renderQuizQuestion(index) {
+  quizCurrentIndex = index;
+  const q = QUIZ_QUESTIONS[index];
+  if (!q) return;
+
+  // Mise à jour de la barre de progression
+  const counter = document.getElementById('quiz-question-counter');
+  const bar = document.getElementById('quiz-progress-bar');
+  const prevBtn = document.getElementById('quiz-prev-btn');
+  const nextBtn = document.getElementById('quiz-next-btn');
+
+  if (counter) counter.textContent = `Question ${index + 1} sur ${QUIZ_QUESTIONS.length}`;
+  if (bar) bar.style.width = `${((index + 1) / QUIZ_QUESTIONS.length) * 100}%`;
+  if (prevBtn) prevBtn.disabled = index === 0;
+
+  const titleEl = document.getElementById('quiz-question-title');
+  const optionsEl = document.getElementById('quiz-options-list');
+  const feedbackBox = document.getElementById('quiz-feedback-box');
+
+  if (titleEl) titleEl.textContent = `${index + 1}. ${q.question}`;
+  if (optionsEl) optionsEl.innerHTML = '';
+
+  const answered = quizUserAnswers[index] !== null;
+
+  q.options.forEach((optText, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    if (answered) {
+      if (optIdx === q.answer) {
+        btn.classList.add('correct');
+      } else if (optIdx === quizUserAnswers[index]) {
+        btn.classList.add('incorrect');
+      }
+    }
+
+    btn.innerHTML = `
+      <div style="font-family: var(--font-label); font-weight: 600; min-width: 24px; color: var(--primary);">
+        ${String.fromCharCode(65 + optIdx)}.
+      </div>
+      <div style="font-size: 0.9375rem; color: var(--on-surface); line-height: 1.4;">
+        ${optText}
+      </div>
+    `;
+
+    btn.onclick = () => handleQuizAnswer(index, optIdx);
+    if (optionsEl) optionsEl.appendChild(btn);
+  });
+
+  // Afficher ou masquer le feedback
+  if (answered) {
+    showQuizFeedback(index);
+    if (nextBtn) {
+      nextBtn.style.display = 'inline-flex';
+      nextBtn.textContent = index === QUIZ_QUESTIONS.length - 1 ? 'Voir le Bilan Final' : 'Question Suivante';
+    }
+  } else {
+    if (feedbackBox) feedbackBox.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
+  }
+}
+
+function handleQuizAnswer(questionIndex, selectedOptionIndex) {
+  // Empêcher de re-sélectionner si déjà répondu
+  if (quizUserAnswers[questionIndex] !== null) return;
+
+  quizUserAnswers[questionIndex] = selectedOptionIndex;
+  const isCorrect = selectedOptionIndex === QUIZ_QUESTIONS[questionIndex].answer;
+  if (isCorrect) quizScore++;
+
+  const scoreBadge = document.getElementById('quiz-score-badge');
+  if (scoreBadge) scoreBadge.textContent = `${quizScore} / ${QUIZ_QUESTIONS.length}`;
+
+  // Réafficher les options avec les styles de validation
+  renderQuizQuestion(questionIndex);
+
+  // Sauvegarder l'état
+  saveAppState();
+}
+
+function showQuizFeedback(index) {
+  const q = QUIZ_QUESTIONS[index];
+  const isCorrect = quizUserAnswers[index] === q.answer;
+  const feedbackBox = document.getElementById('quiz-feedback-box');
+  const titleEl = document.getElementById('quiz-feedback-title');
+  const textEl = document.getElementById('quiz-feedback-text');
+
+  if (!feedbackBox || !titleEl || !textEl) return;
+
+  feedbackBox.style.display = 'block';
+  feedbackBox.className = isCorrect ? 'callout callout-success' : 'callout callout-warning';
+  titleEl.textContent = isCorrect ? 'Excellente réponse !' : 'Explication pédagogique :';
+  textEl.textContent = q.explanation;
+}
+
+function nextQuizQuestion() {
+  if (quizCurrentIndex < QUIZ_QUESTIONS.length - 1) {
+    renderQuizQuestion(quizCurrentIndex + 1);
+  } else {
+    showQuizSummary();
+  }
+}
+
+function prevQuizQuestion() {
+  if (quizCurrentIndex > 0) {
+    renderQuizQuestion(quizCurrentIndex - 1);
+  }
+}
+
+function showQuizSummary() {
+  const qContainer = document.getElementById('quiz-question-container');
+  const navContainer = document.getElementById('quiz-feedback-box');
+  const nextBtn = document.getElementById('quiz-next-btn');
+  const prevBtn = document.getElementById('quiz-prev-btn');
+  const summaryBox = document.getElementById('quiz-summary-box');
+
+  if (qContainer) qContainer.style.display = 'none';
+  if (navContainer) navContainer.style.display = 'none';
+  if (nextBtn) nextBtn.style.display = 'none';
+  if (prevBtn) prevBtn.style.display = 'none';
+  if (summaryBox) summaryBox.style.display = 'block';
+
+  const scoreEl = document.getElementById('quiz-final-score');
+  const titleEl = document.getElementById('quiz-final-title');
+  const descEl = document.getElementById('quiz-final-desc');
+
+  if (scoreEl) scoreEl.textContent = `${quizScore} / ${QUIZ_QUESTIONS.length}`;
+
+  const pct = (quizScore / QUIZ_QUESTIONS.length) * 100;
+  if (pct >= 90) {
+    if (titleEl) titleEl.textContent = 'Mention d\'Excellence : Architecte Maître du Silicium & du Magnétisme';
+    if (descEl) descEl.textContent = 'Félicitations ! Vous maîtrisez parfaitement l\'histoire, les grandeurs physiques nanométriques et les principes quantiques du stockage de données.';
+  } else if (pct >= 70) {
+    if (titleEl) titleEl.textContent = 'Mention Très Bien : Ingénieur Systèmes Averti';
+    if (descEl) descEl.textContent = 'Très bonne compréhension globale de la hiérarchie mémoire, du fonctionnement du disque dur mécanique et des cellules 3D NAND.';
+  } else if (pct >= 50) {
+    if (titleEl) titleEl.textContent = 'Mention Honorable : Explorateur des Données';
+    if (descEl) descEl.textContent = 'Les bases sont acquises, mais certaines subtilités (GMR, effet tunnel, temps d\'accès mécanique) méritent une relecture des simulateurs.';
+  } else {
+    if (titleEl) titleEl.textContent = 'Apprenti du Binaire';
+    if (descEl) descEl.textContent = 'Prenez le temps de revoir les sections interactives du cours, notamment les analogies spatiales et le vol de la tête du disque dur.';
+  }
+
+  saveAppState();
+}
+
+function restartQuiz() {
+  quizCurrentIndex = 0;
+  quizScore = 0;
+  quizUserAnswers = new Array(QUIZ_QUESTIONS.length).fill(null);
+
+  const qContainer = document.getElementById('quiz-question-container');
+  const summaryBox = document.getElementById('quiz-summary-box');
+  const scoreBadge = document.getElementById('quiz-score-badge');
+
+  if (qContainer) qContainer.style.display = 'block';
+  if (summaryBox) summaryBox.style.display = 'none';
+  if (scoreBadge) scoreBadge.textContent = `0 / ${QUIZ_QUESTIONS.length}`;
+
+  renderQuizQuestion(0);
+  saveAppState();
+}
+
+/* ==========================================================================
+   PERSISTANCE D'ÉTAT (SHIM API)
+   ========================================================================== */
+
+async function saveAppState() {
+  if (!window.notebookAppApi) return;
+  const stateObj = {
+    currentTimelineIndex,
+    currentPyramidIndex,
+    quizUserAnswers,
+    quizScore,
+    flashWearCount
+  };
+
+  try {
+    await window.notebookAppApi.setAppState(stateObj);
+    const syncStatus = document.getElementById('session-sync-status');
+    if (syncStatus) syncStatus.textContent = 'Prêt & Synchronisé';
+  } catch (err) {
+    console.warn('Erreur lors de la sauvegarde d\'état :', err);
+  }
+}
+
+function restoreAppState(state) {
+  if (!state) return;
+  if (typeof state.currentTimelineIndex === 'number') {
+    selectTimelineItem(state.currentTimelineIndex);
+  }
+  if (typeof state.currentPyramidIndex === 'number') {
+    selectPyramidTier(state.currentPyramidIndex);
+  }
+  if (Array.isArray(state.quizUserAnswers)) {
+    quizUserAnswers = state.quizUserAnswers;
+    quizScore = state.quizScore || 0;
+    const scoreBadge = document.getElementById('quiz-score-badge');
+    if (scoreBadge) scoreBadge.textContent = `${quizScore} / ${QUIZ_QUESTIONS.length}`;
+    renderQuizQuestion(0);
+  }
+  if (typeof state.flashWearCount === 'number') {
+    flashWearCount = state.flashWearCount;
+    updateFlashDisplay();
+  }
+}
+</script>
+
+</body>
+</html>

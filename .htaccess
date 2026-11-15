@@ -1,0 +1,51 @@
+# Configuration Apache PCDOCTOR (OVH Cloud)
+
+# 1. Redirection canonique WWW vers Non-WWW & HTTPS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Forcer www vers non-www
+    RewriteCond %{HTTP_HOST} ^www\.pcdoctor\.tn$ [NC]
+    RewriteRule ^(.*)$ https://pcdoctor.tn/$1 [L,R=301]
+
+    # Forcer HTTP vers HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Redirection propre du dossier support de stockage et du cours interactif
+    RewriteRule ^support(?:\s|%20)+de(?:\s|%20)+stockage/?$ /support-de-stockage/ [R=301,L,NC]
+    RewriteRule ^stockage/?$ /support-de-stockage/ [R=301,L,NC]
+    RewriteRule ^cours-stockage/?$ /support-de-stockage/cours-stockage.html [R=301,L,NC]
+    RewriteRule ^support-de-stockage/Cours_interactif___Histoire_et_fonctionnement_des_supports\.html$ /support-de-stockage/cours-stockage.html [R=301,L,NC]
+</IfModule>
+
+# 2. Compression GZIP / Deflate
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json application/xml
+</IfModule>
+
+# 3. Mise en cache navigateur (Performance & Vitesse)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+
+# 4. En-têtes de sécurité renforcés
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self' https:; frame-ancestors 'self'; object-src 'none'; base-uri 'self';"
+</IfModule>

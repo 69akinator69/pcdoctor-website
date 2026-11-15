@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomie Pédagogique d'un Ordinateur • CompTIA A+ Core 1</title>
+    <style>
+        :root {
+            --bg-dark: #070b14;
+            --bg-panel: #0f172a;
+            --bg-card: #1e293b;
+            --border: #334155;
+            --primary: #2563eb;
+            --cyan: #0ea5e9;
+            --emerald: #10b981;
+            --amber: #f59e0b;
+            --rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Header */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-comptia {
+            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .app-subtitle {
+            font-size: 0.82rem;
+            color: var(--cyan);
+            margin-left: 6px;
+        }
+
+        /* Nav Modes */
+        .nav-modes {
+            display: flex;
+            background: #090e1a;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            gap: 4px;
+        }
+
+        .mode-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: #fff;
+            border-color: var(--cyan);
+        }
+
+        /* Main Workspace */
+        main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Canvas & Visual Area */
+        .viewport-area {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #111a2f 0%, #070b14 75%);
+            overflow: hidden;
+        }
+
+        /* Interactive Controls Overlay */
+        .canvas-toolbar {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pill-bar {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .pill-label {
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        .slider-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="range"] {
+            accent-color: var(--cyan);
+            cursor: pointer;
+            width: 140px;
+        }
+
+        /* SVG Computer Canvas */
+        #pc-stage {
+            width: 95%;
+            height: 90%;
+            max-width: 980px;
+            max-height: 720px;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Interactive Component Styling */
+        .comp-group {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .comp-group:hover .comp-body {
+            filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.7));
+            stroke: var(--cyan) !important;
+            stroke-width: 2px !important;
+        }
+
+        .comp-group.selected .comp-body {
+            filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.9));
+            stroke: var(--emerald) !important;
+            stroke-width: 3px !important;
+        }
+
+        .comp-group.faulty .comp-body {
+            animation: pulse-fault 1s infinite alternate;
+            stroke: var(--rose) !important;
+            stroke-width: 3px !important;
+        }
+
+        @keyframes pulse-fault {
+            from { filter: drop-shadow(0 0 4px rgba(244, 63, 94, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(244, 63, 94, 1)); }
+        }
+
+        /* Rotating Fan Animations */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .fan-blade {
+            transform-origin: center;
+            animation: spin 1.2s linear infinite;
+        }
+
+        .fan-blade-fast {
+            transform-origin: center;
+            animation: spin 0.6s linear infinite;
+        }
+
+        /* Data bus particle animation */
+        @keyframes flow-trace {
+            to {
+                stroke-dashoffset: -40;
+            }
+        }
+
+        .data-bus-active {
+            stroke-dasharray: 6, 4;
+            animation: flow-trace 0.6s linear infinite;
+        }
+
+        /* Inspector Side Panel */
+        .inspector-panel {
+            width: 440px;
+            background: var(--bg-panel);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 50;
+            transition: transform 0.3s ease;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .panel-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .comp-tag {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .comp-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 2px;
+        }
+
+        .panel-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: #0b1120;
+        }
+
+        .panel-tab {
+            flex: 1;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .panel-tab:hover {
+            color: #fff;
+        }
+
+        .panel-tab.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .panel-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .info-card h4 {
+            font-size: 0.95rem;
+            color: var(--cyan);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-card p, .info-card li {
+            font-size: 0.88rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .info-card ul {
+            padding-left: 18px;
+            margin-top: 6px;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .spec-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .spec-table td:first-child {
+            color: var(--text-muted);
+            font-weight: 600;
+            width: 40%;
+        }
+
+        .spec-table td:last-child {
+            color: #f1f5f9;
+        }
+
+        .comp-photo-box {
+            width: 100%;
+            height: 180px;
+            background: #0b1120;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .comp-photo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Quiz Overlay & Bottom Bar */
+        .bottom-bar {
+            background: #090e1a;
+            border-top: 1px solid var(--border);
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .component-quick-pills {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            max-width: 70%;
+        }
+
+        .quick-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: #cbd5e1;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .quick-pill:hover, .quick-pill.active {
+            background: var(--cyan);
+            color: #070b14;
+            font-weight: bold;
+            border-color: var(--cyan);
+        }
+
+        /* Quiz Banner */
+        #quiz-banner {
+            display: none;
+            position: absolute;
+            top: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid var(--amber);
+            border-radius: 12px;
+            padding: 14px 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            z-index: 80;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        #quiz-banner h3 {
+            color: var(--amber);
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        #quiz-banner p {
+            color: #ffffff;
+            font-size: 1.05rem;
+        }
+
+        /* Process Animation Overlay */
+        .process-legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--border);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            display: flex;
+            gap: 16px;
+            z-index: 20;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <span class="badge-comptia">COMPTIA A+ • CORE 1</span>
+        <div>
+            <span class="app-title">Anatomie Interactive d'un Ordinateur</span>
+            <span class="app-subtitle">Support Pédagogique &bull; Mohamed Aissaoui (Formateur IT)</span>
+        </div>
+    </div>
+
+    <div class="nav-modes">
+        <button class="mode-btn active" onclick="setMode('exploded')">
+            <span>📦</span> Vue Éclatée PC
+        </button>
+        <button class="mode-btn" onclick="setMode('motherboard')">
+            <span>🔌</span> Carte Mère Zoom
+        </button>
+        <button class="mode-btn" onclick="setMode('process')">
+            <span>⚡</span> Flux de Données (Computing)
+        </button>
+        <button class="mode-btn" onclick="setMode('diagnostic')">
+            <span>🩺</span> Atelier Diagnostic
+        </button>
+        <button class="mode-btn" onclick="setMode('quiz')">
+            <span>🎯</span> Quiz Anatomie
+        </button>
+    </div>
+
+    <div class="header-actions">
+        <button class="icon-btn" onclick="toggleMute()" id="btn-sound" title="Activer/Couper les effets sonores">🔊</button>
+        <button class="icon-btn" onclick="resetView()" title="Réinitialiser la vue">🔄</button>
+        <button class="icon-btn" onclick="toggleFullscreen()" title="Plein écran">⛶</button>
+    </div>
+</header>
+
+<main>
+    <div class="viewport-area">
+        <!-- Canvas Toolbar -->
+        <div class="canvas-toolbar">
+            <div class="pill-bar" id="exploded-bar">
+                <span class="pill-label">Vue Éclatée :</span>
+                <div class="slider-control">
+                    <span>Assemblé</span>
+                    <input type="range" id="explode-slider" min="0" max="100" value="0" oninput="onExplodeChange(this.value)">
+                    <span>Éclaté</span>
+                </div>
+            </div>
+
+            <div class="pill-bar" id="process-bar" style="display: none;">
+                <span class="pill-label">Simulation Flux :</span>
+                <button class="mode-btn" style="padding: 3px 8px; font-size: 0.75rem;" onclick="toggleProcessFlow()" id="btn-play-flow">⏸ Pause</button>
+                <button class="mode-btn" style="padding: 3px 8px; font-size: 0.75rem;" onclick="stepProcessFlow()">⏭ Pas à pas</button>
+                <span style="font-size: 0.75rem; color: #94a3b8;" id="process-step-label">Étape : Lecture RAM -> CPU</span>
+            </div>
+
+            <div class="pill-bar" id="diag-bar" style="display: none;">
+                <span class="pill-label">Symptôme de Panne :</span>
+                <select id="fault-select" onchange="applyFault(this.value)" style="background:#1e293b; color:#fff; border:1px solid #334155; padding:4px 8px; border-radius:4px; font-size:0.8rem; cursor:pointer;">
+                    <option value="none">-- Aucun défaut (Système sain) --</option>
+                    <option value="ram">Bips continus au démarrage + Écran bleu (BSOD RAM)</option>
+                    <option value="psu">Coupure brutale en charge / Ne s'allume plus (Alimentation)</option>
+                    <option value="cpu">Surchauffe extrême > 95°C + Arrêt de sécurité (CPU Thermal)</option>
+                    <option value="gpu">Artefacts visuels rayés à l'écran (Carte Graphique)</option>
+                    <option value="ssd">Disque non détecté dans le BIOS (Stockage NVMe)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Quiz Question Overlay -->
+        <div id="quiz-banner">
+            <h3 id="quiz-q-num">Question 1 / 5</h3>
+            <p id="quiz-q-text">Cliquez sur le composant responsable du calcul principal et de l'exécution des instructions du système d'exploitation.</p>
+            <div style="margin-top: 10px; font-size: 0.85rem; color: #10b981;" id="quiz-feedback"></div>
+        </div>
+
+        <!-- Process Legend -->
+        <div class="process-legend" id="process-legend" style="display: none;">
+            <div class="legend-item"><div class="legend-dot" style="background:#38bdf8;"></div> Entrées (I/O)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f43f5e;"></div> Calculs (CPU)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#10b981;"></div> Mémoire Vive (RAM)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;"></div> Stockage (SSD)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#a855f7;"></div> Sorties (GPU/Écran)</div>
+        </div>
+
+        <!-- Vector SVG Computer Stage -->
+        <svg id="pc-stage" viewBox="0 0 1000 750">
+            <defs>
+                <linearGradient id="case-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#0f172a"/>
+                </linearGradient>
+                <linearGradient id="mobo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#064e3b"/>
+                    <stop offset="100%" stop-color="#022c22"/>
+                </linearGradient>
+                <linearGradient id="cpu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#94a3b8"/>
+                    <stop offset="100%" stop-color="#475569"/>
+                </linearGradient>
+                <linearGradient id="ram-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0284c7"/>
+                    <stop offset="100%" stop-color="#0369a1"/>
+                </linearGradient>
+                <linearGradient id="gpu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#334155"/>
+                    <stop offset="100%" stop-color="#1e293b"/>
+                </linearGradient>
+                <linearGradient id="psu-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1e293b"/>
+                    <stop offset="100%" stop-color="#090d16"/>
+                </linearGradient>
+                <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="5" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            </defs>
+
+            <!-- ================= VIEW 1 : BOÎTIER & PC INTERIOR ================= -->
+            <g id="layer-tower">
+                <!-- Outer Case Chassis -->
+                <rect class="comp-body" x="180" y="80" width="620" height="580" rx="16" fill="url(#case-grad)" stroke="#475569" stroke-width="3"/>
+                <rect x="200" y="100" width="580" height="540" rx="10" fill="#090e1a" stroke="#1e293b" stroke-width="2"/>
+                
+                <!-- Front Intake Fans (Animated) -->
+                <g id="comp-case-fans" class="comp-group" onclick="selectComponent('fans')">
+                    <rect class="comp-body" x="720" y="120" width="48" height="420" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+                    <!-- Fan 1 -->
+                    <circle cx="744" cy="180" r="28" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                    <g class="fan-blade" style="transform-origin: 744px 180px;">
+                        <line x1="744" y1="155" x2="744" y2="205" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="719" y1="180" x2="769" y2="180" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+                    </g>
+                    <!-- Fan 2 -->
+                    <circle cx="744" cy="280" r="28" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                    <g class="fan-blade" style="transform-origin: 744px 280px;">
+                        <line x1="744" y1="255" x2="744" y2="305" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="719" y1="280" x2="769" y2="280" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+                    </g>
+                    <!-- Fan 3 -->
+                    <circle cx="744" cy="380" r="28" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                    <g class="fan-blade" style="transform-origin: 744px 380px;">
+                        <line x1="744" y1="355" x2="744" y2="405" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+                        <line x1="719" y1="380" x2="769" y2="380" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+                    </g>
+                    <text x="744" y="440" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">AIR IN (Frais)</text>
+                </g>
+
+                <!-- Rear Exhaust Fan -->
+                <g id="comp-rear-fan" class="comp-group" onclick="selectComponent('fans')">
+                    <circle class="comp-body" cx="240" cy="190" r="32" fill="#0f172a" stroke="#f43f5e" stroke-width="2"/>
+                    <g class="fan-blade" style="transform-origin: 240px 190px;">
+                        <line x1="240" y1="162" x2="240" y2="218" stroke="#f43f5e" stroke-width="6" stroke-linecap="round"/>
+                        <line x1="212" y1="190" x2="268" y2="190" stroke="#f43f5e" stroke-width="6" stroke-linecap="round"/>
+                    </g>
+                    <text x="240" y="240" fill="#f43f5e" font-size="9" font-weight="bold" text-anchor="middle">EXHAUST (Chaud)</text>
+                </g>
+
+                <!-- Motherboard PCB Tray -->
+                <g id="comp-motherboard" class="comp-group" onclick="selectComponent('motherboard')">
+                    <rect id="mobo-rect" class="comp-body" x="290" y="120" width="410" height="390" rx="6" fill="url(#mobo-grad)" stroke="#10b981" stroke-width="2"/>
+                    <!-- Traces decoration -->
+                    <path d="M 320 180 L 410 180 L 410 220" stroke="rgba(16, 185, 129, 0.4)" stroke-width="2" fill="none"/>
+                    <path d="M 470 200 L 530 200 L 530 160" stroke="rgba(16, 185, 129, 0.4)" stroke-width="2" fill="none"/>
+                    <path d="M 430 330 L 430 390 L 540 390" stroke="rgba(16, 185, 129, 0.4)" stroke-width="2" fill="none"/>
+                    <text x="310" y="145" fill="#10b981" font-size="12" font-weight="bold">CARTE MÈRE ATX</text>
+                </g>
+
+                <!-- CPU Socket & Processor -->
+                <g id="comp-cpu" class="comp-group" onclick="selectComponent('cpu')">
+                    <rect id="cpu-rect" class="comp-body" x="380" y="170" width="100" height="100" rx="4" fill="url(#cpu-grad)" stroke="#e2e8f0" stroke-width="2"/>
+                    <rect x="395" y="185" width="70" height="70" rx="3" fill="#334155" stroke="#cbd5e1" stroke-width="1"/>
+                    <circle cx="390" cy="180" r="3" fill="#f59e0b"/>
+                    <text x="430" y="225" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">CPU CORE</text>
+                    <text x="430" y="240" fill="#94a3b8" font-size="9" text-anchor="middle">Socket LGA/AM5</text>
+                </g>
+
+                <!-- CPU Cooler / Heatsink (Explodable on top of CPU) -->
+                <g id="comp-cooler" class="comp-group" onclick="selectComponent('cooler')">
+                    <rect id="cooler-rect" class="comp-body" x="365" y="155" width="130" height="130" rx="8" fill="rgba(15, 23, 42, 0.7)" stroke="#38bdf8" stroke-width="2"/>
+                    <circle cx="430" cy="220" r="45" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                    <g class="fan-blade-fast" style="transform-origin: 430px 220px;">
+                        <line x1="430" y1="180" x2="430" y2="260" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+                        <line x1="390" y1="220" x2="470" y2="220" stroke="#38bdf8" stroke-width="6" stroke-linecap="round"/>
+                    </g>
+                    <circle cx="430" cy="220" r="14" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+                </g>
+
+                <!-- RAM Slots & Sticks -->
+                <g id="comp-ram" class="comp-group" onclick="selectComponent('ram')">
+                    <!-- Slot 1 -->
+                    <rect x="520" y="160" width="14" height="130" rx="2" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                    <!-- Slot 2 (Populated) -->
+                    <rect id="ram-stick-1" class="comp-body" x="540" y="155" width="14" height="140" rx="3" fill="url(#ram-grad)" stroke="#38bdf8" stroke-width="1.5"/>
+                    <!-- Slot 3 -->
+                    <rect x="560" y="160" width="14" height="130" rx="2" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                    <!-- Slot 4 (Populated) -->
+                    <rect id="ram-stick-2" class="comp-body" x="580" y="155" width="14" height="140" rx="3" fill="url(#ram-grad)" stroke="#38bdf8" stroke-width="1.5"/>
+                    <text x="555" y="315" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">RAM DDR5</text>
+                </g>
+
+                <!-- Graphics Card (GPU) in PCIe x16 Slot -->
+                <g id="comp-gpu" class="comp-group" onclick="selectComponent('gpu')">
+                    <!-- PCIe Slot on Mobo -->
+                    <rect x="310" y="340" width="220" height="12" rx="2" fill="#0f172a" stroke="#f59e0b" stroke-width="1"/>
+                    <!-- GPU Main Board & Shroud -->
+                    <g id="gpu-shroud">
+                        <rect class="comp-body" x="250" y="345" width="370" height="90" rx="6" fill="url(#gpu-grad)" stroke="#f59e0b" stroke-width="2"/>
+                        <!-- Fan 1 -->
+                        <circle cx="360" cy="390" r="28" fill="#090e1a" stroke="#f59e0b" stroke-width="1.5"/>
+                        <g class="fan-blade" style="transform-origin: 360px 390px;">
+                            <line x1="360" y1="365" x2="360" y2="415" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="335" y1="390" x2="385" y2="390" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+                        </g>
+                        <!-- Fan 2 -->
+                        <circle cx="480" cy="390" r="28" fill="#090e1a" stroke="#f59e0b" stroke-width="1.5"/>
+                        <g class="fan-blade" style="transform-origin: 480px 390px;">
+                            <line x1="480" y1="365" x2="480" y2="415" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+                            <line x1="455" y1="390" x2="505" y2="390" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+                        </g>
+                        <text x="560" y="395" fill="#f8fafc" font-size="11" font-weight="bold">GPU PCIe x16</text>
+                        <text x="560" y="410" fill="#94a3b8" font-size="9">VRAM Dédiée</text>
+                    </g>
+                </g>
+
+                <!-- M.2 NVMe SSD -->
+                <g id="comp-ssd" class="comp-group" onclick="selectComponent('ssd')">
+                    <rect id="ssd-rect" class="comp-body" x="420" y="300" width="90" height="26" rx="3" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                    <rect x="425" y="304" width="22" height="18" fill="#0f172a"/>
+                    <rect x="455" y="304" width="48" height="18" fill="#334155"/>
+                    <text x="465" y="317" fill="#38bdf8" font-size="8" font-weight="bold">NVMe M.2</text>
+                </g>
+
+                <!-- Power Supply Unit (PSU) at the Bottom -->
+                <g id="comp-psu" class="comp-group" onclick="selectComponent('psu')">
+                    <rect id="psu-rect" class="comp-body" x="200" y="525" width="260" height="115" rx="8" fill="url(#psu-grad)" stroke="#f43f5e" stroke-width="2"/>
+                    <circle cx="280" cy="582" r="35" fill="#090e1a" stroke="#334155" stroke-width="2"/>
+                    <g class="fan-blade" style="transform-origin: 280px 582px;">
+                        <line x1="280" y1="552" x2="280" y2="612" stroke="#475569" stroke-width="6" stroke-linecap="round"/>
+                        <line x1="250" y1="582" x2="310" y2="582" stroke="#475569" stroke-width="6" stroke-linecap="round"/>
+                    </g>
+                    <text x="350" y="570" fill="#f8fafc" font-size="13" font-weight="bold">BLOC D'ALIMENTATION</text>
+                    <text x="350" y="588" fill="#f43f5e" font-size="10" font-weight="bold">PSU 750W 80+ GOLD</text>
+                    <text x="350" y="605" fill="#f87171" font-size="9">⚠️ NE JAMAIS OUVRIR !</text>
+                </g>
+
+                <!-- HDD / SATA Storage Bay -->
+                <g id="comp-hdd" class="comp-group" onclick="selectComponent('hdd')">
+                    <rect class="comp-body" x="500" y="540" width="160" height="90" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>
+                    <circle cx="580" cy="585" r="26" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+                    <text x="580" y="590" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">Disque SATA 2.5"</text>
+                </g>
+
+                <!-- Data Bus Animated Traces (Shown in Process Mode) -->
+                <g id="layer-data-bus" style="display: none;">
+                    <!-- Front I/O to Mobo -->
+                    <path id="bus-io-cpu" class="data-bus-active" d="M 720 180 L 620 180 L 480 200" stroke="#38bdf8" stroke-width="4" fill="none"/>
+                    <!-- CPU to RAM -->
+                    <path id="bus-cpu-ram" class="data-bus-active" d="M 480 220 L 540 220" stroke="#10b981" stroke-width="5" fill="none"/>
+                    <!-- CPU to GPU -->
+                    <path id="bus-cpu-gpu" class="data-bus-active" d="M 430 270 L 430 345" stroke="#f59e0b" stroke-width="5" fill="none"/>
+                    <!-- CPU to SSD -->
+                    <path id="bus-cpu-ssd" class="data-bus-active" d="M 450 270 L 450 300" stroke="#38bdf8" stroke-width="4" fill="none"/>
+                    <!-- GPU to Rear Output -->
+                    <path id="bus-gpu-out" class="data-bus-active" d="M 250 390 L 180 390" stroke="#a855f7" stroke-width="5" fill="none"/>
+                </g>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Inspector Side Panel -->
+    <div class="inspector-panel" id="inspector">
+        <div class="panel-header">
+            <div>
+                <div class="comp-tag" id="panel-tag">Composant Matériel</div>
+                <div class="comp-name" id="panel-name">Microprocesseur (CPU)</div>
+            </div>
+            <span style="font-size: 1.5rem;" id="panel-icon">🧠</span>
+        </div>
+
+        <div class="panel-tabs">
+            <button class="panel-tab active" onclick="setTab('role')">Rôle & Fonction</button>
+            <button class="panel-tab" onclick="setTab('specs')">Spécifications</button>
+            <button class="panel-tab" onclick="setTab('faults')">Pannes & Diag</button>
+            <button class="panel-tab" onclick="setTab('photo')">Photo Réelle</button>
+        </div>
+
+        <div class="panel-body">
+            <!-- TAB 1 : ROLE -->
+            <div class="tab-content active" id="tab-role">
+                <div class="info-card">
+                    <h4><span>🎯</span> Définition & Rôle Essentiel</h4>
+                    <p id="desc-role">Le processeur (CPU) est le cerveau informatique de l'ordinateur. Il exécute les calculs arithmétiques et logiques et coordonne l'ensemble des autres composants du système selon la boucle extraction-décodage-exécution.</p>
+                </div>
+                <div class="info-card">
+                    <h4><span>⚡</span> Processus & Interaction Système</h4>
+                    <p id="desc-interact">Il charge les instructions depuis la mémoire vive (RAM) à très grande vitesse et délègue les calculs graphiques lourds au GPU dédié.</p>
+                </div>
+            </div>
+
+            <!-- TAB 2 : SPECS -->
+            <div class="tab-content" id="tab-specs">
+                <div class="info-card">
+                    <h4><span>📋</span> Fiche Technique CompTIA A+</h4>
+                    <table class="spec-table" id="table-specs">
+                        <tr><td>Format / Socket</td><td id="spec-1">LGA1700 / AM5</td></tr>
+                        <tr><td>Architecture</td><td id="spec-2">x86-64 bits, Multi-coeurs</td></tr>
+                        <tr><td>Mémoire Cache</td><td id="spec-3">L1, L2 et L3 ultra-rapide</td></tr>
+                        <tr><td>Consommation (TDP)</td><td id="spec-4">65W à 250W</td></tr>
+                        <tr><td>Obligation Atelier</td><td id="spec-5">Pâte thermique + Ventirad</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3 : FAULTS -->
+            <div class="tab-content" id="tab-faults">
+                <div class="info-card" style="border-left: 3px solid var(--rose);">
+                    <h4 style="color: var(--rose);"><span>🚨</span> Symptômes de Défaillance</h4>
+                    <ul id="list-faults">
+                        <li>Arrêt brutal ou gel du PC sous forte charge.</li>
+                        <li>Extinction de sécurité thermique (*Thermal Shutdown*).</li>
+                        <li>Ventilateur tournant à 100% de façon continue et bruyante.</li>
+                    </ul>
+                </div>
+                <div class="info-card" style="border-left: 3px solid var(--emerald);">
+                    <h4 style="color: var(--emerald);"><span>🔧</span> Méthode de Résolution CompTIA</h4>
+                    <p id="desc-fix">Nettoyer les poussières du radiateur, remplacer la pâte thermique durcie par une pâte neuve au grain de riz, et vérifier que la pompe de refroidissement ou le ventilateur tourne convenablement.</p>
+                </div>
+            </div>
+
+            <!-- TAB 4 : PHOTO -->
+            <div class="tab-content" id="tab-photo">
+                <div class="comp-photo-box">
+                    <img id="comp-real-img" src="assets_anatomy/cpu_wafer_processor.jpg" alt="Composant Réel">
+                </div>
+                <p id="comp-photo-caption" style="font-size: 0.82rem; color: var(--text-muted); text-align: center;">Figure 2-9 : Wafer de silicium et processeur moderne (Extrait CompTIA A+)</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="bottom-bar">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: 700; color: #fff;">Explorer un Organe :</span>
+        <div class="component-quick-pills">
+            <button class="quick-pill active" onclick="selectComponent('cpu')">CPU</button>
+            <button class="quick-pill" onclick="selectComponent('motherboard')">Carte Mère</button>
+            <button class="quick-pill" onclick="selectComponent('ram')">RAM DDR5</button>
+            <button class="quick-pill" onclick="selectComponent('gpu')">Carte Graphique</button>
+            <button class="quick-pill" onclick="selectComponent('ssd')">SSD NVMe</button>
+            <button class="quick-pill" onclick="selectComponent('psu')">Alimentation PSU</button>
+            <button class="quick-pill" onclick="selectComponent('cooler')">Ventirad</button>
+            <button class="quick-pill" onclick="selectComponent('fans')">Airflow</button>
+        </div>
+    </div>
+    <div id="status-hint">Astuce : Cliquez sur un composant pour afficher son autopsie détaillée.</div>
+</div>
+
+<script>
+    // Component Database with Pedagogical Depth
+    const componentsData = {
+        cpu: {
+            name: "Microprocesseur (CPU)",
+            tag: "Cerveau de Traitement",
+            icon: "🧠",
+            role: "Le processeur (Central Processing Unit) est le cerveau calculateur principal. Il exécute les instructions du système d'exploitation et des logiciels en appliquant le cycle perpétuel Recherche-Décodage-Exécution (Fetch-Decode-Execute).",
+            interact: "Communique directement avec la mémoire vive (RAM) à très haute vitesse via le contrôleur mémoire intégré (IMC) et avec le GPU via les lignes directes PCIe du processeur.",
+            specs: {
+                "Type de Socket": "LGA (broches sur la carte mère) ou PGA (broches sous le CPU)",
+                "Architecture": "64 bits (x86_64) Multi-cœurs (P-Cores et E-Cores)",
+                "Hiérarchie Mémoire": "Caches L1 (ultra-rapide), L2 et L3 partagé",
+                "Consommation (TDP)": "65W à 253W selon la charge",
+                "Indispensable": "Pâte thermique de haute conductivité + Ventirad"
+            },
+            faults: [
+                "Arrêt brutal instantané de la machine en jeu ou encodage vidéo.",
+                "Écran bleu BSOD WHEA_UNCORRECTABLE_ERROR ou MACHINE_CHECK_EXCEPTION.",
+                "Ralentissement drastique par sécurité thermique (Thermal Throttling)."
+            ],
+            fix: "Contrôler la température dans le BIOS/UEFI. Nettoyer les radiateurs, vérifier le bon contact de la pompe AIO ou changer la pâte thermique séchée.",
+            photo: "assets_anatomy/cpu_wafer_processor.jpg",
+            caption: "Figure 2-9 : Microprocesseur moderne et wafer de silicium."
+        },
+        motherboard: {
+            name: "Carte Mère (Motherboard)",
+            tag: "Squelette & Système Nerveux",
+            icon: "🔌",
+            role: "Circuit imprimé principal multicouche reliant tous les composants. Elle distribue les différentes tensions électriques générées par l'alimentation et achemine les signaux de données via les bus de communication.",
+            interact: "Accueille le socket CPU, les slots RAM, les connecteurs PCIe, les ports M.2 et le chipset gérant les entrées/sorties lentes (SATA, USB, audio, réseau).",
+            specs: {
+                "Facteurs de Forme": "ATX (standard), Micro-ATX (compact), Mini-ITX (très réduit)",
+                "Étages d'Alimentation": "VRM (Voltage Regulator Modules) filtrés par condensateurs",
+                "Firmware de base": "UEFI avec Secure Boot et puce TPM 2.0 intégrée",
+                "Alimentation principale": "Connecteur ATX 24 broches + Connecteur CPU 8 broches",
+                "Pile de sauvegarde": "Pile bouton au lithium CR2032 (3V) pour la CMOS"
+            },
+            faults: [
+                "L'ordinateur ne démarre pas du tout, aucun voyant de veille ne s'allume.",
+                "Condensateurs gonflés, noircis ou fuyards sur les étages VRM.",
+                "Ports USB ou carte réseau intégrée non reconnus par l'OS."
+            ],
+            fix: "Vérifier le branchement du connecteur 24 broches ATX. Tester avec une alimentation de test. Réinitialiser le BIOS via le cavalier Clear CMOS (CLRTC).",
+            photo: "assets_anatomy/pc_internal_view.jpg",
+            caption: "Figure 2-13 : Vue d'ensemble de la carte mère au sein du boîtier."
+        },
+        ram: {
+            name: "Mémoire Vive (RAM)",
+            tag: "Espace de Travail Ultra-Rapide",
+            icon: "⚡",
+            role: "Mémoire volatile à accès aléatoire stockant temporairement le système d'exploitation en cours d'exécution et les applications actives. Dès que le PC s'éteint, tout son contenu s'efface.",
+            interact: "Échange en permanence des gigaoctets par seconde avec le processeur via un bus mémoire dédié en Dual Channel ou Quad Channel.",
+            specs: {
+                "Technologies": "DDR4 (jusqu'à 3200 MT/s) ou DDR5 (4800 à 7200+ MT/s)",
+                "Format physique": "DIMM 288 broches pour PC fixe / SO-DIMM pour portables",
+                "Détrompeur": "Encoche asymétrique empêchant tout montage à l'envers",
+                "Latence & Canaux": "Profils XMP / EXPO pour fréquences et timings optimaux",
+                "Caractéristique": "Volatile (perte des données à la coupure du courant)"
+            },
+            faults: [
+                "Bips répétés au démarrage du PC (POST Beep Code mémoire absente).",
+                "Écrans bleus BSOD réguliers avec mention MEMORY_MANAGEMENT.",
+                "Applications qui se ferment brusquement sans message d'erreur."
+            ],
+            fix: "Éteindre le PC, porter le bracelet antistatique (ESD), retirer les barrettes et les réenclencher fermement jusqu'au 'clic' des ergots. Tester avec MemTest86.",
+            photo: "assets_anatomy/pc_internal_view.jpg",
+            caption: "Figure 2-13 : Barrette mémoire installée dans son slot DIMM."
+        },
+        gpu: {
+            name: "Carte Graphique Dédiée (GPU)",
+            tag: "Moteur de Rendu Visuel",
+            icon: "🎮",
+            role: "Processeur graphique massivement parallèle spécialisé dans le calcul matriciel, le rendu 3D, le décodage vidéo haute définition et le traitement de l'intelligence artificielle.",
+            interact: "S'enfiche dans le connecteur PCIe 4.0/5.0 x16 le plus proche du CPU et génère le signal vidéo envoyé aux écrans via HDMI et DisplayPort.",
+            specs: {
+                "Bus de connexion": "PCI Express x16 (jusqu'à 64 Go/s de bande passante)",
+                "Mémoire Embarquée": "VRAM GDDR6 ou GDDR6X haute vitesse",
+                "Alimentation": "Connecteurs PCIe 8 broches ou nouveau connecteur 12V-2x6",
+                "Sorties vidéo": "DisplayPort 1.4/2.1 et HDMI 2.1",
+                "Refroidissement": "2 ou 3 ventilateurs avec chambre à vapeur en cuivre"
+            },
+            faults: [
+                "Lignes verticales colorées ou damiers de pixels à l'écran (Artefacts).",
+                "Écran noir dès le lancement d'une application ou d'un jeu 3D.",
+                "Pilote graphique qui plante en boucle et redémarre sous Windows."
+            ],
+            fix: "Vérifier le bon enfichage des câbles d'alimentation PCIe 8 broches. Nettoyer les pilotes avec DDU en mode sans échec. Vérifier la température du GPU.",
+            photo: "assets_anatomy/pc_rear_io_connectors.jpg",
+            caption: "Figure 2-12 : Connecteurs HDMI et DisplayPort à l'arrière de la carte graphique."
+        },
+        ssd: {
+            name: "Stockage NVMe M.2 / SSD SATA",
+            tag: "Mémoire de Masse Permanente",
+            icon: "💾",
+            role: "Conserve le système d'exploitation, les programmes et les fichiers personnels de façon non-volatile (les données restent intactes même PC éteint pendant des années).",
+            interact: "Le protocole NVMe exploite 4 lignes directes PCIe, offrant des débits jusqu'à 7 000 Mo/s (soit 12 fois plus rapide qu'un SSD SATA classique à 550 Mo/s).",
+            specs: {
+                "Facteur de forme": "M.2 format 2280 (22 mm de large, 80 mm de long)",
+                "Interface": "PCIe 4.0 x4 ou PCIe 5.0 x4 protocole NVMe",
+                "Technologie interne": "Puces de mémoire Flash NAND 3D (TLC / QLC)",
+                "Contrôleur": "Puce dédiée gérant l'usure des cellules (Wear Leveling)",
+                "Surveillance": "Télémétrie S.M.A.R.T. intégrée"
+            },
+            faults: [
+                "Message au démarrage : 'BOOT DEVICE NOT FOUND' ou 'INSERT BOOT MEDIA'.",
+                "Lenteurs extrêmes au chargement de Windows.",
+                "Fichiers corrompus ou alertes SMART indiquant une fin de vie imminente."
+            ],
+            fix: "Vérifier la détection du disque dans la liste de boot UEFI. Contrôler la santé des cellules avec CrystalDiskInfo. Remplacer le SSD en cas de secteurs réalloués.",
+            photo: "assets_anatomy/pc_internal_view.jpg",
+            caption: "Figure 2-13 : Emplacement M.2 vissé directement sur le PCB de la carte mère."
+        },
+        psu: {
+            name: "Bloc d'Alimentation (PSU)",
+            tag: "Générateur d'Énergie Vital",
+            icon: "⚡",
+            role: "Transforme le courant alternatif haute tension dangereux de la prise murale (230V AC) en tensions continues faibles et stables (+12V, +5V, +3.3V DC) indispensables aux circuits électroniques.",
+            interact: "Alimente la carte mère (24 broches), le processeur (EPS 8 broches), la carte graphique (PCIe 8 broches) et les disques de stockage (SATA Power).",
+            specs: {
+                "Certification Énergie": "80 PLUS (Bronze, Gold, Platinum, Titanium)",
+                "Format": "ATX standard modulaire ou semi-modulaire",
+                "Protections internes": "OVP (surtension), OCP (surintensité), SCP (court-circuit)",
+                "RÈGLE D'OR COMPTIA": "NE JAMAIS OUVRIR LE CHÂSSIS D'UNE ALIMENTATION !",
+                "Danger Mortel": "Condensateurs haute tension chargés même débranchée"
+            },
+            faults: [
+                "L'ordinateur s'éteint instantanément lors d'une charge graphique lourde.",
+                "Odeur caractéristique de composant grillé ou condensateur éclaté.",
+                "Bruit aigu de sifflement électrique gênant (Coil Whine)."
+            ],
+            fix: "Testeur d'alimentation ou multimètre pour vérifier les rails 12V et 5V. Remplacement pur et simple du bloc d'alimentation (FRU) : aucune réparation interne !",
+            photo: "assets_anatomy/pc_rear_io_connectors.jpg",
+            caption: "Figure 2-12 : Interrupteur secteur I/O et prise d'alimentation 230V à la base de la tour."
+        },
+        cooler: {
+            name: "Refroidissement CPU (Ventirad / AIO)",
+            tag: "Gestion Thermique & Protection",
+            icon: "❄️",
+            role: "Évacue l'énorme concentration de chaleur produite par le die microscopique du processeur afin d'empêcher sa destruction thermique et d'éviter les pertes de performances.",
+            interact: "La semelle de cuivre poli absorbe la chaleur via la pâte thermique, les caloducs la transportent vers les ailettes en aluminium refroidies par le ventilateur PWM.",
+            specs: {
+                "Types": "Ventirad à caloducs (Air cooling) ou Watercooling tout-en-un (AIO)",
+                "Régulation": "Signal PWM 4 broches faisant varier la vitesse de 600 à 2000 RPM",
+                "Interface thermique": "Pâte thermique à base d'argent ou céramique",
+                "Surveillance": "Sonde interne CPU Package lue par la carte mère",
+                "Température idéale": "35-45°C au repos, < 80°C en pleine charge"
+            },
+            faults: [
+                "Ventilateur bloqué par un câble traînant à l'intérieur du boîtier.",
+                "Film plastique de protection sous le radiateur oublié lors du montage !",
+                "Pâte thermique desséchée après 3 à 5 ans d'utilisation."
+            ],
+            fix: "Démonter le ventirad, nettoyer à l'alcool isopropylique avec un chiffon non pelucheux, réappliquer un grain de riz de pâte thermique neuve et revisser en croix.",
+            photo: "assets_anatomy/pc_internal_view.jpg",
+            caption: "Figure 2-13 : Radiateur et ventilateur montés au-dessus du socket processeur."
+        },
+        fans: {
+            name: "Ventilation du Boîtier (Airflow)",
+            tag: "Circulation Aéraulique",
+            icon: "💨",
+            role: "Crée un flux d'air continu et dirigé dans tout le boîtier : aspiration d'air frais depuis la façade avant et expulsion d'air chaud par l'arrière et le sommet.",
+            interact: "Évite l'effet de 'four' à l'intérieur du châssis en créant une pression positive qui repousse la poussière à travers les filtres amovibles.",
+            specs: {
+                "Diamètres standards": "120 mm ou 140 mm",
+                "Connecteurs": "3 broches (tension DC) ou 4 broches (PWM asservi)",
+                "Principe de Pression": "Pression positive (Entrée > Sortie) pour limiter la poussière",
+                "Filtres": "Filtres à poussière magnétiques amovibles et lavables",
+                "Orientation": "La face avec l'armature plastique indique le sens de sortie de l'air"
+            },
+            faults: [
+                "Poussière colmatant totalement les grilles d'aération avant.",
+                "Bruit de frottement d'un câble contre les pales en rotation.",
+                "Ventilateurs montés à l'envers expulsant l'air par l'avant !"
+            ],
+            fix: "Dépoussiérer à la bombe à air comprimé (en maintenant les pales avec le doigt pour éviter d'induire un courant destructeur sur la carte mère).",
+            photo: "assets_anatomy/pc_internal_view.jpg",
+            caption: "Figure 2-13 : Grilles d'aération et ventilateurs de flux d'air."
+        }
+    };
+
+    let currentMode = 'exploded';
+    let currentComponent = 'cpu';
+    let soundEnabled = true;
+
+    // Web Audio Synthesizer for Interactive Tech Feedback
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.08) {
+        if (!soundEnabled) return;
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+    }
+
+    function toggleMute() {
+        soundEnabled = !soundEnabled;
+        document.getElementById('btn-sound').innerText = soundEnabled ? '🔊' : '🔇';
+    }
+
+    function setTab(tabId) {
+        playTone(600, 'sine', 0.05);
+        document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        event.target.classList.add('active');
+        document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    function selectComponent(key) {
+        playTone(520, 'sine', 0.06);
+        currentComponent = key;
+        const data = componentsData[key];
+        if (!data) return;
+
+        // Update active quick pill
+        document.querySelectorAll('.quick-pill').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.comp-group').forEach(g => g.classList.remove('selected'));
+
+        const groupElem = document.getElementById('comp-' + key);
+        if (groupElem) groupElem.classList.add('selected');
+
+        // Update Inspector Panel
+        document.getElementById('panel-name').innerText = data.name;
+        document.getElementById('panel-tag').innerText = data.tag;
+        document.getElementById('panel-icon').innerText = data.icon;
+        document.getElementById('desc-role').innerText = data.role;
+        document.getElementById('desc-interact').innerText = data.interact;
+        
+        // Specs table
+        let specsHtml = '';
+        for (const [k, v] of Object.entries(data.specs)) {
+            specsHtml += `<tr><td>${k}</td><td>${v}</td></tr>`;
+        }
+        document.getElementById('table-specs').innerHTML = specsHtml;
+
+        // Faults list
+        let faultsHtml = '';
+        data.faults.forEach(f => { faultsHtml += `<li>${f}</li>`; });
+        document.getElementById('list-faults').innerHTML = faultsHtml;
+        document.getElementById('desc-fix').innerText = data.fix;
+
+        // Photo
+        document.getElementById('comp-real-img').src = data.photo;
+        document.getElementById('comp-photo-caption').innerText = data.caption;
+
+        // If in quiz mode, verify answer
+        if (currentMode === 'quiz') {
+            checkQuizAnswer(key);
+        }
+    }
+
+    function onExplodeChange(val) {
+        const factor = val / 100;
+        // Shift parts along explosion vectors
+        const cooler = document.getElementById('comp-cooler');
+        const gpu = document.getElementById('gpu-shroud');
+        const ram1 = document.getElementById('ram-stick-1');
+        const ram2 = document.getElementById('ram-stick-2');
+        const psu = document.getElementById('psu-rect');
+
+        if (cooler) cooler.style.transform = `translate(${val * 0.4}px, ${-val * 0.8}px)`;
+        if (gpu) gpu.style.transform = `translate(${-val * 0.6}px, ${val * 0.5}px)`;
+        if (ram1) ram1.style.transform = `translate(${val * 0.3}px, ${-val * 0.4}px)`;
+        if (ram2) ram2.style.transform = `translate(${val * 0.5}px, ${-val * 0.5}px)`;
+        if (psu) psu.style.transform = `translate(${-val * 0.4}px, ${val * 0.3}px)`;
+    }
+
+    function setMode(mode) {
+        playTone(750, 'triangle', 0.08);
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        // Hide all mode overlays
+        document.getElementById('exploded-bar').style.display = 'none';
+        document.getElementById('process-bar').style.display = 'none';
+        document.getElementById('diag-bar').style.display = 'none';
+        document.getElementById('quiz-banner').style.display = 'none';
+        document.getElementById('process-legend').style.display = 'none';
+        document.getElementById('layer-data-bus').style.display = 'none';
+        
+        // Clear faults
+        document.querySelectorAll('.comp-group').forEach(g => g.classList.remove('faulty'));
+
+        const stage = document.getElementById('pc-stage');
+        stage.style.transform = 'scale(1)';
+
+        if (mode === 'exploded') {
+            document.getElementById('exploded-bar').style.display = 'flex';
+            document.getElementById('status-hint').innerText = "Déplacez le curseur pour démonter progressivement les organes du PC.";
+        } else if (mode === 'motherboard') {
+            // Zoom in on motherboard area
+            stage.style.transform = 'scale(1.45) translate(-60px, -40px)';
+            document.getElementById('status-hint').innerText = "Autopsie de la carte mère : Observez les slots DIMM, le socket CPU et le bus PCIe.";
+            selectComponent('motherboard');
+        } else if (mode === 'process') {
+            document.getElementById('process-bar').style.display = 'flex';
+            document.getElementById('process-legend').style.display = 'flex';
+            document.getElementById('layer-data-bus').style.display = 'inline';
+            document.getElementById('status-hint').innerText = "Observez le cycle informatique : Entrées (I/O) -> Traitement (CPU) -> RAM -> GPU -> Sortie.";
+        } else if (mode === 'diagnostic') {
+            document.getElementById('diag-bar').style.display = 'flex';
+            document.getElementById('status-hint').innerText = "Sélectionnez un symptôme de panne pour localiser et diagnostiquer l'organe défaillant.";
+        } else if (mode === 'quiz') {
+            document.getElementById('quiz-banner').style.display = 'block';
+            startQuiz();
+        }
+    }
+
+    function applyFault(fault) {
+        document.querySelectorAll('.comp-group').forEach(g => g.classList.remove('faulty'));
+        if (fault === 'none') return;
+
+        playTone(300, 'sawtooth', 0.2);
+        let targetComp = 'cpu';
+        if (fault === 'ram') targetComp = 'ram';
+        if (fault === 'psu') targetComp = 'psu';
+        if (fault === 'cpu') targetComp = 'cooler';
+        if (fault === 'gpu') targetComp = 'gpu';
+        if (fault === 'ssd') targetComp = 'ssd';
+
+        const elem = document.getElementById('comp-' + targetComp);
+        if (elem) elem.classList.add('faulty');
+        selectComponent(targetComp);
+        setTab('faults');
+    }
+
+    function resetView() {
+        playTone(440, 'sine', 0.05);
+        document.getElementById('explode-slider').value = 0;
+        onExplodeChange(0);
+        document.getElementById('pc-stage').style.transform = 'scale(1)';
+        document.getElementById('fault-select').value = 'none';
+        applyFault('none');
+        selectComponent('cpu');
+    }
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // Process Simulation Step by Step
+    const steps = [
+        { label: "1. ENTRÉE : Commande clavier/souris envoyée au contrôleur I/O", comp: "fans" },
+        { label: "2. TRAITEMENT : Le CPU extrait et décode l'instruction (Fetch/Decode)", comp: "cpu" },
+        { label: "3. MÉMOIRE VIVE : Échange ultra-rapide des blocs de données avec la RAM", comp: "ram" },
+        { label: "4. STOCKAGE : Chargement de texture ou fichier persistant depuis le SSD", comp: "ssd" },
+        { label: "5. SORTIE : Le GPU calcule les trames et les transmet à l'écran DisplayPort", comp: "gpu" }
+    ];
+    let currentProcessStep = 0;
+
+    function stepProcessFlow() {
+        playTone(650, 'sine', 0.08);
+        currentProcessStep = (currentProcessStep + 1) % steps.length;
+        document.getElementById('process-step-label').innerText = steps[currentProcessStep].label;
+        selectComponent(steps[currentProcessStep].comp);
+    }
+
+    let processPlaying = true;
+    let processTimer = null;
+
+    function toggleProcessFlow() {
+        processPlaying = !processPlaying;
+        document.getElementById('btn-play-flow').innerText = processPlaying ? '⏸ Pause' : '▶ Lecture';
+        if (processPlaying) {
+            processTimer = setInterval(stepProcessFlow, 2500);
+        } else {
+            clearInterval(processTimer);
+        }
+    }
+
+    // Quiz Questions Data
+    const quizQuestions = [
+        {
+            q: "Cliquez sur le composant responsable des calculs principaux et de l'exécution des instructions du système d'exploitation.",
+            target: "cpu",
+            exp: "Bravo ! Le CPU (processeur) effectue tous les calculs arithmétiques et logiques de l'ordinateur."
+        },
+        {
+            q: "Cliquez sur l'organe qui stocke temporairement le système et les programmes actifs (mémoire volatile effacée à l'extinction).",
+            target: "ram",
+            exp: "Exact ! La mémoire vive (RAM) est un espace de travail ultra-rapide mais totalement volatile."
+        },
+        {
+            q: "Cliquez sur le composant qui présente un DANGER MORTEL de haute tension et dont le boîtier ne doit JAMAIS être ouvert.",
+            target: "psu",
+            exp: "Parfait ! L'alimentation (PSU) contient des condensateurs de forte capacité chargés à plusieurs centaines de volts."
+        },
+        {
+            q: "Cliquez sur la carte d'extension s'enfichant dans le slot PCIe x16 pour calculer et restituer les graphismes 3D aux écrans.",
+            target: "gpu",
+            exp: "Excellent ! La carte graphique dédiée (GPU) décharge le CPU de tous les rendus visuels complexes."
+        },
+        {
+            q: "Cliquez sur le circuit imprimé fédérateur qui accueille tous les organes et achemine les signaux électriques et de données.",
+            target: "motherboard",
+            exp: "Félicitations ! La carte mère (Motherboard) est la colonne vertébrale reliant tous les composants entre eux."
+        }
+    ];
+
+    let quizIndex = 0;
+    let quizScore = 0;
+
+    function startQuiz() {
+        quizIndex = 0;
+        quizScore = 0;
+        showQuizQuestion();
+    }
+
+    function showQuizQuestion() {
+        const q = quizQuestions[quizIndex];
+        document.getElementById('quiz-q-num').innerText = `Question ${quizIndex + 1} / ${quizQuestions.length} • Score : ${quizScore}`;
+        document.getElementById('quiz-q-text').innerText = q.q;
+        document.getElementById('quiz-feedback').innerText = "";
+    }
+
+    function checkQuizAnswer(compKey) {
+        const q = quizQuestions[quizIndex];
+        const feedback = document.getElementById('quiz-feedback');
+        
+        if (compKey === q.target) {
+            playTone(880, 'sine', 0.15);
+            quizScore++;
+            feedback.style.color = '#10b981';
+            feedback.innerText = "✓ " + q.exp;
+            setTimeout(() => {
+                quizIndex++;
+                if (quizIndex < quizQuestions.length) {
+                    showQuizQuestion();
+                } else {
+                    document.getElementById('quiz-q-num').innerText = "🏆 Quiz Terminé !";
+                    document.getElementById('quiz-q-text').innerText = `Votre score final : ${quizScore} / ${quizQuestions.length}. Vous maîtrisez l'anatomie fondamentale CompTIA A+ !`;
+                    feedback.innerText = "Félicitations Technicien !";
+                }
+            }, 1800);
+        } else {
+            playTone(240, 'sawtooth', 0.2);
+            feedback.style.color = '#f43f5e';
+            feedback.innerText = "❌ Incorrect ! Cherchez encore...";
+        }
+    }
+
+    // Default initialization
+    selectComponent('cpu');
+</script>
+
+</body>
+</html>

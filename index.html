@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PCDOCTOR | Dépannage, Réparation Ordinateur & Maintenance IT à Tunis</title>
+  <meta name="description" content="PCDOCTOR Computer Service Center à Tunis : réparation PC portable & bureau, changement d'écran LCD, boost SSD, récupération de données et maintenance pour professionnels. Contact : +216 98 484 569.">
+  <meta name="keywords" content="réparation pc tunis, dépannage informatique tunisie, changement écran pc portable, boost ssd ordinateur, réparation ordinateur portable tunis, maintenance informatique entreprise grand tunis, pcdoc, pcdoctor tn, mohamed aissaoui ">
+  <meta name="theme-color" content="#29C2E7">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- URL Canonique & Référencement Multilingue -->
+  <link rel="canonical" href="https://pcdoctor.tn/">
+  <link rel="alternate" hreflang="fr" href="https://pcdoctor.tn/">
+  <link rel="alternate" hreflang="en" href="https://pcdoctor.tn/en/">
+  <link rel="alternate" hreflang="x-default" href="https://pcdoctor.tn/">
+
+  <!-- Open Graph / Réseaux Sociaux -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pcdoctor.tn/">
+  <meta property="og:site_name" content="PCDOCTOR Computer Service Center">
+  <meta property="og:title" content="PCDOCTOR | Centre de Réparation & Maintenance Informatique à Tunis">
+  <meta property="og:description" content="Dépannage rapide, réparation matérielle, boost SSD et maintenance informatique par un formateur IT certifié. Appelez le +216 98 484 569.">
+  <meta property="og:image" content="https://pcdoctor.tn/assets/logo.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="fr_TN">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PCDOCTOR | Réparation Ordinateur & Maintenance IT à Tunis">
+  <meta name="twitter:description" content="Dépannage PC portable & bureau, remplacement écran, boost SSD et maintenance par Mohamed Aissaoui à Tunis.">
+  <meta name="twitter:image" content="https://pcdoctor.tn/assets/logo.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2.2">
+
+  <!-- Critical Hero Slider Styles (Garantit l'affichage immédiat sans dépendance de cache) -->
+  <style id="hero-slider-critical">
+  .hero-slider-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    min-height: 340px;
+    max-height: 480px;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 20px 45px -12px rgba(5, 8, 8, 0.45);
+    border: 1px solid var(--card-border, #1c2b30);
+    background: #0b1316;
+  }
+  .slider-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .slide-item {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1.03);
+    will-change: opacity, transform;
+  }
+  .slide-item.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    z-index: 1;
+  }
+  .slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.9);
+  }
+  .slide-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2.25rem 1.75rem 1.5rem;
+    background: linear-gradient(to top, rgba(5, 8, 8, 0.94) 0%, rgba(5, 8, 8, 0.65) 55%, transparent 100%);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .slide-tag {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #29C2E7;
+    background: rgba(41, 194, 231, 0.15);
+    border: 1px solid rgba(41, 194, 231, 0.35);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+  .slide-title {
+    font-family: var(--font-condensed, "Barlow Condensed", sans-serif);
+    font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.15;
+    margin: 0;
+  }
+  .slide-desc {
+    font-size: 0.92rem;
+    color: #d3dcdf;
+    line-height: 1.4;
+    margin: 0;
+    max-width: 440px;
+  }
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(5, 8, 8, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(6px);
+  }
+  .slider-btn:hover {
+    background: #29C2E7;
+    color: #050808;
+    border-color: #29C2E7;
+    transform: translateY(-50%) scale(1.08);
+  }
+  .slider-prev { left: 1rem; }
+  .slider-next { right: 1rem; }
+  .slider-dots {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(5, 8, 8, 0.6);
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .dot-btn {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s ease;
+  }
+  .dot-btn:hover { background: rgba(255, 255, 255, 0.8); }
+  .dot-btn.active { width: 24px; background: #29C2E7; }
+  .slider-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.18);
+    z-index: 4;
+  }
+  .slider-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #29C2E7;
+    transition: width 0.1s linear;
+  }
+  .floating-badge { z-index: 6; }
+  @media (max-width: 768px) {
+    .hero-media-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .hero-slider-card {
+      aspect-ratio: 4 / 3;
+      min-height: 280px;
+    }
+    .slide-overlay {
+      padding: 1.5rem 1rem 1rem;
+    }
+    .slide-desc {
+      display: none;
+    }
+    .slider-btn {
+      width: 36px;
+      height: 36px;
+    }
+    .slider-prev { left: 0.5rem; }
+    .slider-next { right: 0.5rem; }
+    .floating-badge {
+      position: static !important;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  </style>
+
+  <!-- Script Thème Anti-flicker -->
+  <script>
+    try {
+      var t = localStorage.getItem("theme");
+      if (t) document.documentElement.setAttribute("data-theme", t);
+    } catch(e) {}
+  </script>
+
+  <!-- Schema.org Données Structurées Riches (LocalBusiness + FAQPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["LocalBusiness", "ProfessionalService"],
+        "@id": "https://pcdoctor.tn/#organization",
+        "name": "PCDOCTOR Computer Service Center",
+        "alternateName": ["PCDOCTOR Tunis", "PCDoc TN"],
+        "url": "https://pcdoctor.tn/",
+        "logo": "https://pcdoctor.tn/assets/logo.png",
+        "image": "https://pcdoctor.tn/assets/logo.png",
+        "telephone": "+21698484569",
+        "email": "contact@pcdoctor.tn",
+        "priceRange": "35 - 350 TND",
+        "currenciesAccepted": "TND",
+        "paymentAccepted": "Cash, Virement bancaire, Chèque",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Tunis",
+          "addressRegion": "Grand Tunis",
+          "addressCountry": "TN"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 36.8065,
+          "longitude": 10.1815
+        },
+        "areaServed": [
+          {"@type": "AdministrativeArea", "name": "Tunis"},
+          {"@type": "AdministrativeArea", "name": "Ariana"},
+          {"@type": "AdministrativeArea", "name": "Ben Arous"},
+          {"@type": "AdministrativeArea", "name": "Manouba"},
+          {"@type": "AdministrativeArea", "name": "La Marsa"},
+          {"@type": "AdministrativeArea", "name": "Les Berges du Lac"},
+          {"@type": "AdministrativeArea", "name": "Grand Tunis"}
+        ],
+        "founder": {
+          "@type": "Person",
+          "name": "Mohamed Aissaoui",
+          "jobTitle": "Directeur Technique & Formateur IT"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "08:30",
+            "closes": "18:30"
+          }
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "bestRating": "5",
+          "reviewCount": "128"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Prestations de Maintenance et Réparation Informatique",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Remplacement Dalle Écran PC Portable (LCD / LED / IPS)"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Boost Vitesse SSD & Extension Mémoire RAM"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Installation Officielle Windows & Désinfection Virus"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Nettoyage Interne & Remplacement Pâte Thermique"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Récupération de Données Disque Dur & Clé USB"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Contrat de Maintenance de Parc Informatique PME"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://pcdoctor.tn/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Combien de temps prend généralement la réparation d'un PC ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "La majorité des pannes courantes (changement de dalle écran en stock, passage au SSD avec clonage, nettoyage avec pâte thermique, réinstallation de système) sont traitées en 24 à 48 heures. En cas de commande d'une pièce spécifique ou de micro-soudure complexe, nous vous indiquons un délai précis dès le diagnostic."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Vais-je perdre mes données personnelles pendant la réparation ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Non, la protection de vos données est notre priorité absolue. Pour une réparation matérielle (écran, connecteur, ventilateur), vos données restent intactes. Pour une réinstallation système ou un boost SSD, nous réalisons systématiquement une sauvegarde complète préalable."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Le devis est-il payant et obligatoire avant intervention ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "L'estimation initiale et le diagnostic visuel sont totalement transparents. Une fois la panne identifiée avec certitude, nous vous contactons pour valider le devis chiffré. Aucune réparation n'est lancée sans votre accord explicite."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Vous déplacez-vous à domicile ou en entreprise ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Oui ! Nous intervenons sur site dans tout le Grand Tunis (Tunis centre, Ariana, Ben Arous, Manouba, La Marsa, Les Berges du Lac, etc.) auprès des professionnels comme des particuliers : dépannage réseau, installation d'équipements ou enlèvement d'ordinateur pour diagnostic approfondi en atelier."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Quelles marques d'ordinateurs prenez-vous en charge ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nous prenons en charge toutes les grandes marques du marché : Dell, HP, Lenovo, ASUS, Acer, Apple (MacBook Air / Pro, iMac), Toshiba, MSI, Samsung, ordinateurs fixes assemblés (Gamer) ainsi que les serveurs de fichiers TPE."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP ANNOUNCEMENT BAR
+       ========================================================================== -->
+  <div class="top-bar">
+    <div class="top-bar-container">
+      <div class="top-bar-left">
+        <span class="top-bar-item urgent-badge">⚡ Prise en charge express 24/48h</span>
+        <span class="top-bar-item hide-mobile">🕒 Lun - Sam : 08h30 - 18h30</span>
+        <span class="top-bar-item hide-mobile">📍 Grand Tunis & Dépôt Atelier</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="tel:+21698484569" class="top-phone-link" aria-label="Téléphone direct PCDOCTOR">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +216 98 484 569
+        </a>
+        <div class="lang-switch" aria-label="Sélection de langue">
+          <span class="lang-item active" aria-current="true">FR</span>
+          <span class="lang-sep">|</span>
+          <a href="/en/" class="lang-item" title="Switch to English website">EN</a>
+        </div>
+        <button class="theme" id="theme" type="button" aria-pressed="false" aria-label="Basculer le mode sombre">
+          <svg class="i-moon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+          <svg class="i-sun" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+          <span class="theme-label">Mode sombre</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN STICKY HEADER
+       ========================================================================== -->
+  <header class="main-header" id="mainHeader">
+    <div class="header-inner">
+      <a href="#" class="logo-link" aria-label="PCDOCTOR Accueil">
+        <img class="logo logo-light" src="assets/logo.png" alt="PCDOCTOR Computer Service Center" width="2211" height="426">
+        <img class="logo logo-dark" src="assets/logo-dark.png" alt="PCDOCTOR Computer Service Center" aria-hidden="true" width="2211" height="426">
+      </a>
+
+      <nav aria-label="Navigation principale">
+        <ul class="nav-desktop">
+          <li><a href="#services" class="nav-link">Nos Services</a></li>
+          <li><a href="#diagnostic" class="nav-link">Votre Panne ?</a></li>
+          <li><a href="#forfaits" class="nav-link">Forfaits</a></li>
+          <li><a href="#apropos" class="nav-link">À propos</a></li>
+          <li><a href="#avis" class="nav-link">Avis</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+          <li>
+            <a href="etudiants.html" class="nav-badge-link" title="Espace réservé aux étudiants ">
+              <span>🎓 Espace Étudiants</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-cta-group">
+        <a href="#contact" class="btn btn-primary btn-sm hide-mobile">Devis Gratuit</a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-label="Ouvrir le menu">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tiroir Mobile -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+      <ul class="mobile-nav-list">
+        <li><a href="#services" class="mobile-link">Nos Services</a></li>
+        <li><a href="#diagnostic" class="mobile-link">Diagnostic de Panne</a></li>
+        <li><a href="#forfaits" class="mobile-link">Forfaits &amp; Tarifs</a></li>
+        <li><a href="#apropos" class="mobile-link">À propos de PCDOCTOR</a></li>
+        <li><a href="#avis" class="mobile-link">Avis Clients</a></li>
+        <li><a href="#faq" class="mobile-link">FAQ</a></li>
+        <li><a href="#contact" class="mobile-link">Prendre Rendez-vous</a></li>
+        <li><a href="etudiants.html" class="mobile-link" style="color:var(--sharepoint); font-weight:700;">🎓 Espace Étudiants</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         HERO SECTION (Split-screen avec Photographie & Badges d'accréditation)
+         ========================================================================== -->
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-tag">
+            <span class="pulse-dot"></span>
+            Prise en charge express · Diagnostic rigoureux · Tunis
+          </div>
+          <h1 class="hero-title">
+            Votre ordinateur réparé par un <span class="highlight">spécialiste certifié</span>.
+          </h1>
+          <p class="hero-lead">
+            Dépannage PC portable &amp; ordinateur fixe, remplacement de dalle écran, boost SSD haute vitesse, désinfection et maintenance de parc informatique. Rigueur technique, pièces garanties et transparence totale.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-whatsapp" href="https://wa.me/21698484569?text=Bonjour%20PCDOCTOR,%20j'ai%20besoin%20d'une%20estimation%20pour%20mon%20ordinateur." target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.11.82.83-3.03-.19-.31a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.29z"/></svg>
+              Écrire sur WhatsApp
+            </a>
+            <a class="btn btn-outline" href="#contact">
+              Demander un Diagnostic
+            </a>
+            <a class="btn btn-dark" href="tel:+21698484569">
+              📞 +216 98 484 569
+            </a>
+          </div>
+
+          <div class="hero-guarantees">
+            <span class="guarantee-item"><span class="guarantee-icon">✓</span> Devis validé avant travaux</span>
+            <span class="guarantee-item"><span class="guarantee-icon">✓</span> Pièces de qualité garanties</span>
+            <span class="guarantee-item"><span class="guarantee-icon">✓</span> Confidentialité absolue</span>
+          </div>
+        </div>
+
+        <!-- Visuel Hero avec Badges Flottants -->
+        <div class="hero-media-wrapper">
+          <!-- Slider Interactif PCDOCTOR -->
+          <div class="hero-slider-card" id="heroSlider" aria-roledescription="carousel" aria-label="Galerie des interventions PCDOCTOR">
+            <div class="slider-track" id="sliderTrack">
+              <!-- Slide 1 -->
+              <div class="slide-item active" role="group" aria-roledescription="slide" aria-label="1 sur 4">
+                <img src="assets/img/slider-carousel-1.webp" alt="Atelier de réparation électronique PCDOCTOR à Tunis" class="slide-img" width="1200" height="750" loading="eager">
+                <div class="slide-overlay">
+                  <span class="slide-tag">⚡ Dépannage Matériel</span>
+                  <h3 class="slide-title">Atelier de Réparation Électronique</h3>
+                  <p class="slide-desc">Micro-soudures, diagnostic carte mère et composants certifiés.</p>
+                </div>
+              </div>
+
+              <!-- Slide 2 -->
+              <div class="slide-item" role="group" aria-roledescription="slide" aria-label="2 sur 4">
+                <img src="assets/img/slider-carousel-2.webp" alt="Remplacement écran et pièces détachées ordinateurs portables" class="slide-img" width="1200" height="750" loading="lazy">
+                <div class="slide-overlay">
+                  <span class="slide-tag">💻 PC Portables &amp; Laptops</span>
+                  <h3 class="slide-title">Écrans, Claviers &amp; Charnières</h3>
+                  <p class="slide-desc">Remplacement express de dalles LCD / LED Full HD &amp; 4K.</p>
+                </div>
+              </div>
+
+              <!-- Slide 3 -->
+              <div class="slide-item" role="group" aria-roledescription="slide" aria-label="3 sur 4">
+                <img src="assets/img/slider-hero-maintenance-pc.webp" alt="Optimisation PC et boost SSD" class="slide-img" width="1200" height="750" loading="lazy">
+                <div class="slide-overlay">
+                  <span class="slide-tag">🚀 Performance Maximale</span>
+                  <h3 class="slide-title">Boost SSD &amp; Nettoyage Thermique</h3>
+                  <p class="slide-desc">Vitesse multipliée par 10 et pâte thermique haute conductivité.</p>
+                </div>
+              </div>
+
+              <!-- Slide 4 -->
+              <div class="slide-item" role="group" aria-roledescription="slide" aria-label="4 sur 4">
+                <img src="assets/img/slider-technicien-pro.webp" alt="Direction technique PCDOCTOR et expertise certifiée" class="slide-img" width="1200" height="750" loading="lazy">
+                <div class="slide-overlay">
+                  <span class="slide-tag">👨‍🏫 Expertise Certifiée</span>
+                  <h3 class="slide-title">15+ Ans d'Expérience Terrain</h3>
+                  <p class="slide-desc">Supervisé par Mohamed Aissaoui (Formateur IT).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flèches de navigation -->
+            <button class="slider-btn slider-prev" id="sliderPrev" type="button" aria-label="Diapositive précédente">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="slider-btn slider-next" id="sliderNext" type="button" aria-label="Diapositive suivante">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <!-- Indicateurs Dots -->
+            <div class="slider-dots" id="sliderDots" role="tablist" aria-label="Sélectionner une diapositive">
+              <button class="dot-btn active" type="button" role="tab" aria-selected="true" aria-label="Diapositive 1"></button>
+              <button class="dot-btn" type="button" role="tab" aria-selected="false" aria-label="Diapositive 2"></button>
+              <button class="dot-btn" type="button" role="tab" aria-selected="false" aria-label="Diapositive 3"></button>
+              <button class="dot-btn" type="button" role="tab" aria-selected="false" aria-label="Diapositive 4"></button>
+            </div>
+
+            <!-- Barre de progression -->
+            <div class="slider-progress-bar"><div class="slider-progress-fill" id="sliderProgressFill"></div></div>
+          </div>
+
+          <div class="floating-badge badge-top-left">
+            <div class="badge-icon-box">👨‍🏫</div>
+            <div class="badge-content">
+              <strong>15+ Ans d'Expérience</strong>
+              <span>Supervisé par Mohamed Aissaoui</span>
+            </div>
+          </div>
+
+          <div class="floating-badge badge-bottom-right">
+            <div class="badge-icon-box">🛡️</div>
+            <div class="badge-content">
+              <strong>100% Devis Transparent</strong>
+              <span>Anciennes pièces restituées</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         BANDEAU DE STATISTIQUES (COUNTER STRIP)
+         ========================================================================== -->
+    <section class="stats-strip" aria-label="Chiffres clés">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-num">15+</div>
+          <div class="stat-text">Années d'Expérience</div>
+          <span class="stat-sub">Formation &amp; Ingénierie IT</span>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">3 500+</div>
+          <div class="stat-text">Ordinateurs Réparés</div>
+          <span class="stat-sub">PC Portables, Fixes &amp; Mac</span>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">100%</div>
+          <div class="stat-text">Devis Validé à l'Avance</div>
+          <span class="stat-sub">Aucun frais caché</span>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">24 / 48h</div>
+          <div class="stat-text">Délai Moyen d'Action</div>
+          <span class="stat-sub">Prise en charge réactive</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         DIAGNOSTIC RAPIDE INTERACTIF ("Quelle est votre panne ?")
+         ========================================================================== -->
+    <section class="section section-alt" id="diagnostic">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Diagnostic Express</span>
+          <h2 class="section-title">Quelle est la panne de votre ordinateur ?</h2>
+          <p class="section-subtitle">Sélectionnez le symptôme rencontré pour obtenir une estimation immédiate et la solution recommandée.</p>
+        </div>
+
+        <div class="diagnostic-tiles-grid">
+          <!-- Panne 1 -->
+          <div class="issue-card" data-issue="ecran" tabindex="0" role="button">
+            <div class="issue-icon-wrap">💻</div>
+            <div class="issue-info">
+              <h3>Écran Cassé ou Noir</h3>
+              <p>Fissure LCD, lignes verticales, écran qui clignote ou reste noir à l'allumage.</p>
+              <span class="issue-link-label">Solution : Remplacement dalle LCD/LED →</span>
+            </div>
+          </div>
+
+          <!-- Panne 2 -->
+          <div class="issue-card" data-issue="lenteur" tabindex="0" role="button">
+            <div class="issue-icon-wrap">⚡</div>
+            <div class="issue-info">
+              <h3>PC Très Lent / Freeze</h3>
+              <p>Démarrage interminable, applications qui bloquent, disque dur saturé à 100%.</p>
+              <span class="issue-link-label">Solution : Passage au SSD &amp; RAM →</span>
+            </div>
+          </div>
+
+          <!-- Panne 3 -->
+          <div class="issue-card" data-issue="allumage" tabindex="0" role="button">
+            <div class="issue-icon-wrap">🔌</div>
+            <div class="issue-info">
+              <h3>Ne S'allume Plus</h3>
+              <p>Aucun voyant, coupure subite, connecteur de charge dessoudé ou chargeur défectueux.</p>
+              <span class="issue-link-label">Solution : Diagnostic circuit de charge →</span>
+            </div>
+          </div>
+
+          <!-- Panne 4 -->
+          <div class="issue-card" data-issue="virus" tabindex="0" role="button">
+            <div class="issue-icon-wrap">🛡️</div>
+            <div class="issue-info">
+              <h3>Virus &amp; Écrans Bleus</h3>
+              <p>Publicités intempestives, plantages répétés (BSOD), système Windows corrompu.</p>
+              <span class="issue-link-label">Solution : Nettoyage &amp; Réinstallation propre →</span>
+            </div>
+          </div>
+
+          <!-- Panne 5 -->
+          <div class="issue-card" data-issue="donnees" tabindex="0" role="button">
+            <div class="issue-icon-wrap">💾</div>
+            <div class="issue-info">
+              <h3>Données Perdues / Disque HS</h3>
+              <p>Disque dur qui claque, partition inaccessible, clé USB non reconnue.</p>
+              <span class="issue-link-label">Solution : Récupération sécurisée →</span>
+            </div>
+          </div>
+
+          <!-- Panne 6 -->
+          <div class="issue-card" data-issue="chauffe" tabindex="0" role="button">
+            <div class="issue-icon-wrap">🌡️</div>
+            <div class="issue-info">
+              <h3>Surchauffe &amp; Ventilateur Bruyant</h3>
+              <p>Ordinateur brûlant, soufflerie permanente à fond, extinction subite en plein travail.</p>
+              <span class="issue-link-label">Solution : Dépoussiérage + Pâte thermique →</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <a href="#contact" class="btn btn-primary" id="btnDiagnostiquer">
+            🔧 Réserver mon diagnostic pour cette panne
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         NOS SERVICES SPECIALISES (Cartes riches avec photos)
+         ========================================================================== -->
+    <section class="section" id="services">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Expertise Technique</span>
+          <h2 class="section-title">Des solutions professionnelles pour chaque panne</h2>
+          <p class="section-subtitle">Chaque machine confiée à PCDOCTOR fait l'objet d'un examen approfondi et de tests rigoureux avant restitution.</p>
+        </div>
+
+        <div class="services-card-grid">
+          <!-- Service 1 : Réparation Matérielle -->
+          <article class="service-v-card">
+            <div class="service-media">
+              <img src="assets/img/service-2.webp" alt="Remplacement d'écran et carte mère ordinateur portable" width="400" height="250" loading="lazy" decoding="async">
+              <span class="service-badge-tag">Hardware &amp; Composants</span>
+            </div>
+            <div class="service-body">
+              <h3 class="service-body-title">Réparation Matérielle &amp; Dalles Écran</h3>
+              <p class="service-body-desc">
+                Changement minutieux de dalles cassées (LED, IPS, 120/144Hz), remplacement de claviers, connecteurs de charge, ventilateurs et micro-soudures sur carte mère.
+              </p>
+              <ul class="service-features-list">
+                <li>Dalles neuves certifiées compatibles</li>
+                <li>Remplacement charnières &amp; coques fissurées</li>
+                <li>Soudure connecteur d'alimentation (Jack DC)</li>
+              </ul>
+              <div class="service-card-footer">
+                <span class="service-price-est">Délai : <strong>24h à 48h</strong></span>
+                <a href="#contact" class="btn btn-outline btn-sm">Réserver</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 2 : Boost SSD & Performance -->
+          <article class="service-v-card">
+            <div class="service-media">
+              <img src="assets/img/service-5.webp" alt="Installation disque SSD et ajout de mémoire RAM" width="400" height="250" loading="lazy" decoding="async">
+              <span class="service-badge-tag">Rajeunissement PC</span>
+            </div>
+            <div class="service-body">
+              <h3 class="service-body-title">Passage au SSD Ultra-Rapide &amp; RAM</h3>
+              <p class="service-body-desc">
+                Multipliez par 10 la réactivité de votre machine. Clonage bit à bit de votre disque existant sans perte de vos logiciels, documents et configurations.
+              </p>
+              <ul class="service-features-list">
+                <li>Démarrage Windows complet en 10 secondes</li>
+                <li>Clonage 100% fidèle sans perte de données</li>
+                <li>Installation de SSD NVMe ou SATA haute fiabilité</li>
+              </ul>
+              <div class="service-card-footer">
+                <span class="service-price-est">Résultat : <strong>Immédiat</strong></span>
+                <a href="#contact" class="btn btn-outline btn-sm">Réserver</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 3 : Système & Désinfection -->
+          <article class="service-v-card">
+            <div class="service-media">
+              <img src="assets/img/service-4.webp" alt="Installation propre Windows et désinfection de virus" width="400" height="250" loading="lazy" decoding="async">
+              <span class="service-badge-tag">Système &amp; Logiciels</span>
+            </div>
+            <div class="service-body">
+              <h3 class="service-body-title">Système, Virus &amp; Écrans Bleus</h3>
+              <p class="service-body-desc">
+                Installation officielle et propre de Windows 11 / 10 ou distribution Linux. Éradication complète des malwares, spywares et paramétrage des pilotes officiels.
+              </p>
+              <ul class="service-features-list">
+                <li>Installation saine sans logiciels indésirables</li>
+                <li>Sauvegarde intégrale préalable de vos fichiers</li>
+                <li>Configuration des pilotes et utilitaires essentiels</li>
+              </ul>
+              <div class="service-card-footer">
+                <span class="service-price-est">Garantie : <strong>Système stable</strong></span>
+                <a href="#contact" class="btn btn-outline btn-sm">Réserver</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 4 : Récupération de Données -->
+          <article class="service-v-card">
+            <div class="service-media">
+              <img src="assets/img/service-6.webp" alt="Récupération de données disque dur et support endommagé" width="400" height="250" loading="lazy" decoding="async">
+              <span class="service-badge-tag">Données &amp; Sécurité</span>
+            </div>
+            <div class="service-body">
+              <h3 class="service-body-title">Récupération de Données Sensibles</h3>
+              <p class="service-body-desc">
+                Disque dur tombé, partition effacée par erreur ou clé USB inaccessible : extraction de vos documents professionnels, photos de famille et comptabilité.
+              </p>
+              <ul class="service-features-list">
+                <li>Analyse sans altérer les plateaux magnétiques</li>
+                <li>Confidentialité absolue et secret professionnel</li>
+                <li>Sauvegarde sur support externe sain fourni</li>
+              </ul>
+              <div class="service-card-footer">
+                <span class="service-price-est">Diagnostic : <strong>Rapide</strong></span>
+                <a href="#contact" class="btn btn-outline btn-sm">Réserver</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 5 : Maintenance Entreprise -->
+          <article class="service-v-card">
+            <div class="service-media">
+              <img src="assets/img/service-1.webp" alt="Maintenance de parc informatique pour entreprises et cabinets" width="400" height="250" loading="lazy" decoding="async">
+              <span class="service-badge-tag">Professionnels &amp; PME</span>
+            </div>
+            <div class="service-body">
+              <h3 class="service-body-title">Maintenance Informatique &amp; Réseau</h3>
+              <p class="service-body-desc">
+                Contrats de maintenance préventive et curative pour TPE, PME, cabinets médicaux et bureaux à Tunis. Gestion de parc, partage d'imprimantes et téléassistance.
+              </p>
+              <ul class="service-features-list">
+                <li>Réseau local sécurisé (Ethernet LAN / Wi-Fi)</li>
+                <li>Sauvegarde automatisée locale &amp; Cloud</li>
+                <li>Téléassistance réactive et interventions sur site</li>
+              </ul>
+              <div class="service-card-footer">
+                <span class="service-price-est">Formule : <strong>Sur mesure</strong></span>
+                <a href="#contact" class="btn btn-outline btn-sm">Demander un devis</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 6 : Dépoussiérage & Entretien -->
+          <article class="service-v-card">
+            <div class="service-media">
+              <img src="assets/img/feature.webp" alt="Nettoyage interne et application pâte thermique PC portable" width="400" height="250" loading="lazy" decoding="async">
+              <span class="service-badge-tag">Santé &amp; Refroidissement</span>
+            </div>
+            <div class="service-body">
+              <h3 class="service-body-title">Nettoyage &amp; Pâte Thermique</h3>
+              <p class="service-body-desc">
+                Démontage intégral du bloc de refroidissement, évacuation des poussières et application d'une pâte thermique haute conductivité pour préserver processeur et GPU.
+              </p>
+              <ul class="service-features-list">
+                <li>Baisse de température de 15°C à 25°C</li>
+                <li>Suppression des bruits de turbine gênants</li>
+                <li>Prolonge la durée de vie de la carte mère</li>
+              </ul>
+              <div class="service-card-footer">
+                <span class="service-price-est">Durée : <strong>En atelier</strong></span>
+                <a href="#contact" class="btn btn-outline btn-sm">Réserver</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         COMMENT CA MARCHE ? (Processus en 4 étapes claires)
+         ========================================================================== -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Processus Transparent</span>
+          <h2 class="section-title">Comment se déroule votre réparation ?</h2>
+          <p class="section-subtitle">Chez PCDOCTOR, chaque étape est claire, expliquée et sans surprise financière.</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <span class="step-icon">📞</span>
+            <h3>Contact &amp; Dépôt</h3>
+            <p>Appel, message WhatsApp ou dépôt direct à l'atelier. Description des symptômes constatés.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <span class="step-icon">🔍</span>
+            <h3>Diagnostic &amp; Devis</h3>
+            <p>Tests complets des composants. Proposition d'un devis chiffré clair sans engagement.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <span class="step-icon">🛠️</span>
+            <h3>Réparation &amp; Tests</h3>
+            <p>Intervention avec pièces de qualité, dépoussiérage et tests de stabilité sous charge.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <span class="step-icon">🤝</span>
+            <h3>Restitution &amp; Suivi</h3>
+            <p>Remise en main propre de votre machine prête à l'emploi et restitution systématique des anciennes pièces remplacées.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FORFAITS & TARIFS TRANSPARENTS
+         ========================================================================== -->
+    <section class="section" id="forfaits">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Transparence Tarifaire</span>
+          <h2 class="section-title">Nos forfaits de maintenance les plus demandés</h2>
+          <p class="section-subtitle">Des prix justes, sans frais cachés, pour remettre votre ordinateur dans un état irréprochable.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Forfait 1 -->
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <h3>Forfait Entretien Thermique</h3>
+              <p>Idéal si votre PC chauffe ou souffle fort</p>
+            </div>
+            <ul class="pricing-features">
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Dépoussiérage complet ventilateurs &amp; caloducs
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Remplacement pâte thermique haute conductivité
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Contrôle des températures sous charge
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Nettoyage externe écran &amp; clavier
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-outline" onclick="selectIssue('chauffe')">Choisir ce forfait</a>
+          </div>
+
+          <!-- Forfait 2 (Populaire) -->
+          <div class="pricing-card popular">
+            <div class="popular-badge">⭐ Très Recommandé</div>
+            <div class="pricing-header">
+              <h3>Forfait Boost SSD Rajeunissement</h3>
+              <p>Redonnez une seconde jeunesse à votre PC</p>
+            </div>
+            <ul class="pricing-features">
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Fourniture d'un disque SSD rapide neuf
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Clonage intégral sans perte de documents
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Démarrage en 10 secondes garanti
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Optimisation globale de Windows
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-primary" onclick="selectIssue('lenteur')">Booster mon PC</a>
+          </div>
+
+          <!-- Forfait 3 -->
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <h3>Forfait Réinstallation Système</h3>
+              <p>Remise à zéro propre et désinfection</p>
+            </div>
+            <ul class="pricing-features">
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Sauvegarde préalable des documents
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Installation propre Windows 11 / 10
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Installation de tous les pilotes constructeurs
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Pack utilitaires (navigateurs, PDF, antivirus)
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-outline" onclick="selectIssue('virus')">Choisir ce forfait</a>
+          </div>
+
+          <!-- Forfait 4 -->
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <h3>Forfait Dalle Écran &amp; Hardware</h3>
+              <p>Remplacement de pièces défectueuses</p>
+            </div>
+            <ul class="pricing-features">
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Dalle écran LCD / LED neuve
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Connecteur de charge / Charnières
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Montage soigné &amp; tests d'affichage
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Restitution de l'ancienne dalle
+              </li>
+            </ul>
+            <a href="#contact" class="btn btn-outline" onclick="selectIssue('ecran')">Demander mon tarif</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         A PROPOS & DIRECTION TECHNIQUE (Mohamed Aissaoui)
+         ========================================================================== -->
+    <section class="section section-alt" id="apropos">
+      <div class="container">
+        <div class="about-layout">
+          <!-- Composition Photos -->
+          <div class="about-images-composition">
+            <div class="about-main-photo">
+              <img src="assets/img/about-1.webp" alt="Technicien PCDOCTOR en réparation informatique" width="600" height="420" loading="lazy" decoding="async">
+            </div>
+            <div class="about-sub-photo">
+              <img src="assets/img/about-2.webp" alt="Examen microscopique de carte mère" width="220" height="180" loading="lazy" decoding="async">
+            </div>
+          </div>
+
+          <!-- Texte de Présentation -->
+          <div class="about-text-content">
+            <span class="section-tag">Qui Sommes-Nous ?</span>
+            <h2 class="section-title">Plus de 15 ans d'exigence technique et de rigueur</h2>
+
+            <div class="about-quote-box">
+              « Nous avons plus de 15 ans d'expérience dans le domaine de la maintenance informatique, la réparation des ordinateurs de bureau et des laptops. »
+            </div>
+
+            <p style="color:var(--muted); margin-bottom:1.25rem;">
+              Chez <strong>PCDOCTOR Computer Service Center</strong>, nous croyons qu'un bon dépannage repose d'abord sur la compréhension exacte de la panne et le respect du matériel du client. Pas de remplacements inutiles : nous diagnostiquons au composant et cherchons toujours la solution la plus pérenne et économique.
+            </p>
+
+            <div class="director-card">
+              <div class="director-avatar">MA</div>
+              <div class="director-info">
+                <strong>Mohamed Aissaoui</strong>
+                <span>Directeur Technique &amp; Formateur IT</span>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:1rem;">
+              <a href="#contact" class="btn btn-primary">Nous Confier un Matériel</a>
+              <a href="etudiants.html" class="btn btn-outline">Espace Formations &amp; Étudiants →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bannière Espace Étudiants -->
+        <div class="portal-cta-banner">
+          <div class="portal-cta-info">
+            <span class="portal-tag">Portail Pédagogique</span>
+            <h3>Espace Étudiants &amp; Supports de Cours TMMI</h3>
+            <p>Retrouvez vos cours complets de maintenance : Anatomie du PC, Diagnostic matériel, protocoles de test et ressources téléchargeables.</p>
+          </div>
+          <a href="etudiants.html" class="btn btn-dark">Accéder au Portail →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         AVIS CLIENTS
+         ========================================================================== -->
+    <section class="section" id="avis">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Témoignages Vérifiés</span>
+          <h2 class="section-title">Ce que disent nos clients</h2>
+          <p class="section-subtitle">Particuliers, étudiants et entreprises font confiance à PCDOCTOR pour la remise en état de leur matériel.</p>
+        </div>
+
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              « J'avais cassé l'écran de mon PC portable la veille de la soutenance de mon projet. M. Mohamed Aissaoui a trouvé la dalle exacte et l'a remplacée en moins de 24h. Un travail impeccable et un accueil très professionnel ! »
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">YK</div>
+              <div class="author-meta">
+                <strong>Yassine K.</strong>
+                <span>Étudiant en Informatique (Tunis)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              « Mon ordinateur portable mettait plus de 5 minutes à démarrer et ramait sur mes logiciels d'architecture. Après le passage au SSD et le clonage sans rien perdre de mes configurations, c'est le jour et la nuit. Démarrage en 8 secondes ! »
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">SB</div>
+              <div class="author-meta">
+                <strong>Salma B.</strong>
+                <span>Architecte d'intérieur (Ariana)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-text">
+              « Nous avons confié la maintenance de notre parc de 10 ordinateurs de bureau à PCDOCTOR. Réactivité exemplaire sur WhatsApp, conseils clairs et devis toujours respectés. Je recommande sans hésitation. »
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">KM</div>
+              <div class="author-meta">
+                <strong>Karim M.</strong>
+                <span>Gérant de Société Commerciale (Grand Tunis)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FAQ (ACCORDEON INTERACTIF)
+         ========================================================================== -->
+    <section class="section section-alt" id="faq">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Foire Aux Questions</span>
+          <h2 class="section-title">Questions Fréquentes</h2>
+          <p class="section-subtitle">Retrouvez les réponses aux interrogations courantes avant de nous confier votre matériel.</p>
+        </div>
+
+        <div class="faq-container">
+          <div class="faq-item active">
+            <button class="faq-question" type="button" aria-expanded="true">
+              <span>Combien de temps prend généralement la réparation d'un PC ?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              La majorité des pannes courantes (changement de dalle écran en stock, passage au SSD avec clonage, nettoyage avec pâte thermique, réinstallation de système) sont traitées en <strong>24 à 48 heures</strong>. En cas de commande d'une pièce spécifique ou de micro-soudure complexe, nous vous indiquons un délai précis dès le diagnostic.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+              <span>Vais-je perdre mes données personnelles pendant la réparation ?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <strong>Non, la protection de vos données est notre priorité absolue.</strong> Pour une réparation matérielle (écran, connecteur, ventilateur), vos données restent intactes. Pour une réinstallation système ou un boost SSD, nous réalisons systématiquement une sauvegarde complète préalable.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+              <span>Le devis est-il payant et obligatoire avant intervention ?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              L'estimation initiale et le diagnostic visuel sont totalement transparents. Une fois la panne identifiée avec certitude, nous vous contactons pour valider le devis chiffré. <strong>Aucune réparation n'est lancée sans votre accord explicite.</strong>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+              <span>Vous déplacez-vous à domicile ou en entreprise ?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              Oui ! Nous intervenons sur site dans tout le Grand Tunis (Tunis centre, Ariana, Ben Arous, Manouba, La Marsa, Les Berges du Lac, etc.) auprès des professionnels comme des particuliers : dépannage réseau, installation d'équipements ou enlèvement d'ordinateur pour diagnostic approfondi en atelier.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false">
+              <span>Quelles marques d'ordinateurs prenez-vous en charge ?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              Nous prenons en charge toutes les grandes marques du marché : <strong>Dell, HP, Lenovo, ASUS, Acer, Apple (MacBook Air / Pro, iMac), Toshiba, MSI, Samsung, ordinateurs fixes assemblés (Gamer)</strong> ainsi que les serveurs de fichiers TPE.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         FORMULAIRE DE CONTACT & DEVIS RAPIDE
+         ========================================================================== -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Contact &amp; Rendez-vous</span>
+          <h2 class="section-title">Demandez une estimation ou un rendez-vous</h2>
+          <p class="section-subtitle">Remplissez ce formulaire pour recevoir un devis clair ou écrivez-nous directement sur WhatsApp pour une réponse immédiate.</p>
+        </div>
+
+        <div class="contact-layout">
+          <!-- Coordonnées & Horaires -->
+          <div class="contact-info-panel">
+            <div class="contact-card-item">
+              <div class="contact-icon-box">📞</div>
+              <div>
+                <h4>Téléphone Direct</h4>
+                <p><a href="tel:+21698484569"><strong>+216 98 484 569</strong></a></p>
+                <p style="font-size:0.85rem; color:var(--muted);">Joignable du lundi au samedi</p>
+              </div>
+            </div>
+
+            <div class="contact-card-item">
+              <div class="contact-icon-box" style="background:#eaf8ef; color:#25D366;">💬</div>
+              <div>
+                <h4>WhatsApp Express</h4>
+                <p><a href="https://wa.me/21698484569" target="_blank" rel="noopener"><strong>Discuter sur WhatsApp</strong></a></p>
+                <p style="font-size:0.85rem; color:var(--muted);">Envoi de photos de panne &amp; diagnostic rapide</p>
+              </div>
+            </div>
+
+            <div class="contact-card-item">
+              <div class="contact-icon-box">✉️</div>
+              <div>
+                <h4>Courriel</h4>
+                <p><a href="mailto:contact@pcdoctor.tn"><strong>contact@pcdoctor.tn</strong></a></p>
+                <p style="font-size:0.85rem; color:var(--muted);">Réponse sous 24h ouvrées</p>
+              </div>
+            </div>
+
+            <div class="contact-card-item">
+              <div class="contact-icon-box">📍</div>
+              <div>
+                <h4>Zone d'Intervention</h4>
+                <p><strong>Tunis, Tunisie</strong></p>
+                <p style="font-size:0.85rem; color:var(--muted);">Dépôt en atelier ou déplacement Grand Tunis</p>
+              </div>
+            </div>
+
+            <div class="contact-card-item">
+              <div class="contact-icon-box">🕒</div>
+              <div>
+                <h4>Horaires d'Ouverture</h4>
+                <p><strong>Lundi à Samedi : 08h30 - 18h30</strong></p>
+                <p style="font-size:0.85rem; color:var(--muted);">Dimanche sur urgence confirmée</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulaire Interactif -->
+          <div class="quote-form-card">
+            <form id="quoteForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="clientName">Votre Nom &amp; Prénom *</label>
+                  <input type="text" id="clientName" class="form-control" placeholder="Ex: Mohamed Ben Salem" required>
+                </div>
+                <div class="form-group">
+                  <label for="clientPhone">Numéro de Téléphone *</label>
+                  <input type="tel" id="clientPhone" class="form-control" placeholder="Ex: 98 123 456" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="deviceModel">Marque &amp; Modèle du PC</label>
+                  <input type="text" id="deviceModel" class="form-control" placeholder="Ex: Dell Inspiron 15, HP Pavilion, MacBook...">
+                </div>
+                <div class="form-group">
+                  <label for="issueSelect">Type de Panne ou Forfait *</label>
+                  <select id="issueSelect" class="form-control" required>
+                    <option value="" disabled selected>-- Sélectionnez votre panne --</option>
+                    <option value="ecran">Écran cassé / Problème d'affichage</option>
+                    <option value="lenteur">PC très lent / Passage au SSD &amp; RAM</option>
+                    <option value="allumage">Ne s'allume plus / Problème de charge</option>
+                    <option value="virus">Virus, lenteurs &amp; Réinstallation système</option>
+                    <option value="donnees">Récupération de données (Disque ou clé USB)</option>
+                    <option value="chauffe">Surchauffe / Nettoyage &amp; Pâte thermique</option>
+                    <option value="maintenance">Maintenance entreprise / Réseau</option>
+                    <option value="autre">Autre panne spécifique</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="clientMessage">Description détaillée du problème</label>
+                <textarea id="clientMessage" class="form-control" placeholder="Décrivez les symptômes : comment est apparue la panne, messages d'erreur, liquide renversé, etc."></textarea>
+              </div>
+
+              <div class="form-submit-group">
+                <button type="button" class="btn btn-whatsapp" id="btnSendWhatsApp" style="flex:1;">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.11.82.83-3.03-.19-.31a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.29z"/></svg>
+                  Envoyer sur WhatsApp Direct
+                </button>
+                <button type="submit" class="btn btn-dark" style="flex:1;">
+                  ✉️ Envoyer par Email
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       BOUTON FLOTTANT WHATSAPP
+       ========================================================================== -->
+  <a href="https://wa.me/21698484569?text=Bonjour%20PCDOCTOR,%20je%20souhaite%20un%20renseignement%20pour%20mon%20ordinateur." class="floating-whatsapp" target="_blank" rel="noopener" aria-label="Discuter sur WhatsApp avec le technicien">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.82 2.41c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.11.82.83-3.03-.19-.31a8.19 8.19 0 0 1-1.26-4.47c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.26-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.44.12-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.29z"/></svg>
+    <span>WhatsApp Express (+216 98 484 569)</span>
+  </a>
+
+  <!-- ==========================================================================
+       SITE FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Colonne 1 : Brand & Mission -->
+        <div class="footer-brand">
+          <img class="logo logo-light" src="assets/logo.png" alt="PCDOCTOR" style="width:200px;" width="2211" height="426">
+          <img class="logo logo-dark" src="assets/logo-dark.png" alt="PCDOCTOR" style="width:200px;" aria-hidden="true" width="2211" height="426">
+          <p>
+            Centre d'assistance, dépannage et maintenance informatique à Tunis. Diagnostic rigoureux, pièces de rechange certifiées et interventions rapides en atelier ou sur site.
+          </p>
+          <div style="display:flex; gap:0.75rem; align-items:center;">
+            <a href="https://wa.me/21698484569" class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener">WhatsApp Direct</a>
+            <a href="tel:+21698484569" class="btn btn-outline btn-sm">📞 Appeler</a>
+          </div>
+        </div>
+
+        <!-- Colonne 2 : Nos Services -->
+        <div class="footer-col">
+          <h4>Prestations</h4>
+          <ul>
+            <li><a href="#services">Réparation dalles écrans LCD/LED</a></li>
+            <li><a href="#services">Boost SSD &amp; Extension de RAM</a></li>
+            <li><a href="#services">Connecteurs de charge &amp; Soudures</a></li>
+            <li><a href="#services">Suppression virus &amp; Formatage propre</a></li>
+            <li><a href="#services">Récupération de données disque dur</a></li>
+            <li><a href="#services">Contrats de maintenance TPE/PME</a></li>
+          </ul>
+        </div>
+
+        <!-- Colonne 3 : Espace Étudiants & Pédagogie -->
+        <div class="footer-col">
+          <h4>Formation &amp; Pédagogie</h4>
+          <ul>
+            <li><a href="etudiants.html">🎓 Espace Étudiants</a></li>
+            <li><a href="tmmi/cours-windows11.html">Guide &amp; Simulateur Windows 11</a></li>
+            <li><a href="tmmi/1.html" target="_blank">Support TMMI : Anatomie PC</a></li>
+            <li><a href="tmmi/Guide_Pratique_Diagnostic_Maintenance.pdf" target="_blank">Support TMMI : Diagnostic Matériel (PDF)</a></li>
+            <li><a href="#apropos">Direction Technique Certifiée</a></li>
+            <li><a href="#faq">Questions Fréquentes (FAQ)</a></li>
+          </ul>
+        </div>
+
+        <!-- Colonne 4 : Contact & Accès -->
+        <div class="footer-col">
+          <h4>Coordonnées</h4>
+          <ul>
+            <li>📞 <a href="tel:+21698484569">+216 98 484 569</a></li>
+            <li>💬 <a href="https://wa.me/21698484569" target="_blank">WhatsApp Direct</a></li>
+            <li>✉️ <a href="mailto:contact@pcdoctor.tn">contact@pcdoctor.tn</a></li>
+            <li>📍 Grand Tunis, Tunisie</li>
+            <li>🕒 Lun - Sam : 08h30 - 18h30</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© <span id="currentYear">2026</span> <strong>PCDOCTOR Computer Service Center</strong> — Tous droits réservés.</p>
+        <p class="footer-signature">
+          Direction technique : <strong>Mohamed Aissaoui</strong> (Formateur IT) &nbsp;|&nbsp;
+          <a href="etudiants.html" style="color:var(--cyan); text-decoration:none; font-weight:600;">Accès Portail Étudiants &rarr;</a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       SCRIPTS JAVASCRIPT (Pur JS, sans dépendance lourde)
+       ========================================================================== -->
+  <script>
+    // 1. Gestion du mode clair / sombre avec mémorisation
+    (function() {
+      var root = document.documentElement;
+      var btn = document.getElementById("theme");
+      var label = btn.querySelector(".theme-label");
+      var mq = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function current() {
+        return root.getAttribute("data-theme") || (mq.matches ? "dark" : "light");
+      }
+
+      function render() {
+        var isDark = current() === "dark";
+        btn.setAttribute("aria-pressed", isDark);
+        btn.setAttribute("aria-label", isDark ? "Activer le mode clair" : "Activer le mode sombre");
+        if (label) label.textContent = isDark ? "Mode clair" : "Mode sombre";
+      }
+
+      btn.addEventListener("click", function() {
+        var next = current() === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch(e) {}
+        render();
+      });
+
+      render();
+    })();
+
+    // 2. Année en cours automatique
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+    // 3. Menu Mobile Toggle
+    var navToggle = document.getElementById("mobileNavToggle");
+    var navDrawer = document.getElementById("mobileMenuDrawer");
+    if (navToggle && navDrawer) {
+      navToggle.addEventListener("click", function() {
+        var isOpen = navDrawer.classList.toggle("open");
+        navToggle.setAttribute("aria-expanded", isOpen);
+      });
+      document.querySelectorAll(".mobile-link").forEach(function(link) {
+        link.addEventListener("click", function() {
+          navDrawer.classList.remove("open");
+          navToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+    }
+
+    // 4. Diagnostic rapide interactif
+    function selectIssue(issueKey) {
+      var select = document.getElementById("issueSelect");
+      if (select && issueKey) {
+        select.value = issueKey;
+      }
+      var target = document.getElementById("contact");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    document.querySelectorAll(".issue-card").forEach(function(card) {
+      card.addEventListener("click", function() {
+        var issue = this.getAttribute("data-issue");
+        document.querySelectorAll(".issue-card").forEach(function(c) { c.classList.remove("active"); });
+        this.classList.add("active");
+        selectIssue(issue);
+      });
+      card.addEventListener("keydown", function(e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+
+    var btnDiagnostiquer = document.getElementById("btnDiagnostiquer");
+    if (btnDiagnostiquer) {
+      btnDiagnostiquer.addEventListener("click", function(e) {
+        var activeCard = document.querySelector(".issue-card.active");
+        if (activeCard) {
+          selectIssue(activeCard.getAttribute("data-issue"));
+        }
+      });
+    }
+
+    // 5. Accordéon FAQ interactif
+    document.querySelectorAll(".faq-question").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var item = this.parentElement;
+        var isActive = item.classList.contains("active");
+
+        // Fermer les autres items
+        document.querySelectorAll(".faq-item").forEach(function(el) {
+          el.classList.remove("active");
+          el.querySelector(".faq-question").setAttribute("aria-expanded", "false");
+        });
+
+        if (!isActive) {
+          item.classList.add("active");
+          this.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+
+    // 6. Gestionnaire Envoi WhatsApp depuis le formulaire
+    var btnSendWhatsApp = document.getElementById("btnSendWhatsApp");
+    if (btnSendWhatsApp) {
+      btnSendWhatsApp.addEventListener("click", function(e) {
+        var name = document.getElementById("clientName").value.trim();
+        var phone = document.getElementById("clientPhone").value.trim();
+        var model = document.getElementById("deviceModel").value.trim();
+        var select = document.getElementById("issueSelect");
+        var issueText = select.options[select.selectedIndex] ? select.options[select.selectedIndex].text : "Non précisée";
+        var message = document.getElementById("clientMessage").value.trim();
+
+        if (!name || !phone) {
+          alert("Veuillez renseigner au moins votre nom et votre numéro de téléphone.");
+          document.getElementById("clientName").focus();
+          return;
+        }
+
+        var text = "Bonjour PCDOCTOR,%0A%0A"
+          + "Je souhaite un devis / rendez-vous :%0A"
+          + "👤 *Nom* : " + encodeURIComponent(name) + "%0A"
+          + "📞 *Téléphone* : " + encodeURIComponent(phone) + "%0A"
+          + "💻 *Modèle* : " + encodeURIComponent(model || "Non spécifié") + "%0A"
+          + "🔧 *Panne / Service* : " + encodeURIComponent(issueText) + "%0A"
+          + "📝 *Détails* : " + encodeURIComponent(message || "Aucun détail supplémentaire");
+
+        window.open("https://wa.me/21698484569?text=" + text, "_blank");
+      });
+    }
+
+    // 7. Envoi classique par courriel
+    var quoteForm = document.getElementById("quoteForm");
+    if (quoteForm) {
+      quoteForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        var name = document.getElementById("clientName").value.trim();
+        var phone = document.getElementById("clientPhone").value.trim();
+        var model = document.getElementById("deviceModel").value.trim();
+        var select = document.getElementById("issueSelect");
+        var issueText = select.options[select.selectedIndex] ? select.options[select.selectedIndex].text : "Panne";
+        var message = document.getElementById("clientMessage").value.trim();
+
+        var subject = encodeURIComponent("Demande de devis PCDOCTOR - " + name + " (" + issueText + ")");
+        var body = encodeURIComponent(
+          "Nom : " + name + "\n"
+          + "Téléphone : " + phone + "\n"
+          + "Modèle : " + model + "\n"
+          + "Type de panne : " + issueText + "\n\n"
+          + "Description :\n" + message
+        );
+
+        window.location.href = "mailto:contact@pcdoctor.tn?subject=" + subject + "&body=" + body;
+      });
+    }
+  </script>
+
+  <!-- Contrôleur Hero Slider -->
+  <script>
+  (function initHeroSlider() {
+    const slider = document.getElementById('heroSlider');
+    if (!slider) return;
+
+    const slides = slider.querySelectorAll('.slide-item');
+    const dots = slider.querySelectorAll('.dot-btn');
+    const prevBtn = document.getElementById('sliderPrev');
+    const nextBtn = document.getElementById('sliderNext');
+    const progressFill = document.getElementById('sliderProgressFill');
+
+    if (!slides.length) return;
+
+    let currentIndex = 0;
+    const total = slides.length;
+    const duration = 4500;
+    let startTime = null;
+    let animFrameId = null;
+    let isPaused = false;
+
+    function showSlide(index) {
+      if (index < 0) index = total - 1;
+      if (index >= total) index = 0;
+      currentIndex = index;
+
+      slides.forEach((slide, i) => {
+        const active = i === currentIndex;
+        slide.classList.toggle('active', active);
+        slide.setAttribute('aria-hidden', !active);
+      });
+
+      dots.forEach((dot, i) => {
+        const active = i === currentIndex;
+        dot.classList.toggle('active', active);
+        dot.setAttribute('aria-selected', active);
+      });
+
+      startTime = performance.now();
+    }
+
+    function nextSlide() {
+      showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentIndex - 1);
+    }
+
+    function step(now) {
+      if (!startTime) startTime = now;
+      if (!isPaused) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        if (progressFill) progressFill.style.width = (progress * 100) + '%';
+
+        if (elapsed >= duration) {
+          nextSlide();
+        }
+      } else {
+        startTime = now;
+      }
+      animFrameId = requestAnimationFrame(step);
+    }
+
+    if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); });
+    if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); });
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => {
+        showSlide(idx);
+      });
+    });
+
+    slider.addEventListener('mouseenter', () => { isPaused = true; });
+    slider.addEventListener('mouseleave', () => { isPaused = false; startTime = performance.now(); });
+
+    let touchStartX = 0;
+    slider.addEventListener('touchstart', (e) => {
+      isPaused = true;
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    slider.addEventListener('touchend', (e) => {
+      isPaused = false;
+      startTime = performance.now();
+      const diff = touchStartX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) nextSlide();
+        else prevSlide();
+      }
+    }, { passive: true });
+
+    document.addEventListener('keydown', (e) => {
+      const rect = slider.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (!inView) return;
+      if (e.key === 'ArrowLeft') { prevSlide(); }
+      else if (e.key === 'ArrowRight') { nextSlide(); }
+    });
+
+    showSlide(0);
+    animFrameId = requestAnimationFrame(step);
+  })();
+  </script>
+
+</body>
+</html>

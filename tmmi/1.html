@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomie Graphique d'un PC de Bureau - Maintenance</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tech: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                        },
+                        darkBg: '#0b0f19',
+                        cardBg: '#111827',
+                        cardHover: '#1f2937'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .pulse-glow {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .flow-line {
+            stroke-dasharray: 8;
+            animation: dash 1.5s linear infinite;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -16; }
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen flex flex-col antialiased selection:bg-tech-500 selection:text-white">
+
+    <!-- En-tête de l'application -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-tech-500/20 border border-tech-500/40 flex items-center justify-center text-tech-500 text-xl font-bold">
+                    <i class="fa-solid fa-desktop"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white">Anatomie Graphique PC &bull; Maintenance</h1>
+                    <p class="text-xs text-slate-400">Support Pédagogique &bull; Mohamed Aissaoui (Formateur IT)</p>
+                </div>
+            </div>
+            <!-- Navigation -->
+            <nav class="hidden md:flex space-x-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/60">
+                <button onclick="switchTab('graphical')" id="nav-graphical" class="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-tech-500 text-white shadow-sm">
+                    <i class="fa-solid fa-cubes mr-2"></i>Vue Graphique 3D/2D
+                </button>
+                <button onclick="switchTab('simulator')" id="nav-simulator" class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-700/50">
+                    <i class="fa-solid fa-bolt mr-2"></i>Flux & Bus de Données
+                </button>
+                <button onclick="switchTab('quiz')" id="nav-quiz" class="px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-700/50">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i>Mini-Quiz
+                </button>
+            </nav>
+            <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white text-xl p-2">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 border-t border-slate-800 bg-slate-900">
+            <button onclick="switchTab('graphical'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-white bg-tech-500">Vue Graphique de l'Unité Centrale</button>
+            <button onclick="switchTab('simulator'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800">Simulateur de Flux</button>
+            <button onclick="switchTab('quiz'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800">Mini-Quiz d'Évaluation</button>
+        </div>
+    </header>
+
+    <!-- Contenu Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION 1 : VUE GRAPHIQUE INTERACTIVE DU PC DE BUREAU -->
+        <section id="tab-graphical" class="space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-computer text-tech-500"></i> Anatomie Graphique d'une Unité Centrale (Tour PC)
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">Explorez l'agencement interne des composants d'un ordinateur de bureau. Cliquez sur un élément pour afficher sa fiche technique complète.</p>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300">
+                    <span class="w-2.5 h-2.5 rounded-full bg-tech-500 animate-pulse"></span>
+                    <span>Mode Pédagogique Actif</span>
+                </div>
+            </div>
+
+            <!-- Grille principale : Schéma graphique interactif (7 colonnes) & Fiche Technique (5 colonnes) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Schéma graphique de la tour PC (7 colonnes) -->
+                <div class="lg:col-span-7 bg-cardBg rounded-2xl border border-slate-700/60 p-6 relative overflow-hidden shadow-2xl min-h-[580px] flex flex-col justify-between">
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#22c55e_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+                    
+                    <!-- En-tête du boîtier -->
+                    <div class="flex justify-between items-center z-10 border-b border-slate-800 pb-3">
+                        <span class="text-xs uppercase font-semibold text-slate-400 tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-box-open text-tech-500"></i> Schéma Interne Tour ATX (Vue de Face Interieure)
+                        </span>
+                        <div class="flex gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Conteneur graphique du boîtier PC -->
+                    <div class="relative w-full h-[450px] my-4 bg-slate-950/80 rounded-2xl border-2 border-slate-700/80 p-6 flex flex-col justify-between shadow-inner">
+                        
+                        <!-- SVG de liaisons et bus de données -->
+                        <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40 z-0" stroke="#22c55e" stroke-width="2" fill="none">
+                            <path class="flow-line" d="M 220,130 L 220,210 L 340,210" />
+                            <path class="flow-line" d="M 220,210 L 120,210 L 120,330" />
+                            <path class="flow-line" d="M 340,210 L 460,210 L 460,300" />
+                            <path class="flow-line" d="M 340,210 L 520,210 L 520,120" />
+                        </svg>
+
+                        <!-- Ligne Haute : Alimentation (PSU) & Stockage -->
+                        <div class="grid grid-cols-3 gap-4 z-10 relative">
+                            <!-- Hotspot Bloc d'Alimentation -->
+                            <button onclick="selectComponent('psu')" id="hotspot-psu" class="bg-slate-900/90 hover:bg-tech-500/20 border-2 border-slate-700 hover:border-tech-500 p-3 rounded-xl transition-all duration-300 shadow-lg group flex flex-col items-center text-center">
+                                <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 group-hover:text-tech-500 mb-1">
+                                    <i class="fa-solid fa-plug-circle-bolt text-xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-200 group-hover:text-white">Alimentation (PSU)</span>
+                                <span class="absolute -top-2 -right-2 w-5 h-5 bg-tech-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">1</span>
+                            </button>
+
+                            <!-- Hotspot Carte Mère (Support général) -->
+                            <button onclick="selectComponent('motherboard')" id="hotspot-motherboard" class="bg-slate-900/90 hover:bg-tech-500/20 border-2 border-slate-700 hover:border-tech-500 p-3 rounded-xl transition-all duration-300 shadow-lg group flex flex-col items-center text-center">
+                                <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 group-hover:text-tech-500 mb-1">
+                                    <i class="fa-solid fa-square-poll-vertical text-xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-200 group-hover:text-white">Carte Mère & Chipset</span>
+                                <span class="absolute -top-2 -right-2 w-5 h-5 bg-tech-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">2</span>
+                            </button>
+
+                            <!-- Hotspot Stockage SSD -->
+                            <button onclick="selectComponent('storage')" id="hotspot-storage" class="bg-slate-900/90 hover:bg-tech-500/20 border-2 border-slate-700 hover:border-tech-500 p-3 rounded-xl transition-all duration-300 shadow-lg group flex flex-col items-center text-center">
+                                <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-slate-300 group-hover:text-tech-500 mb-1">
+                                    <i class="fa-solid fa-hard-drive text-xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-200 group-hover:text-white">Stockage SSD NVMe</span>
+                                <span class="absolute -top-2 -right-2 w-5 h-5 bg-tech-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">3</span>
+                            </button>
+                        </div>
+
+                        <!-- Ligne Centrale : Processeur (CPU) & Mémoire RAM -->
+                        <div class="grid grid-cols-2 gap-8 z-10 relative max-w-lg mx-auto w-full">
+                            <!-- Hotspot CPU -->
+                            <button onclick="selectComponent('cpu')" id="hotspot-cpu" class="bg-slate-900/90 hover:bg-tech-500/20 border-2 border-slate-700 hover:border-tech-500 p-4 rounded-xl transition-all duration-300 shadow-lg group flex flex-col items-center text-center">
+                                <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 group-hover:text-tech-500 mb-2">
+                                    <i class="fa-solid fa-microchip text-2xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-200 group-hover:text-white">Processeur (CPU) + Ventilateur</span>
+                                <span class="absolute -top-2 -right-2 w-5 h-5 bg-tech-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">4</span>
+                            </button>
+
+                            <!-- Hotspot RAM -->
+                            <button onclick="selectComponent('ram')" id="hotspot-ram" class="bg-slate-900/90 hover:bg-tech-500/20 border-2 border-slate-700 hover:border-tech-500 p-4 rounded-xl transition-all duration-300 shadow-lg group flex flex-col items-center text-center">
+                                <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 group-hover:text-tech-500 mb-2">
+                                    <i class="fa-solid fa-memory text-2xl"></i>
+                                </div>
+                                <span class="text-xs font-bold text-slate-200 group-hover:text-white">Mémoire Vive (RAM DDR4/DDR5)</span>
+                                <span class="absolute -top-2 -right-2 w-5 h-5 bg-tech-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">5</span>
+                            </button>
+                        </div>
+
+                        <!-- Ligne Basse : Carte Graphique (GPU) -->
+                        <div class="z-10 relative max-w-md mx-auto w-full">
+                            <!-- Hotspot GPU -->
+                            <button onclick="selectComponent('gpu')" id="hotspot-gpu" class="w-full bg-slate-900/90 hover:bg-tech-500/20 border-2 border-slate-700 hover:border-tech-500 p-4 rounded-xl transition-all duration-300 shadow-lg group flex items-center justify-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 group-hover:text-tech-500">
+                                    <i class="fa-solid fa-display text-2xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <span class="text-xs font-bold text-slate-200 group-hover:text-white block">Carte Graphique (GPU)</span>
+                                    <span class="text-[11px] text-slate-400">Insérée sur port PCIe x16 (Rendu 3D & Affichage)</span>
+                                </div>
+                                <span class="absolute -top-2 -right-2 w-5 h-5 bg-tech-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold">6</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-info text-tech-500"></i> Cliquez sur l'un des 6 composants numérotés pour inspecter sa fiche détaillée ci-contre.
+                    </div>
+                </div>
+
+                <!-- Fiche Technique Détaillée (5 colonnes) -->
+                <div class="lg:col-span-5 bg-cardBg rounded-2xl border border-slate-700/60 p-6 shadow-2xl space-y-5">
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-700">
+                        <div class="flex items-center gap-3">
+                            <div id="comp-icon-box" class="w-12 h-12 rounded-xl bg-tech-500/20 border border-tech-500/40 flex items-center justify-center text-tech-500 text-2xl">
+                                <i class="fa-solid fa-microchip" id="comp-main-icon"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-tech-500">Fiche Pédagogique Hardware</span>
+                                <h3 id="comp-title" class="text-lg font-bold text-white">Processeur (CPU)</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contenu détaillé -->
+                    <div class="space-y-4 text-sm">
+                        <!-- Définition & Rôle -->
+                        <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                            <h4 class="font-semibold text-slate-200 flex items-center gap-2 mb-1 text-xs uppercase tracking-wider text-tech-500">
+                                <i class="fa-solid fa-bullseye"></i> Définition & Rôle Précis
+                            </h4>
+                            <p id="comp-role" class="text-slate-300 leading-relaxed text-xs">
+                                Le processeur (Unité Centrale de Traitement) est le cerveau du PC. Il exécute les instructions des programmes stockés en mémoire, effectue les calculs arithmétiques et logiques et coordonne les flux d'informations.
+                            </p>
+                        </div>
+
+                        <!-- Emplacement physique -->
+                        <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                            <h4 class="font-semibold text-slate-200 flex items-center gap-2 mb-1 text-xs uppercase tracking-wider text-tech-500">
+                                <i class="fa-solid fa-map-pin"></i> Emplacement sur la Carte Mère
+                            </h4>
+                            <p id="comp-location" class="text-slate-300 leading-relaxed text-xs">
+                                Fixé au centre de la carte mère sur un connecteur spécial appelé "Socket" (ex: LGA 1700 ou AM5), recouvert d'une pâte thermique et surmonté d'un radiateur avec ventilateur (ou watercooling).
+                            </p>
+                        </div>
+
+                        <!-- Connectiques & Bus -->
+                        <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                            <h4 class="font-semibold text-slate-200 flex items-center gap-2 mb-1 text-xs uppercase tracking-wider text-tech-500">
+                                <i class="fa-solid fa-plug"></i> Connectiques & Interfaces
+                            </h4>
+                            <p id="comp-conn" class="text-slate-300 leading-relaxed text-xs">
+                                Connecté via des milliers de micro-pads dorés sur le socket, relié directement au chipset et aux canaux mémoire via les bus système à très haut débit.
+                            </p>
+                        </div>
+
+                        <!-- Schéma simplifié du fonctionnement -->
+                        <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                            <h4 class="font-semibold text-slate-200 flex items-center gap-2 mb-1 text-xs uppercase tracking-wider text-tech-500">
+                                <i class="fa-solid fa-diagram-project"></i> Schéma Simplifié du Fonctionnement
+                            </h4>
+                            <p id="comp-mechanism" class="text-slate-300 leading-relaxed text-xs">
+                                Cycle de von Neumann : Recherche (Fetch) de l'instruction en mémoire RAM &rarr; Décodage (Decode) par l'unité de contrôle &rarr; Exécution (Execute) par l'UAL (Unité Arithmétique et Logique).
+                            </p>
+                        </div>
+
+                        <!-- Pannes & Maintenance -->
+                        <div class="bg-red-950/20 p-3.5 rounded-xl border border-red-900/30">
+                            <h4 class="font-semibold text-red-400 flex items-center gap-2 mb-1 text-xs uppercase tracking-wider">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Pannes & Maintenance Préventive
+                            </h4>
+                            <p id="comp-maintenance" class="text-slate-300 leading-relaxed text-xs">
+                                Risque majeur de surchauffe en cas de séchage de la pâte thermique. Maintenance : Dépoussiérage régulier du ventirad et remplacement de la pâte thermique tous les 2 à 3 ans.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 2 : SIMULATEUR DE FLUX DE DONNEES -->
+        <section id="tab-simulator" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-tech-500"></i> Simulateur de Flux & Traitement des Données
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">Visualisez comment les composants collaborent en temps réel lors du lancement d'une application ou d'un jeu.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="startSimulation('game')" class="px-4 py-2 bg-tech-500 hover:bg-tech-600 text-white font-medium text-sm rounded-xl transition shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad"></i> Simuler un Jeu 3D
+                    </button>
+                    <button onclick="startSimulation('file')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium text-sm rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down"></i> Simuler un Fichier Lourd
+                    </button>
+                </div>
+            </div>
+
+            <!-- Schéma de simulation -->
+            <div class="bg-cardBg rounded-2xl border border-slate-700/60 p-8 shadow-2xl relative overflow-hidden min-h-[480px] flex flex-col justify-between">
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#22c55e_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+
+                <!-- Console d'état -->
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono text-xs text-tech-500 flex items-center justify-between z-10">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-terminal"></i>
+                        <span id="sim-status-text" class="text-slate-300">Système prêt. Sélectionnez un scénario de simulation ci-dessus.</span>
+                    </div>
+                    <span id="sim-step-badge" class="bg-tech-500/20 text-tech-500 px-2.5 py-1 rounded border border-tech-500/30">IDLE</span>
+                </div>
+
+                <!-- Composants en action -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 my-8 z-10 relative">
+                    <div id="sim-box-storage" class="bg-slate-900/90 border border-slate-700 p-5 rounded-xl text-center transition-all duration-300">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-300 mb-3 text-xl">
+                            <i class="fa-solid fa-hard-drive"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Disque SSD</h4>
+                        <p class="text-xs text-slate-400 mt-1">Source des données permanentes.</p>
+                    </div>
+
+                    <div id="sim-box-ram" class="bg-slate-900/90 border border-slate-700 p-5 rounded-xl text-center transition-all duration-300">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-300 mb-3 text-xl">
+                            <i class="fa-solid fa-memory"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Mémoire RAM</h4>
+                        <p class="text-xs text-slate-400 mt-1">Zone de travail temporaire.</p>
+                    </div>
+
+                    <div id="sim-box-cpu" class="bg-slate-900/90 border border-slate-700 p-5 rounded-xl text-center transition-all duration-300">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-300 mb-3 text-xl">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Processeur (CPU)</h4>
+                        <p class="text-xs text-slate-400 mt-1">Calculs et logique générale.</p>
+                    </div>
+
+                    <div id="sim-box-gpu" class="bg-slate-900/90 border border-slate-700 p-5 rounded-xl text-center transition-all duration-300">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-300 mb-3 text-xl">
+                            <i class="fa-solid fa-display"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Carte Graphique (GPU)</h4>
+                        <p class="text-xs text-slate-400 mt-1">Affichage et rendu 3D.</p>
+                    </div>
+                </div>
+
+                <!-- Explication pédagogique du flux actif -->
+                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 z-10">
+                    <h4 class="text-xs uppercase font-semibold text-slate-400 tracking-wider mb-1">Explication Pédagogique</h4>
+                    <p id="sim-explanation" class="text-sm text-slate-300">
+                        Le processeur orchestre les transferts entre le stockage permanent (SSD) et la mémoire vive (RAM) pour exécuter les instructions de manière synchrone.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3 : MINI-QUIZ D'EVALUATION -->
+        <section id="tab-quiz" class="hidden space-y-6">
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-tech-500"></i> Mini-Quiz d'Évaluation des Connaissances
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">Validez votre maîtrise de l'anatomie graphique et des rôles des composants informatiques.</p>
+                </div>
+                <div id="quiz-score-badge" class="hidden bg-tech-500/20 text-tech-500 px-4 py-2 rounded-xl border border-tech-500/40 font-bold text-sm">
+                    Score : <span id="current-score">0</span> / 5
+                </div>
+            </div>
+
+            <div class="bg-cardBg rounded-2xl border border-slate-700/60 p-8 shadow-2xl max-w-3xl mx-auto">
+                <div id="quiz-container">
+                    <!-- Généré dynamiquement -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="border-t border-slate-800 bg-slate-900 py-6 mt-12 text-center text-xs text-slate-500">
+        <p>Atelier Pédagogique &bull; Anatomie Graphique de l'Unité Centrale &bull; Maintenance Informatique</p>
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script>
+        // Données complètes des composants pour l'anatomie graphique
+        const componentsData = {
+            cpu: {
+                title: "Processeur (CPU) & Ventilateur",
+                icon: "fa-microchip",
+                role: "C'est le 'cerveau' de l'ordinateur. Il exécute les instructions des programmes, effectue les calculs arithmétiques/logiques et pilote l'ensemble des composants.",
+                location: "Au centre de la carte mère, enfiché sur le Socket et surmonté du bloc de refroidissement (ventirad ou waterblock).",
+                conn: "Connexion directe par des milliers de contacts dorés (LGA/PGA) sur les bus système de la carte mère.",
+                mechanism: "Cycle de von Neumann : Recherche (Fetch) &rarr; Décodage (Decode) &rarr; Exécution (Execute).",
+                maintenance: "Dépoussiérage régulier des ailettes du radiateur et remplacement de la pâte thermique en cas de surchauffe."
+            },
+            ram: {
+                title: "Mémoire Vive (RAM)",
+                icon: "fa-memory",
+                role: "Espace de travail temporaire ultra-rapide permettant au processeur d'accéder instantanément aux données des applications ouvertes.",
+                location: "Dans les slots DIMM situés généralement à droite du processeur sur la carte mère.",
+                conn: "Barrettes à contacts dorés insérées dans les slots DDR4/DDR5 de la carte mère avec ergots de verrouillage.",
+                mechanism: "Stockage électrique volatile : les transistors retiennent les bits sous tension et s'effacent dès l'arrêt du PC.",
+                maintenance: "Vérification des contacts en cas d'écran bleu au démarrage (BSOD) et test avec MemTest."
+            },
+            gpu: {
+                title: "Carte Graphique (GPU)",
+                icon: "fa-display",
+                role: "Gère les calculs complexes de rendu visuel, d'affichage 3D, de jeux et d'accélération matérielle, déchargeant ainsi le processeur principal.",
+                location: "Insérée horizontalement ou verticalement sur le port d'extension principal PCIe x16 de la carte mère.",
+                conn: "Port PCIe x16 de la carte mère + Câble d'alimentation dédié issu de l'alimentation (PSU).",
+                mechanism: "Parallélisme massif de milliers de cœurs de calcul graphiques transformant les données géométriques en pixels affichés.",
+                maintenance: "Nettoyage des ventilateurs de la carte et vérification du bon enclenchement du loquet PCIe."
+            },
+            storage: {
+                title: "Disque SSD NVMe M.2",
+                icon: "fa-hard-drive",
+                role: "Stockage permanent et non volatil des données (Système d'exploitation Windows/Linux, logiciels, fichiers personnels).",
+                location: "Connecté directement à plat sur la carte mère via un port M.2 dédié, ou logé dans les baies 2.5 pouces.",
+                conn: "Interface M.2 NVMe (PCIe) ou câble SATA + connecteur d'alimentation SATA.",
+                mechanism: "Mémoire flash NAND sans pièces mécaniques mobiles, permettant des débits fulgurants de lecture/écriture.",
+                maintenance: "Surveillance de la santé du disque via S.M.A.R.T. et réalisation de sauvegardes régulières."
+            },
+            psu: {
+                title: "Bloc d'Alimentation (PSU)",
+                icon: "fa-plug-circle-bolt",
+                role: "Convertit le courant alternatif du secteur mural (230V) en tensions continues stables (+12V, +5V, +3.3V) pour alimenter tous les composants.",
+                location: "Logé dans le compartiment inférieur ou supérieur arrière de la tour PC.",
+                conn: "Câble secteur mural + faisceau de câbles internes (ATX 24-pins, EPS 8-pins, PCIe pour GPU, SATA).",
+                mechanism: "Redressement, découpage et régulation électronique du courant pour garantir une tension stable et sans surtension.",
+                maintenance: "Dépoussiérage de la grille d'aération et remplacement immédiat en cas de bruits suspects ou de coupures."
+            },
+            motherboard: {
+                title: "Carte Mère & Chipset",
+                icon: "fa-square-poll-vertical",
+                role: "Pilier central de l'ordinateur. Elle relie physiquement et logiquement tous les composants entre eux grâce au chipset et aux bus internes.",
+                location: "Fixée au fond du châssis de la tour PC sur des entretoises isolantes.",
+                conn: "Centralise tous les ports internes (SATA, M.2, PCIe, USB internes) et externes (panneau arrière E/O).",
+                mechanism: "Routage des signaux électriques et communication synchrone entre le CPU, la mémoire et les périphériques.",
+                maintenance: "Vérification des piles CMOS (BIOS) et inspection visuelle des condensateurs."
+            }
+        };
+
+        function selectComponent(key) {
+            const data = componentsData[key];
+            if (!data) return;
+
+            document.getElementById('comp-title').innerText = data.title;
+            document.getElementById('comp-role').innerText = data.role;
+            document.getElementById('comp-location').innerText = data.location;
+            document.getElementById('comp-conn').innerText = data.conn;
+            document.getElementById('comp-mechanism').innerText = data.mechanism;
+            document.getElementById('comp-maintenance').innerText = data.maintenance;
+
+            const iconElement = document.getElementById('comp-main-icon');
+            iconElement.className = `fa-solid ${data.icon}`;
+
+            // Style actif sur les boutons du schéma
+            document.querySelectorAll('[id^="hotspot-"]').forEach(btn => {
+                btn.classList.remove('border-tech-500', 'bg-tech-500/20');
+            });
+            const activeBtn = document.getElementById(`hotspot-${key}`);
+            if (activeBtn) {
+                activeBtn.classList.add('border-tech-500', 'bg-tech-500/20');
+            }
+        }
+
+        function switchTab(tabId) {
+            const tabs = ['graphical', 'simulator', 'quiz'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabId) {
+                    el.classList.remove('hidden');
+                    if (navBtn) {
+                        navBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all bg-tech-500 text-white shadow-sm';
+                    }
+                } else {
+                    el.classList.add('hidden');
+                    if (navBtn) {
+                        navBtn.className = 'px-4 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-700/50';
+                    }
+                }
+            });
+            if (tabId === 'quiz' && quizState.currentQuestion === 0) {
+                renderQuizQuestion();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function startSimulation(type) {
+            const statusText = document.getElementById('sim-status-text');
+            const stepBadge = document.getElementById('sim-step-badge');
+            const explanation = document.getElementById('sim-explanation');
+
+            ['storage', 'ram', 'cpu', 'gpu'].forEach(id => {
+                document.getElementById(`sim-box-${id}`).classList.remove('border-tech-500', 'pulse-glow');
+            });
+
+            if (type === 'game') {
+                statusText.innerText = "Étape 1 : Lecture des fichiers du jeu 3D depuis le SSD NVMe...";
+                stepBadge.innerText = "ÉTAPE 1 / 4";
+                document.getElementById('sim-box-storage').classList.add('border-tech-500', 'pulse-glow');
+                explanation.innerText = "Le disque SSD transmet les textures et les niveaux du jeu à très haute vitesse vers la mémoire vive.";
+
+                setTimeout(() => {
+                    statusText.innerText = "Étape 2 : Chargement des données temporaires dans la Mémoire Vive (RAM)...";
+                    stepBadge.innerText = "ÉTAPE 2 / 4";
+                    document.getElementById('sim-box-storage').classList.remove('border-tech-500', 'pulse-glow');
+                    document.getElementById('sim-box-ram').classList.add('border-tech-500', 'pulse-glow');
+                    explanation.innerText = "La RAM stocke activement les données nécessaires pour que le processeur y accède instantanément.";
+                }, 2500);
+
+                setTimeout(() => {
+                    statusText.innerText = "Étape 3 : Calculs logiques et physiques de l'IA par le Processeur (CPU)...";
+                    stepBadge.innerText = "ÉTAPE 3 / 4";
+                    document.getElementById('sim-box-ram').classList.remove('border-tech-500', 'pulse-glow');
+                    document.getElementById('sim-box-cpu').classList.add('border-tech-500', 'pulse-glow');
+                    explanation.innerText = "Le CPU calcule le comportement des personnages et la physique du jeu en temps réel.";
+                }, 5000);
+
+                setTimeout(() => {
+                    statusText.innerText = "Étape 4 : Rendu graphique 3D par la Carte Graphique (GPU) affiché à l'écran !";
+                    stepBadge.innerText = "TERMINÉ";
+                    document.getElementById('sim-box-cpu').classList.remove('border-tech-500', 'pulse-glow');
+                    document.getElementById('sim-box-gpu').classList.add('border-tech-500', 'pulse-glow');
+                    explanation.innerText = "Le GPU dessine les images 3D à l'écran avec une fluidité optimale (ex: 60 FPS ou plus).";
+                }, 7500);
+            } else {
+                statusText.innerText = "Étape 1 : Chargement d'un fichier lourd depuis le SSD...";
+                stepBadge.innerText = "ÉTAPE 1 / 3";
+                document.getElementById('sim-box-storage').classList.add('border-tech-500', 'pulse-glow');
+                explanation.innerText = "Extraction des données du stockage non volatil.";
+
+                setTimeout(() => {
+                    statusText.innerText = "Étape 2 : Traitement des données en RAM et calculs par le CPU...";
+                    stepBadge.innerText = "ÉTAPE 2 / 3";
+                    document.getElementById('sim-box-storage').classList.remove('border-tech-500', 'pulse-glow');
+                    document.getElementById('sim-box-ram').classList.add('border-tech-500', 'pulse-glow');
+                    document.getElementById('sim-box-cpu').classList.add('border-tech-500', 'pulse-glow');
+                    explanation.innerText = "Le processeur applique les modifications demandées.";
+                }, 3000);
+
+                setTimeout(() => {
+                    statusText.innerText = "Étape 3 : Affichage du résultat graphique final.";
+                    stepBadge.innerText = "TERMINÉ";
+                    document.getElementById('sim-box-ram').classList.remove('border-tech-500', 'pulse-glow');
+                    document.getElementById('sim-box-cpu').classList.remove('border-tech-500', 'pulse-glow');
+                    document.getElementById('sim-box-gpu').classList.add('border-tech-500', 'pulse-glow');
+                    explanation.innerText = "Le résultat est rendu à l'écran pour l'utilisateur.";
+                }, 6000);
+            }
+        }
+
+        const quizData = [
+            {
+                question: "Quel composant agit comme le 'cerveau' de l'unité centrale pour exécuter les instructions ?",
+                options: ["La Mémoire Vive (RAM)", "Le Processeur (CPU)", "Le Bloc d'Alimentation", "Le Disque SSD"],
+                answer: 1
+            },
+            {
+                question: "Quelle est la principale propriété de la Mémoire Vive (RAM) ?",
+                options: ["Elle est permanente", "Elle est volatile (les données s'effacent sans courant)", "Elle sert de boîtier de protection", "Elle remplace l'écran"],
+                answer: 1
+            },
+            {
+                question: "Où s'insère principalement une Carte Graphique (GPU) performante sur une carte mère de PC de bureau ?",
+                options: ["Sur le port PCIe x16", "Sur un port USB", "Directement sur le disque dur", "Dans l'alimentation"],
+                answer: 0
+            },
+            {
+                question: "Quel est le rôle du Bloc d'Alimentation (PSU) dans un ordinateur ?",
+                options: ["Stocker les fichiers Windows", "Convertir le courant secteur en tensions continues stables pour les composants", "Refroidir le processeur", "Afficher les images 3D"],
+                answer: 1
+            },
+            {
+                question: "Quelle action de maintenance préventive est essentielle pour éviter la surchauffe du processeur ?",
+                options: ["Changer de clavier", "Dépoussiérer le radiateur et renouveler la pâte thermique", "Ajouter une clé USB", "Mettre à jour l'écran"],
+                answer: 1
+            }
+        ];
+
+        let quizState = { currentQuestion: 0, score: 0, answered: false };
+
+        function renderQuizQuestion() {
+            const container = document.getElementById('quiz-container');
+            document.getElementById('quiz-score-badge').classList.remove('hidden');
+            document.getElementById('current-score').innerText = quizState.score;
+
+            if (quizState.currentQuestion >= quizData.length) {
+                container.innerHTML = `
+                    <div class="text-center space-y-6 py-8">
+                        <div class="w-20 h-20 bg-tech-500/20 border border-tech-500/40 text-tech-500 rounded-full flex items-center justify-center mx-auto text-3xl">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Évaluation Terminée !</h3>
+                        <p class="text-slate-300">Votre score : <span class="text-tech-500 font-bold text-xl">${quizState.score} / ${quizData.length}</span></p>
+                        <p class="text-xs text-slate-400 max-w-md mx-auto">
+                            ${quizState.score >= 4 ? "Bravo ! Vous maîtrisez parfaitement l'anatomie graphique et les rôles matériels d'un PC." : "Bon travail ! Relisez les fiches pédagogiques pour consolider vos connaissances."}
+                        </p>
+                        <button onclick="resetQuiz()" class="px-6 py-3 bg-tech-500 hover:bg-tech-600 text-white font-medium rounded-xl transition shadow-lg">
+                            Recommencer le Quiz
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = quizData[quizState.currentQuestion];
+            let optionsHTML = '';
+            q.options.forEach((opt, idx) => {
+                optionsHTML += `
+                    <button onclick="selectAnswer(${idx})" id="opt-${idx}" class="w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-800 text-slate-200 transition font-medium text-sm flex items-center justify-between group">
+                        <span>${opt}</span>
+                        <span class="w-6 h-6 rounded-full border border-slate-600 flex items-center justify-center text-xs group-hover:border-tech-500">${String.fromCharCode(65 + idx)}</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                        <span>Question ${quizState.currentQuestion + 1} sur ${quizData.length}</span>
+                        <span>Progression : ${Math.round((quizState.currentQuestion / quizData.length) * 100)}%</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white leading-snug">${q.question}</h3>
+                    <div class="space-y-3">${optionsHTML}</div>
+                    <div id="quiz-next-container" class="pt-4 flex justify-end"></div>
+                </div>
+            `;
+            quizState.answered = false;
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (quizState.answered) return;
+            quizState.answered = true;
+
+            const q = quizData[quizState.currentQuestion];
+            q.options.forEach((_, idx) => {
+                const btn = document.getElementById(`opt-${idx}`);
+                btn.disabled = true;
+                if (idx === q.answer) {
+                    btn.classList.add('border-tech-500', 'bg-tech-500/20', 'text-white');
+                } else if (idx === selectedIndex) {
+                    btn.classList.add('border-red-500', 'bg-red-950/30', 'text-red-300');
+                } else {
+                    btn.classList.add('opacity-50');
+                }
+            });
+
+            if (selectedIndex === q.answer) {
+                quizState.score++;
+                document.getElementById('current-score').innerText = quizState.score;
+            }
+
+            document.getElementById('quiz-next-container').innerHTML = `
+                <button onclick="nextQuestion()" class="px-6 py-2.5 bg-tech-500 hover:bg-tech-600 text-white font-medium text-sm rounded-xl transition shadow-lg flex items-center gap-2">
+                    Question Suivante <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            `;
+        }
+
+        function nextQuestion() {
+            quizState.currentQuestion++;
+            renderQuizQuestion();
+        }
+
+        function resetQuiz() {
+            quizState.currentQuestion = 0;
+            quizState.score = 0;
+            quizState.answered = false;
+            renderQuizQuestion();
+        }
+
+        window.onload = function() {
+            selectComponent('cpu');
+        };
+    </script>
+</body>
+</html>

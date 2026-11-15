@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dossier Pédagogique : Support de Stockage &mdash; PCDOCTOR</title>
+  <meta name="description" content="Dossier pédagogique complet dédié aux technologies de support de stockage (SSD, NVMe, HDD, USB), cours pratiques et évaluations NotebookLM animés par Mohamed Aissaoui.">
+  <link rel="canonical" href="https://pcdoctor.tn/support-de-stockage/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pcdoctor.tn/support-de-stockage/">
+  <meta property="og:title" content="Dossier Pédagogique : Support de Stockage — PCDOCTOR">
+  <meta property="og:description" content="Dossier pédagogique complet dédié aux technologies de support de stockage (SSD, NVMe, HDD, USB), cours pratiques et évaluations NotebookLM animés par Mohamed Aissaoui.">
+  <meta property="og:image" content="https://pcdoctor.tn/assets/logo.png">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card-bg: #111827;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --ink: #f8fafc;
+      --muted: #94a3b8;
+      --cyan: #06b6d4;
+      --cyan-hover: #0891b2;
+      --sharepoint: #0078d4;
+      --sharepoint-hover: #106ebe;
+      --btn-bg: #0f172a;
+      --btn-fg: #f8fafc;
+      --btn-hover: #1e293b;
+    }
+    html[data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: rgba(0, 0, 0, 0.08);
+      --ink: #0f172a;
+      --muted: #475569;
+      --btn-bg: #f1f5f9;
+      --btn-fg: #0f172a;
+      --btn-hover: #e2e8f0;
+    }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Plus Jakarta Sans", sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .portal-hero {
+      background: linear-gradient(180deg, rgba(6, 182, 212, 0.12) 0%, transparent 100%);
+      padding: 3.5rem 1.5rem 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+      text-align: center;
+    }
+    .portal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--cyan);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .portal-title {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      margin: 0 0 1rem;
+      color: var(--ink);
+    }
+    .portal-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.6;
+    }
+    .instructor-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+    }
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+    }
+    .filiere-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .resource-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .resource-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.3);
+      border-color: var(--cyan);
+    }
+    .resource-type-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.35rem;
+      align-self: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .tag-interactive { background: #e0f2fe; color: #0369a1; }
+    .tag-pdf { background: #fee2e2; color: #b91c1c; }
+    .tag-slides { background: #fef3c7; color: #b45309; }
+    .tag-cloud { background: #e0e7ff; color: #4338ca; }
+    .resource-card h3 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.45rem;
+      color: var(--ink);
+      margin: 0 0 0.5rem;
+      line-height: 1.25;
+    }
+    .resource-card p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0 0 1.25rem;
+      flex: 1;
+    }
+    .btn-resource {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-open-interactive {
+      background: var(--btn-bg);
+      color: var(--btn-fg);
+      border-bottom: 3px solid var(--cyan);
+    }
+    .btn-open-interactive:hover {
+      background: var(--btn-hover);
+    }
+    .btn-download-pdf {
+      background: #b91c1c;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #991b1b;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header class="top">
+    <a href="/" aria-label="Retour à l'accueil PCDOCTOR">
+      <img class="logo logo-light" src="/assets/logo.png" alt="PCDOCTOR" width="2211" height="426">
+      <img class="logo logo-dark" src="/assets/logo-dark.png" alt="PCDOCTOR" aria-hidden="true" width="2211" height="426">
+    </a>
+
+    <div class="nav-group">
+      <nav aria-label="Navigation dossier">
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">&larr; Accueil PCDOCTOR</a></li>
+          <li><a href="/etudiants.html" class="nav-link">&larr; Portail Étudiants</a></li>
+          <li><a href="/etudiants.html#tmmi" class="nav-link">Filière TMMI</a></li>
+          <li><a href="/etudiants.html#tsig" class="nav-link">Filière TSIG</a></li>
+          <li><a href="/etudiants.html#ig" class="nav-link">Filière IG</a></li>
+        </ul>
+      </nav>
+
+      <button class="theme" id="theme" type="button" aria-pressed="false" aria-label="Activer le mode sombre">
+        <svg class="i-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+        <span class="theme-label">Mode sombre</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Bannière Dossier -->
+  <div class="portal-hero">
+    <div class="section-container" style="padding-top:0; padding-bottom:0;">
+      <span class="portal-badge">📁 Dossier Pédagogique Spécialisé</span>
+      <h1 class="portal-title">Dossier : Support de Stockage</h1>
+      <p class="portal-sub">
+        Retrouvez dans ce dossier l'ensemble des modules d'apprentissage, quiz interactifs NotebookLM, fiches d'atelier de partitionnement et présentations consacrés aux technologies de stockage (SSD SATA, NVMe M.2, disques durs magnétiques HDD, clés USB bootables) et à la cybersécurité.
+      </p>
+      <div class="instructor-badge">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--cyan);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Enseignant Référent : <strong>Mohamed Aissaoui</strong> (Formateur IT)</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="section-container">
+    <div class="filiere-grid">
+      <!-- Ressource Majeure : Cours Interactif Histoire & Fonctionnement des Supports -->
+      <article class="resource-card" style="border: 2px solid var(--cyan); background: rgba(6, 182, 212, 0.04);">
+        <span class="resource-type-tag tag-interactive" style="background:#cffafe; color:#0e7490;">⭐ Cours Interactif Complet</span>
+        <h3>L'Épopée du Stockage : Histoire &amp; Fonctionnement des Supports</h3>
+        <p>Voyage interactif et visuel à travers un siècle de stockage : cartes perforées, disques magnétiques (HDD), mémoire Flash, SSD SATA/NVMe et puces 3D NAND avec simulateurs interactifs intégrés.</p>
+        <a href="/support-de-stockage/cours-stockage.html" class="btn-resource btn-open-interactive" style="background:var(--cyan); color:#0b1120; font-weight:700;">
+          🚀 Lancer le Cours Interactif &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource NotebookLM : Évolution des Supports de Stockage -->
+      <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+        <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🧠 NotebookLM IA</span>
+        <h3>Évolution des Supports de Stockage (NotebookLM)</h3>
+        <p>Cahier d'apprentissage intelligent et interactif dédié à l'histoire et à l'évolution du stockage : résumés, analyse comparée des générations de supports et Q&amp;A interactif guidé par l'IA.</p>
+        <a href="https://notebooklm.link.google/Y2OEq36ZGJ8A" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+          ⚡ Ouvrir le NotebookLM Stockage &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource NotebookLM 2 : The Strata of Memory -->
+      <article class="resource-card" style="border-left: 3px solid #f59e0b;">
+        <span class="resource-type-tag tag-slides" style="background:#fef3c7; color:#b45309;">📽️ Présentation NotebookLM</span>
+        <h3>The Strata of Memory (Diaporama Interactif)</h3>
+        <p>Présentation visuelle sur l'évolution des supports de stockage, de la mémoire rupestre et des cartes perforées aux nanotechnologies 3D NAND.</p>
+        <a href="https://notebooklm.link.google/fTzdXcQpMHDQ" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#f59e0b;">
+          🖥️ Lancer la Présentation &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource NotebookLM 3 : L'évolution du stockage -->
+      <article class="resource-card" style="border-left: 3px solid #3b82f6;">
+        <span class="resource-type-tag tag-interactive" style="background:#dbeafe; color:#1d4ed8;">📚 Synthèse Approfondie</span>
+        <h3>L'Évolution du Stockage : Synthèse Pédagogique</h3>
+        <p>Étude complète et documentée retraçant la chronologie, les ruptures technologiques et la physique des supports de données informatiques.</p>
+        <a href="https://notebook.google.com/notebook/1d402182-fe7d-44ba-ae44-feaf2f3aa4a4/artifact/f4730475-d244-4aa1-9a99-518f1b06f716?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#3b82f6;">
+          📖 Consulter l'Étude &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource NotebookLM 4 : Stockage Flashcards -->
+      <article class="resource-card" style="border-left: 3px solid #10b981;">
+        <span class="resource-type-tag tag-interactive" style="background:#d1fae5; color:#047857;">🗂️ Flashcards de Révision</span>
+        <h3>Cartes Mémo : Technologies de Stockage</h3>
+        <p>Révisez activement les notions clés : caractéristiques HDD vs SSD, débits SATA vs NVMe, secteurs de boot et cellules flash SLC/MLC/TLC.</p>
+        <a href="https://notebooklm.link.google/e2XEYqUrPQlJ" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#10b981;">
+          🗂️ S'entraîner avec les Cartes &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource NotebookLM 5 : Storage Media Quiz -->
+      <article class="resource-card" style="border-left: 3px solid #6366f1;">
+        <span class="resource-type-tag tag-interactive" style="background:#e0e7ff; color:#4338ca;">🇬🇧 English Quiz NotebookLM</span>
+        <h3>Storage Media Quiz (Interactive IT Quiz)</h3>
+        <p>Test your computer hardware knowledge in English: magnetic disks, solid-state drives, flash memory, interfaces and storage hierarchies.</p>
+        <a href="https://notebooklm.link.google/PSo0lT933KQU" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#6366f1;">
+          🌍 Take Storage Quiz (English) &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource NotebookLM 6 : Supports Stockage Arbre -->
+      <article class="resource-card" style="border-left: 3px solid #06b6d4;">
+        <span class="resource-type-tag tag-interactive" style="background:#cffafe; color:#0e7490;">🌳 Arbre Conceptuel NotebookLM</span>
+        <h3>Arborescence Conceptuelle des Supports</h3>
+        <p>Schéma hiérarchique et classification arborescente des familles de stockage : mémoire volatile vs rémanente, magnétique, optique et électronique.</p>
+        <a href="https://notebooklm.link.google/GOieqvGziaUD" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#06b6d4;">
+          🔍 Explorer l'Arbre Conceptuel &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource NotebookLM 7 : Histoire et technologies du stockage (Schéma ADN) -->
+      <article class="resource-card" style="border-left: 3px solid #ec4899;">
+        <span class="resource-type-tag tag-interactive" style="background:#fce7f3; color:#be185d;">🧬 Schéma &amp; Infographie IA</span>
+        <h3>Histoire &amp; Technologies du Stockage (De l'HDD à l'ADN)</h3>
+        <p>Schéma illustré et interactif retraçant les sauts de densité du stockage : des plateaux magnétiques aux puces 3D NAND jusqu'aux nanotechnologies et à la molécule d'ADN.</p>
+        <a href="https://notebooklm.link.google/ajmUhhBV5F6D" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#ec4899;">
+          🧬 Découvrir l'Infographie &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource 1 : Quiz Stockage -->
+      <article class="resource-card">
+        <span class="resource-type-tag tag-interactive">💾 Quiz NotebookLM</span>
+        <h3>Quiz Stockage de Données (SSD, HDD &amp; NVMe)</h3>
+        <p>Évaluez vos compétences sur les technologies de stockage : disques magnétiques HDD, SSD SATA/NVMe, bus M.2/PCIe, configurations RAID et partitionnement.</p>
+        <a href="https://notebooklm.link.google/jQQ4BNOZr2wv" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+          ⚡ Lancer le Quiz Stockage &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource 2 : Fiche USB bootable -->
+      <article class="resource-card">
+        <span class="resource-type-tag tag-pdf">Fiche Pratique PDF</span>
+        <h3>Création de Clé USB Bootable d'Installation</h3>
+        <p>Procédure pas-à-pas avec Rufus et Media Creation Tool : préparation du support de stockage USB, schéma GPT/MBR et système de fichiers FAT32/NTFS.</p>
+        <a href="/tmmi/Installation_Windows_11_Cle_USB.pdf" target="_blank" class="btn-resource btn-download-pdf">
+          📄 Consulter la Fiche USB
+        </a>
+      </article>
+
+      <!-- Ressource 3 : Présentation Cybersécurité & Architecture -->
+      <article class="resource-card">
+        <span class="resource-type-tag tag-slides">📽️ Présentation NotebookLM</span>
+        <h3>Maîtriser la Cybersécurité &amp; l'Architecture Informatique : Du Matériel au Cloud</h3>
+        <p>Support de présentation interactif et complet couvrant les architectures matérielles, les contrôleurs de stockage, les couches réseaux et le Cloud.</p>
+        <a href="https://notebooklm.link.google/4hwerWLWnOuq" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+          🖥️ Ouvrir la Présentation &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource 4 : Cartes Mémo Sécurité -->
+      <article class="resource-card">
+        <span class="resource-type-tag tag-interactive">🛡️ Cartes Mémo NotebookLM</span>
+        <h3>Cartes Mémo : Sécurité Informatique &amp; Données</h3>
+        <p>Révisez activement les fondamentaux de la protection des données : typologie des menaces, stratégies de sauvegarde, chiffrement et gestion des accès.</p>
+        <a href="https://notebooklm.link.google/uqQfxoDxuwHB" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+          🗂️ Étudier les Cartes Mémo &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource 5 : Ports Réseau CompTIA A+ -->
+      <article class="resource-card">
+        <span class="resource-type-tag tag-interactive">🌐 CompTIA A+ NotebookLM</span>
+        <h3>Protocoles &amp; Ports Réseau Courants (CompTIA A+)</h3>
+        <p>Guide de révision interactif des protocoles et numéros de ports essentiels (TCP/UDP, HTTP, HTTPS, SSH, DNS, DHCP, FTP, RDP) pour l'examen CompTIA A+.</p>
+        <a href="https://notebooklm.link.google/qJABVstL5ny2" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+          📡 Consulter les Ports Réseau &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource 6 : English Quiz -->
+      <article class="resource-card">
+        <span class="resource-type-tag tag-interactive">🇬🇧 English Quiz NotebookLM</span>
+        <h3>Computer Science Quiz (English Version)</h3>
+        <p>Test your IT knowledge in English: interactive quiz covering PC hardware architecture, storage drives, networking fundamentals, and computer maintenance.</p>
+        <a href="https://notebooklm.link.google/lBudjkk8Eyns" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+          🌍 Start English Quiz &rarr;
+        </a>
+      </article>
+
+      <!-- Ressource 7 : Grand Quiz 50 Questions -->
+      <article class="resource-card">
+        <span class="resource-type-tag tag-interactive">⭐ Grand Quiz NotebookLM</span>
+        <h3>Grand Quiz Informatique Générale (50 Questions)</h3>
+        <p>Test d'auto-évaluation interactif de 50 questions pour réviser et valider vos acquis fondamentaux en informatique, composants et systèmes d'information.</p>
+        <a href="https://notebooklm.link.google/60BGVagV4WP8" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+          🚀 Démarrer le Quiz (50 Q) &rarr;
+        </a>
+      </article>
+    </div>
+  </main>
+
+  <!-- Pied de page -->
+  <footer class="site-footer">
+    <div class="footer-bottom" style="border:none; padding-top:0;">
+      <p>© <span id="y">2026</span> <strong>PCDOCTOR Computer Service Center</strong> — Tous droits réservés.</p>
+      <p>Portail pédagogique géré par <strong>Mohamed Aissaoui</strong> (Formateur IT)</p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var root = document.documentElement;
+      var btn = document.getElementById("theme");
+      var label = btn.querySelector(".theme-label");
+      var mq = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function current(){
+        return root.getAttribute("data-theme") || (mq.matches ? "dark" : "light");
+      }
+
+      function render(){
+        var dark = current() === "dark";
+        btn.setAttribute("aria-pressed", dark);
+        btn.setAttribute("aria-label", dark ? "Activer le mode clair" : "Activer le mode sombre");
+        label.textContent = dark ? "Mode clair" : "Mode sombre";
+      }
+
+      btn.addEventListener("click", function(){
+        var next = current() === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try{ localStorage.setItem("theme", next); }catch(e){}
+        render();
+      });
+
+      render();
+    })();
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

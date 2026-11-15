@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Espace Étudiants &amp; Portail Pédagogique | PCDOCTOR — Mohamed Aissaoui</title>
+  <meta name="description" content="Espace de formation officiel : supports de cours, cours interactifs, fiches de diagnostic matériel et guides PDF pour les filières TMMI, TSIG et IG. Encadré par Mohamed Aissaoui.">
+  <meta name="theme-color" content="#29C2E7">
+  <meta name="color-scheme" content="light dark">
+
+  <link rel="canonical" href="https://pcdoctor.tn/etudiants.html">
+  <!-- Open Graph & Partage Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pcdoctor.tn/etudiants.html">
+  <meta property="og:title" content="Espace Étudiants &amp; Portail Pédagogique | PCDOCTOR — Mohamed Aissaoui">
+  <meta property="og:description" content="Supports de cours officiels, simulateurs interactifs, fiches de diagnostic et quiz d'évaluation pour les filières TMMI, TSIG et IG. Encadré par Mohamed Aissaoui.">
+  <meta property="og:image" content="https://pcdoctor.tn/assets/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Espace Étudiants &amp; Portail Pédagogique | PCDOCTOR — Mohamed Aissaoui">
+  <meta name="twitter:description" content="Supports de cours officiels, simulateurs interactifs, fiches de diagnostic et quiz d'évaluation pour les filières TMMI, TSIG et IG. Encadré par Mohamed Aissaoui.">
+  <meta name="twitter:image" content="https://pcdoctor.tn/assets/logo.png">
+
+
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    try{
+      var t = localStorage.getItem("theme");
+      if(t) document.documentElement.setAttribute("data-theme", t);
+    }catch(e){}
+  </script>
+
+  <style>
+    .portal-hero {
+      background: var(--tint);
+      border-bottom: 2px solid var(--sharepoint);
+      padding: 3.5rem clamp(1.25rem, 5vw, 4rem);
+    }
+    .portal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--sharepoint);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .portal-title {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+    .portal-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 820px;
+      line-height: 1.6;
+    }
+    .instructor-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      font-weight: 600;
+      color: var(--ink);
+      box-shadow: var(--card-shadow);
+    }
+    .resource-section {
+      padding: 3.5rem clamp(1.25rem, 5vw, 4rem);
+    }
+    .filiere-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--card-border);
+      margin-bottom: 2rem;
+    }
+    .filiere-title {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 2.2rem;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .filiere-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .resource-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .resource-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--cyan);
+    }
+    .resource-type-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.35rem;
+      align-self: flex-start;
+      margin-bottom: 0.75rem;
+    }
+    .tag-interactive { background: #e0f2fe; color: #0369a1; }
+    .tag-pdf { background: #fee2e2; color: #b91c1c; }
+    .tag-pptx { background: #ffedd5; color: #c2410c; }
+    .tag-slides { background: #fef3c7; color: #b45309; }
+    .tag-cloud { background: #e0e7ff; color: #4338ca; }
+    .tag-media { background: #ecfdf5; color: #047857; }
+    .card-featured {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.12) 0%, rgba(14, 165, 233, 0.04) 100%), var(--card-bg);
+      border: 2px solid var(--cyan) !important;
+      box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.2);
+    }
+    .card-featured h3 {
+      font-size: 1.85rem !important;
+    }
+    .card-actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: auto;
+    }
+    .resource-card h3 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.45rem;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+    .resource-card p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+    .btn-resource {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-open-interactive {
+      background: var(--btn-bg);
+      color: var(--btn-fg);
+      border-bottom: 3px solid var(--cyan);
+    }
+    .btn-open-interactive:hover {
+      background: var(--btn-hover);
+    }
+    .btn-download-pdf {
+      background: #b91c1c;
+      color: #ffffff;
+    }
+    .btn-download-pdf:hover {
+      background: #991b1b;
+    }
+    .btn-download-pptx {
+      background: #ea580c;
+      color: #ffffff;
+    }
+    .btn-download-pptx:hover {
+      background: #c2410c;
+    }
+    .btn-media {
+      background: #059669;
+      color: #ffffff;
+    }
+    .btn-media:hover {
+      background: #047857;
+    }
+    .btn-cloud-sharepoint {
+      background: var(--sharepoint);
+      color: #ffffff;
+    }
+    .btn-cloud-sharepoint:hover {
+      background: var(--sharepoint-hover);
+    }
+
+    /* ==========================================================================
+       BARRE DE RECHERCHE & FILTRES DYNAMIQUES
+       ========================================================================== */
+    .portal-search-box {
+      margin-top: 2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md, 14px);
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .portal-search-box:focus-within {
+      border-color: var(--cyan);
+      box-shadow: 0 10px 30px rgba(41, 194, 231, 0.15);
+    }
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-icon {
+      position: absolute;
+      left: 1.25rem;
+      color: var(--muted);
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .portal-search-box:focus-within .search-icon {
+      color: var(--cyan);
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.95rem 3.5rem 0.95rem 3.25rem;
+      font-size: 1.05rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--tint);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius-sm, 8px);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .search-input::placeholder {
+      color: var(--muted);
+      opacity: 0.85;
+    }
+    .search-input:focus {
+      border-color: var(--cyan);
+      background: var(--card-bg);
+      box-shadow: 0 0 0 3px var(--cyan-glow);
+    }
+    .search-clear-btn {
+      position: absolute;
+      right: 3.25rem;
+      background: none;
+      border: none;
+      padding: 0.35rem;
+      cursor: pointer;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: color 0.15s, background 0.15s;
+    }
+    .search-clear-btn:hover {
+      color: var(--ink);
+      background: var(--card-border);
+    }
+    .search-kbd-hint {
+      position: absolute;
+      right: 1.1rem;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+    .search-kbd-hint kbd {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 640px) {
+      .search-kbd-hint {
+        display: none;
+      }
+      .search-clear-btn {
+        right: 1rem;
+      }
+    }
+    .search-filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .filter-pill {
+      background: var(--tint);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      padding: 0.45rem 0.95rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      user-select: none;
+    }
+    .filter-pill:hover {
+      border-color: var(--cyan);
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
+    .filter-pill.active {
+      background: var(--btn-bg);
+      color: var(--btn-fg);
+      border-color: var(--btn-bg);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    [data-theme="dark"] .filter-pill.active {
+      background: var(--cyan);
+      color: #091014;
+      border-color: var(--cyan);
+    }
+    .search-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .search-status-bar strong {
+      color: var(--ink);
+    }
+    .reset-filters-btn {
+      background: none;
+      border: none;
+      color: var(--cyan-dark, #189ab9);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .reset-filters-btn:hover {
+      color: var(--cyan);
+    }
+    .no-results-card {
+      background: var(--card-bg);
+      border: 1px dashed var(--card-border);
+      border-radius: var(--radius-md, 14px);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      margin: 2.5rem 0;
+    }
+    .no-results-icon {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .no-results-card h3 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.8rem;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .no-results-card p {
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    .back-to-top-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--btn-bg);
+      color: var(--btn-fg);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: all 0.25s ease;
+      z-index: 99;
+    }
+    .back-to-top-btn.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .back-to-top-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(41, 194, 231, 0.3);
+      border-color: var(--cyan);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- En-tête -->
+  <header class="top">
+    <a href="/" aria-label="Retour à l'accueil PCDOCTOR">
+      <img class="logo logo-light" src="assets/logo.png" alt="PCDOCTOR" width="2211" height="426">
+      <img class="logo logo-dark" src="assets/logo-dark.png" alt="PCDOCTOR" aria-hidden="true" width="2211" height="426">
+    </a>
+
+    <div class="nav-group">
+      <nav aria-label="Navigation portail">
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">&larr; Accueil PCDOCTOR</a></li>
+          <li><a href="#tmmi" class="nav-link">Filière TMMI</a></li>
+          <li><a href="#tsig" class="nav-link">Filière TSIG</a></li>
+          <li><a href="#ig" class="nav-link">Filière IG</a></li>
+          <li><a href="#stockage" class="nav-link" style="color:var(--sharepoint); font-weight:700;">💾 Support de Stockage</a></li>
+        </ul>
+      </nav>
+
+      <button class="theme" id="theme" type="button" aria-pressed="false" aria-label="Activer le mode sombre">
+        <svg class="i-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+        <span class="theme-label">Mode sombre</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Bannière Portail -->
+  <div class="portal-hero">
+    <div class="section-container">
+      <span class="portal-badge">Portail Universitaire &amp; Pédagogique</span>
+      <h1 class="portal-title">Espace Étudiants &amp; Supports de Formation</h1>
+      <p class="portal-sub">
+        Retrouvez l'ensemble des modules interactifs, documentations officielles, travaux dirigés et fiches d'atelier pour vos cursus de formation en technologies de l'information.
+      </p>
+      <div class="instructor-badge">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sharepoint);"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Enseignant Référent : <strong>Mohamed Aissaoui</strong> (Formateur IT)</span>
+      </div>
+      <!-- Barre de Recherche & Filtres Rapides -->
+      <div class="portal-search-box" id="search-section">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="search" 
+            id="resource-search" 
+            class="search-input" 
+            placeholder="Rechercher un cours, TP, simulateur, quiz, mot-clé (ex: Windows 11, BIOS, CH341A, SSD, Réseau...)" 
+            autocomplete="off"
+            aria-label="Rechercher un cours ou un support"
+          >
+          <button type="button" id="search-clear-btn" class="search-clear-btn" aria-label="Effacer la recherche" style="display:none;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div class="search-kbd-hint" title="Appuyez sur la touche / pour rechercher">
+            <kbd>/</kbd>
+          </div>
+        </div>
+
+        <!-- Filtres rapides par catégories -->
+        <div class="search-filter-pills" role="group" aria-label="Filtres rapides par catégorie">
+          <button type="button" class="filter-pill active" data-filter="all">Tous (66)</button>
+          <button type="button" class="filter-pill" data-filter="windows">⚡ Windows 11</button>
+          <button type="button" class="filter-pill" data-filter="bios">🛠️ BIOS &amp; CH341A</button>
+          <button type="button" class="filter-pill" data-filter="stockage">💾 Stockage &amp; SSD</button>
+          <button type="button" class="filter-pill" data-filter="reseau">🌐 Réseau &amp; Cisco</button>
+          <button type="button" class="filter-pill" data-filter="virtualisation">💻 Virtualisation</button>
+          <button type="button" class="filter-pill" data-filter="quiz">🎯 Quiz &amp; NotebookLM</button>
+          <button type="button" class="filter-pill" data-filter="pdf">📄 Guides PDF</button>
+        </div>
+
+        <!-- Compteur et statut de filtrage -->
+        <div class="search-status-bar">
+          <span id="search-results-count" class="search-results-count">
+            Affichage de <strong>66</strong> ressources
+          </span>
+          <button type="button" id="reset-filters-btn" class="reset-filters-btn" style="display:none;">
+            ↺ Réinitialiser la recherche
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <main class="section-container">
+
+    <!-- Message Aucun Résultat -->
+    <div id="no-results-box" class="no-results-card" style="display:none;">
+      <div class="no-results-icon">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+        </svg>
+      </div>
+      <h3>Aucun résultat trouvé</h3>
+      <p>Aucun support ne correspond à votre recherche « <strong id="no-results-query"></strong> ».</p>
+      <button type="button" id="no-results-reset-btn" class="btn-resource btn-open-interactive" style="margin-top:1rem;">
+        ↺ Afficher toutes les ressources
+      </button>
+    </div>
+
+    <!-- ==================== FILIÈRE TMMI ==================== -->
+    <section class="resource-section" id="tmmi">
+      <div class="filiere-header">
+        <h2 class="filiere-title">
+          <span>🛠️</span> Filière TMMI : Maintenance en Micro-Informatique
+        </h2>
+        <a href="https://universitecentrale-my.sharepoint.com/:f:/r/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Ftt%5Fmohamed%5Faissaoui%5Fimset%5Ftn%2FDocuments%2FTMMI&share=cgqgIMNt1%2DUFQ4qLQGqLFziBEgUCwovk2ka74JMRt35onIUsWg" 
+           target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+          ☁️ Dossier Complet OneDrive (TMMI)
+        </a>
+      </div>
+
+      <div class="filiere-grid">
+        <!-- Ressource 1 : Windows 11 Interactif -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">⭐ Nouveau · Cours Interactif</span>
+          <h3>Maîtriser l'Installation de Windows 11 &amp; Simulateur Setup</h3>
+          <p>Guide technique complet avec simulateur interactif de boot UEFI/BIOS, configuration TPM 2.0, partitionnement GPT/MBR et check-list post-déploiement.</p>
+          <a href="/tmmi/cours-windows11.html" class="btn-resource btn-open-interactive">
+            🚀 Lancer le Cours Interactif
+          </a>
+        </article>
+
+        <!-- Ressource 2 : Histoire & Fonctionnement des Supports -->
+        <article class="resource-card" style="border: 2px solid var(--cyan); background: rgba(6, 182, 212, 0.04);">
+          <span class="resource-type-tag tag-interactive" style="background:#cffafe; color:#0e7490;">⭐ Nouveau · Cours Interactif</span>
+          <h3>Histoire &amp; Fonctionnement des Supports de Stockage</h3>
+          <p>L'épopée du stockage : de la carte perforée aux puces 3D NAND. Fonctionnement physique des disques HDD, mémoire Flash, SSD NVMe et simulateurs interactifs.</p>
+          <a href="/support-de-stockage/cours-stockage.html" class="btn-resource btn-open-interactive" style="background:var(--cyan); color:#0b1120; font-weight:700;">
+            💾 Lancer le Cours Stockage &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 3 : Guide Windows 11 PDF -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Guide Complet PDF (15 Mo)</span>
+          <h3>Guide Déploiement Windows 11</h3>
+          <p>Manuel de référence détaillé pour les techniciens : méthodes de déploiement, compatibilité matérielle, outils de création de médias et dépannage.</p>
+          <a href="/tmmi/Windows_11_Installation_Guide.pdf" target="_blank" class="btn-resource btn-download-pdf">
+            📄 Télécharger le Guide PDF
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Maîtriser le Déploiement Windows -->
+        <article class="resource-card" style="border-left: 3px solid #162e51;">
+          <span class="resource-type-tag tag-slides" style="background:#dbeafe; color:#1e40af;">📽️ Présentation NotebookLM</span>
+          <h3>Maîtriser le Déploiement Windows (Diaporama IA)</h3>
+          <p>Cours complet et visuel de la planification au déploiement en entreprise : préparation des images, automatisation, conformité matérielle et post-installation.</p>
+          <a href="https://notebooklm.link.google/VlqqKc4OiOea" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#162e51;">
+            🖥️ Lancer la Présentation Déploiement &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Installation et Configuration de Windows -->
+        <article class="resource-card" style="border-left: 3px solid #0078d4;">
+          <span class="resource-type-tag tag-slides" style="background:#e0f2fe; color:#0369a1;">📽️ Slides NotebookLM</span>
+          <h3>Installation &amp; Configuration de Windows (Guide Visuel)</h3>
+          <p>Support visuel interactif présentant le guide complet de déploiement, gestion des partitions et post-configuration Windows en milieu professionnel.</p>
+          <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            <a href="https://notebooklm.link.google/EWfhMCuvtCsI" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0078d4;">
+              📖 Consulter le Diaporama Windows &rarr;
+            </a>
+            <a href="https://notebooklm.link.google/KQxyIPtJ3Tbm" target="_blank" rel="noopener noreferrer" style="font-size:0.8rem; color:var(--muted); text-align:center; text-decoration:underline;">
+              Lien miroir alternatif NotebookLM
+            </a>
+          </div>
+        </article>
+
+        <!-- Ressource NotebookLM : Administration Windows Quiz 50 Questions -->
+        <article class="resource-card" style="border-left: 3px solid #059669;">
+          <span class="resource-type-tag tag-interactive" style="background:#d1fae5; color:#065f46;">⭐ Grand Quiz NotebookLM</span>
+          <h3>Administration Windows Quiz (50 Questions)</h3>
+          <p>Test d'auto-évaluation interactif de 50 questions couvrant l'administration système, l'installation de Windows, le partitionnement et le dépannage.</p>
+          <a href="https://notebooklm.link.google/EtxHNw3vrERM" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#059669;">
+            🎯 Démarrer le Quiz Windows (50 Q) &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Installation Windows Flashcards -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🗂️ Flashcards de Révision</span>
+          <h3>Cartes Mémo : Installation Windows</h3>
+          <p>Révisez activement les notions clés : prérequis TPM 2.0 / UEFI, commandes DISM, partitionnement GPT/MBR et procédures de configuration.</p>
+          <a href="https://notebooklm.link.google/JizAOS22yfsB" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+            🗂️ Réviser avec les Flashcards &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource : Cours Interactif Programmation BIOS CH341A -->
+        <article class="resource-card" style="border: 2px solid #0f62fe; background: rgba(15, 98, 254, 0.04);">
+          <span class="resource-type-tag tag-interactive" style="background:#d0e2ff; color:#0f62fe;">⭐ Nouveau · Cours Interactif &amp; Simulateur</span>
+          <h3>Programmation &amp; Flashage BIOS/UEFI avec CH341A</h3>
+          <p>Portail d'atelier complet : architecture BIOS et POST, brochage SPI SOIC8, gestion des tensions 1.8V/3.3V, simulateur terminal flashrom, checklist TP et quiz intégré.</p>
+          <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            <a href="/tmmi/cours-bios-ch341a.html" class="btn-resource btn-open-interactive" style="background:#0f62fe; color:#ffffff; font-weight:700;">
+              🚀 Lancer le Cours &amp; Simulateur BIOS &rarr;
+            </a>
+            <a href="/tmmi/Flashage_BIOS_CH341A.pdf" target="_blank" class="btn-resource btn-download-pdf">
+              📄 Télécharger le Manuel Complet PDF (2.2 Mo)
+            </a>
+          </div>
+        </article>
+
+        <!-- Ressource NotebookLM : Procédures et Outils de Programmation de BIOS -->
+        <article class="resource-card" style="border-left: 3px solid #0284c7;">
+          <span class="resource-type-tag tag-slides" style="background:#e0f2fe; color:#0369a1;">📘 Guide Technique NotebookLM</span>
+          <h3>Procédures &amp; Outils de Programmation de BIOS</h3>
+          <p>Guide technique complet sur le firmware BIOS/UEFI : identification des puces SPI/EEPROM, logiciels de programmation (NeoProgrammer, AsProgrammer, Flashrom), extraction et injection de dumps certifiés.</p>
+          <a href="https://notebooklm.link.google/luSVxjueVXqg" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0284c7;">
+            ⚡ Consulter le Guide Programmation BIOS &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Flashage BIOS CH341A -->
+        <article class="resource-card" style="border-left: 3px solid #ea580c;">
+          <span class="resource-type-tag tag-interactive" style="background:#ffedd5; color:#c2410c;">🔧 Atelier Pratique NotebookLM</span>
+          <h3>Flashage BIOS avec Programmateur CH341A</h3>
+          <p>Méthodologie pas-à-pas de reprogrammation matérielle : branchement du programmateur USB CH341A, repérage de la broche 1 (fil rouge), utilisation de la pince SOIC8 et précautions de tension (3.3V vs 5V).</p>
+          <a href="https://notebooklm.link.google/PaDKjmLOS0w7" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#ea580c;">
+            🛠️ Lancer le Guide Flashage CH341A &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Épreuvage BIOS Quiz -->
+        <article class="resource-card" style="border-left: 3px solid #10b981;">
+          <span class="resource-type-tag tag-interactive" style="background:#d1fae5; color:#065f46;">⭐ Évaluation Formative NotebookLM</span>
+          <h3>Épreuvage BIOS &amp; CH341A (Quiz d'Évaluation)</h3>
+          <p>Test d'auto-évaluation interactif sur la programmation de BIOS : repérage du détrompeur broche 1, diagnostic des puces EEPROM, tensions d'alimentation et résolution des pannes de flash.</p>
+          <a href="https://notebooklm.link.google/CXiYm0Xlni5N" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#10b981;">
+            🎯 Démarrer le Quiz Épreuvage BIOS &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 3 : Anatomie PC -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">Cours Interactif</span>
+          <h3>Anatomie &amp; Architecture Interne du PC</h3>
+          <p>Exploration visuelle des composants d'un ordinateur de bureau et portable : carte mère, bus, sockets, RAM, alimentations et systèmes de refroidissement.</p>
+          <a href="/tmmi/1.html" class="btn-resource btn-open-interactive">
+            📖 Consulter l'Anatomie du PC
+          </a>
+        </article>
+
+        <!-- Ressource 4 : Connectique & Périphériques -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">Cours Interactif</span>
+          <h3>Connectique, Ports &amp; Périphériques</h3>
+          <p>Guide complet des interfaces d'entrée/sortie, protocoles de communication, normes USB/Thunderbolt, HDMI, DisplayPort et réseaux.</p>
+          <a href="/tmmi/2.html" class="btn-resource btn-open-interactive">
+            🔌 Consulter la Connectique
+          </a>
+        </article>
+
+        <!-- Ressource 5 : Diagnostic Pannes CompTIA -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">Guide Pratique Atelier</span>
+          <h3>Guide Pratique de Diagnostic &amp; Maintenance (CompTIA A+)</h3>
+          <p>Méthodologie officielle de dépannage en 6 étapes, gestion des risques électrostatiques (ESD), check-list d'atelier et communication avec l'utilisateur.</p>
+          <a href="/tmmi/Guide_Pratique_Diagnostic_Maintenance.pdf" rel="noopener noreferrer" target="_blank" class="btn-resource btn-open-interactive">
+            🛠️ Ouvrir le Guide Diagnostic (PDF)
+          </a>
+        </article>
+
+        <!-- Ressource 6 : Clé USB bootable -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Fiche Pratique PDF</span>
+          <h3>Création de Clé USB Bootable d'Installation</h3>
+          <p>Procédure pas-à-pas avec Rufus et Media Creation Tool : réglage schéma de partition GPT/MBR et système de fichiers FAT32/NTFS.</p>
+          <a href="/tmmi/Installation_Windows_11_Cle_USB.pdf" target="_blank" class="btn-resource btn-download-pdf">
+            📄 Consulter la Fiche USB
+          </a>
+        </article>
+
+        <!-- Ressource 7 : Prise en charge des pannes -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Support de Cours PDF</span>
+          <h3>Prise en Charge des Pannes en Atelier</h3>
+          <p>Accueil du client, établissement de la fiche de suivi d'intervention, diagnostic matériel méthodique et restitution du matériel réparé.</p>
+          <a href="/tmmi/Prendre_en_charge_les_pannes.pdf" target="_blank" class="btn-resource btn-download-pdf">
+            📄 Ouvrir le Support Pannes
+          </a>
+        </article>
+
+        <!-- Ressource 8 : Démarrage PC -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Support Théorique PDF</span>
+          <h3>Les Étapes de Démarrage d'un Ordinateur</h3>
+          <p>Chronologie exacte de l'allumage : séquence POST, initialisation du BIOS/UEFI, chargement du Master Boot Record et passage de relais au Bootloader.</p>
+          <a href="/tmmi/Les_Etapes_de_Demarrage_PC.pdf" target="_blank" class="btn-resource btn-download-pdf">
+            📄 Ouvrir les Étapes de Boot
+          </a>
+        </article>
+
+        <!-- Ressource 9 : Virtualisation Slides -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-slides">Slides Web Interactives</span>
+          <h3>Virtualisation &amp; Déploiement sur VirtualBox</h3>
+          <p>Diaporama complet sur l'installation de machines virtuelles, allocation des ressources CPU/RAM et isolation pour les travaux pratiques.</p>
+          <a href="/tmmi/slides-virtualbox.html" target="_blank" class="btn-resource btn-open-interactive">
+            🖥️ Lancer les Slides Virtuelles
+          </a>
+        </article>
+
+        <!-- Ressource 10 : Grand Quiz Informatique 50 Questions -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">⭐ Grand Quiz NotebookLM</span>
+          <h3>Grand Quiz Informatique Générale (50 Questions)</h3>
+          <p>Test d'auto-évaluation complet de 50 questions couvrant l'architecture des PC, les composants matériels, les systèmes d'exploitation et la maintenance.</p>
+          <a href="https://notebooklm.link.google/60BGVagV4WP8" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+            🎯 Lancer le Quiz 50 Questions &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 11 : Accès au Dossier Support de Stockage -->
+        <article class="resource-card" style="border: 2px solid var(--sharepoint); background: var(--card-bg);">
+          <span class="resource-type-tag" style="background:#e0f2fe; color:#0369a1;">📁 Dossier Spécialisé</span>
+          <h3>Dossier : Support de Stockage</h3>
+          <p>Accédez au dossier complet regroupant les quiz NotebookLM (SSD, NVMe, HDD), les fiches USB bootables, les cartes mémo et la présentation d'architecture.</p>
+          <a href="#stockage" class="btn-resource btn-open-interactive">
+            💾 Ouvrir le Dossier Support de Stockage &rarr;
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== FILIÈRE TSIG ==================== -->
+    <section class="resource-section" id="tsig" style="border-top: 1px solid var(--card-border);">
+      <div class="filiere-header">
+        <h2 class="filiere-title">
+          <span>📊</span> Filière TSIG : Informatique de Gestion &amp; Systèmes
+        </h2>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="https://notebooklm.link.google/plMEeP4MndNQ" 
+             target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#06b6d4; background:rgba(6, 182, 212, 0.15); color:var(--cyan); font-weight:700;">
+            🌐 Portail Pilotes &amp; Périphériques (NotebookLM)
+          </a>
+          <a href="/tsig/" class="btn-resource btn-open-interactive" style="border-bottom-color:var(--cyan);">
+            📁 Dossier Web TSIG (/tsig)
+          </a>
+          <a href="https://universitecentrale-my.sharepoint.com/:f:/r/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Ftt%5Fmohamed%5Faissaoui%5Fimset%5Ftn%2FDocuments%2FTSIG&share=cgrnueyWCDIDTopm5KwnBMplEgUCdzxOEEU7i8bL7TSS%5Fbpu9Q" 
+             target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+            ☁️ Dossier Complet OneDrive (TSIG)
+          </a>
+        </div>
+      </div>
+      <p style="color:var(--muted); font-size:1.05rem; margin-bottom:1.5rem;">
+        Espace pédagogique officiel encadré par <strong>Mohamed Aissaoui</strong> : masterclass interactives, déploiement Windows 11, virtualisation avancée VirtualBox, architecture matérielle et évaluations formatives.
+      </p>
+
+      <div class="filiere-grid">
+        <!-- 1. CARTE VEDETTE : MASTERCLASS DÉPLOIEMENT WINDOWS 11 -->
+        <article class="resource-card card-featured">
+          <span class="resource-type-tag tag-interactive">⭐ Support Interactif Majeur · Nouveau</span>
+          <h3>Masterclass : Ingénierie &amp; Déploiement de Windows 11</h3>
+          <p>
+            Guide technique de pointe avec simulateurs embarqués, matrice des spécifications firmware (UEFI, TPM 2.0, Secure Boot), contournements de registre (<code>LabConfig</code>), bypass de compte Microsoft (<code>OOBE\BYPASSNRO</code>), checklist technicien et quiz d'auto-certification.
+          </p>
+          <div class="card-actions-row">
+            <a href="/tsig/Guide_de_d%C3%A9ploiement_de_Windows_11.html" class="btn-resource btn-open-interactive">
+              🚀 Lancer la Masterclass Interactive &rarr;
+            </a>
+            <a href="/tsig/guide-deploiement-windows11.html" class="btn-resource btn-open-interactive" style="border-bottom-color:#38bdf8;">
+              Lien Direct Alternatif
+            </a>
+            <a href="https://universitecentrale-my.sharepoint.com/:u:/r/personal/tt_mohamed_aissaoui_imset_tn/Documents/TSIG/Guide_de_d%C3%A9ploiement_de_Windows_11.html?csf=1&web=1&share=cQpPjyqZ7FvWT4xj3VZ3eHLEEgUCaeTHTcAaiPqKJt_nWH1TVQ" target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+              ☁️ Ouvrir sur OneDrive
+            </a>
+          </div>
+        </article>
+
+        <!-- 2. Hub Dossier TSIG -->
+        <article class="resource-card" style="border: 2px solid var(--cyan); background: var(--card-bg);">
+          <span class="resource-type-tag" style="background:#e0f2fe; color:#0369a1;">📁 Hub Filière TSIG</span>
+          <h3>Portail Dédié : Tous les Fichiers &amp; Supports TSIG</h3>
+          <p>Accédez à l'index web complet de la filière regroupant les 27 supports pédagogiques : cours interactifs, manuels PDF, modules et quiz NotebookLM, présentations PPTX et schémas conceptuels.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/" class="btn-resource btn-open-interactive">
+              📂 Explorer le Dossier /tsig &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 3. Windows 11 Installation Guide -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Guide Complet (15 Mo)</span>
+          <h3>Windows 11 Installation Guide</h3>
+          <p>Manuel technique exhaustif détaillant pas à pas l'installation, la gestion des partitions GPT et la configuration système.</p>
+          <div class="card-actions-row">
+            <a href="/tmmi/Windows_11_Installation_Guide.pdf" download class="btn-resource btn-download-pdf">
+              📥 Télécharger PDF (15 Mo)
+            </a>
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/Doc.aspx?sourcedoc=%7BFE1CD25A-4182-48FD-AE0A-E5E5EA3A91FC%7D&file=Windows_11_Installation_Guide.pptx&action=default" target="_blank" rel="noopener noreferrer" class="btn-resource btn-download-pptx">
+              ☁️ Diaporama PPTX (OneDrive)
+            </a>
+          </div>
+        </article>
+
+        <!-- 4. Windows 11 VirtualBox Deployment -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Atelier Lab (17 Mo)</span>
+          <h3>Windows 11 VirtualBox Deployment</h3>
+          <p>Support pratique dédié au dimensionnement des machines virtuelles, à l'émulation TPM/Secure Boot et aux Guest Additions.</p>
+          <div class="card-actions-row">
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/Documents/TSIG/Windows_11_VirtualBox_Deployment.pdf" target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+              ☁️ Manuel PDF (OneDrive)
+            </a>
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/Doc.aspx?sourcedoc=%7B365C6E78-F80E-45D3-B91D-51F8659AAF44%7D&file=Windows_11_VirtualBox_Deployment.pptx&action=default" target="_blank" rel="noopener noreferrer" class="btn-resource btn-download-pptx">
+              ☁️ Support PPTX (OneDrive)
+            </a>
+          </div>
+        </article>
+
+        <!-- 5. Déploiement Windows 11 VirtualBox (Slides + Cours) -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-slides">Diaporama &amp; TP</span>
+          <h3>Déploiement de Windows 11 sur VirtualBox</h3>
+          <p>Fascicule de présentation et slides synthétiques pour les séances de travaux pratiques en salle informatique.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/deploiement_windows11_virtualbox_slides.pdf" download class="btn-resource btn-download-pdf">
+              📥 Slides PDF (Local)
+            </a>
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/Documents/TSIG/D%C3%A9ploiement_de_Windows_11_sur_VirtualBox.pdf" target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+              ☁️ Support Complet (OneDrive)
+            </a>
+          </div>
+        </article>
+
+        <!-- 6. Maîtriser la Virtualisation -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Module Fondamental</span>
+          <h3>Maîtriser la Virtualisation</h3>
+          <p>Concepts théoriques et appliqués sur les hyperviseurs de type 1 et type 2, isolation de ressources et ponts réseaux.</p>
+          <div class="card-actions-row">
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/Documents/TSIG/Ma%C3%AEtriser_la_Virtualisation.pdf" target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+              ☁️ Cours PDF (OneDrive)
+            </a>
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/Doc.aspx?sourcedoc=%7B8F99DB9B-87AC-41BE-940E-D7CA6BBA02FD%7D&file=Ma%C3%AEtriser_la_Virtualisation.pptx&action=default" target="_blank" rel="noopener noreferrer" class="btn-resource btn-download-pptx">
+              ☁️ Support PPTX (OneDrive)
+            </a>
+          </div>
+        </article>
+
+        <!-- 7. Blueprint Cybersécurité -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Sécurité des Systèmes</span>
+          <h3>Blueprint Cybersécurité</h3>
+          <p>Plan d'architecture défensive : durcissement d'OS, protection des points de terminaison, politiques de sécurité et détection d'intrusions.</p>
+          <div class="card-actions-row">
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/Documents/TSIG/Blueprint_Cybers%C3%A9curit%C3%A9.pdf" target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+              ☁️ Document PDF (OneDrive)
+            </a>
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/Doc.aspx?sourcedoc=%7B043308C9-C161-4AB5-A01F-D0AF6FB8767F%7D&file=Blueprint_Cybers%C3%A9curit%C3%A9.pptx&action=default" target="_blank" rel="noopener noreferrer" class="btn-resource btn-download-pptx">
+              ☁️ Présentation PPTX (OneDrive)
+            </a>
+          </div>
+        </article>
+
+        <!-- 8. Les Étapes de Démarrage PC -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Firmware &amp; Boot</span>
+          <h3>Les Étapes de Démarrage d'un Ordinateur</h3>
+          <p>Décorticage étape par étape du signal Power Good, du BIOS/UEFI, de la table de partitionnement GPT/MBR et du chargeur Windows Boot Manager.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/Les%20%C3%89tapes%20de%20D%C3%A9marrage%20d'un%20Ordinateur.pdf" download class="btn-resource btn-download-pdf">
+              📥 Manuel PDF (2.1 Mo)
+            </a>
+          </div>
+        </article>
+
+        <!-- 9. Anatomie du PC & Mémoires -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pptx">Hardware &amp; Architecture</span>
+          <h3>Anatomie du PC &amp; Hiérarchie Mémoire</h3>
+          <p>Étude détaillée des composants de la carte mère, bus systèmes, sockets CPU et de la pyramide des mémoires caches et DRAM.</p>
+          <div class="card-actions-row">
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/Doc.aspx?sourcedoc=%7BC985C302-98DF-4FEF-A5AD-04DE7DD81715%7D&file=Anatomy_of_a_PC.pptx&action=default" target="_blank" rel="noopener noreferrer" class="btn-resource btn-download-pptx">
+              ☁️ Anatomy PC (OneDrive)
+            </a>
+            <a href="https://universitecentrale-my.sharepoint.com/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/Doc.aspx?sourcedoc=%7B43C0BE58-15E2-4D6E-B91E-A157659EE091%7D&file=The_Strata_of_Memory.pptx&action=default" target="_blank" rel="noopener noreferrer" class="btn-resource btn-download-pptx" style="background:#0284c7;">
+              ☁️ Strata Memory (OneDrive)
+            </a>
+          </div>
+        </article>
+
+        <!-- 10. Méthodes d'Installation Windows 11 (HTML) -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">💻 Guide Web Interactif</span>
+          <h3>Méthodes d'Installation Windows 11</h3>
+          <p>Synthèse complète des différentes méthodes d'installation et de déploiement client : Clean Install, Mise à niveau et clonage.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/M%C3%A9thodes_d_installation_Windows_11.html" class="btn-resource btn-open-interactive">
+              🚀 Ouvrir le Guide &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 11. Histoire & Fonctionnement Supports -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">💾 Cours Interactif</span>
+          <h3>Histoire &amp; Fonctionnement des Supports</h3>
+          <p>Exploration visuelle et pédagogique des mémoires de masse, de la carte perforée aux technologies NVMe PCIe 5.0.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/Cours_interactif___Histoire_et_fonctionnement_des_supports.html" class="btn-resource btn-open-interactive">
+              💾 Lancer le Cours &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 12. NotebookLM Quiz Administration Windows -->
+        <article class="resource-card" style="border-left: 3px solid #059669;">
+          <span class="resource-type-tag tag-interactive" style="background:#d1fae5; color:#065f46;">⭐ Grand Quiz NotebookLM</span>
+          <h3>Administration Windows Quiz (50 Questions)</h3>
+          <p>Test d'auto-évaluation interactif de 50 questions pour valider vos compétences en administration système, déploiement Windows et gestion de parc informatique.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/EtxHNw3vrERM" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#059669;">
+              🎯 Démarrer le Quiz Windows (50 Q) &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 13. NotebookLM Diaporama Déploiement Windows -->
+        <article class="resource-card" style="border-left: 3px solid #162e51;">
+          <span class="resource-type-tag tag-slides" style="background:#dbeafe; color:#1e40af;">📽️ Présentation NotebookLM</span>
+          <h3>Maîtriser le Déploiement Windows (Diaporama IA)</h3>
+          <p>Guide visuel complet pour les administrateurs systèmes : planification, images systèmes, compatibilité matérielle et politiques de déploiement.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/VlqqKc4OiOea" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#162e51;">
+              🖥️ Lancer la Présentation &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 14. NotebookLM Flashcards -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🗂️ Flashcards de Révision</span>
+          <h3>Cartes Mémo : Installation Windows</h3>
+          <p>Flashcards interactives pour mémoriser les commandes systèmes, règles de sécurité, gestion des comptes et options d'installation Windows.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/JizAOS22yfsB" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+              🗂️ S'entraîner avec les Cartes &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 15. Quiz VM -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">🧠 Évaluation &amp; Révision</span>
+          <h3>Le Quiz VM (Machines Virtuelles)</h3>
+          <p>Testez et évaluez vos connaissances sur la virtualisation, l'installation de machines virtuelles et les environnements VirtualBox via NotebookLM.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/v9RWUNvDssB3" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+              🎯 Lancer le Quiz VM (NotebookLM) &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 16. Grand Quiz Informatique (50 Questions) -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">⭐ Grand Quiz NotebookLM</span>
+          <h3>Grand Quiz Informatique Générale (50 Questions)</h3>
+          <p>Test d'auto-évaluation interactif de 50 questions pour réviser et valider vos acquis fondamentaux en informatique et systèmes d'information.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/60BGVagV4WP8" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+              🚀 Démarrer le Quiz (50 Q) &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 17. Portail BTS TSIG : Gestion des Pilotes & Périphériques (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #06b6d4;">
+          <span class="resource-type-tag" style="background:#cffafe; color:#0e7490;">🌐 Portail Thématique NotebookLM</span>
+          <h3>Portail TSIG : Gestion des Pilotes &amp; Périphériques</h3>
+          <p>Hub pédagogique officiel BTS TSIG dédié à l'architecture des pilotes sous Windows 11, la gestion Plug and Play (PnP) et les stratégies de dépannage.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/plMEeP4MndNQ" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#06b6d4;">
+              🌐 Accéder au Portail NotebookLM &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 18. Cours : Gestion des Périphériques & Pilotes (Drivers) -->
+        <article class="resource-card" style="border-left: 3px solid #3b82f6;">
+          <span class="resource-type-tag tag-pdf" style="background:#dbeafe; color:#1d4ed8;">📘 Cours &amp; Guides Officiels PDF</span>
+          <h3>Cours : Gestion des Périphériques &amp; Pilotes (Drivers)</h3>
+          <p>Étude approfondie de l'architecture des pilotes Windows 11 : modes UMDF vs KMDF, packages de pilotes .inf, catalogue de sécurité .cat et signature numérique.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/cours-pilotes-peripheriques-windows11.pdf" download class="btn-resource btn-download-pdf">
+              📥 Télécharger le Cours PDF (458 Ko)
+            </a>
+            <a href="/tsig/guide-installation-pilote.pdf" download class="btn-resource btn-download-pdf" style="background:#0284c7;">
+              📄 Guide d'Installation (PDF)
+            </a>
+            <a href="https://notebooklm.link.google/kaN4DQ119I8o" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#3b82f6;">
+              📖 NotebookLM &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 19. Cours Interactif : Pilotes & Périphériques Windows 11 -->
+        <article class="resource-card" style="border: 2px solid var(--cyan); background: rgba(6, 182, 212, 0.04);">
+          <span class="resource-type-tag tag-interactive" style="background:#cffafe; color:#0e7490;">⭐ Support Web Interactif · Carbon Design</span>
+          <h3>Cours Interactif : Pilotes &amp; Périphériques Windows 11</h3>
+          <p>Module interactif guidé : détection et identification matérielle (Hardware IDs, Device Instance Path), mise à jour, restauration et résolution de conflits avec simulateurs intégrés.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/cours-pilotes-peripheriques-windows11.html" class="btn-resource btn-open-interactive" style="background:var(--cyan); color:#0b1120; font-weight:700;">
+              🚀 Lancer le Cours Interactif Direct &rarr;
+            </a>
+            <a href="https://notebooklm.link.google/ffHFhMbBPKtX" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0284c7;">
+              ⚡ Version NotebookLM &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 20. Présentation IA : Maîtriser la Gestion des Périphériques & Pilotes -->
+        <article class="resource-card" style="border-left: 3px solid #6366f1;">
+          <span class="resource-type-tag tag-slides" style="background:#e0e7ff; color:#4338ca;">📽️ Présentation NotebookLM</span>
+          <h3>Maîtriser la Gestion des Périphériques &amp; Pilotes</h3>
+          <p>Diaporama visuel généré par IA : méthodologie d'administration, console devmgmt.msc, commandes PowerShell et bonnes pratiques de déploiement.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/mhKQBzgxObYo" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#6366f1;">
+              🖥️ Lancer la Présentation &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 21. Cartes Mémo (Flashcards) : Périphériques & Pilotes -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🗂️ Flashcards de Révision</span>
+          <h3>Cartes Mémo : Périphériques &amp; Pilotes</h3>
+          <p>Flashcards interactives pour mémoriser rapidement le vocabulaire clé, les identifiants matériels, les commandes de diagnostic et le dépannage de code d'erreur.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/vBOkIQiUXYVF" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+              🗂️ S'entraîner avec les Cartes &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 22. Quiz Technique : Commandes PnPUtil & Pilotes -->
+        <article class="resource-card" style="border-left: 3px solid #10b981;">
+          <span class="resource-type-tag tag-interactive" style="background:#d1fae5; color:#065f46;">🎯 Quiz Technique PnPUtil</span>
+          <h3>Quiz Technique : Commandes PnPUtil &amp; Pilotes</h3>
+          <p>Test d'auto-évaluation pratique de 5 QCM sur la gestion des magasins de pilotes et les commandes système via <code>pnputil.exe</code>.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/b53Ud1ZqQkg2" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#10b981;">
+              🎯 Démarrer le Quiz PnPUtil &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 23. Cours Interactif & Quiz : Pilotes Windows 11 -->
+        <article class="resource-card" style="border: 2px solid #f59e0b; background: rgba(245, 158, 11, 0.04);">
+          <span class="resource-type-tag tag-interactive" style="background:#fef3c7; color:#92400e;">🧠 Application Web Pédagogique Complète</span>
+          <h3>Cours Interactif &amp; Grand Quiz : Pilotes Windows 11</h3>
+          <p>Application pédagogique complète (7 chapitres + quiz évaluatif) conçue par Mohamed Aissaoui : architecture HAL, modèles WDF/WDM, console PnPUtil et auto-évaluation finale.</p>
+          <div class="card-actions-row">
+            <a href="/tsig/quiz-pilotes-windows11.html" class="btn-resource btn-open-interactive" style="background:#f59e0b; color:#0b1120; font-weight:700;">
+              🚀 Lancer l'App Web &amp; Grand Quiz &rarr;
+            </a>
+            <a href="https://notebooklm.link.google/BnC7OtzQOFza" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#f59e0b;">
+              🧠 Version NotebookLM &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 24. Accès au Dossier Support de Stockage -->
+        <article class="resource-card" style="border: 2px solid var(--sharepoint); background: var(--card-bg);">
+          <span class="resource-type-tag" style="background:#e0f2fe; color:#0369a1;">📁 Dossier Thématique</span>
+          <h3>Dossier : Support de Stockage</h3>
+          <p>Modules interactifs complets : technologies SSD/HDD, supports bootables, cartes de révision cybersécurité et présentation d'architecture.</p>
+          <div class="card-actions-row">
+            <a href="#stockage" class="btn-resource btn-open-interactive">
+              💾 Ouvrir le Dossier Support de Stockage &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 25. Accès Global OneDrive TSIG -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-cloud">OneDrive Officiel</span>
+          <h3>Espace de Travail TSIG (Cours, TP &amp; TD)</h3>
+          <p>Accès sécurisé à l'ensemble des dossiers de cours partagés par Mohamed Aissaoui sur la plateforme institutionnelle cloud.</p>
+          <div class="card-actions-row">
+            <a href="https://universitecentrale-my.sharepoint.com/:f:/r/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Ftt%5Fmohamed%5Faissaoui%5Fimset%5Ftn%2FDocuments%2FTSIG&share=cgrnueyWCDIDTopm5KwnBMplEgUCdzxOEEU7i8bL7TSS%5Fbpu9Q" target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+              Accéder à l'espace TSIG &rarr;
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== FILIÈRE IG ==================== -->
+    <section class="resource-section" id="ig" style="border-top: 1px solid var(--card-border);">
+      <div class="filiere-header">
+        <h2 class="filiere-title">
+          <span>💼</span> Filière IG : Informatique de Gestion
+        </h2>
+        <a href="https://universitecentrale-my.sharepoint.com/:f:/r/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Ftt%5Fmohamed%5Faissaoui%5Fimset%5Ftn%2FDocuments%2FIG&share=cgrwuYsWD5%2D%2DToqRVveyJf5uEgUCSEEtYMMaCj%5Fl0g0mTk1P5g" 
+           target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+          ☁️ Dossier Complet OneDrive (IG)
+        </a>
+      </div>
+      <p style="color:var(--muted); font-size:1.05rem; margin-bottom:1.5rem;">
+        Supports pédagogiques pour la maîtrise des outils collaboratifs, applications d'entreprise et automatisation bureautique.
+      </p>
+      <div class="filiere-grid">
+        <!-- Accès au Dossier Support de Stockage -->
+        <article class="resource-card" style="border: 2px solid var(--sharepoint); background: var(--card-bg);">
+          <span class="resource-type-tag" style="background:#e0f2fe; color:#0369a1;">📁 Dossier Thématique</span>
+          <h3>Dossier : Support de Stockage</h3>
+          <p>Consultez les quiz interactifs sur les supports de stockage, la création de clés bootables, les cartes de révision cybersécurité et les présentations d'architecture.</p>
+          <a href="#stockage" class="btn-resource btn-open-interactive">
+            💾 Ouvrir le Dossier Support de Stockage &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Administration Windows Quiz 50 Questions -->
+        <article class="resource-card" style="border-left: 3px solid #059669;">
+          <span class="resource-type-tag tag-interactive" style="background:#d1fae5; color:#065f46;">⭐ Grand Quiz NotebookLM</span>
+          <h3>Administration Windows Quiz (50 Questions)</h3>
+          <p>Testez vos compétences sur l'environnement Windows professionnel, les outils de configuration et la prise en main des postes de travail.</p>
+          <a href="https://notebooklm.link.google/EtxHNw3vrERM" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#059669;">
+            🎯 Démarrer le Quiz Windows (50 Q) &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Installation Windows Flashcards -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🗂️ Flashcards de Révision</span>
+          <h3>Cartes Mémo : Installation Windows</h3>
+          <p>Cartes mémo de révision pour retenir l'essentiel des protocoles de déploiement et des fonctionnalités Windows en entreprise.</p>
+          <a href="https://notebooklm.link.google/JizAOS22yfsB" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+            🗂️ Réviser avec les Flashcards &rarr;
+          </a>
+        </article>
+
+        <!-- Travaux Pratiques Réseau (TP2) -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Fiche TP PDF</span>
+          <h3>TP 2 : Configuration &amp; Architecture Réseau Local</h3>
+          <p>Travaux pratiques sur l'adressage IP, le découpage en sous-réseaux, la connectivité des postes de travail et le diagnostic des pannes réseau d'entreprise.</p>
+          <a href="/ig/tp2-reseau.pdf" target="_blank" class="btn-resource btn-download-pdf">
+            📄 Télécharger le TP 2 Réseau (PDF) &rarr;
+          </a>
+        </article>
+
+        <!-- Lab Cisco Switch and Router Network -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Laboratoire Pratique Cisco</span>
+          <h3>Lab Cisco 6.4.3.5 : Building a Switch &amp; Router Network</h3>
+          <p>Laboratoire d'interconnexion réseau : configuration matérielle des commutateurs et routeurs, topologies LAN, passerelles par défaut et tests de connectivité end-to-end.</p>
+          <a href="/ig/lab-switch-router-network.pdf" target="_blank" class="btn-resource btn-download-pdf">
+            📄 Consulter le Lab 6.4.3.5 (PDF) &rarr;
+          </a>
+        </article>
+
+        <article class="resource-card">
+          <span class="resource-type-tag tag-cloud">OneDrive Officiel</span>
+          <h3>Espace de Travail IG (Cours &amp; Projets)</h3>
+          <p>Consultez et téléchargez les présentations, études de cas et exercices pratiques déposés par votre formateur.</p>
+          <a href="https://universitecentrale-my.sharepoint.com/:f:/r/personal/tt_mohamed_aissaoui_imset_tn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Ftt%5Fmohamed%5Faissaoui%5Fimset%5Ftn%2FDocuments%2FIG&share=cgrwuYsWD5%2D%2DToqRVveyJf5uEgUCSEEtYMMaCj%5Fl0g0mTk1P5g" target="_blank" rel="noopener noreferrer" class="btn-resource btn-cloud-sharepoint">
+            Accéder à l'espace IG &rarr;
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== DOSSIER : SUPPORT DE STOCKAGE ==================== -->
+    <section class="resource-section" id="stockage" style="border-top: 1px solid var(--card-border);">
+      <div class="filiere-header">
+        <h2 class="filiere-title">
+          <span>💾</span> Dossier : Support de Stockage
+        </h2>
+        <a href="/support-de-stockage/" class="btn-resource btn-cloud-sharepoint">
+          📁 Ouvrir le Dossier Dédié &rarr;
+        </a>
+      </div>
+      <p style="color:var(--muted); font-size:1.05rem; margin-bottom:1.5rem;">
+        Dossier pédagogique complet regroupant les quiz interactifs NotebookLM, fiches d'atelier de partitionnement, cartes de révision cybersécurité et présentations d'architecture dédiés aux technologies de stockage (SSD, HDD, NVMe, USB).
+      </p>
+      <div class="filiere-grid">
+        <!-- Ressource Majeure : Cours Interactif Histoire & Fonctionnement des Supports -->
+        <article class="resource-card" style="border: 2px solid var(--cyan); background: rgba(6, 182, 212, 0.04);">
+          <span class="resource-type-tag tag-interactive" style="background:#cffafe; color:#0e7490;">⭐ Cours Interactif Complet</span>
+          <h3>L'Épopée du Stockage : Histoire &amp; Fonctionnement des Supports</h3>
+          <p>Voyage interactif et visuel à travers un siècle de stockage : cartes perforées, disques durs (HDD), mémoire Flash, SSD SATA/NVMe et puces 3D NAND avec simulateurs interactifs intégrés.</p>
+          <a href="/support-de-stockage/cours-stockage.html" class="btn-resource btn-open-interactive" style="background:var(--cyan); color:#0b1120; font-weight:700;">
+            🚀 Lancer le Cours Interactif &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM : Évolution des Supports de Stockage -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🧠 NotebookLM IA</span>
+          <h3>Évolution des Supports de Stockage (NotebookLM)</h3>
+          <p>Cahier d'apprentissage intelligent et interactif dédié à l'histoire et à l'évolution du stockage : résumés, analyse comparée des générations de supports et Q&amp;A interactif guidé par l'IA.</p>
+          <a href="https://notebooklm.link.google/Y2OEq36ZGJ8A" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+            ⚡ Ouvrir le NotebookLM Stockage &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM 2 : The Strata of Memory -->
+        <article class="resource-card" style="border-left: 3px solid #f59e0b;">
+          <span class="resource-type-tag tag-slides" style="background:#fef3c7; color:#b45309;">📽️ Présentation NotebookLM</span>
+          <h3>The Strata of Memory (Diaporama Interactif)</h3>
+          <p>Présentation visuelle sur l'évolution des supports de stockage, de la mémoire rupestre et des cartes perforées aux nanotechnologies 3D NAND.</p>
+          <a href="https://notebooklm.link.google/fTzdXcQpMHDQ" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#f59e0b;">
+            🖥️ Lancer la Présentation &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM 3 : L'évolution du stockage -->
+        <article class="resource-card" style="border-left: 3px solid #3b82f6;">
+          <span class="resource-type-tag tag-interactive" style="background:#dbeafe; color:#1d4ed8;">📚 Synthèse Approfondie</span>
+          <h3>L'Évolution du Stockage : Synthèse Pédagogique</h3>
+          <p>Étude complète et documentée retraçant la chronologie, les ruptures technologiques et la physique des supports de données informatiques.</p>
+          <a href="https://notebook.google.com/notebook/1d402182-fe7d-44ba-ae44-feaf2f3aa4a4/artifact/f4730475-d244-4aa1-9a99-518f1b06f716?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1&utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1_" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#3b82f6;">
+            📖 Consulter l'Étude &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM 4 : Stockage Flashcards -->
+        <article class="resource-card" style="border-left: 3px solid #10b981;">
+          <span class="resource-type-tag tag-interactive" style="background:#d1fae5; color:#047857;">🗂️ Flashcards de Révision</span>
+          <h3>Cartes Mémo : Technologies de Stockage</h3>
+          <p>Révisez activement les notions clés : caractéristiques HDD vs SSD, débits SATA vs NVMe, secteurs de boot et cellules flash SLC/MLC/TLC.</p>
+          <a href="https://notebooklm.link.google/e2XEYqUrPQlJ" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#10b981;">
+            🗂️ S'entraîner avec les Cartes &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM 5 : Storage Media Quiz -->
+        <article class="resource-card" style="border-left: 3px solid #6366f1;">
+          <span class="resource-type-tag tag-interactive" style="background:#e0e7ff; color:#4338ca;">🇬🇧 English Quiz NotebookLM</span>
+          <h3>Storage Media Quiz (Interactive IT Quiz)</h3>
+          <p>Test your computer hardware knowledge in English: magnetic disks, solid-state drives, flash memory, interfaces and storage hierarchies.</p>
+          <a href="https://notebooklm.link.google/PSo0lT933KQU" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#6366f1;">
+            🌍 Take Storage Quiz (English) &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM 6 : Supports Stockage Arbre -->
+        <article class="resource-card" style="border-left: 3px solid #06b6d4;">
+          <span class="resource-type-tag tag-interactive" style="background:#cffafe; color:#0e7490;">🌳 Arbre Conceptuel NotebookLM</span>
+          <h3>Arborescence Conceptuelle des Supports</h3>
+          <p>Schéma hiérarchique et classification arborescente des familles de stockage : mémoire volatile vs rémanente, magnétique, optique et électronique.</p>
+          <a href="https://notebooklm.link.google/GOieqvGziaUD" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#06b6d4;">
+            🔍 Explorer l'Arbre Conceptuel &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource NotebookLM 7 : Histoire et technologies du stockage (Schéma ADN) -->
+        <article class="resource-card" style="border-left: 3px solid #ec4899;">
+          <span class="resource-type-tag tag-interactive" style="background:#fce7f3; color:#be185d;">🧬 Schéma &amp; Infographie IA</span>
+          <h3>Histoire &amp; Technologies du Stockage (De l'HDD à l'ADN)</h3>
+          <p>Schéma illustré et interactif retraçant les sauts de densité du stockage : des plateaux magnétiques aux puces 3D NAND jusqu'aux nanotechnologies et à la molécule d'ADN.</p>
+          <a href="https://notebooklm.link.google/ajmUhhBV5F6D" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#ec4899;">
+            🧬 Découvrir l'Infographie &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 1 : Quiz Stockage -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">💾 Quiz NotebookLM</span>
+          <h3>Quiz Stockage de Données (SSD, HDD &amp; NVMe)</h3>
+          <p>Évaluez vos compétences sur les technologies de stockage : disques magnétiques HDD, SSD SATA/NVMe, bus M.2/PCIe, configurations RAID et partitionnement.</p>
+          <a href="https://notebooklm.link.google/jQQ4BNOZr2wv" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+            ⚡ Lancer le Quiz Stockage &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 2 : Fiche USB bootable -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-pdf">Fiche Pratique PDF</span>
+          <h3>Création de Clé USB Bootable d'Installation</h3>
+          <p>Procédure pas-à-pas avec Rufus et Media Creation Tool : préparation du support de stockage USB, schéma GPT/MBR et système de fichiers FAT32/NTFS.</p>
+          <a href="/tmmi/Installation_Windows_11_Cle_USB.pdf" target="_blank" class="btn-resource btn-download-pdf">
+            📄 Consulter la Fiche USB
+          </a>
+        </article>
+
+        <!-- Ressource 3 : Présentation Cybersécurité & Architecture -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-slides">📽️ Présentation NotebookLM</span>
+          <h3>Maîtriser la Cybersécurité &amp; l'Architecture Informatique : Du Matériel au Cloud</h3>
+          <p>Support de présentation interactif et complet couvrant les architectures matérielles, les couches réseaux, les vecteurs d'attaque et la transition sécurisée vers le Cloud.</p>
+          <a href="https://notebooklm.link.google/4hwerWLWnOuq" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+            🖥️ Ouvrir la Présentation &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 4 : Cartes Mémo Sécurité -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">🛡️ Cartes Mémo NotebookLM</span>
+          <h3>Cartes Mémo : Sécurité Informatique</h3>
+          <p>Révisez activement les fondamentaux de la cybersécurité : typologie des menaces, bonnes pratiques de protection, chiffrement, gestion des accès et politiques de sécurité.</p>
+          <a href="https://notebooklm.link.google/uqQfxoDxuwHB" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+            🗂️ Étudier les Cartes Mémo &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 5 : Ports Réseau CompTIA A+ -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">🌐 CompTIA A+ NotebookLM</span>
+          <h3>Protocoles &amp; Ports Réseau Courants (CompTIA A+)</h3>
+          <p>Guide de révision interactif des protocoles et numéros de ports essentiels (TCP/UDP, HTTP, HTTPS, SSH, DNS, DHCP, FTP, RDP) pour l'examen CompTIA A+.</p>
+          <a href="https://notebooklm.link.google/qJABVstL5ny2" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+            📡 Consulter les Ports Réseau &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 6 : English Quiz -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">🇬🇧 English Quiz NotebookLM</span>
+          <h3>Computer Science Quiz (English Version)</h3>
+          <p>Test your IT knowledge in English: interactive quiz covering PC hardware architecture, operating systems, networking fundamentals, and computer maintenance.</p>
+          <a href="https://notebooklm.link.google/lBudjkk8Eyns" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+            🌍 Start English Quiz &rarr;
+          </a>
+        </article>
+
+        <!-- Ressource 7 : Grand Quiz 50 Questions -->
+        <article class="resource-card">
+          <span class="resource-type-tag tag-interactive">⭐ Grand Quiz NotebookLM</span>
+          <h3>Grand Quiz Informatique Générale (50 Questions)</h3>
+          <p>Test d'auto-évaluation interactif de 50 questions pour réviser et valider vos acquis fondamentaux en informatique et systèmes d'information.</p>
+          <a href="https://notebooklm.link.google/60BGVagV4WP8" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
+            🚀 Démarrer le Quiz (50 Q) &rarr;
+          </a>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Pied de page -->
+  <footer class="site-footer">
+    <div class="footer-bottom" style="border:none; padding-top:0;">
+      <p>© <span id="y">2026</span> <strong>PCDOCTOR Computer Service Center</strong> — Tous droits réservés.</p>
+      <p>Portail pédagogique géré par <strong>Mohamed Aissaoui</strong> (Formateur IT)</p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var root = document.documentElement;
+      var btn = document.getElementById("theme");
+      var label = btn.querySelector(".theme-label");
+      var mq = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function current(){
+        return root.getAttribute("data-theme") || (mq.matches ? "dark" : "light");
+      }
+
+      function render(){
+        var dark = current() === "dark";
+        btn.setAttribute("aria-pressed", dark);
+        btn.setAttribute("aria-label", dark ? "Activer le mode clair" : "Activer le mode sombre");
+        label.textContent = dark ? "Mode clair" : "Mode sombre";
+      }
+
+      btn.addEventListener("click", function(){
+        var next = current() === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        try{ localStorage.setItem("theme", next); }catch(e){}
+        render();
+      });
+
+      render();
+    })();
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Bouton Retour en haut -->
+  <button id="back-to-top" class="back-to-top-btn" type="button" aria-label="Retour en haut de page" title="Retour en haut">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- Moteur de recherche et filtres instantanés -->
+  <script>
+    (function(){
+      var searchInput = document.getElementById("resource-search");
+      var clearBtn = document.getElementById("search-clear-btn");
+      var resultsCount = document.getElementById("search-results-count");
+      var resetBtn = document.getElementById("reset-filters-btn");
+      var noResultsBox = document.getElementById("no-results-box");
+      var noResultsQuery = document.getElementById("no-results-query");
+      var noResultsResetBtn = document.getElementById("no-results-reset-btn");
+      var filterPills = document.querySelectorAll(".filter-pill");
+      var cards = Array.from(document.querySelectorAll(".resource-card"));
+      var sections = Array.from(document.querySelectorAll(".resource-section"));
+      var backToTop = document.getElementById("back-to-top");
+
+      var currentFilter = "all";
+
+      function cleanText(text) {
+        return (text || "")
+          .normalize("NFD")
+          .replace(/[̀-ͯ]/g, "")
+          .toLowerCase();
+      }
+
+      var indexedCards = cards.map(function(card){
+        var title = cleanText(card.querySelector("h3") ? card.querySelector("h3").textContent : "");
+        var desc = cleanText(card.querySelector("p") ? card.querySelector("p").textContent : "");
+        var tag = cleanText(card.querySelector(".resource-type-tag") ? card.querySelector(".resource-type-tag").textContent : "");
+        var links = Array.from(card.querySelectorAll("a")).map(function(a){ return cleanText(a.textContent + " " + (a.getAttribute("href") || "")); }).join(" ");
+        var section = card.closest(".resource-section");
+        var sectionTitle = cleanText(section && section.querySelector("h2") ? section.querySelector("h2").textContent : "");
+
+        var fullText = title + " " + desc + " " + tag + " " + links + " " + sectionTitle;
+
+        return {
+          element: card,
+          section: section,
+          fullText: fullText,
+          isWindows: /windows|win11|win 11|setup|deploiement|pnputil/.test(fullText),
+          isBios: /bios|uefi|ch341a|flashage|firmware|eeprom/.test(fullText),
+          isStockage: /stockage|ssd|nvme|hdd|disque|nand|memoire/.test(fullText),
+          isReseau: /reseau|network|cisco|switch|router|cablage|port|tcp|udp/.test(fullText),
+          isVirtualisation: /virtual|virtualbox|vm|machine virtuelle/.test(fullText),
+          isQuiz: /quiz|qcm|evaluation|flashcard|memo|cartes memo/.test(fullText),
+          isPdf: /\.pdf|pdf|guide telecharger/.test(fullText)
+        };
+      });
+
+      function applyFilterAndSearch() {
+        var query = cleanText(searchInput.value);
+        clearBtn.style.display = query.length > 0 ? "flex" : "none";
+
+        var words = query.split(/\s+/).filter(function(w){ return w.length > 0; });
+        var visibleCount = 0;
+
+        var sectionMatchCount = new Map();
+        sections.forEach(function(sec){ sectionMatchCount.set(sec, 0); });
+
+        indexedCards.forEach(function(item){
+          var matchesFilter = true;
+          if (currentFilter === "windows") matchesFilter = item.isWindows;
+          else if (currentFilter === "bios") matchesFilter = item.isBios;
+          else if (currentFilter === "stockage") matchesFilter = item.isStockage;
+          else if (currentFilter === "reseau") matchesFilter = item.isReseau;
+          else if (currentFilter === "virtualisation") matchesFilter = item.isVirtualisation;
+          else if (currentFilter === "quiz") matchesFilter = item.isQuiz;
+          else if (currentFilter === "pdf") matchesFilter = item.isPdf;
+
+          var matchesQuery = true;
+          if (words.length > 0) {
+            matchesQuery = words.every(function(word){
+              return item.fullText.indexOf(word) !== -1;
+            });
+          }
+
+          var isVisible = matchesFilter && matchesQuery;
+          item.element.style.display = isVisible ? "" : "none";
+
+          if (isVisible) {
+            visibleCount++;
+            if (item.section) {
+              sectionMatchCount.set(item.section, (sectionMatchCount.get(item.section) || 0) + 1);
+            }
+          }
+        });
+
+        sections.forEach(function(sec){
+          var count = sectionMatchCount.get(sec) || 0;
+          sec.style.display = count > 0 ? "" : "none";
+        });
+
+        var isFiltered = query.length > 0 || currentFilter !== "all";
+        resetBtn.style.display = isFiltered ? "inline-block" : "none";
+
+        if (visibleCount === 0) {
+          resultsCount.innerHTML = "Aucune ressource trouvée";
+          noResultsBox.style.display = "block";
+          noResultsQuery.textContent = searchInput.value || "le filtre sélectionné";
+        } else {
+          resultsCount.innerHTML = "Affichage de <strong>" + visibleCount + "</strong> ressource" + (visibleCount > 1 ? "s" : "") + (isFiltered ? " (filtrées)" : "");
+          noResultsBox.style.display = "none";
+        }
+      }
+
+      searchInput.addEventListener("input", applyFilterAndSearch);
+
+      clearBtn.addEventListener("click", function(){
+        searchInput.value = "";
+        searchInput.focus();
+        applyFilterAndSearch();
+      });
+
+      function resetAll() {
+        searchInput.value = "";
+        currentFilter = "all";
+        filterPills.forEach(function(p){
+          p.classList.toggle("active", p.getAttribute("data-filter") === "all");
+        });
+        applyFilterAndSearch();
+      }
+
+      resetBtn.addEventListener("click", resetAll);
+      noResultsResetBtn.addEventListener("click", resetAll);
+
+      filterPills.forEach(function(pill){
+        pill.addEventListener("click", function(){
+          filterPills.forEach(function(p){ p.classList.remove("active"); });
+          pill.classList.add("active");
+          currentFilter = pill.getAttribute("data-filter");
+          applyFilterAndSearch();
+        });
+      });
+
+      document.addEventListener("keydown", function(e){
+        if (e.key === "/" && document.activeElement !== searchInput && !["input", "textarea"].includes(document.activeElement.tagName.toLowerCase())) {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          searchInput.focus();
+          searchInput.select();
+        } else if (e.key === "Escape" && document.activeElement === searchInput) {
+          if (searchInput.value) {
+            searchInput.value = "";
+            applyFilterAndSearch();
+          } else {
+            searchInput.blur();
+          }
+        }
+      });
+
+      window.addEventListener("scroll", function(){
+        if (window.scrollY > 350) {
+          backToTop.classList.add("visible");
+        } else {
+          backToTop.classList.remove("visible");
+        }
+      }, { passive: true });
+
+      backToTop.addEventListener("click", function(){
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
