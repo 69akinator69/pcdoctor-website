@@ -1,0 +1,4208 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Périphériques, Pilotes & Diagnostic Matériel (Windows 11 & Linux Ubuntu) | PCDOCTOR.TN</title>
+    <meta name="description" content="Cours pédagogique complet et interactif sur les périphériques, les pilotes (drivers), l'installation sous Windows 11 et Linux Ubuntu, simulateur réaliste du Gestionnaire de périphériques et terminal Linux. Par Mohamed Aissaoui (Formateur IT / IMSET).">
+    <meta name="author" content="Mohamed Aissaoui (Formateur IT / IMSET)">
+    <link rel="icon" type="image/png" href="/assets/favicon.png">
+    <link rel="canonical" href="https://pcdoctor.tn/tmmi/cours-diagnostic-materiel-pilotes.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Périphériques, Pilotes & Diagnostic Matériel : Windows 11 & Linux Ubuntu | PCDOCTOR.TN">
+    <meta property="og:description" content="Cours interactif complet, simulateur Gestionnaire de périphériques devmgmt.msc, terminal Ubuntu bash, codes d'erreur et arbre de diagnostic. Formateur : Mohamed Aissaoui (IMSET).">
+    <meta property="og:url" content="https://pcdoctor.tn/tmmi/cours-diagnostic-materiel-pilotes.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="PCDOCTOR.TN">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ubuntu: {
+                orange: '#E95420',
+                aubergine: '#77216F',
+                bg: '#300A24'
+              },
+              win: {
+                blue: '#0067b8',
+                light: '#f3f3f3',
+                border: '#d1d5db'
+              },
+              pcdoc: {
+                cyan: '#29C2E7',
+                blue: '#0f62fe',
+                dark: '#0f172a'
+              }
+            },
+            fontFamily: {
+              sans: ['Barlow', 'system-ui', 'sans-serif'],
+              condensed: ['Barlow Condensed', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace']
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+/* ==========================================================================
+   Cours Pédagogique : Périphériques, Pilotes & Diagnostic
+   Feuille de styles moderne, responsive et authentique
+   ========================================================================== */
+
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --ubuntu-orange: #e95420;
+  --ubuntu-aubergine: #77216f;
+  --ubuntu-bg: #300a24;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --dark: #0f172a;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --win-bg: #f3f3f3;
+  --win-header: #fbfbfb;
+  --win-blue: #0067b8;
+  --win-border: #d1d5db;
+  --win-selected: #cce8ff;
+  --win-selected-border: #99d1ff;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-win: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Ubuntu, sans-serif;
+  color: var(--text-main);
+  background-color: #f8fafc;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Header & Navigation */
+.header-glass {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.1rem;
+  font-weight: 500;
+  font-size: 0.925rem;
+  color: var(--text-muted);
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.nav-tab:hover {
+  color: var(--primary);
+  background-color: #f8fafc;
+}
+
+.nav-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background-color: var(--primary-light);
+  font-weight: 600;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.badge-blue { background: #dbeafe; color: #1e40af; }
+.badge-orange { background: #ffedd5; color: #9a3412; }
+.badge-green { background: #d1fae5; color: #065f46; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-yellow { background: #fef3c7; color: #92400e; }
+.badge-purple { background: #f3e8ff; color: #6b21a8; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+
+/* Interactive Device Manager Windows 11 replica */
+.win11-window {
+  background: #ffffff;
+  border: 1px solid var(--win-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-win);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.win11-titlebar {
+  background: #f3f3f3;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.win11-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.win11-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.win11-control-btn {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.win11-menubar {
+  background: #fcfcfc;
+  padding: 4px 10px;
+  display: flex;
+  gap: 14px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.82rem;
+  color: #333;
+}
+
+.win11-menu-item {
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.win11-menu-item:hover {
+  background: #e5e5e5;
+}
+
+.win11-toolbar {
+  background: #f8f8f8;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.win11-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  color: #333;
+  font-size: 0.8rem;
+  gap: 6px;
+  transition: all 0.15s;
+}
+
+.win11-tool-btn:hover:not(:disabled) {
+  background: #e8e8e8;
+  border-color: #d0d0d0;
+}
+
+.win11-tool-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Tree view */
+.win-tree {
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  overflow-y: auto;
+  max-height: 520px;
+  background: #ffffff;
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  padding: 3px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  margin: 1px 0;
+  border: 1px solid transparent;
+}
+
+.tree-node:hover {
+  background-color: #f1f5f9;
+}
+
+.tree-node.selected {
+  background-color: var(--win-selected);
+  border-color: var(--win-selected-border);
+}
+
+.tree-toggle {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #555;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tree-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.tree-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-overlay {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 12px;
+  height: 12px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4));
+}
+
+.tree-children {
+  padding-left: 24px;
+  border-left: 1px dotted #cbd5e1;
+  margin-left: 8px;
+}
+
+/* Modal Dialog Windows 11 Properties */
+.win-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 16px;
+}
+
+.win-prop-dialog {
+  width: 100%;
+  max-width: 530px;
+  background: #fbfbfb;
+  border: 1px solid #999;
+  border-radius: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 0.85rem;
+}
+
+.win-dialog-header {
+  padding: 10px 14px;
+  background: #f3f3f3;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.win-dialog-tabs {
+  display: flex;
+  background: #ececec;
+  border-bottom: 1px solid #d0d0d0;
+  padding: 6px 12px 0;
+  gap: 4px;
+}
+
+.win-dialog-tab {
+  padding: 6px 14px;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  background: #e2e2e2;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.win-dialog-tab.active {
+  background: #fbfbfb;
+  border-color: #bbb;
+  border-bottom: 1px solid #fbfbfb;
+  margin-bottom: -1px;
+  font-weight: 600;
+}
+
+.win-dialog-body {
+  padding: 16px;
+  background: #fbfbfb;
+  min-height: 330px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.win-dialog-footer {
+  padding: 10px 16px;
+  background: #f3f3f3;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.win-btn {
+  padding: 6px 16px;
+  font-size: 0.82rem;
+  border: 1px solid #aaa;
+  background: #fbfbfb;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.win-btn:hover {
+  background: #e5e5e5;
+  border-color: #888;
+}
+
+.win-btn-primary {
+  background: #0067b8;
+  color: #fff;
+  border-color: #005a9e;
+}
+
+.win-btn-primary:hover {
+  background: #005a9e;
+}
+
+/* Ubuntu Terminal Replica */
+.ubuntu-terminal {
+  background: var(--ubuntu-bg);
+  border-radius: 10px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  font-family: 'Ubuntu Mono', 'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.ubuntu-titlebar {
+  background: #200517;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ubuntu-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.ubuntu-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.dot-red { background: #df382c; }
+.dot-yellow { background: #efb73e; }
+.dot-green { background: #38b44a; }
+
+.ubuntu-screen {
+  padding: 16px;
+  height: 440px;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.prompt-user { color: #87ff5f; font-weight: bold; }
+.prompt-at { color: #ffffff; }
+.prompt-host { color: #87ff5f; font-weight: bold; }
+.prompt-path { color: #5fd7ff; font-weight: bold; }
+.prompt-char { color: #ffffff; }
+
+.term-cmd { color: #ffffff; font-weight: 600; }
+.term-out { color: #cccccc; margin-bottom: 8px; word-break: break-all; }
+.term-out-success { color: #4ade80; }
+.term-out-warn { color: #fde047; }
+.term-out-err { color: #f87171; }
+.term-out-pci { color: #67e8f9; }
+
+.term-input-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.term-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: inherit;
+  flex: 1;
+}
+
+/* Diagnostic tree node */
+.diag-step-card {
+  border-left: 4px solid var(--primary);
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.diag-step-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Card & Content Styling */
+.course-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s;
+}
+
+.course-card:hover {
+  border-color: #cbd5e1;
+}
+
+.key-concept-box {
+  background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.warning-concept-box {
+  background: #fffbeb;
+  border-left: 4px solid var(--warning);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+.danger-concept-box {
+  background: #fef2f2;
+  border-left: 4px solid var(--danger);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+
+/* Icon visual card */
+.icon-visual-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-visual-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.icon-visual-card.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Progress bar */
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Animations */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.03); }
+}
+
+.pulse-hint {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Print styles for memo */
+@media print {
+  .no-print, header, nav, .btn-action, .win11-window, .ubuntu-terminal {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* ==========================================================================
+   Robustesse Hors-Ligne & Fallback Utilitaires
+   ========================================================================== */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.shrink-0 { flex-shrink: 0; }
+.flex-1 { flex: 1 1 0%; }
+
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+@media (min-width: 640px) {
+  .sm\:flex-row { flex-direction: row; }
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 768px) {
+  .md\:flex-row { flex-direction: row; }
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .md\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lg\:col-span-1 { grid-column: span 1 / span 1; }
+  .lg\:col-span-3 { grid-column: span 3 / span 3; }
+}
+
+.gap-1\.5 { gap: 0.375rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+.max-w-7xl { max-width: 80rem; }
+.max-w-xl { max-width: 36rem; }
+.max-w-lg { max-width: 32rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.w-full { width: 100%; }
+
+.p-2 { padding: 0.5rem; }
+.p-2\.5 { padding: 0.625rem; }
+.p-3 { padding: 0.75rem; }
+.p-4 { padding: 1rem; }
+.p-5 { padding: 1.25rem; }
+.p-6 { padding: 1.5rem; }
+.p-8 { padding: 2rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+.py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+
+.rounded-lg { border-radius: 0.5rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-full { border-radius: 9999px; }
+
+.border { border-width: 1px; border-style: solid; border-color: var(--border); }
+.border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+.border-t { border-top-width: 1px; border-top-style: solid; }
+.border-l-4 { border-left-width: 4px; border-left-style: solid; }
+
+.bg-white { background-color: #ffffff; }
+.bg-slate-50 { background-color: #f8fafc; }
+.bg-slate-100 { background-color: #f1f5f9; }
+.bg-slate-800 { background-color: #1e293b; }
+.bg-slate-900 { background-color: #0f172a; }
+.bg-blue-600 { background-color: #2563eb; }
+.bg-emerald-600 { background-color: #059669; }
+
+.text-white { color: #ffffff; }
+.text-slate-500 { color: #64748b; }
+.text-slate-600 { color: #475569; }
+.text-slate-700 { color: #334155; }
+.text-slate-800 { color: #1e293b; }
+.text-slate-900 { color: #0f172a; }
+.text-blue-600 { color: #2563eb; }
+.text-emerald-600 { color: #059669; }
+
+.font-bold { font-weight: 700; }
+.font-semibold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+.font-mono { font-family: monospace; }
+.font-black { font-weight: 900; }
+
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+
+
+    /* Style d'entête & Branding PCDOCTOR */
+    .brand-glow {
+        box-shadow: 0 0 25px -5px rgba(41, 194, 231, 0.3);
+    }
+    .nav-tab.active {
+        color: #0f62fe;
+        border-bottom-color: #0f62fe;
+        background-color: #eff6ff;
+    }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- 1. BARRE DE NAVIGATION PCDOCTOR & ESPACE ÉTUDIANTS -->
+    <nav class="bg-slate-950 border-b border-slate-800 text-slate-300 text-xs sm:text-sm py-2.5 px-4 sm:px-6 lg:px-8 no-print sticky top-0 z-50 backdrop-blur bg-slate-950/95">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2 font-bold text-white hover:text-cyan-400 transition" title="Retour à l'accueil PCDOCTOR.TN">
+                    <span class="px-2 py-0.5 rounded bg-blue-600 text-white font-mono text-xs font-bold">PCDOCTOR.TN</span>
+                    <span>Accueil</span>
+                </a>
+                <span class="text-slate-600">/</span>
+                <a href="/etudiants.html#tmmi" class="hover:text-cyan-400 transition flex items-center gap-1 font-medium text-slate-300">
+                    <span>&larr; Espace Étudiants (Portail TMMI &amp; TSIG)</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+                <span class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                    🎓 Filières TMMI / TSIG / IG
+                </span>
+                <span class="hidden md:inline-flex items-center gap-1 text-emerald-400 font-semibold">
+                    👨‍🏫 Formateur : Mohamed Aissaoui (IMSET)
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. BANNIÈRE HERO PÉDAGOGIQUE -->
+    <header class="bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white py-8 sm:py-10 px-4 sm:px-6 lg:px-8 border-b border-slate-800 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div class="space-y-3 max-w-3xl">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-600/30 text-cyan-300 border border-cyan-500/30">
+                        ⚡ Support Officiel de Formation IT
+                    </span>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700 font-mono">
+                        Windows 11 &amp; Ubuntu 24.04 LTS
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/60">
+                        👨‍🏫 Mohamed Aissaoui (Formateur IT / IMSET)
+                    </span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight font-condensed">
+                    Périphériques, Pilotes (Drivers) &amp; Démarche de Diagnostic
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    Cours pédagogique complet, simulateurs interactifs réalistes (<span class="text-cyan-300 font-mono">devmgmt.msc</span> et <span class="text-orange-400 font-mono">Terminal Bash Ubuntu</span>), identification des Hardware IDs (VEN/DEV/VID/PID), dictionnaire des codes d'erreur et quiz d'évaluation.
+                </p>
+            </div>
+
+            <!-- Boutons d'action rapide -->
+            <div class="flex flex-wrap items-center gap-3 no-print shrink-0">
+                <a href="https://share.gemini.google/zdQXzXh9X25v" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-semibold text-xs sm:text-sm border border-slate-700 shadow-sm transition" title="Consulter la fiche sur Google Gemini">
+                    <span class="text-cyan-400">✨</span>
+                    <span>Fiche Gemini partagée</span>
+                </a>
+                <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm shadow-md transition cursor-pointer">
+                    <span>🖨️</span>
+                    <span>Imprimer / Export PDF</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Recherche globale intégrée au hero -->
+        <div class="max-w-7xl mx-auto mt-6 pt-5 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-xs text-slate-400">
+                🔍 Accès immédiat aux notions :
+            </div>
+            <div class="relative w-full sm:w-96">
+                <input 
+                    type="text" 
+                    id="global-search-input"
+                    class="w-full pl-9 pr-3 py-2 bg-slate-800/90 text-white border border-slate-700 rounded-xl text-xs transition focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-400" 
+                    placeholder="Rechercher dans tout le cours (ex: Code 43, lspci, INF, DKMS)...">
+                <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+                <div id="search-results-overlay" class="absolute left-0 right-0 top-11 hidden z-50"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. BARRE DE NAVIGATION DES ONGLETS -->
+    <div class="header-glass border-b border-slate-200 sticky top-10 z-40 bg-white/95 backdrop-blur">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex overflow-x-auto no-scrollbar -mb-px text-xs sm:text-sm">
+                <button class="nav-tab active" data-tab="course" onclick="app.switchTab('course')">
+                    <span>📚</span>
+                    <span>Cours Complet (5 Modules)</span>
+                </button>
+                <button class="nav-tab" data-tab="icons" onclick="app.switchTab('icons')">
+                    <span>⚠️</span>
+                    <span>Icônes &amp; Codes d'Erreur</span>
+                </button>
+                <button class="nav-tab" data-tab="diag" onclick="app.switchTab('diag')">
+                    <span>🧭</span>
+                    <span>Arbre de Diagnostic</span>
+                </button>
+                <button class="nav-tab" data-tab="win" onclick="app.switchTab('win')">
+                    <span>💻</span>
+                    <span>Simulateur Windows 11</span>
+                </button>
+                <button class="nav-tab" data-tab="linux" onclick="app.switchTab('linux')">
+                    <span>🐧</span>
+                    <span>Simulateur Terminal Ubuntu</span>
+                </button>
+                <button class="nav-tab" data-tab="quiz" onclick="app.switchTab('quiz')">
+                    <span>📝</span>
+                    <span>Quiz &amp; Évaluation</span>
+                </button>
+                <button class="nav-tab" data-tab="memo" onclick="app.switchTab('memo')">
+                    <span>📋</span>
+                    <span>Fiche Synthèse</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 4. CONTENU PRINCIPAL -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- VUE 1 : COURS COMPLET -->
+        <section id="view-course" class="tab-pane">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <aside class="lg:col-span-1">
+                    <div class="sticky top-28 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-3 px-2 font-condensed">
+                            Programme de Formation
+                        </h3>
+                        <div id="course-modules-list" class="space-y-1"></div>
+                        
+                        <div class="mt-6 pt-4 border-t border-slate-100 px-2 space-y-2">
+                            <div class="text-[11px] text-slate-500 font-semibold">Ateliers interactifs :</div>
+                            <button class="w-full text-left p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold transition flex items-center justify-between" onclick="app.switchTab('win')">
+                                <span>💻 Gestionnaire Windows 11</span>
+                                <span>&rarr;</span>
+                            </button>
+                            <button class="w-full text-left p-2 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-800 text-xs font-semibold transition flex items-center justify-between" onclick="app.switchTab('linux')">
+                                <span>🐧 Console Bash Ubuntu</span>
+                                <span>&rarr;</span>
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="lg:col-span-3" id="course-module-view"></div>
+            </div>
+        </section>
+
+        <!-- VUE 2 : ICÔNES & CODES ERREURS WINDOWS -->
+        <section id="view-icons" class="tab-pane hidden">
+            <div class="space-y-8">
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="badge badge-yellow">Gestionnaire de périphériques (devmgmt.msc)</span>
+                    </div>
+                    <h2 class="text-2xl font-black text-slate-900 font-condensed">Galerie des Icônes d'État &amp; Codes d'Erreur Windows</h2>
+                    <p class="text-sm text-slate-600 mt-1">
+                        Identifiez instantanément la nature d'un dysfonctionnement matériel grâce aux symboles superposés et au code numérique de diagnostic officiel Microsoft.
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="font-bold text-slate-800 text-base mb-3 flex items-center gap-2">
+                        <span>🔍</span> Cliquez sur une icône pour inspecter sa signification et sa résolution :
+                    </h3>
+                    <div id="icons-gallery-container"></div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-200">
+                    <div class="mb-4">
+                        <h3 class="font-bold text-slate-900 text-xl font-condensed">Dictionnaire Complet des Codes d'Erreur Windows (Codes 1 à 52)</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Base de connaissances exhaustive des messages renvoyés par le système d'exploitation avec solution étape par étape.</p>
+                    </div>
+                    <div id="error-codes-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VUE 3 : ARBRE DE DIAGNOSTIC -->
+        <section id="view-diag" class="tab-pane hidden">
+            <div class="space-y-6">
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                    <span class="badge badge-blue mb-1">Méthodologie Pas-à-Pas</span>
+                    <h2 class="text-2xl font-black text-slate-900 font-condensed">Arbre Décisionnel de Diagnostic</h2>
+                    <p class="text-sm text-slate-600 mt-1">
+                        Sélectionnez le symptôme rencontré en atelier pour dérouler la démarche logique d'intervention recommandée en milieu professionnel.
+                    </p>
+                </div>
+
+                <div id="diagnostic-tree-container"></div>
+            </div>
+        </section>
+
+        <!-- VUE 4 : SIMULATEUR WINDOWS 11 -->
+        <section id="view-win" class="tab-pane hidden">
+            <div id="win-simulator-container"></div>
+        </section>
+
+        <!-- VUE 5 : SIMULATEUR UBUNTU LINUX -->
+        <section id="view-linux" class="tab-pane hidden">
+            <div id="linux-simulator-container"></div>
+        </section>
+
+        <!-- VUE 6 : QUIZ & ÉVALUATION -->
+        <section id="view-quiz" class="tab-pane hidden">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-8">
+                    <span class="badge badge-purple mb-2">Validation des Compétences</span>
+                    <h2 class="text-3xl font-black text-slate-900 font-condensed">Quiz d'Évaluation des Connaissances</h2>
+                    <p class="text-sm text-slate-500 mt-1">10 questions pour évaluer votre maîtrise des périphériques, des pilotes, de Windows 11 et d'Ubuntu 24.04.</p>
+                </div>
+                <div id="quiz-container"></div>
+            </div>
+        </section>
+
+        <!-- VUE 7 : FICHE SYNTHÈSE / MÉMO -->
+        <section id="view-memo" class="tab-pane hidden">
+            <div id="memo-content-container"></div>
+        </section>
+
+    </main>
+
+    <!-- 5. PIED DE PAGE PCDOCTOR.TN OFFICIEL -->
+    <footer class="bg-slate-950 text-slate-400 border-t border-slate-800 py-10 text-xs mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-slate-800/80">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded bg-blue-600 text-white font-mono text-sm font-bold">PCDOCTOR.TN</span>
+                    </div>
+                    <p class="text-slate-400 leading-relaxed">
+                        Atelier de maintenance &amp; portail pédagogique officiel pour les filières TMMI, TSIG et Informatique de Gestion.
+                    </p>
+                    <p class="text-cyan-400 font-medium">
+                        Conçu &amp; Encadré par Mohamed Aissaoui (Formateur IT / IMSET)
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase text-[11px] tracking-wider mb-3 font-condensed">Navigation Rapide</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="hover:text-cyan-400 transition">&rarr; Accueil PCDOCTOR</a></li>
+                        <li><a href="/etudiants.html" class="hover:text-cyan-400 transition">&rarr; Portail Espace Étudiants</a></li>
+                        <li><a href="/etudiants.html#tmmi" class="hover:text-cyan-400 transition">&rarr; Filière TMMI (Maintenance)</a></li>
+                        <li><a href="/etudiants.html#tsig" class="hover:text-cyan-400 transition">&rarr; Filière TSIG (Systèmes &amp; Réseaux)</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase text-[11px] tracking-wider mb-3 font-condensed">Ateliers Pratiques</h4>
+                    <ul class="space-y-2">
+                        <li><button class="hover:text-cyan-400 transition text-left" onclick="app.switchTab('win')">&rarr; Gestionnaire Windows 11 (Missions)</button></li>
+                        <li><button class="hover:text-cyan-400 transition text-left" onclick="app.switchTab('linux')">&rarr; Terminal Bash Ubuntu 24.04</button></li>
+                        <li><button class="hover:text-cyan-400 transition text-left" onclick="app.switchTab('diag')">&rarr; Arbre de Diagnostic Interactif</button></li>
+                        <li><button class="hover:text-cyan-400 transition text-left" onclick="app.switchTab('quiz')">&rarr; Test &amp; Quiz d'Évaluation</button></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white uppercase text-[11px] tracking-wider mb-3 font-condensed">Ressources Recommandées</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://share.gemini.google/zdQXzXh9X25v" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition">&rarr; Fiche Partagée Google Gemini</a></li>
+                        <li><a href="/tmmi/cours-windows11.html" class="hover:text-cyan-400 transition">&rarr; Cours Installation Windows 11</a></li>
+                        <li><a href="/tmmi/cours-bios-ch341a.html" class="hover:text-cyan-400 transition">&rarr; Flashage BIOS &amp; Programmeur CH341A</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+                <p>&copy; 2026 PCDOCTOR.TN &mdash; Tous droits réservés. Développé pour la formation professionnelle IT.</p>
+                <p class="text-slate-500">Dernière mise à jour : 20 Novembre 2026</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 6. SCRIPTS JAVASCRIPT INTÉGRÉS -->
+    <script>
+// ==========================================================================
+// Base de données pédagogique : Cours, Icônes, Codes Erreur, Simulateurs
+// ==========================================================================
+
+const COURSE_DATA = {
+  // Modules de cours structurés
+  modules: [
+    {
+      id: "mod-1",
+      number: "01",
+      title: "Les Périphériques Informatiques",
+      subtitle: "Classification, bus de communication et détection matérielle",
+      icon: "hard-drive",
+      sections: [
+        {
+          title: "1.1 Qu'est-ce qu'un périphérique ?",
+          content: `
+            <p class="mb-4">Un <strong>périphérique</strong> est un composant matériel connecté à l'unité centrale d'un ordinateur. Il permet à la machine d'interagir avec le monde extérieur, avec l'utilisateur ou avec d'autres systèmes informatiques.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+              <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 class="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-blue-600"></span> Périphériques d'Entrée (Input)
+                </h4>
+                <p class="text-sm text-slate-700">Envoient des données vers l'ordinateur : clavier, souris, microphone, webcam, scanner, manette de jeu, capteurs biométriques.</p>
+              </div>
+              <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                <h4 class="font-bold text-emerald-900 mb-2 flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-emerald-600"></span> Périphériques de Sortie (Output)
+                </h4>
+                <p class="text-sm text-slate-700">Reçoivent des données de l'ordinateur pour les restituer : écran/moniteur, haut-parleurs, casque audio, imprimante, vidéoprojecteur.</p>
+              </div>
+              <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <h4 class="font-bold text-purple-900 mb-2 flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-purple-600"></span> Entrée / Sortie & Réseau
+                </h4>
+                <p class="text-sm text-slate-700">Fonctionnement bidirectionnel : écran tactile, carte réseau (Ethernet RJ45, Wi-Fi 6/7, modem 4G/5G), carte son pro, contrôleur Bluetooth.</p>
+              </div>
+              <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <h4 class="font-bold text-amber-900 mb-2 flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-amber-600"></span> Périphériques de Stockage
+                </h4>
+                <p class="text-sm text-slate-700">Conservation persistante : SSD NVMe M.2, SSD/HDD SATA, clés USB, cartes mémoire SD/microSD, lecteurs optiques Blu-ray.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          title: "1.2 Les Bus de Communication et Protocoles",
+          content: `
+            <p class="mb-3">Pour dialoguer avec le processeur (CPU) et la mémoire vive (RAM), chaque périphérique emprunte un <strong>bus de communication</strong> :</p>
+            <div class="overflow-x-auto my-3">
+              <table class="w-full text-sm border-collapse bg-white rounded-lg shadow-sm">
+                <thead>
+                  <tr class="bg-slate-100 text-slate-700 text-left border-b border-slate-200">
+                    <th class="p-3 font-semibold">Bus</th>
+                    <th class="p-3 font-semibold">Usage principal</th>
+                    <th class="p-3 font-semibold">Bande passante</th>
+                    <th class="p-3 font-semibold">Exemples de périphériques</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-blue-600">PCI Express (PCIe)</td>
+                    <td class="p-3">Connexion directe au CPU/Chipset</td>
+                    <td class="p-3">Jusqu'à 64 Go/s (PCIe 5.0 x16)</td>
+                    <td class="p-3">Carte graphique (GPU), SSD NVMe, carte réseau 10GbE</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-indigo-600">USB (2.0 à USB4)</td>
+                    <td class="p-3">Périphériques externes universels</td>
+                    <td class="p-3">480 Mb/s (2.0) à 40 Gb/s (USB4)</td>
+                    <td class="p-3">Souris, clavier, webcam, disques externes, DAC audio</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-teal-600">SATA III</td>
+                    <td class="p-3">Stockage interne de masse</td>
+                    <td class="p-3">6 Gb/s (~550 Mo/s réel)</td>
+                    <td class="p-3">Disques durs 3.5", SSD 2.5", lecteurs DVD/Blu-ray</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-purple-600">Thunderbolt 3 / 4</td>
+                    <td class="p-3">Multiplexage PCIe + DisplayPort</td>
+                    <td class="p-3">40 Gb/s</td>
+                    <td class="p-3">Docks stations, eGPU (boîtiers graphiques externes)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="key-concept-box">
+              <strong>💡 Le mécanisme Plug and Play (PnP) :</strong>
+              Lorsqu'un périphérique est branché, le bus signale une interruption. Le système d'exploitation interroge le périphérique pour lire ses registres d'identification matérielle (Vendor ID et Device ID) et charge automatiquement le pilote adapté.
+            </div>
+          `
+        }
+      ]
+    },
+    {
+      id: "mod-2",
+      number: "02",
+      title: "Les Pilotes (Drivers) & Identification Matérielle",
+      subtitle: "Le rôle d'intermédiaire, architectures noyau/utilisateur et Hardware IDs",
+      icon: "cpu",
+      sections: [
+        {
+          title: "2.1 Rôle et architecture d'un pilote",
+          content: `
+            <p class="mb-3">Un <strong>pilote (driver)</strong> est un programme informatique spécialisé qui sert d'interprète entre le système d'exploitation et le matériel électronique. Sans pilote, le système sait que le périphérique est branché, mais ne sait pas lui transmettre d'instructions compréhensibles.</p>
+            <div class="bg-slate-900 text-slate-100 p-4 rounded-xl my-4 font-mono text-sm">
+              <div class="text-center font-bold text-blue-400 mb-2">SCHÉMA DES COUCHES LOGICIELLES / MATÉRIELLES</div>
+              <div class="border border-slate-700 p-2 my-1 bg-slate-800 text-center rounded">Application Utilisateur (ex: Navigateur Web, Jeu, VLC)</div>
+              <div class="text-center text-slate-500">⬇️ Appels système (APIs : DirectX, Vulkan, ALSA, Win32)</div>
+              <div class="border border-blue-900 p-2 my-1 bg-blue-950 text-center rounded text-blue-200">Système d'Exploitation (Kernel Windows / Linux)</div>
+              <div class="text-center text-slate-500">⬇️ Instructions spécifiques au matériel</div>
+              <div class="border border-amber-800 p-2 my-1 bg-amber-950 text-center rounded text-amber-200 font-bold">PILOTE DE PÉRIPHÉRIQUE (DRIVER : .sys sous Win, .ko sous Linux)</div>
+              <div class="text-center text-slate-500">⬇️ Tensions électriques, registres, interruptions (IRQ), DMA</div>
+              <div class="border border-emerald-900 p-2 my-1 bg-emerald-950 text-center rounded text-emerald-200 font-bold">Composant Matériel Physique (GPU, Wi-Fi, Puce audio)</div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div class="p-3 bg-red-50 border-l-4 border-red-500 rounded">
+                <h5 class="font-bold text-red-900 text-sm">Espace Noyau (Kernel Mode)</h5>
+                <p class="text-xs text-slate-700 mt-1">Accès direct à la mémoire physique et au processeur. Pilotes graphiques, réseau, stockage. <strong>Attention :</strong> un bug dans ce pilote provoque un Écran Bleu (BSOD) sous Windows ou un Kernel Panic sous Linux.</p>
+              </div>
+              <div class="p-3 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <h5 class="font-bold text-blue-900 text-sm">Espace Utilisateur (User Mode)</h5>
+                <p class="text-xs text-slate-700 mt-1">Isolé de la mémoire critique (UMDF sous Windows). Pilotes d'imprimantes virtuelles, scanners, capteurs simples. Si le pilote plante, seule l'application s'arrête, sans crasher le système.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          title: "2.2 L'Identifiant Matériel Unique (Hardware ID)",
+          content: `
+            <p class="mb-3">Chaque puce électronique possède un <strong>identifiant matériel unique au monde</strong> gravé dans son firmware. C'est la clé absolue du diagnostic lorsqu'un périphérique apparaît comme inconnu !</p>
+            <div class="p-4 bg-slate-900 rounded-lg text-white font-mono text-sm my-3">
+              <div class="text-amber-400 font-bold mb-1">// Exemple d'identifiant PCI (Carte graphique, Wi-Fi, Ethernet...) :</div>
+              <div class="text-emerald-400 font-bold text-base">PCI\\VEN_10DE&DEV_2504&SUBSYS_88181043&REV_A1</div>
+              <div class="mt-2 text-xs text-slate-300 space-y-1">
+                <div>🔹 <strong class="text-yellow-300">VEN_10DE</strong> : Vendor ID (Fabricant). 10DE = <strong>NVIDIA Corporation</strong>.</div>
+                <div>🔹 <strong class="text-yellow-300">DEV_2504</strong> : Device ID (Modèle exact). 2504 = <strong>GeForce RTX 3060</strong>.</div>
+                <div>🔹 <strong class="text-yellow-300">SUBSYS_88181043</strong> : Sous-système OEM (1043 = ASUS).</div>
+              </div>
+            </div>
+            <div class="p-4 bg-slate-900 rounded-lg text-white font-mono text-sm my-3">
+              <div class="text-amber-400 font-bold mb-1">// Exemple d'identifiant USB (Souris, Clé Wi-Fi, Webcam...) :</div>
+              <div class="text-emerald-400 font-bold text-base">USB\\VID_0BDA&PID_8153&REV_3000</div>
+              <div class="mt-2 text-xs text-slate-300 space-y-1">
+                <div>🔹 <strong class="text-yellow-300">VID_0BDA</strong> : Vendor ID (0BDA = <strong>Realtek Semiconductor Corp.</strong>).</div>
+                <div>🔹 <strong class="text-yellow-300">PID_8153</strong> : Product ID (8153 = <strong>RTL8153 Gigabit Ethernet Adapter</strong>).</div>
+              </div>
+            </div>
+            <div class="key-concept-box">
+              <strong>🔍 Comment retrouver un pilote à partir du VEN/DEV ?</strong>
+              Consultez des bases de données de référence publiques comme <code>pci-ids.ucw.cz</code> (pour PCI) ou <code>linux-usb.org/usb.ids</code> (pour USB), ou saisissez simplement <code>VEN_xxxx DEV_yyyy</code> dans un moteur de recherche pour identifier la puce exacte et télécharger le pilote officiel.
+            </div>
+          `
+        }
+      ]
+    },
+    {
+      id: "mod-3",
+      number: "03",
+      title: "Windows 11 : Téléchargement, Installation & Gestion",
+      subtitle: "Windows Update, fabricants OEM, packages .INF / .EXE, pnputil et sauvegarde",
+      icon: "laptop",
+      sections: [
+        {
+          title: "3.1 Les Sources Légitimes de Pilotes sous Windows",
+          content: `
+            <p class="mb-3">Sous Windows 11, il existe une hiérarchie stricte des sources fiables pour obtenir des pilotes :</p>
+            <div class="space-y-3 my-4">
+              <div class="p-3 bg-white border border-slate-200 rounded-lg flex items-start gap-3">
+                <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-bold flex items-center justify-center shrink-0">1</span>
+                <div>
+                  <h4 class="font-bold text-slate-800">Windows Update & Catalogue Microsoft</h4>
+                  <p class="text-sm text-slate-600">Pilotes certifiés <strong>WHQL</strong> (Windows Hardware Quality Labs). Installés automatiquement en arrière-plan. Pensez à vérifier <em>Paramètres > Windows Update > Options avancées > Mises à jour facultatives</em> pour les pilotes récents.</p>
+                </div>
+              </div>
+              <div class="p-3 bg-white border border-slate-200 rounded-lg flex items-start gap-3">
+                <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 font-bold flex items-center justify-center shrink-0">2</span>
+                <div>
+                  <h4 class="font-bold text-slate-800">Site Officiel du Fabricant du PC ou Carte Mère (OEM)</h4>
+                  <p class="text-sm text-slate-600">Essentiel pour les PC portables (Dell, HP, Lenovo, ASUS, Acer...) : pilotes du pavé tactile, gestion d'énergie (ACPI), touches Fn et cartes mères (MSI, Gigabyte, ASRock).</p>
+                </div>
+              </div>
+              <div class="p-3 bg-white border border-slate-200 rounded-lg flex items-start gap-3">
+                <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 font-bold flex items-center justify-center shrink-0">3</span>
+                <div>
+                  <h4 class="font-bold text-slate-800">Site Officiel du Fondeur de Puce (Chipset / GPU)</h4>
+                  <p class="text-sm text-slate-600">Pour les performances maximales : <strong>NVIDIA</strong> (GeForce Experience / Game Ready), <strong>AMD</strong> (Adrenalin), <strong>Intel</strong> (Assistant pilotes et support), <strong>Realtek</strong>.</p>
+                </div>
+              </div>
+            </div>
+            <div class="danger-concept-box">
+              <strong>⛔ DANGER DES LOGICIELS "DRIVER UPDATERS" TIERS :</strong>
+              Bannissez formellement les logiciels comme <em>Driver Booster, Driver Easy, SlimDrivers</em>. Ils installent souvent des adwares, des versions bêta instables ou inadaptées à votre révision de carte mère, provoquant des pannes système majeures.
+            </div>
+          `
+        },
+        {
+          title: "3.2 Formats d'Installation & Outils en Ligne de Commande",
+          content: `
+            <p class="mb-3">Les pilotes se présentent sous deux formes principales :</p>
+            <ul class="list-disc pl-5 mb-4 text-sm space-y-2">
+              <li><strong>Installateur exécutable (.EXE ou .MSI) :</strong> Double-clic, assistant pas-à-pas avec panneaux de configuration associés.</li>
+              <li><strong>Archive brute (.INF, .SYS, .CAT) :</strong> Le fichier <code>.INF</code> contient les instructions d'installation, le <code>.SYS</code> est le binaire du pilote, et le <code>.CAT</code> contient la signature de sécurité. À installer via le Gestionnaire de périphériques ("Parcourir mon ordinateur").</li>
+            </ul>
+            <div class="bg-slate-900 p-4 rounded-xl text-slate-100 font-mono text-xs my-3 space-y-3">
+              <div class="text-blue-400 font-bold text-sm">// Commandes d'administration Windows (Terminal PowerShell / CMD Admin) :</div>
+              <div>
+                <span class="text-emerald-400"># Ouvrir le Gestionnaire de périphériques directement :</span><br>
+                <code>devmgmt.msc</code>
+              </div>
+              <div>
+                <span class="text-emerald-400"># Ajouter et installer un pilote .INF en ligne de commande :</span><br>
+                <code>pnputil /add-driver "D:\\Pilotes\\mon_pilote.inf" /install</code>
+              </div>
+              <div>
+                <span class="text-emerald-400"># Sauvegarder TOUS les pilotes installés sur la machine vers un dossier :</span><br>
+                <code>pnputil /export-driver * "C:\\Sauvegarde_Drivers"</code>
+              </div>
+              <div>
+                <span class="text-emerald-400"># Lister tous les pilotes tiers installés :</span><br>
+                <code>pnputil /enum-drivers</code>
+              </div>
+            </div>
+          `
+        }
+      ]
+    },
+    {
+      id: "mod-4",
+      number: "04",
+      title: "Linux Ubuntu : Modules Noyau & Détection Matérielle",
+      subtitle: "Modules .ko, DKMS, gestion graphique propriétaire et commandes CLI indispensables",
+      icon: "terminal",
+      sections: [
+        {
+          title: "4.1 Le Modèle de Pilotes sous Linux",
+          content: `
+            <p class="mb-3">Contrairement à Windows où chaque composant nécessite souvent l'installation manuelle d'un pilote tiers, la philosophie de Linux est différente :</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+              <div class="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                <h4 class="font-bold text-orange-950 mb-2">95% des Pilotes sont dans le Noyau ("In-Tree")</h4>
+                <p class="text-sm text-slate-700">Le noyau Linux contient nativement les pilotes (fichiers <code>.ko</code>). Branchez une webcam, une souris, une imprimante ou une carte réseau standard : elle fonctionne <strong>instantanément</strong> sans rien installer !</p>
+              </div>
+              <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <h4 class="font-bold text-purple-950 mb-2">Pilotes Propriétaires & DKMS ("Out-of-Tree")</h4>
+                <p class="text-sm text-slate-700">Certains constructeurs (NVIDIA, puces Wi-Fi Broadcom) ne rendent pas leur code libre. On installe alors un paquet DKMS qui recompile automatiquement le pilote à chaque mise à jour du noyau Linux.</p>
+              </div>
+            </div>
+            <div class="p-3 bg-slate-100 rounded-lg border border-slate-300 text-sm">
+              <strong>Outil Graphique sous Ubuntu :</strong> Rendez-vous dans <em>Logiciels et Mises à jour</em> > onglet <strong>Pilotes additionnels</strong> (Additional Drivers). Ubuntu détecte automatiquement si un pilote propriétaire NVIDIA ou Wi-Fi est recommandé.
+            </div>
+          `
+        },
+        {
+          title: "4.2 Boîte à Outils CLI Linux du Technicien",
+          content: `
+            <p class="mb-3">En ligne de commande Linux, voici les commandes reines pour auditer et réparer le matériel :</p>
+            <div class="overflow-x-auto my-3">
+              <table class="w-full text-sm border-collapse bg-white rounded-lg shadow-sm">
+                <thead>
+                  <tr class="bg-slate-800 text-slate-100 text-left">
+                    <th class="p-3 font-semibold font-mono">Commande</th>
+                    <th class="p-3 font-semibold">Description</th>
+                    <th class="p-3 font-semibold">Exemple d'usage</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-xs md:text-sm">
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-orange-600">lspci -nnk</td>
+                    <td class="p-3">Liste tous les périphériques PCI avec Vendor/Device ID et le module noyau actif</td>
+                    <td class="p-3 font-mono text-slate-600">lspci -k | grep -A 3 -i audio</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-orange-600">lsusb</td>
+                    <td class="p-3">Liste tous les périphériques connectés en USB (VID et PID)</td>
+                    <td class="p-3 font-mono text-slate-600">lsusb -t</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-orange-600">dmesg -T</td>
+                    <td class="p-3">Affiche le journal du noyau au démarrage (recherche d'erreurs matérielles/firmwares)</td>
+                    <td class="p-3 font-mono text-slate-600">dmesg | grep -i firmware</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-orange-600">lsmod</td>
+                    <td class="p-3">Liste tous les modules noyau actuellement chargés en mémoire vive</td>
+                    <td class="p-3 font-mono text-slate-600">lsmod | grep nvidia</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-orange-600">modprobe</td>
+                    <td class="p-3">Charge ou décharge un module avec gestion automatique des dépendances</td>
+                    <td class="p-3 font-mono text-slate-600">sudo modprobe r8169</td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 font-mono font-bold text-orange-600">ubuntu-drivers</td>
+                    <td class="p-3">Outil d'Ubuntu pour détecter et installer les pilotes recommandés</td>
+                    <td class="p-3 font-mono text-slate-600">ubuntu-drivers devices</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          `
+        }
+      ]
+    },
+    {
+      id: "mod-5",
+      number: "05",
+      title: "Démarche Méthodologique Universelle de Diagnostic",
+      subtitle: "Arbre d'analyse en 5 étapes pour résoudre toute panne de périphérique",
+      icon: "check-circle",
+      sections: [
+        {
+          title: "5.1 Les 5 Piliers du Dépannage Matériel",
+          content: `
+            <div class="space-y-4">
+              <div class="diag-step-card">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-7 h-7 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">1</span>
+                  <h4 class="font-bold text-slate-900">Étape 1 : Constat & Qualification du Symptôme</h4>
+                </div>
+                <p class="text-sm text-slate-600">Le périphérique est-il complètement absent ou mal détecté ? Sous Windows, ouvrir <code>devmgmt.msc</code>. Sous Linux, exécuter <code>lspci</code> ou <code>lsusb</code>. Si le périphérique n'apparaît même pas au niveau physique, vérifier le branchement, le câble, le port USB ou le slot PCIe avant d'incriminer le pilote !</p>
+              </div>
+
+              <div class="diag-step-card" style="border-left-color: #6366f1;">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-sm">2</span>
+                  <h4 class="font-bold text-slate-900">Étape 2 : Lecture du Code d'Erreur & de l'ID Matériel</h4>
+                </div>
+                <p class="text-sm text-slate-600">Consulter l'état dans les propriétés Windows : s'agit-il d'un <strong>Code 28</strong> (Pilote manquant), d'un <strong>Code 43</strong> (Défaillance matérielle/crash pilote), ou d'un <strong>Code 22</strong> (Désactivé manuellement) ? Récupérer le <code>VEN_xxxx&DEV_yyyy</code> dans l'onglet Détails.</p>
+              </div>
+
+              <div class="diag-step-card" style="border-left-color: #06b6d4;">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-7 h-7 rounded-full bg-cyan-600 text-white font-bold flex items-center justify-center text-sm">3</span>
+                  <h4 class="font-bold text-slate-900">Étape 3 : Recherche et Approvisionnement Sécurisé</h4>
+                </div>
+                <p class="text-sm text-slate-600">Télécharger le pilote UNIQUEMENT sur le site du constructeur OEM (pour PC portable) ou du fondeur (Intel/AMD/Realtek/NVIDIA). Toujours vérifier l'architecture (64 bits x64 ou ARM64) et la version de l'OS.</p>
+              </div>
+
+              <div class="diag-step-card" style="border-left-color: #10b981;">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-7 h-7 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-sm">4</span>
+                  <h4 class="font-bold text-slate-900">Étape 4 : Installation Propre & Redémarrage</h4>
+                </div>
+                <p class="text-sm text-slate-600">Créer au préalable un point de restauration système. Installer le pilote, puis redémarrer complètement la machine (indispensable pour libérer les accès DMA et registres noyau).</p>
+              </div>
+
+              <div class="diag-step-card" style="border-left-color: #f59e0b;">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-7 h-7 rounded-full bg-amber-600 text-white font-bold flex items-center justify-center text-sm">5</span>
+                  <h4 class="font-bold text-slate-900">Étape 5 : Procédure de Secours si Échec (Rollback / DDU)</h4>
+                </div>
+                <p class="text-sm text-slate-600">Si le problème persiste ou s'aggrave après mise à jour : utiliser le bouton <strong>"Restaurer le pilote"</strong> (Rollback). Pour une carte graphique instable, démarrer en Mode sans échec et utiliser <strong>DDU (Display Driver Uninstaller)</strong> pour nettoyer entièrement les traces avant réinstallation propre.</p>
+              </div>
+            </div>
+          `
+        }
+      ]
+    }
+  ],
+
+  // Icônes du Gestionnaire de Périphériques Windows
+  deviceIcons: [
+    {
+      id: "normal",
+      name: "Périphérique Opérationnel",
+      badgeColor: "badge-green",
+      statusText: "Fonctionnement normal",
+      symbolDescription: "Icône standard du composant (écran, carte réseau, disque...) sans aucun symbole superposé.",
+      meaning: "Le matériel est reconnu, le pilote est signé et chargé avec succès en mémoire noyau, aucune anomalie détectée.",
+      actionNeeded: "Aucune action requise.",
+      svgIcon: `
+        <svg viewBox="0 0 48 48" class="w-16 h-16">
+          <rect x="6" y="8" width="36" height="26" rx="3" fill="#3b82f6" />
+          <rect x="10" y="12" width="28" height="18" rx="1" fill="#ffffff" />
+          <path d="M18 34 L14 42 L34 42 L30 34 Z" fill="#64748b" />
+          <circle cx="38" cy="38" r="8" fill="#10b981" />
+          <path d="M34 38 L37 41 L42 35" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      `
+    },
+    {
+      id: "warning-triangle",
+      name: "Avertissement / Problème (Triangle Jaune)",
+      badgeColor: "badge-yellow",
+      statusText: "Attention requise (Codes 28, 43, 10, 31...)",
+      symbolDescription: "Un triangle jaune avec un point d'exclamation noir superposé sur l'icône du périphérique.",
+      meaning: "Le périphérique est détecté physiquement mais ne peut pas fonctionner. Raisons fréquentes : pilote manquant (Code 28), défaillance matérielle ou crash pilote (Code 43), impossible de démarrer (Code 10), conflit de ressources (Code 12).",
+      actionNeeded: "Double-cliquer sur le périphérique > Lire l'état et le code d'erreur > Récupérer le Hardware ID > Mettre à jour ou réinstaller le pilote.",
+      svgIcon: `
+        <svg viewBox="0 0 48 48" class="w-16 h-16">
+          <rect x="6" y="8" width="36" height="26" rx="3" fill="#94a3b8" />
+          <rect x="10" y="12" width="28" height="18" rx="1" fill="#cbd5e1" />
+          <path d="M18 34 L14 42 L34 42 L30 34 Z" fill="#64748b" />
+          <!-- Triangle Attention -->
+          <polygon points="36,24 47,44 25,44" fill="#f59e0b" stroke="#ffffff" stroke-width="2" />
+          <rect x="35" y="31" width="2" height="6" fill="#000000" rx="1" />
+          <circle cx="36" cy="40.5" r="1.5" fill="#000000" />
+        </svg>
+      `
+    },
+    {
+      id: "disabled-arrow",
+      name: "Périphérique Désactivé (Flèche vers le bas)",
+      badgeColor: "badge-gray",
+      statusText: "Désactivé (Code 22)",
+      symbolDescription: "Une petite flèche noire orientée vers le bas (ou cercle gris) en bas à droite de l'icône.",
+      meaning: "Le périphérique a été volontairement désactivé par un utilisateur administrateur ou par une stratégie de sécurité du système. Le matériel est intact mais n'est pas alimenté/sollicité.",
+      actionNeeded: "Faire un clic droit sur le périphérique et sélectionner 'Activer l'appareil' (Enable device).",
+      svgIcon: `
+        <svg viewBox="0 0 48 48" class="w-16 h-16">
+          <rect x="6" y="8" width="36" height="26" rx="3" fill="#94a3b8" opacity="0.7" />
+          <rect x="10" y="12" width="28" height="18" rx="1" fill="#e2e8f0" />
+          <path d="M18 34 L14 42 L34 42 L30 34 Z" fill="#94a3b8" />
+          <!-- Cercle avec flèche bas -->
+          <circle cx="36" cy="36" r="10" fill="#ffffff" stroke="#64748b" stroke-width="2" />
+          <circle cx="36" cy="36" r="8" fill="#475569" />
+          <path d="M36 30 L36 40 M32 37 L36 41 L40 37" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      `
+    },
+    {
+      id: "unknown-question",
+      name: "Périphérique Inconnu (Point d'interrogation)",
+      badgeColor: "badge-purple",
+      statusText: "Non identifié (Souvent sous 'Autres périphériques')",
+      symbolDescription: "Un point d'interrogation jaune ou bleu placé sur le périphérique, ou icône générique 'Périphérique PCI inconnu'.",
+      meaning: "Windows détecte la présence électrique d'un composant sur le bus PCI, USB ou I2C, mais ne dispose d'aucun pilote générique compatible pour savoir de quel type d'appareil il s'agit.",
+      actionNeeded: "Consulter l'onglet 'Détails' > Propriété 'Numéros d'identification du matériel' > Relever VEN_xxxx et DEV_yyyy pour trouver le constructeur.",
+      svgIcon: `
+        <svg viewBox="0 0 48 48" class="w-16 h-16">
+          <rect x="8" y="10" width="32" height="28" rx="4" fill="#64748b" />
+          <rect x="12" y="14" width="24" height="20" rx="2" fill="#94a3b8" />
+          <!-- Cercle Point d'interrogation -->
+          <circle cx="36" cy="36" r="10" fill="#8b5cf6" stroke="#ffffff" stroke-width="2" />
+          <text x="36" y="41" fill="#ffffff" font-size="14" font-weight="bold" font-family="sans-serif" text-anchor="middle">?</text>
+        </svg>
+      `
+    },
+    {
+      id: "critical-cross",
+      name: "Défaillance Critique (Croix Rouge)",
+      badgeColor: "badge-red",
+      statusText: "Arrêt critique ou conflit irréversible",
+      symbolDescription: "Une croix rouge sur fond blanc ou cercle rouge sur l'icône.",
+      meaning: "Problème matériel critique, composant endommagé ou conflit de ressources mémoire/IRQ non négociable empêchant tout fonctionnement.",
+      actionNeeded: "Tester le composant sur un autre port/ordinateur, vérifier l'alimentation électrique, mettre à jour le BIOS/UEFI de la carte mère.",
+      svgIcon: `
+        <svg viewBox="0 0 48 48" class="w-16 h-16">
+          <rect x="6" y="8" width="36" height="26" rx="3" fill="#94a3b8" opacity="0.6" />
+          <rect x="10" y="12" width="28" height="18" rx="1" fill="#f8fafc" />
+          <path d="M18 34 L14 42 L34 42 L30 34 Z" fill="#94a3b8" />
+          <!-- Croix rouge -->
+          <circle cx="36" cy="36" r="10" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+          <path d="M31 31 L41 41 M41 31 L31 41" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+        </svg>
+      `
+    }
+  ],
+
+  // Dictionnaire exhaustif des codes d'erreur Windows Device Manager
+  errorCodes: [
+    {
+      code: "Code 28",
+      title: "Les pilotes de ce périphérique ne sont pas installés",
+      severity: "Moyenne (Très fréquent)",
+      badge: "badge-yellow",
+      cause: "Aucun pilote compatible n'a été trouvé par Windows Update ou lors de la première détection du matériel.",
+      solution: "1. Récupérer l'ID matériel (VEN_xxxx & DEV_yyyy) dans l'onglet 'Détails'.<br>2. Télécharger le pilote officiel sur le site du fabricant.<br>3. Cliquer sur 'Mettre à jour le pilote' > 'Parcourir mon ordinateur'.",
+      tip: "Classique après une réinstallation propre de Windows 11."
+    },
+    {
+      code: "Code 43",
+      title: "Windows a arrêté ce périphérique car il présente des problèmes",
+      severity: "Élevée (Fréquent)",
+      badge: "badge-red",
+      cause: "Le pilote a envoyé un signal d'échec critique au système d'exploitation, ou le matériel physique s'est mis en sécurité (panne de puce graphique, surchauffe, mémoire VRAM défaillante).",
+      solution: "1. Tenter un 'Rollback' (Restaurer le pilote précédent) si l'erreur est survenue après une mise à jour.<br>2. Utiliser DDU (Display Driver Uninstaller) en mode sans échec pour réinstaller proprement.<br>3. Si l'erreur persiste sur GPU : panne matérielle probable (rebillage/remplacement requis).",
+      tip: "Très fréquent sur les cartes graphiques NVIDIA / AMD."
+    },
+    {
+      code: "Code 10",
+      title: "Ce périphérique ne peut pas démarrer",
+      severity: "Moyenne",
+      badge: "badge-yellow",
+      cause: "Le pilote a été chargé mais la communication de bas niveau avec le contrôleur matériel a échoué (clé de registre invalide, micro-coupure USB, microprogramme obsolète).",
+      solution: "1. Débrancher et rebrancher physiquement le périphérique (pour les périphériques USB).<br>2. Désinstaller le périphérique dans le Gestionnaire, puis cliquer sur 'Rechercher les modifications sur le matériel'.<br>3. Mettre à jour le pilote du chipset de la carte mère.",
+      tip: "Fréquent sur cartes son et adaptateurs USB Bluetooth/Wi-Fi."
+    },
+    {
+      code: "Code 22",
+      title: "Ce périphérique est désactivé",
+      severity: "Faible",
+      badge: "badge-gray",
+      cause: "Le périphérique a été désactivé manuellement dans le Gestionnaire de périphériques par un utilisateur ou un script.",
+      solution: "1. Clic droit sur le périphérique.<br>2. Sélectionner 'Activer l'appareil'.<br>3. Le périphérique redevient immédiatement opérationnel.",
+      tip: "Aucun problème matériel ni logiciel."
+    },
+    {
+      code: "Code 12",
+      title: "Ce périphérique ne trouve pas suffisamment de ressources libres",
+      severity: "Élevée",
+      badge: "badge-orange",
+      cause: "Conflit de ports d'entrée/sortie (I/O), canaux DMA ou lignes d'interruption (IRQ) avec un autre composant.",
+      solution: "1. Activer l'option 'Above 4G Decoding' et 'BAR redimensionnable' dans l'UEFI/BIOS.<br>2. Déplacer la carte PCIe sur un autre slot de la carte mère.<br>3. Mettre à jour le BIOS/UEFI de la carte mère.",
+      tip: "Se produit souvent lors de l'ajout de plusieurs cartes graphiques ou cartes contrôleurs RAID."
+    },
+    {
+      code: "Code 14",
+      title: "Ce périphérique ne peut pas fonctionner tant que vous n'avez pas redémarré votre ordinateur",
+      severity: "Faible",
+      badge: "badge-blue",
+      cause: "Une mise à jour ou modification de configuration nécessite un redémarrage complet pour recharger la couche matérielle.",
+      solution: "Redémarrer simplement l'ordinateur via le menu Démarrer > Redémarrer (ne pas faire 'Arrêter' avec le Démarrage rapide activé).",
+      tip: "Résolu en un redémarrage."
+    },
+    {
+      code: "Code 19",
+      title: "Windows ne peut pas démarrer ce périphérique car ses informations de configuration (dans le Registre) sont incomplètes ou endommagées",
+      severity: "Élevée",
+      badge: "badge-red",
+      cause: "Clés UpperFilters ou LowerFilters corrompues dans le Registre Windows (fréquent sur lecteurs CD/DVD et claviers/souris après désinstallation d'un logiciel tiers).",
+      solution: "1. Ouvrir <code>regedit</code>.<br>2. Naviguer vers la classe du périphérique dans <code>HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Class</code>.<br>3. Supprimer les valeurs <strong>UpperFilters</strong> et <strong>LowerFilters</strong>, puis redémarrer.",
+      tip: "Panne logicielle purement liée à la base de registre."
+    },
+    {
+      code: "Code 31",
+      title: "Ce périphérique ne fonctionne pas correctement car Windows ne peut pas charger les pilotes requis",
+      severity: "Moyenne",
+      badge: "badge-yellow",
+      cause: "Un fichier dépendant (fichier .DLL ou .SYS) requis par le pilote principal est manquant ou endommagé.",
+      solution: "Désinstaller complètement le pilote, exécuter <code>sfc /scannow</code> dans une invite de commande administrateur, puis réinstaller le package complet du constructeur.",
+      tip: "Lié à une corruption de fichiers système."
+    },
+    {
+      code: "Code 39",
+      title: "Windows ne peut pas charger le pilote de périphérique de ce matériel. Ce pilote est peut-être endommagé ou absent",
+      severity: "Moyenne",
+      badge: "badge-yellow",
+      cause: "Fichier binaire du pilote (.sys) introuvable dans <code>C:\\Windows\\System32\\drivers</code> ou signature de fichier tronquée.",
+      solution: "Réinstaller le pilote depuis son installateur d'origine ou restaurer les fichiers via DISM : <code>DISM /Online /Cleanup-Image /RestoreHealth</code>.",
+      tip: "Souvent causé par un antivirus trop zélé ou un disque dur défectueux."
+    },
+    {
+      code: "Code 52",
+      title: "Windows ne peut pas vérifier la signature numérique des pilotes requis pour ce périphérique",
+      severity: "Élevée",
+      badge: "badge-orange",
+      cause: "Le pilote n'a pas été signé numériquement par Microsoft (WHQL) ou par une autorité de certification reconnue. Windows 11 64-bit bloque son chargement pour des raisons de sécurité.",
+      solution: "1. Obtenir une version officielle signée auprès du fabricant.<br>2. En environnement de test/développement : désactiver temporairement l'application de signature via les options de démarrage avancé (F7 au boot).",
+      tip: "Fréquent avec d'anciens matériels d'astronomie, interfaces OBD auto ou cartes DIY Arduino non certifiées."
+    }
+  ],
+
+  // Arborescence de périphériques pour le simulateur Windows 11
+  simulatorDevices: [
+    {
+      id: "cat-audio",
+      name: "Contrôleurs audio, vidéo et jeu",
+      type: "category",
+      children: [
+        {
+          id: "dev-audio-realtek",
+          name: "Realtek(R) High Definition Audio",
+          type: "device",
+          iconType: "audio",
+          status: "warning", // Initialement en Code 10 pour Mission 4
+          errorCode: "Code 10",
+          errorMsg: "Ce périphérique ne peut pas démarrer. (Code 10)\nUne erreur d'opération de périphérique I/O d'E/S a été signalée par le contrôleur de bus.",
+          hardwareId: "HDAUDIO\\FUNC_01&VEN_10EC&DEV_0892&SUBSYS_10438686&REV_1003",
+          manufacturer: "Realtek",
+          driverVersion: "6.0.8924.1",
+          driverDate: "2021-04-12",
+          signer: "Microsoft Windows Hardware Compatibility Publisher",
+          canRollback: false,
+          actionsLog: ["Périphérique configuré", "Échec d'initialisation du pilote"]
+        },
+        {
+          id: "dev-audio-nvidia",
+          name: "NVIDIA High Definition Audio",
+          type: "device",
+          iconType: "audio",
+          status: "normal",
+          errorCode: null,
+          errorMsg: "Ce périphérique fonctionne correctement.",
+          hardwareId: "HDAUDIO\\FUNC_01&VEN_10DE&DEV_0093&SUBSYS_10438818",
+          manufacturer: "NVIDIA",
+          driverVersion: "1.3.40.14",
+          driverDate: "2023-10-18",
+          signer: "Microsoft Windows Hardware Compatibility Publisher",
+          canRollback: false,
+          actionsLog: ["Périphérique démarré"]
+        }
+      ]
+    },
+    {
+      id: "cat-display",
+      name: "Cartes graphiques",
+      type: "category",
+      children: [
+        {
+          id: "dev-gpu-nvidia",
+          name: "NVIDIA GeForce RTX 3060",
+          type: "device",
+          iconType: "display",
+          status: "warning", // Initialement en Code 43 pour Mission 3
+          errorCode: "Code 43",
+          errorMsg: "Windows a arrêté ce périphérique car il présente des problèmes. (Code 43)\nLe pilote a signalé un échec inattendu lors de l'accès aux registres d'accélération 3D.",
+          hardwareId: "PCI\\VEN_10DE&DEV_2504&SUBSYS_88181043&REV_A1",
+          manufacturer: "NVIDIA",
+          driverVersion: "551.86 (Pilote instable récemment mis à jour)",
+          driverDate: "2024-03-19",
+          previousVersion: "537.58 (Version stable fonctionnelle)",
+          previousDate: "2023-11-05",
+          signer: "Microsoft Windows Hardware Compatibility Publisher",
+          canRollback: true,
+          actionsLog: ["Mise à jour du pilote effectuée", "Crash détecté au démarrage du pilote"]
+        },
+        {
+          id: "dev-gpu-intel",
+          name: "Intel(R) UHD Graphics 770",
+          type: "device",
+          iconType: "display",
+          status: "normal",
+          errorCode: null,
+          errorMsg: "Ce périphérique fonctionne correctement.",
+          hardwareId: "PCI\\VEN_8086&DEV_4680&SUBSYS_86941043",
+          manufacturer: "Intel Corporation",
+          driverVersion: "31.0.101.4575",
+          driverDate: "2023-08-22",
+          signer: "Microsoft Windows Hardware Compatibility Publisher",
+          canRollback: false,
+          actionsLog: ["Périphérique démarré"]
+        }
+      ]
+    },
+    {
+      id: "cat-network",
+      name: "Cartes réseau",
+      type: "category",
+      children: [
+        {
+          id: "dev-net-realtek",
+          name: "Realtek PCIe GbE Family Controller",
+          type: "device",
+          iconType: "network",
+          status: "disabled", // Initialement en Code 22 pour Mission 2
+          errorCode: "Code 22",
+          errorMsg: "Ce périphérique est désactivé. (Code 22)\nPour activer ce périphérique, cliquez sur 'Activer le périphérique'.",
+          hardwareId: "PCI\\VEN_10EC&DEV_8168&SUBSYS_86771043&REV_15",
+          manufacturer: "Realtek",
+          driverVersion: "10.68.815.2023",
+          driverDate: "2023-08-15",
+          signer: "Microsoft Windows Hardware Compatibility Publisher",
+          canRollback: false,
+          actionsLog: ["Périphérique désactivé par l'utilisateur"]
+        },
+        {
+          id: "dev-net-intel-wifi",
+          name: "Intel(R) Wi-Fi 6 AX201 160MHz",
+          type: "device",
+          iconType: "network",
+          status: "normal",
+          errorCode: null,
+          errorMsg: "Ce périphérique fonctionne correctement.",
+          hardwareId: "PCI\\VEN_8086&DEV_A0F0&SUBSYS_00748086",
+          manufacturer: "Intel Corporation",
+          driverVersion: "23.30.0.6",
+          driverDate: "2024-01-10",
+          signer: "Microsoft Windows Hardware Compatibility Publisher",
+          canRollback: false,
+          actionsLog: ["Périphérique démarré"]
+        }
+      ]
+    },
+    {
+      id: "cat-other",
+      name: "Autres périphériques (Non configurés)",
+      type: "category",
+      children: [
+        {
+          id: "dev-unknown-pci",
+          name: "Contrôleur de réseau multimédia PCI",
+          type: "device",
+          iconType: "unknown",
+          status: "warning", // Initialement en Code 28 pour Mission 1
+          errorCode: "Code 28",
+          errorMsg: "Les pilotes de ce périphérique ne sont pas installés. (Code 28)\nIl n'y a pas de pilotes compatibles pour ce périphérique.\nPour trouver un pilote, cliquez sur 'Mettre à jour le pilote'.",
+          hardwareId: "PCI\\VEN_10EC&DEV_8125&SUBSYS_E0001458&REV_05",
+          manufacturer: "Inconnu",
+          driverVersion: "Non disponible",
+          driverDate: "Non disponible",
+          signer: "Non disponible",
+          canRollback: false,
+          actionsLog: ["Périphérique détecté par Plug-and-Play", "Pilote introuvable"]
+        }
+      ]
+    },
+    {
+      id: "cat-usb",
+      name: "Contrôleurs de bus USB",
+      type: "category",
+      children: [
+        {
+          id: "dev-usb-intel-host",
+          name: "Contrôleur hôte extensible Intel(R) USB 3.20 - 1.20 (Microsoft)",
+          type: "device",
+          iconType: "usb",
+          status: "normal",
+          errorCode: null,
+          errorMsg: "Ce périphérique fonctionne correctement.",
+          hardwareId: "PCI\\VEN_8086&DEV_7AE0&SUBSYS_86941043",
+          manufacturer: "(Contrôleurs hôtes USB standard)",
+          driverVersion: "10.0.22621.1",
+          driverDate: "2022-05-06",
+          signer: "Microsoft Windows",
+          canRollback: false,
+          actionsLog: ["Périphérique démarré"]
+        }
+      ]
+    }
+  ],
+
+  // Missions interactives du simulateur Windows
+  winMissions: [
+    {
+      id: "mission-1",
+      title: "Mission 1 : Résoudre le périphérique inconnu (Code 28)",
+      description: "Un composant est détecté sous 'Autres périphériques' avec un triangle jaune. Identifiez son VEN/DEV dans les Propriétés, trouvez son pilote puis installez-le.",
+      deviceId: "dev-unknown-pci",
+      hint: "Inspectez l'onglet 'Détails' > 'Numéros d'identification du matériel'. Le VEN_10EC correspond à Realtek (RTL8125 2.5GbE). Cliquez sur 'Mettre à jour le pilote' et installez le package officiel.",
+      targetState: "normal"
+    },
+    {
+      id: "mission-2",
+      title: "Mission 2 : Réactiver la carte réseau (Code 22)",
+      description: "La carte réseau Ethernet Realtek affiche une petite flèche vers le bas et aucune connexion filaire n'est disponible. Réactivez le périphérique.",
+      deviceId: "dev-net-realtek",
+      hint: "Faites un clic droit sur la carte réseau désactivée ou utilisez le bouton dans la barre d'outils, puis choisissez 'Activer l'appareil'.",
+      targetState: "normal"
+    },
+    {
+      id: "mission-3",
+      title: "Mission 3 : Dépanner le GPU en panne après mise à jour (Code 43)",
+      description: "La carte graphique NVIDIA RTX 3060 a crashé (Code 43) suite à une mise à jour instable. Effectuez une restauration vers le pilote précédent (Rollback).",
+      deviceId: "dev-gpu-nvidia",
+      hint: "Ouvrez les Propriétés > Onglet 'Pilote' > Cliquez sur 'Restaurer le pilote' (Rollback Driver) pour revenir à la version 537.58 certifiée stable.",
+      targetState: "normal"
+    },
+    {
+      id: "mission-4",
+      title: "Mission 4 : Débloquer le contrôleur audio (Code 10)",
+      description: "Le contrôleur audio Realtek ne peut pas démarrer (Code 10). Tentez une réinitialisation du composant en le désinstallant puis en relançant l'énumération matérielle.",
+      deviceId: "dev-audio-realtek",
+      hint: "Cliquez sur 'Désinstaller l'appareil', puis cliquez sur le bouton 'Rechercher les modifications sur le matériel' dans la barre d'outils pour forcer Windows à réinitialiser le contrôleur I/O.",
+      targetState: "normal"
+    }
+  ],
+
+  // Scénarios et commandes pour le simulateur Terminal Ubuntu Linux
+  linuxScenarios: [
+    {
+      id: "linux-scen-1",
+      title: "Diagnostic Wi-Fi : Détecter la carte et installer le firmware",
+      goal: "Identifier le chipset Wi-Fi avec lspci, vérifier le dmesg, puis installer le firmware manquant.",
+      instructions: "Tapez `lspci` ou `lspci -k` pour identifier la carte réseau, vérifiez `dmesg | grep -i firmware`, puis installez avec `sudo apt install firmware-realtek`."
+    },
+    {
+      id: "linux-scen-2",
+      title: "Carte Graphique : Installer le pilote propriétaire NVIDIA",
+      goal: "Vérifier les pilotes recommandés par Ubuntu et installer le pilote officiel testé.",
+      instructions: "Tapez `ubuntu-drivers devices`, puis lancez `sudo apt install nvidia-driver-535` et vérifiez avec `lsmod | grep nvidia`."
+    },
+    {
+      id: "linux-scen-3",
+      title: "Contrôleur Audio : Recharger un module noyau qui grésille",
+      goal: "Décharger le module snd_hda_intel avec modprobe -r puis le recharger proprement.",
+      instructions: "Tapez `lsmod | grep snd`, puis `sudo modprobe -r snd_hda_intel`, puis `sudo modprobe snd_hda_intel`."
+    }
+  ],
+
+  // Questions du Quiz interactif
+  quizQuestions: [
+    {
+      id: 1,
+      question: "Dans le Gestionnaire de périphériques Windows, que signifie un triangle jaune avec un point d'exclamation noir sur un composant ?",
+      options: [
+        "Le périphérique est désactivé manuellement par l'administrateur.",
+        "Le périphérique présente un problème (pilote manquant, panne ou conflit de démarrage).",
+        "Le périphérique est en cours de copie de fichiers.",
+        "Le périphérique est connecté en Bluetooth mais la batterie est faible."
+      ],
+      correctIndex: 1,
+      explanation: "Le triangle jaune signale une anomalie (Code 28, Code 43, Code 10, etc.). Le périphérique est détecté sur le bus mais ne peut pas fonctionner normalement."
+    },
+    {
+      id: 2,
+      question: "Que signifie le code d'erreur 'Code 22' dans les propriétés d'un périphérique Windows ?",
+      options: [
+        "Le pilote est corrompu et doit être réinstallé.",
+        "Le périphérique a été désactivé manuellement par un utilisateur ou le système.",
+        "Une surchauffe matérielle a été détectée sur la puce.",
+        "La signature numérique WHQL est expirée."
+      ],
+      correctIndex: 1,
+      explanation: "Le Code 22 indique simplement que le périphérique est désactivé. Il suffit de faire un clic droit et de cliquer sur 'Activer l'appareil' pour le rendre opérationnel."
+    },
+    {
+      id: 3,
+      question: "Dans l'identifiant matériel 'PCI\\VEN_10DE&DEV_2504', que représente '10DE' ?",
+      options: [
+        "Le numéro de série de l'ordinateur.",
+        "Le Vendor ID (identifiant du fabricant, ici NVIDIA).",
+        "La date de fabrication (octobre 2024).",
+        "La version du pilote recommandée."
+      ],
+      correctIndex: 1,
+      explanation: "VEN signifie 'Vendor ID'. L'identifiant 10DE est attribué mondialement à NVIDIA Corporation. Le DEV_2504 correspond quant à lui au modèle GeForce RTX 3060."
+    },
+    {
+      id: 4,
+      question: "Pourquoi est-il fortement déconseillé d'utiliser des logiciels tiers comme 'Driver Booster' ou 'Driver Easy' ?",
+      options: [
+        "Parce qu'ils rendent l'écran noir de manière définitive.",
+        "Parce qu'ils installent souvent des adwares, des pilotes non certifiés et causent des instabilités système.",
+        "Parce qu'ils consomment 100 Go d'espace disque.",
+        "Parce que Microsoft bloque automatiquement l'accès à Internet."
+      ],
+      correctIndex: 1,
+      explanation: "Ces utilitaires installent régulièrement des versions inadaptées à votre modèle spécifique de carte mère, des versions bêta instables ou des logiciels publicitaires indésirables."
+    },
+    {
+      id: 5,
+      question: "Quelle commande Windows permet d'ouvrir instantanément le Gestionnaire de périphériques ?",
+      options: [
+        "drivermgr.exe",
+        "devmgmt.msc",
+        "msconfig.msc",
+        "services.msc"
+      ],
+      correctIndex: 1,
+      explanation: "'devmgmt.msc' est la console MMC (Microsoft Management Console) dédiée au Gestionnaire de périphériques Windows."
+    },
+    {
+      id: 6,
+      question: "Quelle commande Linux permet de lister les périphériques connectés au bus PCI et d'afficher le module noyau en cours d'utilisation ?",
+      options: [
+        "lsusb -v",
+        "lspci -k",
+        "dmesg --clear",
+        "cat /proc/cpuinfo"
+      ],
+      correctIndex: 1,
+      explanation: "L'option '-k' (ou '-nnk') de la commande 'lspci' affiche la ligne 'Kernel driver in use' et 'Kernel modules', ce qui permet de savoir immédiatement quel pilote pilote le matériel."
+    },
+    {
+      id: 7,
+      question: "Où se trouve la très grande majorité des pilotes de périphériques sous Linux Ubuntu ?",
+      options: [
+        "Sur un CD-ROM fourni dans la boîte de chaque composant.",
+        "Directement intégrés dans le noyau Linux ('in-tree') sous forme de modules .ko.",
+        "Dans la base de registre Linux.",
+        "Ils doivent obligatoirement être téléchargés sur le site officiel du fabricant en .EXE."
+      ],
+      correctIndex: 1,
+      explanation: "Le noyau Linux contient nativement des milliers de pilotes. 95% des périphériques fonctionnent automatiquement ('Plug & Play') dès le branchement sans intervention de l'utilisateur."
+    },
+    {
+      id: 8,
+      question: "Sous Windows, à quoi sert l'option 'Restaurer le pilote' (Rollback Driver) ?",
+      options: [
+        "À supprimer définitivement le matériel du boîtier de l'ordinateur.",
+        "À réinstaller la version précédente du pilote qui fonctionnait avant une mise à jour défectueuse.",
+        "À télécharger la dernière version bêta sur Internet.",
+        "À formater le disque dur."
+      ],
+      correctIndex: 1,
+      explanation: "La restauration (Rollback) remet en service la version précédente du pilote enregistrée par Windows, très utile si une nouvelle mise à jour provoque un Code 43 ou des crashs."
+    },
+    {
+      id: 9,
+      question: "Quelle commande Windows permet d'exporter et sauvegarder l'ensemble des pilotes installés sur la machine vers un dossier ?",
+      options: [
+        "pnputil /export-driver * C:\\Backup",
+        "driverbackup.exe /all",
+        "xcopy drivers C:\\Backup",
+        "netsh driver export"
+      ],
+      correctIndex: 0,
+      explanation: "L'utilitaire officiel Microsoft 'pnputil' permet d'ajouter, supprimer et exporter tous les packages de pilotes (.inf) du magasin de pilotes Windows (DriverStore)."
+    },
+    {
+      id: 10,
+      question: "Que signifie le 'Code 52' dans le Gestionnaire de périphériques Windows 11 ?",
+      options: [
+        "Le disque dur est plein à 52%.",
+        "Windows refuse de charger le pilote car sa signature numérique n'a pas pu être vérifiée.",
+        "Le port USB délivre une tension trop élevée.",
+        "La carte réseau est bridée à 52 Mo/s."
+      ],
+      correctIndex: 1,
+      explanation: "Windows 11 impose que tous les pilotes soient signés numériquement (WHQL). Le Code 52 signale un pilote non signé ou modifié qui est bloqué pour protéger l'intégrité du noyau."
+    }
+  ]
+};
+
+if (typeof window !== "undefined") {
+  window.COURSE_DATA = COURSE_DATA;
+}
+
+    </script>
+    <script>
+// ==========================================================================
+// Simulateur Interactif : Gestionnaire de Périphériques Windows 11
+// ==========================================================================
+
+class WindowsDeviceManagerSimulator {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+    this.devices = JSON.parse(JSON.stringify(COURSE_DATA.simulatorDevices));
+    this.selectedDeviceId = "dev-unknown-pci";
+    this.activeMissionIndex = 0;
+    this.missionsCompleted = [false, false, false, false];
+    this.activeTab = "general";
+    this.isPropModalOpen = false;
+    this.isWizardOpen = false;
+    this.uninstalledDevices = [];
+
+    this.init();
+  }
+
+  init() {
+    this.render();
+    this.attachEvents();
+  }
+
+  getDeviceById(id, list = this.devices) {
+    for (const item of list) {
+      if (item.id === id) return item;
+      if (item.children) {
+        const found = this.getDeviceById(id, item.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  getSelectedDevice() {
+    return this.getDeviceById(this.selectedDeviceId);
+  }
+
+  selectDevice(id) {
+    this.selectedDeviceId = id;
+    this.updateSelectionUI();
+    this.updateToolbarUI();
+  }
+
+  render() {
+    if (!this.container) return;
+
+    this.container.innerHTML = `
+      <div class="mb-6 bg-slate-900 text-white p-5 rounded-2xl shadow-lg border border-slate-800">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span class="text-xs uppercase font-bold tracking-wider text-emerald-400">Atelier Pratique Virtuel</span>
+            </div>
+            <h3 class="text-xl font-bold mt-1">Simulateur Windows 11 : Gestionnaire de périphériques</h3>
+            <p class="text-sm text-slate-300 mt-1">Résolvez de véritables pannes de pilotes et observez l'impact direct sur le système.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400 font-medium">Missions réussies :</span>
+            <div class="flex gap-1.5" id="win-missions-badges">
+              ${this.renderMissionBadges()}
+            </div>
+          </div>
+        </div>
+
+        <!-- Mission active bar -->
+        <div class="mt-4 p-4 bg-slate-800/80 rounded-xl border border-slate-700/60" id="win-mission-card">
+          ${this.renderActiveMission()}
+        </div>
+      </div>
+
+      <!-- Fenêtre Windows 11 Replica -->
+      <div class="win11-window shadow-2xl">
+        <!-- Barre de titre -->
+        <div class="win11-titlebar">
+          <div class="win11-title-left">
+            <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801"/>
+            </svg>
+            <span class="font-medium text-slate-800">Gestionnaire de périphériques</span>
+          </div>
+          <div class="win11-controls">
+            <span class="win11-control-btn" title="Réduire">−</span>
+            <span class="win11-control-btn" title="Agrandir">□</span>
+            <span class="win11-control-btn hover:text-red-600 font-bold" title="Fermer">✕</span>
+          </div>
+        </div>
+
+        <!-- Barre de menu -->
+        <div class="win11-menubar">
+          <span class="win11-menu-item">Fichier</span>
+          <span class="win11-menu-item" id="win-menu-action">Action</span>
+          <span class="win11-menu-item">Affichage</span>
+          <span class="win11-menu-item">Aide</span>
+        </div>
+
+        <!-- Barre d'outils -->
+        <div class="win11-toolbar" id="win-toolbar">
+          <button class="win11-tool-btn" id="btn-win-update" title="Mettre à jour le pilote">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            <span>Mettre à jour</span>
+          </button>
+          <div class="w-px h-5 bg-slate-300"></div>
+          <button class="win11-tool-btn" id="btn-win-toggle" title="Désactiver / Activer l'appareil">
+            <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+            </svg>
+            <span id="txt-win-toggle">Désactiver</span>
+          </button>
+          <button class="win11-tool-btn" id="btn-win-uninstall" title="Désinstaller l'appareil">
+            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+            <span>Désinstaller</span>
+          </button>
+          <div class="w-px h-5 bg-slate-300"></div>
+          <button class="win11-tool-btn" id="btn-win-scan" title="Rechercher les modifications sur le matériel">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <span>Rechercher les modifications</span>
+          </button>
+          <div class="w-px h-5 bg-slate-300"></div>
+          <button class="win11-tool-btn font-medium" id="btn-win-properties" title="Propriétés du périphérique">
+            <svg class="w-4 h-4 text-slate-800" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span>Propriétés</span>
+          </button>
+        </div>
+
+        <!-- Corps de l'arborescence -->
+        <div class="win-tree" id="win-device-tree">
+          <div class="tree-node font-semibold text-slate-800 mb-1">
+            <span class="mr-1">💻</span>
+            <span>DESKTOP-PEDAGO-PC</span>
+          </div>
+          <div class="tree-children">
+            ${this.renderTreeNodes(this.devices)}
+          </div>
+        </div>
+
+        <!-- Pied de fenêtre -->
+        <div class="p-2 bg-slate-100 border-t border-slate-200 text-xs text-slate-500 flex justify-between items-center px-4">
+          <span id="win-status-summary">Double-cliquez sur un périphérique pour ouvrir ses propriétés.</span>
+          <span>Version W11 23H2 (Build 22631)</span>
+        </div>
+      </div>
+
+      <!-- Modale des Propriétés (Initialement masquée) -->
+      <div id="win-modal-container"></div>
+
+      <!-- Modale de l'Assistant Mise à jour Pilote -->
+      <div id="win-wizard-container"></div>
+    `;
+
+    this.updateSelectionUI();
+    this.updateToolbarUI();
+  }
+
+  renderMissionBadges() {
+    return COURSE_DATA.winMissions.map((m, idx) => {
+      const isDone = this.missionsCompleted[idx];
+      const isCurrent = this.activeMissionIndex === idx;
+      return `
+        <button 
+          class="w-7 h-7 rounded-full text-xs font-bold transition flex items-center justify-center 
+            ${isDone ? 'bg-emerald-500 text-white' : (isCurrent ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-slate-700 text-slate-300 hover:bg-slate-600')}"
+          onclick="winSimulator.setMission(${idx})"
+          title="${m.title}">
+          ${isDone ? '✓' : (idx + 1)}
+        </button>
+      `;
+    }).join("");
+  }
+
+  renderActiveMission() {
+    const mission = COURSE_DATA.winMissions[this.activeMissionIndex];
+    const isDone = this.missionsCompleted[this.activeMissionIndex];
+
+    return `
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="badge ${isDone ? 'badge-green' : 'badge-yellow'}">
+              ${isDone ? '✓ Mission accomplie' : 'Mission en cours'}
+            </span>
+            <h4 class="font-bold text-white text-base">${mission.title}</h4>
+          </div>
+          <p class="text-xs text-slate-300 mt-1">${mission.description}</p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs rounded-lg text-slate-200 transition" onclick="winSimulator.showHint()">
+            💡 Indice
+          </button>
+          <button class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-xs font-semibold rounded-lg text-white transition" onclick="winSimulator.selectMissionDevice()">
+            🎯 Cibler l'appareil
+          </button>
+        </div>
+      </div>
+      <div id="win-mission-hint" class="hidden mt-3 p-3 bg-blue-950/70 border border-blue-800 rounded-lg text-xs text-blue-200">
+        ${mission.hint}
+      </div>
+    `;
+  }
+
+  renderTreeNodes(list) {
+    return list.map(item => {
+      if (item.type === "category") {
+        return `
+          <div class="category-block mb-1">
+            <div class="tree-node font-medium text-slate-700" onclick="winSimulator.toggleCategory(this)">
+              <span class="tree-toggle">▼</span>
+              <span class="tree-icon">${this.getCategoryIcon(item.id)}</span>
+              <span>${item.name}</span>
+            </div>
+            <div class="tree-children">
+              ${this.renderTreeNodes(item.children)}
+            </div>
+          </div>
+        `;
+      } else {
+        const isSelected = item.id === this.selectedDeviceId;
+        return `
+          <div 
+            class="tree-node ${isSelected ? 'selected' : ''}" 
+            id="node-${item.id}"
+            onclick="winSimulator.selectDevice('${item.id}')"
+            ondblclick="winSimulator.openPropertiesModal('${item.id}')">
+            <span class="tree-icon">
+              ${this.getDeviceIcon(item.iconType, item.status)}
+            </span>
+            <span class="text-slate-800 select-none">${item.name}</span>
+          </div>
+        `;
+      }
+    }).join("");
+  }
+
+  getCategoryIcon(catId) {
+    switch (catId) {
+      case "cat-audio":
+        return `<svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>`;
+      case "cat-display":
+        return `<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
+      case "cat-network":
+        return `<svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>`;
+      case "cat-other":
+        return `<svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+      case "cat-usb":
+        return `<svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`;
+      default:
+        return `<svg class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/></svg>`;
+    }
+  }
+
+  getDeviceIcon(type, status) {
+    let baseIcon = `<svg class="w-4 h-4 text-slate-600" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>`;
+    if (type === "display") {
+      baseIcon = `<svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/></svg>`;
+    } else if (type === "network") {
+      baseIcon = `<svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zm1 5a1 1 0 000 2h12a1 1 0 100-2H4z" clip-rule="evenodd"/></svg>`;
+    } else if (type === "audio") {
+      baseIcon = `<svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/></svg>`;
+    }
+
+    let overlay = "";
+    if (status === "warning") {
+      overlay = `
+        <svg class="icon-overlay" viewBox="0 0 24 24" fill="#f59e0b">
+          <path d="M12 2L1 21h22L12 2zm0 3.8L20.2 19H3.8L12 5.8zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/>
+        </svg>
+      `;
+    } else if (status === "disabled") {
+      overlay = `
+        <svg class="icon-overlay" viewBox="0 0 24 24" fill="#475569">
+          <circle cx="12" cy="12" r="10" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+          <path d="M12 7v7m-3-3l3 3 3-3" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      `;
+    }
+
+    return `<div class="relative inline-flex items-center justify-center">${baseIcon}${overlay}</div>`;
+  }
+
+  toggleCategory(el) {
+    const childrenContainer = el.nextElementSibling;
+    const arrow = el.querySelector(".tree-toggle");
+    if (childrenContainer.style.display === "none") {
+      childrenContainer.style.display = "block";
+      arrow.textContent = "▼";
+    } else {
+      childrenContainer.style.display = "none";
+      arrow.textContent = "▶";
+    }
+  }
+
+  updateSelectionUI() {
+    const allNodes = this.container.querySelectorAll(".tree-node");
+    allNodes.forEach(node => node.classList.remove("selected"));
+    const selected = this.container.querySelector(`#node-${this.selectedDeviceId}`);
+    if (selected) {
+      selected.classList.add("selected");
+    }
+  }
+
+  updateToolbarUI() {
+    const dev = this.getSelectedDevice();
+    const btnToggle = this.container.querySelector("#btn-win-toggle");
+    const txtToggle = this.container.querySelector("#txt-win-toggle");
+    const btnUpdate = this.container.querySelector("#btn-win-update");
+    const btnUninstall = this.container.querySelector("#btn-win-uninstall");
+    const btnProps = this.container.querySelector("#btn-win-properties");
+
+    if (!dev) {
+      if (btnToggle) btnToggle.disabled = true;
+      if (btnUpdate) btnUpdate.disabled = true;
+      if (btnUninstall) btnUninstall.disabled = true;
+      if (btnProps) btnProps.disabled = true;
+      return;
+    }
+
+    btnToggle.disabled = false;
+    btnUpdate.disabled = false;
+    btnUninstall.disabled = false;
+    btnProps.disabled = false;
+
+    if (dev.status === "disabled") {
+      txtToggle.textContent = "Activer";
+    } else {
+      txtToggle.textContent = "Désactiver";
+    }
+  }
+
+  attachEvents() {
+    const btnUpdate = this.container.querySelector("#btn-win-update");
+    const btnToggle = this.container.querySelector("#btn-win-toggle");
+    const btnUninstall = this.container.querySelector("#btn-win-uninstall");
+    const btnScan = this.container.querySelector("#btn-win-scan");
+    const btnProps = this.container.querySelector("#btn-win-properties");
+
+    if (btnUpdate) btnUpdate.onclick = () => this.openUpdateWizard();
+    if (btnToggle) btnToggle.onclick = () => this.toggleActiveStatus();
+    if (btnUninstall) btnUninstall.onclick = () => this.uninstallDevice();
+    if (btnScan) btnScan.onclick = () => this.scanForHardwareChanges();
+    if (btnProps) btnProps.onclick = () => this.openPropertiesModal(this.selectedDeviceId);
+  }
+
+  toggleActiveStatus() {
+    const dev = this.getSelectedDevice();
+    if (!dev) return;
+
+    if (dev.status === "disabled") {
+      dev.status = "normal";
+      dev.errorCode = null;
+      dev.errorMsg = "Ce périphérique fonctionne correctement.";
+      this.showToast("Périphérique réactivé avec succès.", "success");
+    } else {
+      dev.status = "disabled";
+      dev.errorCode = "Code 22";
+      dev.errorMsg = "Ce périphérique est désactivé. (Code 22)\nPour activer ce périphérique, cliquez sur 'Activer le périphérique'.";
+      this.showToast("Périphérique désactivé.", "warning");
+    }
+
+    this.checkMissions();
+    this.refreshTree();
+  }
+
+  uninstallDevice() {
+    const dev = this.getSelectedDevice();
+    if (!dev) return;
+
+    if (!confirm(`Êtes-vous sûr de vouloir désinstaller l'appareil '${dev.name}' ?`)) return;
+
+    // Retirer le périphérique de la liste et le stocker temporairement
+    this.removeDeviceFromTree(dev.id);
+    this.uninstalledDevices.push(dev);
+
+    this.showToast(`L'appareil '${dev.name}' a été désinstallé.`, "warning");
+    this.selectedDeviceId = null;
+    this.refreshTree();
+  }
+
+  removeDeviceFromTree(id, list = this.devices) {
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i];
+      if (item.children) {
+        const subIndex = item.children.findIndex(c => c.id === id);
+        if (subIndex !== -1) {
+          item.children.splice(subIndex, 1);
+          return true;
+        }
+        if (this.removeDeviceFromTree(id, item.children)) return true;
+      }
+    }
+    return false;
+  }
+
+  scanForHardwareChanges() {
+    const btnScan = this.container.querySelector("#btn-win-scan");
+    if (btnScan) btnScan.classList.add("animate-pulse");
+
+    this.showToast("Analyse du bus Plug-and-Play en cours...", "info");
+
+    setTimeout(() => {
+      if (btnScan) btnScan.classList.remove("animate-pulse");
+
+      // Ré-énumérer les périphériques désinstallés
+      if (this.uninstalledDevices.length > 0) {
+        while (this.uninstalledDevices.length > 0) {
+          const dev = this.uninstalledDevices.pop();
+
+          // Si c'était l'audio Code 10, la ré-énumération le réinitialise en état normal !
+          if (dev.id === "dev-audio-realtek") {
+            dev.status = "normal";
+            dev.errorCode = null;
+            dev.errorMsg = "Ce périphérique fonctionne correctement.";
+          }
+
+          // Remettre dans la catégorie appropriée
+          if (dev.id.includes("audio")) {
+            const cat = this.devices.find(c => c.id === "cat-audio");
+            if (cat) cat.children.push(dev);
+          } else if (dev.id.includes("gpu")) {
+            const cat = this.devices.find(c => c.id === "cat-display");
+            if (cat) cat.children.push(dev);
+          } else {
+            const cat = this.devices.find(c => c.id === "cat-other");
+            if (cat) cat.children.push(dev);
+          }
+        }
+        this.showToast("Le Gestionnaire a détecté le matériel et réinitialisé le contrôleur !", "success");
+      } else {
+        this.showToast("Aucune nouvelle modification matérielle détectée.", "info");
+      }
+
+      this.checkMissions();
+      this.refreshTree();
+    }, 1200);
+  }
+
+  openPropertiesModal(deviceId) {
+    const dev = this.getDeviceById(deviceId);
+    if (!dev) return;
+
+    this.selectedDeviceId = deviceId;
+    this.updateSelectionUI();
+    this.updateToolbarUI();
+    this.activeTab = "general";
+
+    const modalContainer = this.container.querySelector("#win-modal-container");
+    modalContainer.innerHTML = `
+      <div class="win-modal-backdrop" onclick="if(event.target === this) winSimulator.closeModal()">
+        <div class="win-prop-dialog">
+          <!-- Entête -->
+          <div class="win-dialog-header">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 flex items-center justify-center">${this.getDeviceIcon(dev.iconType, dev.status)}</span>
+              <span>Propriétés de : ${dev.name}</span>
+            </div>
+            <button class="text-slate-500 hover:text-black font-bold" onclick="winSimulator.closeModal()">✕</button>
+          </div>
+
+          <!-- Onglets -->
+          <div class="win-dialog-tabs">
+            <button class="win-dialog-tab ${this.activeTab === 'general' ? 'active' : ''}" onclick="winSimulator.switchTab('general')">Général</button>
+            <button class="win-dialog-tab ${this.activeTab === 'driver' ? 'active' : ''}" onclick="winSimulator.switchTab('driver')">Pilote</button>
+            <button class="win-dialog-tab ${this.activeTab === 'details' ? 'active' : ''}" onclick="winSimulator.switchTab('details')">Détails</button>
+            <button class="win-dialog-tab ${this.activeTab === 'events' ? 'active' : ''}" onclick="winSimulator.switchTab('events')">Événements</button>
+          </div>
+
+          <!-- Contenu des onglets -->
+          <div class="win-dialog-body" id="win-dialog-content">
+            ${this.renderDialogTabContent(dev)}
+          </div>
+
+          <!-- Pied -->
+          <div class="win-dialog-footer">
+            <button class="win-btn win-btn-primary" onclick="winSimulator.closeModal()">OK</button>
+            <button class="win-btn" onclick="winSimulator.closeModal()">Annuler</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  switchTab(tab) {
+    this.activeTab = tab;
+    const dev = this.getSelectedDevice();
+    const content = this.container.querySelector("#win-dialog-content");
+    const tabs = this.container.querySelectorAll(".win-dialog-tab");
+    tabs.forEach(t => t.classList.remove("active"));
+    const activeBtn = Array.from(tabs).find(t => t.textContent.toLowerCase().includes(tab.toLowerCase().slice(0, 4)));
+    if (activeBtn) activeBtn.classList.add("active");
+
+    if (content && dev) {
+      content.innerHTML = this.renderDialogTabContent(dev);
+    }
+  }
+
+  renderDialogTabContent(dev) {
+    if (this.activeTab === "general") {
+      return `
+        <div class="space-y-4 text-xs text-slate-800">
+          <div class="flex items-center gap-3 pb-3 border-b border-slate-200">
+            <div class="p-2 bg-slate-100 rounded border border-slate-300">
+              ${this.getDeviceIcon(dev.iconType, dev.status)}
+            </div>
+            <div>
+              <div class="font-bold text-sm">${dev.name}</div>
+              <div class="text-slate-500">Fabricant : ${dev.manufacturer || 'Inconnu'}</div>
+              <div class="text-slate-500">Emplacement : Bus PCI / Bus système</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="font-bold text-slate-700 mb-1">État du périphérique :</div>
+            <div class="p-3 bg-white border border-slate-300 rounded font-mono text-xs whitespace-pre-line leading-relaxed ${dev.status === 'warning' ? 'text-amber-700 border-amber-300 bg-amber-50' : (dev.status === 'disabled' ? 'text-slate-600 bg-slate-50' : 'text-emerald-700 bg-emerald-50')}">
+${dev.errorMsg}
+            </div>
+          </div>
+
+          ${dev.status === 'warning' ? `
+            <div class="p-2.5 bg-blue-50 border border-blue-200 rounded flex items-center justify-between">
+              <span class="text-blue-900">Une action de dépannage est requise.</span>
+              <button class="win-btn text-xs font-semibold" onclick="winSimulator.openUpdateWizard()">Résoudre le problème</button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    } else if (this.activeTab === "driver") {
+      return `
+        <div class="space-y-3 text-xs text-slate-800">
+          <div class="grid grid-cols-3 gap-2 pb-2 border-b border-slate-200">
+            <span class="text-slate-500">Fournisseur du pilote :</span>
+            <span class="col-span-2 font-medium">${dev.manufacturer}</span>
+
+            <span class="text-slate-500">Date du pilote :</span>
+            <span class="col-span-2 font-medium">${dev.driverDate}</span>
+
+            <span class="text-slate-500">Version du pilote :</span>
+            <span class="col-span-2 font-mono font-medium">${dev.driverVersion}</span>
+
+            <span class="text-slate-500">Signataire numérique :</span>
+            <span class="col-span-2 font-medium">${dev.signer}</span>
+          </div>
+
+          <div class="space-y-2 pt-2">
+            <button class="win-btn w-full text-left flex justify-between items-center" onclick="winSimulator.openUpdateWizard()">
+              <span><strong>Mettre à jour le pilote</strong><br><span class="text-slate-500 text-[11px]">Rechercher un pilote automatiquement ou sur le disque</span></span>
+              <span>➡️</span>
+            </button>
+
+            <button class="win-btn w-full text-left flex justify-between items-center ${dev.canRollback ? '' : 'opacity-50 cursor-not-allowed'}" 
+              onclick="${dev.canRollback ? 'winSimulator.rollbackDriver()' : ''}" 
+              ${dev.canRollback ? '' : 'disabled'}>
+              <span><strong>Restaurer le pilote</strong><br><span class="text-slate-500 text-[11px]">Si le périphérique échoue après mise à jour, revenir à la version antérieure</span></span>
+              <span>↩️</span>
+            </button>
+
+            <button class="win-btn w-full text-left flex justify-between items-center" onclick="winSimulator.toggleActiveStatus(); winSimulator.switchTab('driver');">
+              <span><strong>${dev.status === 'disabled' ? 'Activer' : 'Désactiver'} le périphérique</strong><br><span class="text-slate-500 text-[11px]">Suspendre l'alimentation et l'accès au pilote</span></span>
+              <span>⚡</span>
+            </button>
+
+            <button class="win-btn w-full text-left flex justify-between items-center text-red-600" onclick="winSimulator.uninstallDevice(); winSimulator.closeModal();">
+              <span><strong>Désinstaller l'appareil</strong><br><span class="text-slate-500 text-[11px]">Supprimer le pilote et déconnecter logiquement le périphérique</span></span>
+              <span>🗑️</span>
+            </button>
+          </div>
+        </div>
+      `;
+    } else if (this.activeTab === "details") {
+      return `
+        <div class="space-y-3 text-xs text-slate-800">
+          <div>
+            <label class="block text-slate-600 mb-1 font-semibold">Propriété :</label>
+            <select class="w-full p-1.5 border border-slate-300 rounded text-xs bg-white" onchange="winSimulator.updateDetailsValue(this.value)">
+              <option value="hwid" selected>Numéros d'identification du matériel (Hardware IDs)</option>
+              <option value="desc">Description du périphérique</option>
+              <option value="status">Code du problème (Status Code)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-slate-600 mb-1 font-semibold">Valeur :</label>
+            <div id="details-value-box" class="p-3 bg-white border border-slate-300 rounded font-mono text-xs select-all text-blue-900 bg-slate-50">
+              ${dev.hardwareId}<br>
+              ${dev.hardwareId.split('&SUBSYS')[0]}
+            </div>
+            <div class="mt-2 text-[11px] text-slate-500">
+              💡 Astuce : Vous pouvez sélectionner et copier ces identifiants pour trouver le pilote exact du constructeur.
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (this.activeTab === "events") {
+      return `
+        <div class="space-y-3 text-xs text-slate-800">
+          <div class="font-semibold text-slate-700">Derniers événements du périphérique :</div>
+          <div class="border border-slate-300 rounded bg-white overflow-hidden max-h-48 overflow-y-auto">
+            <table class="w-full text-[11px]">
+              <thead class="bg-slate-100 border-b border-slate-200">
+                <tr>
+                  <th class="p-1.5 text-left">Date</th>
+                  <th class="p-1.5 text-left">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${dev.actionsLog.map(act => `
+                  <tr>
+                    <td class="p-1.5 text-slate-500 font-mono">2024-03-20 14:32</td>
+                    <td class="p-1.5 text-slate-800 font-medium">${act}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div class="p-2 bg-slate-100 rounded text-[11px] text-slate-600">
+            Source : Microsoft-Windows-Kernel-PnP
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  updateDetailsValue(type) {
+    const dev = this.getSelectedDevice();
+    const box = this.container.querySelector("#details-value-box");
+    if (!box || !dev) return;
+
+    if (type === "hwid") {
+      box.innerHTML = `${dev.hardwareId}<br>${dev.hardwareId.split('&SUBSYS')[0]}`;
+    } else if (type === "desc") {
+      box.textContent = dev.name;
+    } else if (type === "status") {
+      box.textContent = dev.errorCode ? `${dev.errorCode} - Anomalie signalée par le pilote` : "0 (Fonctionnement optimal)";
+    }
+  }
+
+  rollbackDriver() {
+    const dev = this.getSelectedDevice();
+    if (!dev || !dev.canRollback) return;
+
+    if (!confirm("Voulez-vous vraiment restaurer la version précédente du pilote ?")) return;
+
+    dev.driverVersion = dev.previousVersion;
+    dev.driverDate = dev.previousDate;
+    dev.status = "normal";
+    dev.errorCode = null;
+    dev.errorMsg = "Ce périphérique fonctionne correctement.";
+    dev.canRollback = false;
+    dev.actionsLog.push("Restauration du pilote vers la version précédente réussie");
+
+    this.showToast("Pilote restauré ! Le GPU fonctionne à nouveau normalement.", "success");
+    this.checkMissions();
+    this.switchTab("general");
+    this.refreshTree();
+  }
+
+  openUpdateWizard() {
+    const dev = this.getSelectedDevice();
+    if (!dev) return;
+
+    const wizardContainer = this.container.querySelector("#win-wizard-container");
+    wizardContainer.innerHTML = `
+      <div class="win-modal-backdrop" onclick="if(event.target === this) winSimulator.closeWizard()">
+        <div class="win-prop-dialog max-w-lg">
+          <div class="win-dialog-header">
+            <span>Mise à jour des pilotes - ${dev.name}</span>
+            <button onclick="winSimulator.closeWizard()">✕</button>
+          </div>
+          <div class="win-dialog-body" id="wizard-body">
+            <div class="text-sm font-semibold mb-4 text-slate-800">Comment voulez-vous rechercher des pilotes ?</div>
+            
+            <div class="space-y-3">
+              <button class="win-btn w-full p-3 text-left flex items-start gap-3 hover:bg-blue-50 border-slate-300" onclick="winSimulator.startAutoDriverSearch()">
+                <div class="p-2 bg-blue-100 rounded text-blue-600 text-lg">🌐</div>
+                <div>
+                  <div class="font-bold text-slate-900 text-xs">Rechercher automatiquement les pilotes</div>
+                  <div class="text-[11px] text-slate-600">Windows recherche sur votre ordinateur et sur Windows Update le meilleur pilote disponible.</div>
+                </div>
+              </button>
+
+              <button class="win-btn w-full p-3 text-left flex items-start gap-3 hover:bg-blue-50 border-slate-300" onclick="winSimulator.startManualDriverInstall()">
+                <div class="p-2 bg-emerald-100 rounded text-emerald-600 text-lg">📁</div>
+                <div>
+                  <div class="font-bold text-slate-900 text-xs">Parcourir mon ordinateur à la recherche de pilotes</div>
+                  <div class="text-[11px] text-slate-600">Rechercher et installer manuellement un pilote (fichier .INF téléchargé auprès du fabricant).</div>
+                </div>
+              </button>
+            </div>
+          </div>
+          <div class="win-dialog-footer">
+            <button class="win-btn" onclick="winSimulator.closeWizard()">Annuler</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  startAutoDriverSearch() {
+    const wizardBody = this.container.querySelector("#wizard-body");
+    const dev = this.getSelectedDevice();
+
+    wizardBody.innerHTML = `
+      <div class="py-8 text-center space-y-4">
+        <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <div class="text-sm font-semibold text-slate-800">Recherche de pilotes en ligne...</div>
+        <div class="text-xs text-slate-500">Connexion au catalogue Microsoft Windows Update...</div>
+      </div>
+    `;
+
+    setTimeout(() => {
+      if (dev.id === "dev-unknown-pci") {
+        // Le pilote officiel est trouvé et installé !
+        dev.name = "Realtek RTL8125 2.5GbE Gaming Ethernet Family Controller";
+        dev.status = "normal";
+        dev.errorCode = null;
+        dev.errorMsg = "Ce périphérique fonctionne correctement.";
+        dev.manufacturer = "Realtek Semiconductor Corp.";
+        dev.driverVersion = "10.068.0815.2023";
+        dev.driverDate = "2023-08-15";
+        dev.signer = "Microsoft Windows Hardware Compatibility Publisher";
+
+        // Déplacer de 'Autres périphériques' vers 'Cartes réseau'
+        this.moveDeviceToCategory(dev.id, "cat-network");
+
+        wizardBody.innerHTML = `
+          <div class="py-6 text-center space-y-3">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+            <div class="text-sm font-bold text-slate-900">Windows a mis à jour vos pilotes avec succès</div>
+            <div class="text-xs text-slate-600">Windows a terminé l'installation des pilotes pour ce périphérique :<br><strong class="text-slate-800">${dev.name}</strong></div>
+            <div class="pt-4">
+              <button class="win-btn win-btn-primary" onclick="winSimulator.closeWizard(); winSimulator.refreshTree();">Fermer</button>
+            </div>
+          </div>
+        `;
+
+        this.showToast("Pilote installé avec succès ! Périphérique résolu.", "success");
+        this.checkMissions();
+      } else {
+        wizardBody.innerHTML = `
+          <div class="py-6 text-center space-y-3">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-xl">ℹ️</div>
+            <div class="text-sm font-bold text-slate-900">Les meilleurs pilotes pour votre appareil sont déjà installés</div>
+            <div class="text-xs text-slate-600">Windows a déterminé que le meilleur pilote pour cet appareil est déjà installé.</div>
+            <div class="pt-4">
+              <button class="win-btn win-btn-primary" onclick="winSimulator.closeWizard()">Fermer</button>
+            </div>
+          </div>
+        `;
+      }
+    }, 1500);
+  }
+
+  startManualDriverInstall() {
+    const wizardBody = this.container.querySelector("#wizard-body");
+    const dev = this.getSelectedDevice();
+
+    wizardBody.innerHTML = `
+      <div class="space-y-3 text-xs text-slate-800">
+        <div>Rechercher des pilotes dans cet emplacement :</div>
+        <div class="flex gap-2">
+          <input type="text" class="flex-1 p-1.5 border border-slate-300 rounded text-xs bg-white" value="C:\\Pilotes\\Realtek_RTL8125_Win11_INF" readonly>
+          <button class="win-btn">Parcourir...</button>
+        </div>
+        <div class="pt-2">
+          <label class="flex items-center gap-2">
+            <input type="checkbox" checked disabled>
+            <span>Inclure les sous-dossiers</span>
+          </label>
+        </div>
+        <div class="pt-4 flex justify-end">
+          <button class="win-btn win-btn-primary" onclick="winSimulator.startAutoDriverSearch()">Installer le pilote sélectionné</button>
+        </div>
+      </div>
+    `;
+  }
+
+  moveDeviceToCategory(devId, targetCatId) {
+    const dev = this.getDeviceById(devId);
+    if (!dev) return;
+
+    this.removeDeviceFromTree(devId);
+    const targetCat = this.devices.find(c => c.id === targetCatId);
+    if (targetCat) {
+      targetCat.children.push(dev);
+    }
+  }
+
+  closeModal() {
+    const modalContainer = this.container.querySelector("#win-modal-container");
+    if (modalContainer) modalContainer.innerHTML = "";
+  }
+
+  closeWizard() {
+    const wizardContainer = this.container.querySelector("#win-wizard-container");
+    if (wizardContainer) wizardContainer.innerHTML = "";
+  }
+
+  checkMissions() {
+    COURSE_DATA.winMissions.forEach((mission, idx) => {
+      const dev = this.getDeviceById(mission.deviceId);
+      if (dev && dev.status === mission.targetState) {
+        if (!this.missionsCompleted[idx]) {
+          this.missionsCompleted[idx] = true;
+          this.showToast(`🎉 Félicitations ! Vous avez réussi la ${mission.title}`, "success");
+        }
+      }
+    });
+
+    const badgesContainer = this.container.querySelector("#win-missions-badges");
+    if (badgesContainer) {
+      badgesContainer.innerHTML = this.renderMissionBadges();
+    }
+
+    const missionCard = this.container.querySelector("#win-mission-card");
+    if (missionCard) {
+      missionCard.innerHTML = this.renderActiveMission();
+    }
+  }
+
+  setMission(idx) {
+    this.activeMissionIndex = idx;
+    const mission = COURSE_DATA.winMissions[idx];
+    this.selectDevice(mission.deviceId);
+
+    const missionCard = this.container.querySelector("#win-mission-card");
+    if (missionCard) {
+      missionCard.innerHTML = this.renderActiveMission();
+    }
+    const badgesContainer = this.container.querySelector("#win-missions-badges");
+    if (badgesContainer) {
+      badgesContainer.innerHTML = this.renderMissionBadges();
+    }
+  }
+
+  showHint() {
+    const hintEl = this.container.querySelector("#win-mission-hint");
+    if (hintEl) {
+      hintEl.classList.toggle("hidden");
+    }
+  }
+
+  selectMissionDevice() {
+    const mission = COURSE_DATA.winMissions[this.activeMissionIndex];
+    this.selectDevice(mission.deviceId);
+    this.showToast(`Périphérique ciblé : ${mission.deviceId}`, "info");
+  }
+
+  refreshTree() {
+    const treeChildren = this.container.querySelector(".win-tree .tree-children");
+    if (treeChildren) {
+      treeChildren.innerHTML = this.renderTreeNodes(this.devices);
+    }
+    this.updateSelectionUI();
+    this.updateToolbarUI();
+  }
+
+  showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    let bg = "bg-slate-900 border-slate-700 text-white";
+    if (type === "success") bg = "bg-emerald-900 border-emerald-700 text-emerald-100";
+    if (type === "warning") bg = "bg-amber-900 border-amber-700 text-amber-100";
+
+    toast.className = `fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-2xl border ${bg} text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
+    toast.innerHTML = `<span>⚡</span><span>${message}</span>`;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.classList.remove("translate-y-2", "opacity-0");
+    });
+
+    setTimeout(() => {
+      toast.classList.add("translate-y-2", "opacity-0");
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+}
+
+    </script>
+    <script>
+// ==========================================================================
+// Simulateur Interactif : Terminal Linux Ubuntu (Commandes & Pilotes)
+// ==========================================================================
+
+class LinuxTerminalSimulator {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+    this.history = [];
+    this.historyIndex = -1;
+    this.state = {
+      wifiFirmwareInstalled: false,
+      wifiDriverLoaded: false,
+      nvidiaDriverInstalled: false,
+      nvidiaModuleLoaded: false,
+      audioModuleLoaded: true
+    };
+    this.activeScenarioIndex = 0;
+    this.scenariosCompleted = [false, false, false];
+
+    this.init();
+  }
+
+  init() {
+    this.render();
+    this.attachEvents();
+  }
+
+  render() {
+    if (!this.container) return;
+
+    this.container.innerHTML = `
+      <div class="mb-6 bg-slate-900 text-white p-5 rounded-2xl shadow-lg border border-slate-800">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-3 h-3 rounded-full bg-orange-500 animate-pulse"></span>
+              <span class="text-xs uppercase font-bold tracking-wider text-orange-400">Atelier Pratique Ubuntu 24.04 LTS</span>
+            </div>
+            <h3 class="text-xl font-bold mt-1">Console Interactive Linux : Diagnostic & Modules Noyau</h3>
+            <p class="text-sm text-slate-300 mt-1">Exécutez de vraies commandes CLI (<code>lspci</code>, <code>lsusb</code>, <code>dmesg</code>, <code>modprobe</code>) pour auditer le matériel.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-400 font-medium">Scénarios validés :</span>
+            <div class="flex gap-1.5" id="linux-badges">
+              ${this.renderBadges()}
+            </div>
+          </div>
+        </div>
+
+        <!-- Scénario guidé actif -->
+        <div class="mt-4 p-4 bg-slate-800/80 rounded-xl border border-slate-700/60" id="linux-scenario-card">
+          ${this.renderActiveScenario()}
+        </div>
+
+        <!-- Raccourcis de commandes suggérées -->
+        <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-medium">Commandes utiles :</span>
+          <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 font-mono transition" onclick="linuxTerminal.runQuickCmd('lspci -k')">lspci -k</button>
+          <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 font-mono transition" onclick="linuxTerminal.runQuickCmd('lsusb')">lsusb</button>
+          <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 font-mono transition" onclick="linuxTerminal.runQuickCmd('dmesg | grep -i firmware')">dmesg | grep -i firmware</button>
+          <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 font-mono transition" onclick="linuxTerminal.runQuickCmd('ubuntu-drivers devices')">ubuntu-drivers devices</button>
+          <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 font-mono transition" onclick="linuxTerminal.runQuickCmd('lsmod | grep snd')">lsmod | grep snd</button>
+          <button class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 font-mono transition" onclick="linuxTerminal.runQuickCmd('clear')">clear</button>
+        </div>
+      </div>
+
+      <!-- Fenêtre Terminal Ubuntu Replica -->
+      <div class="ubuntu-terminal">
+        <!-- Barre de titre Ubuntu -->
+        <div class="ubuntu-titlebar">
+          <div class="ubuntu-dots">
+            <span class="ubuntu-dot dot-red" title="Fermer"></span>
+            <span class="ubuntu-dot dot-yellow" title="Réduire"></span>
+            <span class="ubuntu-dot dot-green" title="Agrandir"></span>
+          </div>
+          <div class="text-xs text-slate-300 font-mono font-medium">etudiant@ubuntu-24: ~ (bash)</div>
+          <div class="w-12"></div>
+        </div>
+
+        <!-- Écran de terminal interactif -->
+        <div class="ubuntu-screen" id="term-screen" onclick="linuxTerminal.focusInput()">
+          <div class="term-out">
+            Bienvenue sur le simulateur de terminal <span class="text-orange-400 font-bold">Ubuntu 24.04 LTS (Noble Numbat)</span>.<br>
+            Noyau Linux version : <span class="text-cyan-300 font-mono">6.8.0-31-generic x86_64</span>.<br>
+            Tapez <span class="text-yellow-300 font-bold font-mono">help</span> pour afficher la liste des commandes supportées.
+          </div>
+          <div id="term-history"></div>
+          
+          <!-- Ligne de saisie active -->
+          <div class="term-input-line">
+            <span class="prompt-user">etudiant</span><span class="prompt-at">@</span><span class="prompt-host">ubuntu-24</span><span class="prompt-char">:</span><span class="prompt-path">~</span><span class="prompt-char">$</span>
+            <input type="text" id="term-cmd-input" class="term-input" autocomplete="off" spellcheck="false" autofocus>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.focusInput();
+  }
+
+  renderBadges() {
+    return COURSE_DATA.linuxScenarios.map((s, idx) => {
+      const isDone = this.scenariosCompleted[idx];
+      const isCurrent = this.activeScenarioIndex === idx;
+      return `
+        <button 
+          class="w-7 h-7 rounded-full text-xs font-bold transition flex items-center justify-center 
+            ${isDone ? 'bg-emerald-500 text-white' : (isCurrent ? 'bg-orange-600 text-white ring-2 ring-orange-300' : 'bg-slate-700 text-slate-300 hover:bg-slate-600')}"
+          onclick="linuxTerminal.setScenario(${idx})"
+          title="${s.title}">
+          ${isDone ? '✓' : (idx + 1)}
+        </button>
+      `;
+    }).join("");
+  }
+
+  renderActiveScenario() {
+    const scen = COURSE_DATA.linuxScenarios[this.activeScenarioIndex];
+    const isDone = this.scenariosCompleted[this.activeScenarioIndex];
+
+    return `
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="badge ${isDone ? 'badge-green' : 'badge-orange'}">
+              ${isDone ? '✓ Défi réussi' : `Scénario ${this.activeScenarioIndex + 1}`}
+            </span>
+            <h4 class="font-bold text-white text-base">${scen.title}</h4>
+          </div>
+          <p class="text-xs text-slate-300 mt-1">${scen.goal}</p>
+        </div>
+        <div class="shrink-0">
+          <span class="text-xs text-orange-200 bg-orange-950/60 border border-orange-800/80 px-3 py-1.5 rounded-lg inline-block font-mono">
+            💡 ${scen.instructions}
+          </span>
+        </div>
+      </div>
+    `;
+  }
+
+  setScenario(idx) {
+    this.activeScenarioIndex = idx;
+    const card = this.container.querySelector("#linux-scenario-card");
+    if (card) card.innerHTML = this.renderActiveScenario();
+    const badges = this.container.querySelector("#linux-badges");
+    if (badges) badges.innerHTML = this.renderBadges();
+  }
+
+  focusInput() {
+    const input = this.container.querySelector("#term-cmd-input");
+    if (input) input.focus();
+  }
+
+  attachEvents() {
+    const input = this.container.querySelector("#term-cmd-input");
+    if (!input) return;
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const cmd = input.value.trim();
+        if (cmd) {
+          this.executeCommand(cmd);
+          this.history.push(cmd);
+          this.historyIndex = this.history.length;
+          input.value = "";
+        }
+      } else if (e.key === "ArrowUp") {
+        if (this.historyIndex > 0) {
+          this.historyIndex--;
+          input.value = this.history[this.historyIndex] || "";
+        }
+        e.preventDefault();
+      } else if (e.key === "ArrowDown") {
+        if (this.historyIndex < this.history.length - 1) {
+          this.historyIndex++;
+          input.value = this.history[this.historyIndex] || "";
+        } else {
+          this.historyIndex = this.history.length;
+          input.value = "";
+        }
+        e.preventDefault();
+      }
+    });
+  }
+
+  runQuickCmd(cmd) {
+    const input = this.container.querySelector("#term-cmd-input");
+    if (input) {
+      input.value = cmd;
+      this.executeCommand(cmd);
+      this.history.push(cmd);
+      this.historyIndex = this.history.length;
+      input.value = "";
+    }
+  }
+
+  executeCommand(rawCmd) {
+    const termHistory = this.container.querySelector("#term-history");
+    const cmdClean = rawCmd.trim();
+    const cmdLower = cmdClean.toLowerCase();
+
+    // Ajouter la ligne saisie
+    const lineElem = document.createElement("div");
+    lineElem.innerHTML = `
+      <div class="flex items-center gap-1 mt-2">
+        <span class="prompt-user">etudiant</span><span class="prompt-at">@</span><span class="prompt-host">ubuntu-24</span><span class="prompt-char">:</span><span class="prompt-path">~</span><span class="prompt-char">$</span>
+        <span class="term-cmd">${this.escapeHtml(cmdClean)}</span>
+      </div>
+    `;
+    termHistory.appendChild(lineElem);
+
+    if (cmdLower === "clear") {
+      termHistory.innerHTML = "";
+      this.scrollToBottom();
+      return;
+    }
+
+    let outHtml = "";
+
+    // Commandes reconnues
+    if (cmdLower === "help") {
+      outHtml = `
+        <div class="term-out text-yellow-200">
+          Commandes de diagnostic et gestion disponibles :<br>
+          - <span class="text-cyan-300 font-bold">lspci</span> / <span class="text-cyan-300 font-bold">lspci -k</span> / <span class="text-cyan-300 font-bold">lspci -nnk</span> : Lister le matériel PCI et modules noyau<br>
+          - <span class="text-cyan-300 font-bold">lsusb</span> / <span class="text-cyan-300 font-bold">lsusb -t</span> : Lister les périphériques USB<br>
+          - <span class="text-cyan-300 font-bold">dmesg | grep -i [mot]</span> : Consulter le journal du noyau (wifi, firmware, error...)<br>
+          - <span class="text-cyan-300 font-bold">lsmod</span> : Lister les modules noyau chargés en RAM<br>
+          - <span class="text-cyan-300 font-bold">sudo modprobe [module]</span> : Charger un module du noyau<br>
+          - <span class="text-cyan-300 font-bold">sudo modprobe -r [module]</span> : Décharger un module du noyau<br>
+          - <span class="text-cyan-300 font-bold">ubuntu-drivers devices</span> : Lister les pilotes recommandés par Ubuntu<br>
+          - <span class="text-cyan-300 font-bold">sudo apt install [paquet]</span> : Installer un paquet ou pilote (nvidia-driver-535, firmware-realtek)<br>
+          - <span class="text-cyan-300 font-bold">uname -r</span> : Afficher la version du noyau actif<br>
+          - <span class="text-cyan-300 font-bold">clear</span> : Effacer l'écran
+        </div>
+      `;
+    } else if (cmdLower.startsWith("lspci")) {
+      outHtml = `
+        <div class="term-out font-mono">
+          00:00.0 Host bridge: Intel Corporation 12th Gen Core Processor Host Bridge/DRAM Registers (rev 02)<br>
+          00:01.0 PCI bridge: Intel Corporation 12th Gen Core Processor PCI Express x16 Controller (rev 02)<br>
+          01:00.0 <span class="term-out-pci font-bold">VGA compatible controller: NVIDIA Corporation GA106 [GeForce RTX 3060] (rev a1)</span><br>
+          ${this.state.nvidiaDriverInstalled ? `&nbsp;&nbsp;&nbsp;&nbsp;Kernel driver in use: <span class="text-emerald-400 font-bold">nvidia</span><br>&nbsp;&nbsp;&nbsp;&nbsp;Kernel modules: nvidiafb, nouveau, nvidia_drm, nvidia` : `&nbsp;&nbsp;&nbsp;&nbsp;Kernel driver in use: <span class="text-yellow-400 font-bold">nouveau</span> (Pilote open-source libre standard)<br>&nbsp;&nbsp;&nbsp;&nbsp;Kernel modules: nouveau`}
+          <br>
+          02:00.0 <span class="term-out-pci font-bold">Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8125 2.5GbE Controller (rev 05)</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;Kernel driver in use: <span class="text-emerald-400 font-bold">r8169</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;Kernel modules: r8169
+          <br>
+          03:00.0 <span class="term-out-pci font-bold">Network controller: Realtek Semiconductor Co., Ltd. RTL8821CE 802.11ac PCIe Wireless Adapter</span><br>
+          ${this.state.wifiFirmwareInstalled ? `&nbsp;&nbsp;&nbsp;&nbsp;Kernel driver in use: <span class="text-emerald-400 font-bold">rtw88_8821ce</span><br>&nbsp;&nbsp;&nbsp;&nbsp;Kernel modules: rtw88_8821ce` : `&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-red-400 font-bold">[!] Aucun module en cours d'utilisation (Kernel driver in use manquant)</span><br>&nbsp;&nbsp;&nbsp;&nbsp;Kernel modules: rtw88_8821ce`}
+          <br>
+          00:1f.3 <span class="term-out-pci font-bold">Audio device: Intel Corporation Alder Lake-S HD Audio Controller (rev 11)</span><br>
+          ${this.state.audioModuleLoaded ? `&nbsp;&nbsp;&nbsp;&nbsp;Kernel driver in use: <span class="text-emerald-400 font-bold">snd_hda_intel</span><br>&nbsp;&nbsp;&nbsp;&nbsp;Kernel modules: snd_hda_intel` : `&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-yellow-400 font-bold">[Module déchargé manuellement]</span>`}
+        </div>
+      `;
+    } else if (cmdLower.startsWith("lsusb")) {
+      outHtml = `
+        <div class="term-out font-mono">
+          Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub<br>
+          Bus 001 Device 002: ID 046d:c077 Logitech, Inc. M105 Optical Mouse<br>
+          Bus 001 Device 003: ID 04f2:0833 Chicony Electronics Co., Ltd USB Keyboard<br>
+          Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub<br>
+          Bus 002 Device 002: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+        </div>
+      `;
+    } else if (cmdLower.includes("dmesg")) {
+      if (cmdLower.includes("wifi") || cmdLower.includes("firmware") || cmdLower.includes("rtw")) {
+        if (!this.state.wifiFirmwareInstalled) {
+          outHtml = `
+            <div class="term-out font-mono">
+              [    3.142010] rtw88_8821ce 0000:03:00.0: Firmware rtl8821ce_fw.bin requested<br>
+              <span class="text-red-400 font-bold">[    3.150114] rtw88_8821ce 0000:03:00.0: Direct firmware load for rtw88/rtw8821c_fw.bin failed with error -2</span><br>
+              <span class="text-yellow-400">[    3.150120] rtw88_8821ce 0000:03:00.0: failed to load firmware, interface wlan0 disabled</span><br>
+              <span class="text-cyan-300">💡 Diagnostic : Le fichier de firmware est manquant dans /lib/firmware/rtw88/. Installez le paquet 'firmware-realtek'.</span>
+            </div>
+          `;
+        } else {
+          outHtml = `
+            <div class="term-out font-mono text-emerald-400">
+              [    3.142010] rtw88_8821ce 0000:03:00.0: Firmware rtw88/rtw8821c_fw.bin loaded successfully (version 24.8.0)<br>
+              [    3.155420] rtw88_8821ce 0000:03:00.0 wlan0: renamed from wlan0 to wlp3s0<br>
+              [    3.160100] IPv6: ADDRCONF(NETDEV_CHANGE): wlp3s0: link becomes ready
+            </div>
+          `;
+        }
+      } else {
+        outHtml = `
+          <div class="term-out font-mono text-slate-300">
+            [    0.000000] Linux version 6.8.0-31-generic (buildd@lcy02-amd64-073) (x86_64)<br>
+            [    1.240100] ACPI: Core revision 20230628<br>
+            [    2.102300] pci 0000:01:00.0: [10de:2504] type 00 class 0x030000<br>
+            [    2.801040] systemd[1]: Detected architecture x86-64.
+          </div>
+        `;
+      }
+    } else if (cmdLower.includes("ubuntu-drivers")) {
+      outHtml = `
+        <div class="term-out font-mono">
+          == /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==<br>
+          modalias : pci:v000010DEd00002504sv00001043sd00008818bc03sc00i00<br>
+          vendor   : NVIDIA Corporation<br>
+          model    : GA106 [GeForce RTX 3060]<br>
+          driver   : <span class="text-yellow-400 font-bold">nvidia-driver-535 - distro non-free recommended</span><br>
+          driver   : nvidia-driver-550 - distro non-free<br>
+          driver   : xserver-xorg-video-nouveau - distro free builtin
+        </div>
+      `;
+    } else if (cmdLower.startsWith("sudo apt install") || cmdLower.startsWith("apt install")) {
+      if (cmdLower.includes("firmware-realtek") || cmdLower.includes("linux-firmware")) {
+        this.state.wifiFirmwareInstalled = true;
+        this.state.wifiDriverLoaded = true;
+        outHtml = `
+          <div class="term-out font-mono">
+            Lecture des listes de paquets... Fait<br>
+            Construction de l'arbre des dépendances... Fait<br>
+            Les paquets suivants seront installés : <span class="text-cyan-300">firmware-realtek</span><br>
+            Dépaquetage de firmware-realtek (20240310)...<br>
+            Configuration de firmware-realtek...<br>
+            update-initramfs: Generating /boot/initrd.img-6.8.0-31-generic<br>
+            <span class="text-emerald-400 font-bold">Installation terminée avec succès ! Le firmware Wi-Fi RTL8821CE est prêt.</span>
+          </div>
+        `;
+        this.checkLinuxScenario(0);
+      } else if (cmdLower.includes("nvidia-driver-535") || cmdLower.includes("nvidia-driver")) {
+        this.state.nvidiaDriverInstalled = true;
+        this.state.nvidiaModuleLoaded = true;
+        outHtml = `
+          <div class="term-out font-mono">
+            Lecture des listes de paquets... Fait<br>
+            Installation de : <span class="text-cyan-300">nvidia-driver-535 (535.161.07-0ubuntu1)</span><br>
+            Building initial module for 6.8.0-31-generic via DKMS...<br>
+            <span class="text-emerald-400 font-bold">DKMS make.log: Module build completed for nvidia.ko.</span><br>
+            Signing module with machine owner key (MOK)...<br>
+            <span class="text-emerald-400 font-bold">Pilote propriétaire NVIDIA activé avec succès !</span>
+          </div>
+        `;
+        this.checkLinuxScenario(1);
+      } else {
+        outHtml = `<div class="term-out text-yellow-300">apt: Paquet simulé non critique. Essayez 'sudo apt install nvidia-driver-535' ou 'sudo apt install firmware-realtek'.</div>`;
+      }
+    } else if (cmdLower.startsWith("sudo modprobe -r") || cmdLower.startsWith("modprobe -r")) {
+      if (cmdLower.includes("snd_hda_intel")) {
+        this.state.audioModuleLoaded = false;
+        outHtml = `<div class="term-out text-yellow-300 font-mono">Module 'snd_hda_intel' déchargé de la mémoire noyau avec succès. Le son est coupé.</div>`;
+      } else {
+        outHtml = `<div class="term-out font-mono">Module déchargé.</div>`;
+      }
+    } else if (cmdLower.startsWith("sudo modprobe") || cmdLower.startsWith("modprobe")) {
+      if (cmdLower.includes("snd_hda_intel")) {
+        this.state.audioModuleLoaded = true;
+        outHtml = `<div class="term-out text-emerald-400 font-mono">Module 'snd_hda_intel' rechargé avec succès ! Contrôleur son réinitialisé sans redémarrer le système.</div>`;
+        this.checkLinuxScenario(2);
+      } else {
+        outHtml = `<div class="term-out font-mono text-emerald-400">Module chargé avec ses dépendances.</div>`;
+      }
+    } else if (cmdLower.startsWith("lsmod")) {
+      if (cmdLower.includes("snd")) {
+        outHtml = `
+          <div class="term-out font-mono">
+            Module&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Size&nbsp;&nbsp;Used by<br>
+            ${this.state.audioModuleLoaded ? `snd_hda_intel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;57344&nbsp;&nbsp;4<br>snd_intel_dspcfg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;36864&nbsp;&nbsp;1 snd_hda_intel<br>snd_hda_codec&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;176128&nbsp;&nbsp;2 snd_hda_intel,snd_hda_codec_realtek` : `<span class="text-slate-500">(Aucun module snd_hda_intel actif en mémoire)</span>`}
+          </div>
+        `;
+      } else if (cmdLower.includes("nvidia")) {
+        outHtml = `
+          <div class="term-out font-mono">
+            Module&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Size&nbsp;&nbsp;Used by<br>
+            ${this.state.nvidiaDriverInstalled ? `nvidia_drm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;90112&nbsp;&nbsp;6<br>nvidia_modeset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1556480&nbsp;&nbsp;3 nvidia_drm<br>nvidia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;56844288&nbsp;&nbsp;138 nvidia_modeset` : `<span class="text-slate-500">(Pilote propriétaire NVIDIA non chargé, nouveau actif)</span>`}
+          </div>
+        `;
+      } else {
+        outHtml = `
+          <div class="term-out font-mono">
+            Module&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Size&nbsp;&nbsp;Used by<br>
+            r8169&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;106496&nbsp;&nbsp;0<br>
+            ${this.state.wifiDriverLoaded ? `rtw88_8821ce&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;32768&nbsp;&nbsp;0<br>` : ``}
+            snd_hda_intel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;57344&nbsp;&nbsp;4<br>
+            usbhid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;69632&nbsp;&nbsp;0
+          </div>
+        `;
+      }
+    } else if (cmdLower === "uname -r") {
+      outHtml = `<div class="term-out font-mono text-cyan-300">6.8.0-31-generic</div>`;
+    } else {
+      outHtml = `<div class="term-out text-red-400 font-mono">bash: ${this.escapeHtml(cmdClean)}: commande introuvable. Tapez <span class="text-yellow-300 font-bold">help</span> pour les commandes autorisées.</div>`;
+    }
+
+    const outElem = document.createElement("div");
+    outElem.innerHTML = outHtml;
+    termHistory.appendChild(outElem);
+
+    this.scrollToBottom();
+  }
+
+  checkLinuxScenario(index) {
+    if (!this.scenariosCompleted[index]) {
+      this.scenariosCompleted[index] = true;
+      const scen = COURSE_DATA.linuxScenarios[index];
+      this.showToast(`🎉 Défi Linux validé : ${scen.title}`, "success");
+
+      const badges = this.container.querySelector("#linux-badges");
+      if (badges) badges.innerHTML = this.renderBadges();
+      const card = this.container.querySelector("#linux-scenario-card");
+      if (card) card.innerHTML = this.renderActiveScenario();
+    }
+  }
+
+  scrollToBottom() {
+    const screen = this.container.querySelector("#term-screen");
+    if (screen) {
+      screen.scrollTop = screen.scrollHeight;
+    }
+  }
+
+  escapeHtml(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  showToast(message, type = "info") {
+    const toast = document.createElement("div");
+    let bg = "bg-slate-900 border-slate-700 text-white";
+    if (type === "success") bg = "bg-emerald-900 border-emerald-700 text-emerald-100";
+
+    toast.className = `fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-2xl border ${bg} text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
+    toast.innerHTML = `<span>🐧</span><span>${message}</span>`;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.classList.remove("translate-y-2", "opacity-0");
+    });
+
+    setTimeout(() => {
+      toast.classList.add("translate-y-2", "opacity-0");
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+}
+
+    </script>
+    <script>
+// ==========================================================================
+// Moteur de Diagnostic Interactif & Explorateur des Icônes / Codes Erreurs
+// ==========================================================================
+
+class DiagnosticEngine {
+  constructor() {
+    this.activeIconId = "warning-triangle";
+    this.selectedSymptom = "symp-yellow";
+    this.currentStep = 1;
+    this.init();
+  }
+
+  init() {
+    this.renderIconsGallery();
+    this.renderErrorCodesTable();
+    this.renderDiagnosticTree();
+  }
+
+  // --- Galerie Interactive des Icônes ---
+  renderIconsGallery() {
+    const container = document.getElementById("icons-gallery-container");
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-6">
+        ${COURSE_DATA.deviceIcons.map(icon => `
+          <div 
+            class="icon-visual-card text-center ${icon.id === this.activeIconId ? 'active' : ''}" 
+            onclick="diagEngine.selectIcon('${icon.id}')">
+            <div class="mx-auto my-2 flex items-center justify-center h-16">
+              ${icon.svgIcon}
+            </div>
+            <div class="font-bold text-xs text-slate-800 line-clamp-1">${icon.name.split('(')[0]}</div>
+            <div class="mt-1">
+              <span class="badge ${icon.badgeColor} text-[10px]">${icon.id === 'normal' ? 'Normal' : 'Alerte'}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Fiche détaillée de l'icône active -->
+      <div id="icon-detail-panel" class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+        ${this.renderActiveIconDetail()}
+      </div>
+    `;
+  }
+
+  selectIcon(iconId) {
+    this.activeIconId = iconId;
+    const cards = document.querySelectorAll(".icon-visual-card");
+    cards.forEach(c => c.classList.remove("active"));
+    const selectedCard = Array.from(cards).find(c => c.innerHTML.includes(iconId) || c.getAttribute("onclick").includes(iconId));
+    if (selectedCard) selectedCard.classList.add("active");
+
+    const detailPanel = document.getElementById("icon-detail-panel");
+    if (detailPanel) {
+      detailPanel.innerHTML = this.renderActiveIconDetail();
+    }
+  }
+
+  renderActiveIconDetail() {
+    const icon = COURSE_DATA.deviceIcons.find(i => i.id === this.activeIconId) || COURSE_DATA.deviceIcons[1];
+
+    return `
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl shrink-0 flex items-center justify-center w-24 h-24">
+          ${icon.svgIcon}
+        </div>
+        <div class="flex-1 space-y-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <h4 class="text-xl font-bold text-slate-900">${icon.name}</h4>
+            <span class="badge ${icon.badgeColor}">${icon.statusText}</span>
+          </div>
+          <p class="text-xs text-slate-500 font-mono">Apparence visuelle : ${icon.symbolDescription}</p>
+          <div class="p-3 bg-slate-50 rounded-lg text-sm text-slate-700">
+            <strong>Signification système :</strong> ${icon.meaning}
+          </div>
+          <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-900">
+            <strong>Démarche de résolution recommandée :</strong> ${icon.actionNeeded}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // --- Dictionnaire Interactif des Codes d'Erreur ---
+  renderErrorCodesTable(filterQuery = "", severityFilter = "all") {
+    const container = document.getElementById("error-codes-container");
+    if (!container) return;
+
+    let filtered = COURSE_DATA.errorCodes;
+
+    if (filterQuery) {
+      const q = filterQuery.toLowerCase();
+      filtered = filtered.filter(item => 
+        item.code.toLowerCase().includes(q) || 
+        item.title.toLowerCase().includes(q) || 
+        item.cause.toLowerCase().includes(q) ||
+        item.solution.toLowerCase().includes(q)
+      );
+    }
+
+    if (severityFilter !== "all") {
+      filtered = filtered.filter(item => item.severity.toLowerCase().includes(severityFilter.toLowerCase()));
+    }
+
+    container.innerHTML = `
+      <div class="mb-4 flex flex-col sm:flex-row gap-3 justify-between items-center">
+        <div class="relative w-full sm:w-80">
+          <input 
+            type="text" 
+            id="error-code-search-input"
+            class="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            placeholder="Rechercher (ex: Code 28, Code 43, registre...)"
+            value="${this.escapeHtml(filterQuery)}"
+            oninput="diagEngine.handleErrorCodeSearch(this.value)">
+          <span class="absolute left-3 top-2.5 text-slate-400">🔍</span>
+        </div>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <span class="text-xs text-slate-500">Gravité :</span>
+          <select 
+            id="error-severity-select"
+            class="p-2 bg-white border border-slate-300 rounded-lg text-xs" 
+            onchange="diagEngine.handleSeverityFilter(this.value)">
+            <option value="all" ${severityFilter === 'all' ? 'selected' : ''}>Tous les codes (${COURSE_DATA.errorCodes.length})</option>
+            <option value="Très fréquent" ${severityFilter === 'Très fréquent' ? 'selected' : ''}>Très fréquents</option>
+            <option value="Élevée" ${severityFilter === 'Élevée' ? 'selected' : ''}>Gravité Élevée</option>
+            <option value="Moyenne" ${severityFilter === 'Moyenne' ? 'selected' : ''}>Gravité Moyenne</option>
+            <option value="Faible" ${severityFilter === 'Faible' ? 'selected' : ''}>Gravité Faible</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${filtered.length > 0 ? filtered.map(err => `
+          <div class="course-card border-slate-200 hover:border-blue-400 transition">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <span class="px-2.5 py-1 bg-slate-900 text-white font-mono font-bold rounded text-xs">${err.code}</span>
+              <span class="badge ${err.badge}">${err.severity}</span>
+            </div>
+            <h5 class="font-bold text-slate-900 text-sm mb-2">${err.title}</h5>
+            
+            <div class="text-xs text-slate-600 mb-2">
+              <strong class="text-slate-800">Cause racine :</strong> ${err.cause}
+            </div>
+
+            <div class="p-2.5 bg-blue-50/70 border border-blue-100 rounded text-xs text-blue-950 mb-2">
+              <strong class="text-blue-900">Procédure de résolution :</strong><br>
+              <div class="mt-1 leading-relaxed">${err.solution}</div>
+            </div>
+
+            <div class="text-[11px] text-slate-500 italic">
+              💡 ${err.tip}
+            </div>
+          </div>
+        `).join('') : `
+          <div class="col-span-2 p-8 text-center bg-white rounded-xl border border-slate-200 text-slate-500">
+            Aucun code d'erreur ne correspond à votre recherche. Essayez un autre mot-clé (ex: "Code 28", "signature", "ressources").
+          </div>
+        `}
+      </div>
+    `;
+  }
+
+  handleErrorCodeSearch(val) {
+    const select = document.getElementById("error-severity-select");
+    const severity = select ? select.value : "all";
+    this.renderErrorCodesTable(val, severity);
+  }
+
+  handleSeverityFilter(val) {
+    const input = document.getElementById("error-code-search-input");
+    const query = input ? input.value : "";
+    this.renderErrorCodesTable(query, val);
+  }
+
+  // --- Arbre Décisionnel Interactif (Workflow de Diagnostic) ---
+  renderDiagnosticTree() {
+    const container = document.getElementById("diagnostic-tree-container");
+    if (!container) return;
+
+    const symptoms = [
+      { id: "symp-yellow", label: "Triangle Jaune ! (Code 28 / 10 / 43)", icon: "⚠️" },
+      { id: "symp-disabled", label: "Flèche vers le bas ⬇️ (Code 22 - Désactivé)", icon: "⬇️" },
+      { id: "symp-usb", label: "Périphérique USB totalement invisible", icon: "🔌" },
+      { id: "symp-bsod", label: "Écran Bleu (BSOD) ou crashs GPU", icon: "💻" },
+      { id: "symp-linux", label: "Wi-Fi ou matériel non détecté sous Ubuntu", icon: "🐧" }
+    ];
+
+    container.innerHTML = `
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="mb-4">
+          <label class="block text-xs uppercase font-bold tracking-wider text-slate-500 mb-2">
+            1. Choisissez le symptôme constaté sur la machine :
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+            ${symptoms.map(s => `
+              <button 
+                class="p-3 text-left rounded-xl border text-xs font-semibold flex items-center gap-3 transition ${this.selectedSymptom === s.id ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'}"
+                onclick="diagEngine.selectSymptom('${s.id}')">
+                <span class="text-base">${s.icon}</span>
+                <span>${s.label}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="mt-6 border-t border-slate-200 pt-6" id="symptom-stepper-content">
+          ${this.renderSymptomSteps()}
+        </div>
+      </div>
+    `;
+  }
+
+  selectSymptom(sympId) {
+    this.selectedSymptom = sympId;
+    this.currentStep = 1;
+    this.renderDiagnosticTree();
+  }
+
+  renderSymptomSteps() {
+    if (this.selectedSymptom === "symp-yellow") {
+      return `
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <span>⚠️</span> Démarche pas-à-pas : Triangle jaune / Pilote manquant
+            </h4>
+            <span class="badge badge-yellow">Code 28 / Code 10 / Code 43</span>
+          </div>
+
+          <div class="space-y-4">
+            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-blue-600">
+              <div class="font-bold text-slate-900 text-sm mb-1">Étape 1 : Relever le Code d'erreur exact</div>
+              <p class="text-xs text-slate-600">Double-cliquez sur la ligne en anomalie dans <code>devmgmt.msc</code>. Consultez le paragraphe "État du périphérique" dans l'onglet <strong>Général</strong> pour identifier le numéro de code.</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-indigo-600">
+              <div class="font-bold text-slate-900 text-sm mb-1">Étape 2 : Extraire l'ID matériel (Hardware ID)</div>
+              <p class="text-xs text-slate-600">Dans l'onglet <strong>Détails</strong>, déroulez le menu et choisissez <em>"Numéros d'identification du matériel"</em>. Notez la première ligne commençant par <code>PCI\\VEN_xxxx&DEV_yyyy</code> ou <code>USB\\VID_xxxx&PID_yyyy</code>.</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-emerald-600">
+              <div class="font-bold text-slate-900 text-sm mb-1">Étape 3 : Identifier le fabricant et télécharger le pilote officiel</div>
+              <p class="text-xs text-slate-600">Recherchez les codes VEN/DEV sur <code>pci-ids.ucw.cz</code> ou sur le site de support officiel de votre constructeur (Dell, HP, Lenovo, ASUS). Téléchargez le package compatible Windows 11 64-bit.</p>
+            </div>
+
+            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-amber-600">
+              <div class="font-bold text-slate-900 text-sm mb-1">Étape 4 : Installation et vérification</div>
+              <p class="text-xs text-slate-600">Installez l'exécutable ou faites <em>"Mettre à jour le pilote > Parcourir mon ordinateur"</em> pour pointer vers le fichier <code>.inf</code>. Redémarrez l'ordinateur. Le triangle jaune doit disparaître.</p>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (this.selectedSymptom === "symp-disabled") {
+      return `
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <span>⬇️</span> Démarche pas-à-pas : Périphérique désactivé
+            </h4>
+            <span class="badge badge-gray">Code 22</span>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-blue-600 mb-3">
+            <div class="font-bold text-slate-900 text-sm mb-1">Étape 1 : Diagnostic rapide</div>
+            <p class="text-xs text-slate-600">La flèche noire vers le bas signifie qu'aucune panne matérielle n'est présente. Le périphérique est simplement éteint logiquement.</p>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-emerald-600">
+            <div class="font-bold text-slate-900 text-sm mb-1">Étape 2 : Réactivation immédiate</div>
+            <p class="text-xs text-slate-600">Faites un clic droit sur le composant dans le Gestionnaire de périphériques, puis cliquez sur <strong>"Activer l'appareil"</strong>. Le composant est immédiatement remis sous tension sans redémarrage.</p>
+          </div>
+        </div>
+      `;
+    } else if (this.selectedSymptom === "symp-usb") {
+      return `
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <span>🔌</span> Démarche pas-à-pas : Périphérique USB totalement invisible
+            </h4>
+            <span class="badge badge-red">Panne de bus / Alimentation</span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-blue-600 text-xs">
+              <strong>1. Test matériel physique :</strong> Branchez l'appareil sur un port USB situé directement à l'arrière de la carte mère (évitez les hubs USB passifs non alimentés).
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-indigo-600 text-xs">
+              <strong>2. Vérification sous Gestion des disques :</strong> Si c'est une clé USB ou un disque externe, ouvrez <code>diskmgmt.msc</code>. Le disque est peut-être détecté mais sans lettre de lecteur assignée.
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-emerald-600 text-xs">
+              <strong>3. Réinitialiser les contrôleurs USB :</strong> Dans le Gestionnaire, déroulez "Contrôleurs de bus USB", désinstallez le "Contrôleur hôte extensible USB", puis cliquez sur "Rechercher les modifications sur le matériel".
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (this.selectedSymptom === "symp-bsod") {
+      return `
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <span>💻</span> Démarche pas-à-pas : Crashs, Écran Bleu (BSOD) ou Pilote Graphique instable
+            </h4>
+            <span class="badge badge-red">Crash Noyau / Driver Failure</span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-amber-600 text-xs">
+              <strong>1. Rollback immédiat :</strong> Ouvrez les Propriétés de la carte graphique > Onglet "Pilote" > Cliquez sur <strong>"Restaurer le pilote"</strong> (Rollback) pour revenir à la version stable précédente.
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-indigo-600 text-xs">
+              <strong>2. Nettoyage complet avec DDU (Display Driver Uninstaller) :</strong> Démarrez Windows en Mode sans échec, exécutez DDU pour supprimer 100% des fichiers et clés de registre résiduelles NVIDIA/AMD/Intel.
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-emerald-600 text-xs">
+              <strong>3. Réinstallation propre :</strong> Téléchargez le pilote certifié WHQL sur le site officiel NVIDIA ou AMD et cochez l'option "Effectuer une nouvelle installation".
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (this.selectedSymptom === "symp-linux") {
+      return `
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+              <span>🐧</span> Démarche pas-à-pas sous Linux Ubuntu
+            </h4>
+            <span class="badge badge-orange">Module noyau manquant / Firmware</span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-orange-600 text-xs">
+              <strong>1. Identifier la puce :</strong> Tapez <code>lspci -nnk</code> (pour PCIe) ou <code>lsusb</code> (pour USB). Repérez la ligne de la carte et regardez si <code>Kernel driver in use</code> est présent.
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-purple-600 text-xs">
+              <strong>2. Vérifier les erreurs noyau :</strong> Tapez <code>dmesg | grep -iE "firmware|error|wifi"</code>. Si une ligne indique <em>"Direct firmware load failed"</em>, le microprogramme binaire est manquant.
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-emerald-600 text-xs">
+              <strong>3. Installer les pilotes propriétaires :</strong> Exécutez <code>ubuntu-drivers devices</code> puis <code>sudo ubuntu-drivers autoinstall</code> ou installez le paquet <code>linux-firmware</code>.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+}
+
+    </script>
+    <script>
+// ==========================================================================
+// Moteur de Quiz & Évaluation Pédagogique Interactive
+// ==========================================================================
+
+class QuizEngine {
+  constructor(containerId) {
+    this.container = document.getElementById(containerId);
+    this.questions = COURSE_DATA.quizQuestions;
+    this.currentIndex = 0;
+    this.score = 0;
+    this.userAnswers = {};
+    this.isCompleted = false;
+
+    this.init();
+  }
+
+  init() {
+    this.render();
+  }
+
+  render() {
+    if (!this.container) return;
+
+    if (this.isCompleted) {
+      this.renderResults();
+      return;
+    }
+
+    const q = this.questions[this.currentIndex];
+    const isAnswered = this.userAnswers[q.id] !== undefined;
+    const selectedAnswer = this.userAnswers[q.id];
+
+    this.container.innerHTML = `
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
+        <!-- Barre de progression -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center text-xs text-slate-500 font-semibold mb-2">
+            <span>QUESTION ${this.currentIndex + 1} SUR ${this.questions.length}</span>
+            <span>Score actuel : ${this.score} / ${this.questions.length}</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: ${((this.currentIndex + 1) / this.questions.length) * 100}%;"></div>
+          </div>
+        </div>
+
+        <!-- Énoncé de la question -->
+        <div class="mb-6">
+          <h4 class="text-lg md:text-xl font-bold text-slate-900 leading-snug">
+            ${q.question}
+          </h4>
+        </div>
+
+        <!-- Options de réponse -->
+        <div class="space-y-3 mb-6">
+          ${q.options.map((opt, idx) => {
+            let optionClass = "bg-slate-50 border-slate-200 text-slate-800 hover:bg-slate-100 hover:border-slate-300";
+            let indicator = `<span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center font-mono text-xs font-semibold text-slate-600 shrink-0">${String.fromCharCode(65 + idx)}</span>`;
+
+            if (isAnswered) {
+              if (idx === q.correctIndex) {
+                optionClass = "bg-emerald-50 border-emerald-500 text-emerald-900 ring-2 ring-emerald-200 font-semibold";
+                indicator = `<span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">✓</span>`;
+              } else if (idx === selectedAnswer) {
+                optionClass = "bg-red-50 border-red-500 text-red-900 ring-2 ring-red-200";
+                indicator = `<span class="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-xs shrink-0">✕</span>`;
+              } else {
+                optionClass = "opacity-50 bg-slate-50 border-slate-200 text-slate-500";
+              }
+            }
+
+            return `
+              <button 
+                class="w-full text-left p-4 rounded-xl border transition flex items-center gap-3 text-sm md:text-base ${optionClass}"
+                ${isAnswered ? 'disabled' : ''}
+                onclick="quizEngine.selectAnswer(${q.id}, ${idx})">
+                ${indicator}
+                <span>${opt}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- Explication pédagogique si répondu -->
+        ${isAnswered ? `
+          <div class="p-4 rounded-xl mb-6 ${selectedAnswer === q.correctIndex ? 'bg-emerald-50 border border-emerald-200 text-emerald-950' : 'bg-red-50 border border-red-200 text-red-950'}">
+            <div class="font-bold text-sm mb-1 flex items-center gap-1.5">
+              <span>${selectedAnswer === q.correctIndex ? '🎉 Bonne réponse !' : '⚠️ Réponse incorrecte'}</span>
+            </div>
+            <div class="text-xs md:text-sm leading-relaxed">${q.explanation}</div>
+          </div>
+
+          <div class="flex justify-end">
+            <button 
+              class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl shadow-md transition flex items-center gap-2"
+              onclick="quizEngine.nextQuestion()">
+              <span>${this.currentIndex < this.questions.length - 1 ? 'Question suivante' : 'Voir mon bilan complet'}</span>
+              <span>➡️</span>
+            </button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  selectAnswer(qId, optionIndex) {
+    if (this.userAnswers[qId] !== undefined) return;
+
+    this.userAnswers[qId] = optionIndex;
+    const q = this.questions.find(item => item.id === qId);
+    if (q && optionIndex === q.correctIndex) {
+      this.score++;
+    }
+
+    this.render();
+  }
+
+  nextQuestion() {
+    if (this.currentIndex < this.questions.length - 1) {
+      this.currentIndex++;
+      this.render();
+    } else {
+      this.isCompleted = true;
+      this.renderResults();
+    }
+  }
+
+  renderResults() {
+    let title = "Apprenti en Dépannage";
+    let badge = "badge-gray";
+    let emoji = "🥉";
+    let msg = "Prenez le temps de relire les modules de cours sur Windows 11 et Linux pour consolider vos acquis.";
+
+    if (this.score === 10) {
+      title = "Expert Maître du Matériel & Pilotes";
+      badge = "badge-green";
+      emoji = "🏆";
+      msg = "Félicitations ! Vous maîtrisez parfaitement l'architecture des périphériques, les Vendor/Device IDs, le noyau Linux et le dépannage Windows !";
+    } else if (this.score >= 8) {
+      title = "Technicien Informatique Confirmé";
+      badge = "badge-blue";
+      emoji = "🥇";
+      msg = "Excellent travail ! Vous possédez les compétences indispensables pour diagnostiquer et réparer la grande majorité des pannes de périphériques.";
+    } else if (this.score >= 6) {
+      title = "Praticien en Progression";
+      badge = "badge-yellow";
+      emoji = "🥈";
+      msg = "Bonne base générale ! Quelques révisions sur les commandes Linux et les codes d'erreur Windows vous permettront d'atteindre l'excellence.";
+    }
+
+    this.container.innerHTML = `
+      <div class="bg-white border border-slate-200 rounded-2xl p-8 text-center max-w-xl mx-auto shadow-sm">
+        <div class="text-5xl mb-3">${emoji}</div>
+        <span class="badge ${badge} text-sm py-1 px-3 mb-2">${title}</span>
+        <h3 class="text-2xl font-bold text-slate-900 mt-2">Votre Score : ${this.score} / ${this.questions.length}</h3>
+        
+        <p class="text-sm text-slate-600 my-4 leading-relaxed">
+          ${msg}
+        </p>
+
+        <div class="pt-4 flex justify-center gap-3">
+          <button 
+            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl shadow-md transition"
+            onclick="quizEngine.restart()">
+            🔄 Recommencer l'évaluation
+          </button>
+          <button 
+            class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-xl transition"
+            onclick="app.switchTab('memo')">
+            📋 Consulter la Fiche Synthèse
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  restart() {
+    this.currentIndex = 0;
+    this.score = 0;
+    this.userAnswers = {};
+    this.isCompleted = false;
+    this.render();
+  }
+}
+
+    </script>
+    <script>
+// ==========================================================================
+// Application Principale & Routage des Onglets
+// ==========================================================================
+
+class App {
+  constructor() {
+    this.currentTab = "course";
+    this.currentModuleIndex = 0;
+    this.completedModules = new Set();
+    this.init();
+  }
+
+  init() {
+    this.renderCourseNavigation();
+    this.renderCurrentCourseModule();
+    this.attachGlobalEvents();
+    this.renderCheatSheet();
+  }
+
+  switchTab(tabId) {
+    this.currentTab = tabId;
+
+    // Mise à jour de la classe active sur les onglets de la navbar
+    const tabs = document.querySelectorAll(".nav-tab");
+    tabs.forEach(t => {
+      if (t.dataset.tab === tabId) {
+        t.classList.add("active");
+      } else {
+        t.classList.remove("active");
+      }
+    });
+
+    // Affichage de la section correspondante
+    const sections = document.querySelectorAll(".tab-pane");
+    sections.forEach(s => {
+      if (s.id === `view-${tabId}`) {
+        s.classList.remove("hidden");
+      } else {
+        s.classList.add("hidden");
+      }
+    });
+
+    // Initialisation paresseuse ou rafraîchissement
+    if (tabId === "win" && window.winSimulator) {
+      window.winSimulator.render();
+      window.winSimulator.attachEvents();
+    } else if (tabId === "linux" && window.linuxTerminal) {
+      window.linuxTerminal.focusInput();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // --- Affichage du Cours Pédagogique ---
+  renderCourseNavigation() {
+    const listContainer = document.getElementById("course-modules-list");
+    if (!listContainer) return;
+
+    listContainer.innerHTML = COURSE_DATA.modules.map((mod, idx) => {
+      const isSelected = idx === this.currentModuleIndex;
+      const isDone = this.completedModules.has(mod.id);
+
+      return `
+        <button 
+          class="w-full text-left p-3 rounded-xl transition flex items-center justify-between mb-1 text-xs md:text-sm ${isSelected ? 'bg-blue-50 text-blue-900 font-bold border border-blue-200' : 'text-slate-700 hover:bg-slate-100'}"
+          onclick="app.selectCourseModule(${idx})">
+          <div class="flex items-center gap-2.5 overflow-hidden">
+            <span class="w-6 h-6 rounded-md font-mono text-xs flex items-center justify-center font-bold shrink-0 ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700'}">
+              ${mod.number}
+            </span>
+            <span class="truncate">${mod.title}</span>
+          </div>
+          ${isDone ? '<span class="text-emerald-600 font-bold text-xs shrink-0">✓</span>' : ''}
+        </button>
+      `;
+    }).join('');
+  }
+
+  selectCourseModule(idx) {
+    this.currentModuleIndex = idx;
+    this.renderCourseNavigation();
+    this.renderCurrentCourseModule();
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+  }
+
+  renderCurrentCourseModule() {
+    const container = document.getElementById("course-module-view");
+    if (!container) return;
+
+    const mod = COURSE_DATA.modules[this.currentModuleIndex];
+    this.completedModules.add(mod.id);
+
+    container.innerHTML = `
+      <div class="course-card">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="px-3 py-1 bg-blue-100 text-blue-700 font-bold font-mono text-xs rounded-full">
+            MODULE ${mod.number}
+          </span>
+          <span class="text-xs text-slate-400">Temps estimé : ~10 min</span>
+        </div>
+
+        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-1">${mod.title}</h2>
+        <p class="text-sm md:text-base text-slate-500 mb-6">${mod.subtitle}</p>
+
+        <div class="space-y-8">
+          ${mod.sections.map(sec => `
+            <div class="pt-4 border-t border-slate-100">
+              <h3 class="text-lg md:text-xl font-bold text-slate-800 mb-3">${sec.title}</h3>
+              <div class="text-sm md:text-base text-slate-700 leading-relaxed">
+                ${sec.content}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Navigation bas de module -->
+        <div class="mt-8 pt-6 border-t border-slate-200 flex justify-between items-center">
+          <button 
+            class="px-4 py-2 border border-slate-300 rounded-lg text-xs md:text-sm font-semibold text-slate-700 hover:bg-slate-50 transition ${this.currentModuleIndex === 0 ? 'opacity-40 cursor-not-allowed' : ''}"
+            ${this.currentModuleIndex === 0 ? 'disabled' : ''}
+            onclick="app.selectCourseModule(${this.currentModuleIndex - 1})">
+            ⬅️ Module précédent
+          </button>
+
+          <span class="text-xs text-slate-500 font-medium">
+            Module ${this.currentModuleIndex + 1} / ${COURSE_DATA.modules.length}
+          </span>
+
+          ${this.currentModuleIndex < COURSE_DATA.modules.length - 1 ? `
+            <button 
+              class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm font-semibold shadow-sm transition"
+              onclick="app.selectCourseModule(${this.currentModuleIndex + 1})">
+              Module suivant ➡️
+            </button>
+          ` : `
+            <button 
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs md:text-sm font-semibold shadow-sm transition"
+              onclick="app.switchTab('win')">
+              Passer au simulateur 💻
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  }
+
+  // --- Fiche de Synthèse & Aide-Mémoire ---
+  renderCheatSheet() {
+    const container = document.getElementById("memo-content-container");
+    if (!container) return;
+
+    container.innerHTML = `
+      <div class="space-y-6">
+        <!-- Bannière d'en-tête de la fiche -->
+        <div class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white p-6 rounded-2xl shadow-md flex justify-between items-center">
+          <div>
+            <h3 class="text-2xl font-black">Aide-Mémoire Officiel : Périphériques, Pilotes & Diagnostic</h3>
+            <p class="text-xs md:text-sm text-blue-100 mt-1">Fiche mémo condensée pour les techniciens support et administrateurs systèmes.</p>
+          </div>
+          <button class="no-print px-4 py-2 bg-white text-blue-900 rounded-xl font-bold text-xs hover:bg-blue-50 transition flex items-center gap-1.5 shadow" onclick="window.print()">
+            <span>🖨️</span> Imprimer / Enregistrer PDF
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Bloc Windows 11 -->
+          <div class="course-card">
+            <h4 class="font-bold text-blue-900 text-base mb-3 flex items-center gap-2">
+              <span class="p-1 bg-blue-100 rounded text-blue-700">🪟</span>
+              Commandes & Procédures Windows 11
+            </h4>
+            <div class="space-y-2 text-xs font-mono">
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-blue-600 font-bold">devmgmt.msc</span><br>
+                <span class="text-slate-600 font-sans">Ouvre directement le Gestionnaire de périphériques.</span>
+              </div>
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-blue-600 font-bold">pnputil /enum-drivers</span><br>
+                <span class="text-slate-600 font-sans">Affiche la liste complète de tous les pilotes tiers du magasin.</span>
+              </div>
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-blue-600 font-bold">pnputil /add-driver *.inf /install</span><br>
+                <span class="text-slate-600 font-sans">Installe manuellement un ou plusieurs packages .inf.</span>
+              </div>
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-blue-600 font-bold">pnputil /export-driver * C:\\Backup_Drivers</span><br>
+                <span class="text-slate-600 font-sans">Sauvegarde tous les pilotes installés vers un répertoire externe.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bloc Linux Ubuntu -->
+          <div class="course-card">
+            <h4 class="font-bold text-orange-950 text-base mb-3 flex items-center gap-2">
+              <span class="p-1 bg-orange-100 rounded text-orange-700">🐧</span>
+              Commandes & Procédures Linux Ubuntu
+            </h4>
+            <div class="space-y-2 text-xs font-mono">
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-orange-600 font-bold">lspci -nnk</span><br>
+                <span class="text-slate-600 font-sans">Liste les bus PCI avec Vendor/Device ID et le module noyau actif.</span>
+              </div>
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-orange-600 font-bold">lsusb -t</span><br>
+                <span class="text-slate-600 font-sans">Affiche l'arbre hiérarchique des périphériques et contrôleurs USB.</span>
+              </div>
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-orange-600 font-bold">dmesg -T | grep -iE "firmware|error"</span><br>
+                <span class="text-slate-600 font-sans">Affiche les erreurs du noyau et firmwares manquants au démarrage.</span>
+              </div>
+              <div class="p-2 bg-slate-50 border border-slate-200 rounded">
+                <span class="text-orange-600 font-bold">ubuntu-drivers devices</span><br>
+                <span class="text-slate-600 font-sans">Détecte et recommande les pilotes propriétaires appropriés (NVIDIA).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tableau synthétique des codes d'erreur majeurs -->
+        <div class="course-card">
+          <h4 class="font-bold text-slate-900 text-base mb-3">Tableau Récapitulatif des Principaux Codes d'Erreur Windows</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700 text-left border-b border-slate-200 font-semibold">
+                  <th class="p-2.5">Code</th>
+                  <th class="p-2.5">Intitulé de l'erreur</th>
+                  <th class="p-2.5">Cause racine</th>
+                  <th class="p-2.5">Action corrective immédiate</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-yellow-700">Code 28</td>
+                  <td class="p-2.5 font-semibold">Pilotes non installés</td>
+                  <td class="p-2.5">Aucun pilote trouvé au branchement</td>
+                  <td class="p-2.5">Relever VEN/DEV dans Détails > Télécharger sur site OEM</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-red-700">Code 43</td>
+                  <td class="p-2.5 font-semibold">Périphérique arrêté suite à problèmes</td>
+                  <td class="p-2.5">Crash pilote ou défaillance matérielle (GPU)</td>
+                  <td class="p-2.5">Rollback du pilote ou nettoyage complet DDU en mode sans échec</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-yellow-700">Code 10</td>
+                  <td class="p-2.5 font-semibold">Le périphérique ne peut pas démarrer</td>
+                  <td class="p-2.5">Échec de communication de bus I/O</td>
+                  <td class="p-2.5">Débrancher/rebrancher ou Désinstaller + Rechercher modifications</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-slate-600">Code 22</td>
+                  <td class="p-2.5 font-semibold">Ce périphérique est désactivé</td>
+                  <td class="p-2.5">Désactivation manuelle par un admin</td>
+                  <td class="p-2.5">Clic droit > "Activer l'appareil"</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-mono font-bold text-orange-700">Code 52</td>
+                  <td class="p-2.5 font-semibold">Signature numérique non vérifiable</td>
+                  <td class="p-2.5">Pilote non certifié WHQL sous W11 64-bit</td>
+                  <td class="p-2.5">Installer un pilote officiel signé ou désactiver contrôle de signature</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  attachGlobalEvents() {
+    // Événement sur la barre de recherche globale
+    const searchInput = document.getElementById("global-search-input");
+    if (searchInput) {
+      searchInput.addEventListener("input", (e) => {
+        this.handleGlobalSearch(e.target.value);
+      });
+    }
+  }
+
+  handleGlobalSearch(query) {
+    const q = query.trim().toLowerCase();
+    const resultsContainer = document.getElementById("search-results-overlay");
+    if (!resultsContainer) return;
+
+    if (!q || q.length < 2) {
+      resultsContainer.classList.add("hidden");
+      return;
+    }
+
+    const matches = [];
+
+    // Recherche dans les modules
+    COURSE_DATA.modules.forEach((mod, modIdx) => {
+      mod.sections.forEach(sec => {
+        if (sec.title.toLowerCase().includes(q) || sec.content.toLowerCase().includes(q)) {
+          matches.push({
+            type: "Cours",
+            title: `${mod.title} - ${sec.title}`,
+            action: () => {
+              this.switchTab("course");
+              this.selectCourseModule(modIdx);
+            }
+          });
+        }
+      });
+    });
+
+    // Recherche dans les codes d'erreur
+    COURSE_DATA.errorCodes.forEach(err => {
+      if (err.code.toLowerCase().includes(q) || err.title.toLowerCase().includes(q) || err.cause.toLowerCase().includes(q)) {
+        matches.push({
+          type: "Code Erreur",
+          title: `${err.code} : ${err.title}`,
+          action: () => {
+            this.switchTab("icons");
+            if (window.diagEngine) {
+              window.diagEngine.handleErrorCodeSearch(err.code);
+            }
+          }
+        });
+      }
+    });
+
+    if (matches.length > 0) {
+      resultsContainer.innerHTML = `
+        <div class="p-3 bg-white border border-slate-200 rounded-xl shadow-2xl space-y-1 max-h-72 overflow-y-auto text-xs">
+          <div class="font-bold text-slate-400 uppercase text-[10px] px-2 py-1">${matches.length} RÉSULTATS TROUVÉS</div>
+          ${matches.slice(0, 8).map((m, idx) => `
+            <button 
+              class="w-full text-left p-2 rounded-lg hover:bg-blue-50 flex items-center justify-between transition"
+              onclick="app.executeSearchResult(${idx})">
+              <span class="font-semibold text-slate-800">${m.title}</span>
+              <span class="badge badge-blue text-[10px]">${m.type}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+      this.currentSearchMatches = matches;
+      resultsContainer.classList.remove("hidden");
+    } else {
+      resultsContainer.innerHTML = `
+        <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-2xl text-xs text-slate-500 text-center">
+          Aucun résultat pour "${this.escapeHtml(query)}".
+        </div>
+      `;
+      resultsContainer.classList.remove("hidden");
+    }
+  }
+
+  executeSearchResult(idx) {
+    const overlay = document.getElementById("search-results-overlay");
+    if (overlay) overlay.classList.add("hidden");
+    const input = document.getElementById("global-search-input");
+    if (input) input.value = "";
+
+    if (this.currentSearchMatches && this.currentSearchMatches[idx]) {
+      this.currentSearchMatches[idx].action();
+    }
+  }
+
+  escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+}
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new App();
+            window.winSimulator = new WindowsDeviceManagerSimulator('win-simulator-container');
+            window.linuxTerminal = new LinuxTerminalSimulator('linux-simulator-container');
+            window.diagEngine = new DiagnosticEngine();
+            window.quizEngine = new QuizEngine('quiz-container');
+        });
+    </script>
+</body>
+</html>

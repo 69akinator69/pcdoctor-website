@@ -506,7 +506,7 @@
 
         <!-- Filtres rapides par catégories -->
         <div class="search-filter-pills" role="group" aria-label="Filtres rapides par catégorie">
-          <button type="button" class="filter-pill active" data-filter="all">Tous (66)</button>
+          <button type="button" class="filter-pill active" data-filter="all">Tous (78)</button>
           <button type="button" class="filter-pill" data-filter="windows">⚡ Windows 11</button>
           <button type="button" class="filter-pill" data-filter="bios">🛠️ BIOS &amp; CH341A</button>
           <button type="button" class="filter-pill" data-filter="stockage">💾 Stockage &amp; SSD</button>
@@ -519,7 +519,7 @@
         <!-- Compteur et statut de filtrage -->
         <div class="search-status-bar">
           <span id="search-results-count" class="search-results-count">
-            Affichage de <strong>66</strong> ressources
+            Affichage de <strong>78</strong> ressources
           </span>
           <button type="button" id="reset-filters-btn" class="reset-filters-btn" style="display:none;">
             ↺ Réinitialiser la recherche
@@ -561,6 +561,21 @@
       </div>
 
       <div class="filiere-grid">
+        <!-- Ressource : Périphériques, Pilotes & Diagnostic Matériel (Windows 11 & Linux Ubuntu) -->
+        <article class="resource-card" style="border: 2px solid #0f62fe; background: rgba(15, 98, 254, 0.05);">
+          <span class="resource-type-tag tag-interactive" style="background:#d0e2ff; color:#0f62fe;">⭐ Nouveau · Cours Complet &amp; Simulateurs W11 / Ubuntu</span>
+          <h3>Périphériques, Pilotes &amp; Diagnostic : Windows 11 &amp; Linux Ubuntu</h3>
+          <p>Masterclass complète (5 modules) : architecture matérielle (PCIe, USB, SATA), modèles de pilotes (Kernel vs User mode), signature numérique WHQL, installation et gestion sous Windows 11 et Ubuntu 24.04 LTS. Inclus : galerie des icônes d'état, dictionnaire des codes d'erreur (Codes 1 à 52), arbre de diagnostic pas-à-pas, simulateur Windows 11 (4 missions) et simulateur de terminal Linux Bash (lspci, lsusb, dmesg, modprobe).</p>
+          <div style="display:flex; flex-direction:column; gap:0.5rem;">
+            <a href="/tmmi/cours-diagnostic-materiel-pilotes.html" class="btn-resource btn-open-interactive" style="background: linear-gradient(135deg, #0f62fe 0%, #0043ce 100%); color:#ffffff; font-weight:700;">
+              🚀 Lancer le Cours &amp; Simulateurs (W11 &amp; Ubuntu) &rarr;
+            </a>
+            <a href="https://share.gemini.google/zdQXzXh9X25v" target="_blank" rel="noopener noreferrer" class="btn-resource" style="background:#f1f5f9; color:#0f172a; border: 1px solid #cbd5e1; font-weight:600; text-align:center; padding:0.6rem 1rem; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem;">
+              ✨ Fiche de Révision &amp; Partage Gemini &rarr;
+            </a>
+          </div>
+        </article>
+
         <!-- Ressource 1 : Windows 11 Interactif -->
         <article class="resource-card">
           <span class="resource-type-tag tag-interactive">⭐ Nouveau · Cours Interactif</span>
@@ -681,6 +696,54 @@
           </a>
         </article>
 
+        <!-- Ressource NotebookLM : Restauration et Composants de PC Vintage (Guide PLCC32) -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag" style="background:#ede9fe; color:#6d28d9;">🏛️ Guide &amp; Analyse NotebookLM</span>
+          <h3>Restauration &amp; Composants Vintage : Guide PLCC32</h3>
+          <p>Guide technique complet sur les architectures rétro et cartes mères héritées : identification des puces BIOS (DIP-32, PLCC-32, Award PCI/PNP 686), sélection des adaptateurs de programmation et tensions d'atelier.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/Z06xKCjDEVaO" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+              🔌 Consulter le Guide Matériel PLCC32 &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- Ressource NotebookLM : Guide de Restauration et Programmation des Puces BIOS PLCC32 -->
+        <article class="resource-card" style="border-left: 3px solid #0284c7;">
+          <span class="resource-type-tag tag-slides" style="background:#e0f2fe; color:#0369a1;">📘 Guide Pratique NotebookLM</span>
+          <h3>Guide de Restauration &amp; Programmation des Puces BIOS PLCC32</h3>
+          <p>Méthodologie pas-à-pas de reprogrammation matérielle des EEPROM et Flash parallèles : extraction sécurisée sous socket PLCC, dump binaire, effacement, écriture du microcode et vérification d'intégrité.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/xSlgFNxaEuun" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0284c7;">
+              📑 Ouvrir le Guide de Restauration PLCC32 &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- Ressource NotebookLM : Vidéo Pédagogique - Restaurer un BIOS Ancien -->
+        <article class="resource-card" style="border-left: 3px solid #dc2626;">
+          <span class="resource-type-tag" style="background:#fee2e2; color:#991b1b;">🎬 Vidéo &amp; Synthèse IA NotebookLM</span>
+          <h3>Restaurer un BIOS Ancien (Vidéo Explicative)</h3>
+          <p>Aperçu multimédia complet sur le diagnostic, la reprogrammation et la remise en service des cartes mères rétro : pannes de microcode, programmation externe et procédures de récupération.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/5enFhUexnZJG" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#dc2626;">
+              ▶️ Visionner la Vidéo BIOS &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- Ressource NotebookLM : Cartes Mémo - Boîtiers PLCC32 Flashcards -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🗂️ Flashcards de Révision</span>
+          <h3>Cartes Mémo : Boîtiers PLCC32 &amp; Puces BIOS</h3>
+          <p>Flashcards interactives pour mémoriser le brochage des puces PLCC-32, l'orientation du détrompeur broche 1, l'utilisation de la pince d'extraction et les spécificités de programmation.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/9ZlloBBAJbNi" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+              🗂️ S'entraîner avec les Flashcards &rarr;
+            </a>
+          </div>
+        </article>
+
         <!-- Ressource 3 : Anatomie PC -->
         <article class="resource-card">
           <span class="resource-type-tag tag-interactive">Cours Interactif</span>
@@ -746,9 +809,17 @@
           <span class="resource-type-tag tag-slides">Slides Web Interactives</span>
           <h3>Virtualisation &amp; Déploiement sur VirtualBox</h3>
           <p>Diaporama complet sur l'installation de machines virtuelles, allocation des ressources CPU/RAM et isolation pour les travaux pratiques.</p>
-          <a href="/tmmi/slides-virtualbox.html" target="_blank" class="btn-resource btn-open-interactive">
-            🖥️ Lancer les Slides Virtuelles
-          </a>
+          <div class="card-actions-row">
+            <a href="/tmmi/slides-virtualbox.html" target="_blank" class="btn-resource btn-open-interactive">
+              🖥️ Lancer les Slides Virtuelles
+            </a>
+            <a href="https://notebooklm.link.google/qCj6Aml17HMF" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0284c7;">
+              📽️ Guide Ubuntu &amp; VirtualBox &rarr;
+            </a>
+            <a href="https://notebooklm.link.google/ictY0icCzD1V" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#06b6d4;">
+              🌐 Guide Interactif Ubuntu &rarr;
+            </a>
+          </div>
         </article>
 
         <!-- Ressource 10 : Grand Quiz Informatique 50 Questions -->
@@ -1000,6 +1071,96 @@
           <div class="card-actions-row">
             <a href="https://notebooklm.link.google/v9RWUNvDssB3" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive">
               🎯 Lancer le Quiz VM (NotebookLM) &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 16. Mastering VirtualBox and Ubuntu (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #0284c7;">
+          <span class="resource-type-tag tag-slides" style="background:#e0f2fe; color:#0369a1;">📽️ Présentation NotebookLM</span>
+          <h3>Mastering VirtualBox and Ubuntu</h3>
+          <p>Guide visuel étape par étape généré par NotebookLM pour maîtriser VirtualBox et Ubuntu : préparation système, allocation des ressources et Additions Invités.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/qCj6Aml17HMF" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0284c7;">
+              📽️ Voir la Présentation &rarr;
+            </a>
+            <a href="https://notebooklm.link.google/j5KbH1Bl78Iv" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0284c7;" title="Lien miroir NotebookLM">
+              🔗 Miroir
+            </a>
+          </div>
+        </article>
+
+        <!-- 17. Guide de Déploiement Ubuntu (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #0284c7;">
+          <span class="resource-type-tag tag-slides" style="background:#e0f2fe; color:#0369a1;">📽️ Présentation NotebookLM</span>
+          <h3>Guide de Déploiement Ubuntu</h3>
+          <p>Diaporama de synthèse NotebookLM sur les stratégies et bonnes pratiques de déploiement d'Ubuntu en environnement virtuel et installation native.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/8SaXyvX4t1RG" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#0284c7;">
+              📽️ Voir le Diaporama &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 18. Guide Interactif : Installation d'Ubuntu sur VirtualBox (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #06b6d4;">
+          <span class="resource-type-tag" style="background:#cffafe; color:#0e7490;">🌐 Guide Interactif NotebookLM</span>
+          <h3>Guide Interactif : Installation d'Ubuntu sur VirtualBox</h3>
+          <p>Cahier d'apprentissage interactif complet : création et dimensionnement de la machine virtuelle, montage ISO, installation pas à pas et configuration initiale.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/ictY0icCzD1V" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#06b6d4;">
+              🚀 Ouvrir le Guide Interactif &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 19. Maîtriser l'Installation d'Ubuntu : De la Virtualisation au Déploiement Physique (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #3b82f6;">
+          <span class="resource-type-tag tag-pdf" style="background:#dbeafe; color:#1d4ed8;">📑 Rapport &amp; Guide Complet</span>
+          <h3>Maîtriser l'Installation d'Ubuntu : Du Virtuel au Physique</h3>
+          <p>Rapport d'expertise exhaustif : comparaison approfondie entre machine virtuelle et matériel physique, gestion des disques et partitions, UEFI et durcissement de l'OS.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/hHfFUPHmoaPR" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#3b82f6;">
+              📑 Consulter le Guide Complet &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 20. Cartes Mémo : VirtualBox & Ubuntu (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #8b5cf6;">
+          <span class="resource-type-tag tag-interactive" style="background:#ede9fe; color:#6d28d9;">🗂️ Flashcards de Révision</span>
+          <h3>Cartes Mémo : VirtualBox &amp; Ubuntu</h3>
+          <p>Flashcards interactives pour mémoriser les commandes terminal Linux, paramètres d'hyperviseur, gestion du réseau virtuel et résolution d'incidents.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/SmxD7Z155c9S" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#8b5cf6;">
+              🗂️ S'entraîner avec les Cartes &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 21. Machine Virtuelle ou Installation Directe (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #10b981;">
+          <span class="resource-type-tag" style="background:#d1fae5; color:#065f46;">📊 Infographie Pédagogique</span>
+          <h3>Machine Virtuelle ou Installation Directe</h3>
+          <p>Infographie synthétique comparant l'exécution en hyperviseur Type-2 (VirtualBox) et l'installation directe bare-metal (performances, isolation matérielle, pilotes).</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/pKMfIPXPImJ6" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#10b981;">
+              📊 Visualiser l'Infographie &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- 22. Comparatif des Méthodes d'Installation Système (NotebookLM) -->
+        <article class="resource-card" style="border-left: 3px solid #f59e0b;">
+          <span class="resource-type-tag" style="background:#fef3c7; color:#b45309;">📊 Infographie Comparative</span>
+          <h3>Comparatif des Méthodes d'Installation Système</h3>
+          <p>Infographie didactique sous forme de briques comparant pas à pas les processus d'installation d'un système d'exploitation en environnement virtuel et physique.</p>
+          <div class="card-actions-row">
+            <a href="https://notebooklm.link.google/8IEs2SFRd6gE" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#f59e0b;">
+              📊 Voir l'Infographie &rarr;
+            </a>
+            <a href="https://notebooklm.link.google/QoLPIMvc1MOh" target="_blank" rel="noopener noreferrer" class="btn-resource btn-open-interactive" style="border-bottom-color:#f59e0b;" title="Lien miroir NotebookLM">
+              🔗 Miroir
             </a>
           </div>
         </article>
@@ -1470,8 +1631,8 @@
           isBios: /bios|uefi|ch341a|flashage|firmware|eeprom/.test(fullText),
           isStockage: /stockage|ssd|nvme|hdd|disque|nand|memoire/.test(fullText),
           isReseau: /reseau|network|cisco|switch|router|cablage|port|tcp|udp/.test(fullText),
-          isVirtualisation: /virtual|virtualbox|vm|machine virtuelle/.test(fullText),
-          isQuiz: /quiz|qcm|evaluation|flashcard|memo|cartes memo/.test(fullText),
+          isVirtualisation: /virtual|virtualbox|vm|machine virtuelle|ubuntu|linux/.test(fullText),
+          isQuiz: /quiz|qcm|evaluation|flashcard|memo|cartes memo|notebooklm|infographie/.test(fullText),
           isPdf: /\.pdf|pdf|guide telecharger/.test(fullText)
         };
       });

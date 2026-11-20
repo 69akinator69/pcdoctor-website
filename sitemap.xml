@@ -26,7 +26,7 @@
   <!-- 3. Espace Étudiants & Portail Pédagogique -->
   <url>
     <loc>https://pcdoctor.tn/etudiants.html</loc>
-    <lastmod>2026-11-14</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
@@ -34,7 +34,7 @@
   <!-- Dossier Pédagogique : Filière TSIG -->
   <url>
     <loc>https://pcdoctor.tn/tsig/</loc>
-    <lastmod>2026-11-14</lastmod>
+    <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -111,6 +111,19 @@
   </url>
 
   <!-- 4. Modules Pédagogiques & Cours Interactifs TMMI -->
+  <url>
+    <loc>https://pcdoctor.tn/tmmi/cours-diagnostic-materiel-pilotes.html</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pcdoctor.tn/tmmi/cours-peripheriques-pilotes.html</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
   <url>
     <loc>https://pcdoctor.tn/tmmi/cours-bios-ch341a.html</loc>
     <lastmod>2026-11-14</lastmod>
