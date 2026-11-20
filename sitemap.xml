@@ -4,10 +4,10 @@
 
   <!-- 1. Page d'Accueil Principale (FR) -->
   <url>
-    <loc>https://pcdoctor.tn/</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://pcdoctor.tn/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://pcdoctor.tn/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://pcdoctor.tn/"/>
+    <loc>https://69akinator69.github.io/pcdoctor-website/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://69akinator69.github.io/pcdoctor-website/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://69akinator69.github.io/pcdoctor-website/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://69akinator69.github.io/pcdoctor-website/"/>
     <lastmod>2026-11-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -15,9 +15,9 @@
 
   <!-- 2. Page d'Accueil Anglaise (EN) -->
   <url>
-    <loc>https://pcdoctor.tn/en/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://pcdoctor.tn/en/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://pcdoctor.tn/"/>
+    <loc>https://69akinator69.github.io/pcdoctor-website/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://69akinator69.github.io/pcdoctor-website/en/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://69akinator69.github.io/pcdoctor-website/"/>
     <lastmod>2026-11-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -25,7 +25,7 @@
 
   <!-- 3. Espace Étudiants & Portail Pédagogique -->
   <url>
-    <loc>https://pcdoctor.tn/etudiants.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/etudiants.html</loc>
     <lastmod>2026-11-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
@@ -33,63 +33,63 @@
 
   <!-- Dossier Pédagogique : Filière TSIG -->
   <url>
-    <loc>https://pcdoctor.tn/tsig/</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/</loc>
     <lastmod>2026-11-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/cours-pilotes-peripheriques-windows11.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/cours-pilotes-peripheriques-windows11.html</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/quiz-pilotes-windows11.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/quiz-pilotes-windows11.html</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/cours-pilotes-peripheriques-windows11.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/cours-pilotes-peripheriques-windows11.pdf</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/guide-installation-pilote.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/guide-installation-pilote.pdf</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/Guide_de_d%C3%A9ploiement_de_Windows_11.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/Guide_de_d%C3%A9ploiement_de_Windows_11.html</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/guide-deploiement-windows11.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/guide-deploiement-windows11.html</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/M%C3%A9thodes_d_installation_Windows_11.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/M%C3%A9thodes_d_installation_Windows_11.html</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tsig/Cours_interactif___Histoire_et_fonctionnement_des_supports.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tsig/Cours_interactif___Histoire_et_fonctionnement_des_supports.html</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
@@ -97,14 +97,14 @@
 
   <!-- Dossier Pédagogique : Support de Stockage -->
   <url>
-    <loc>https://pcdoctor.tn/support-de-stockage/</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/support-de-stockage/</loc>
     <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/support-de-stockage/cours-stockage.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/support-de-stockage/cours-stockage.html</loc>
     <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
@@ -112,48 +112,48 @@
 
   <!-- 4. Modules Pédagogiques & Cours Interactifs TMMI -->
   <url>
-    <loc>https://pcdoctor.tn/tmmi/cours-diagnostic-materiel-pilotes.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/cours-diagnostic-materiel-pilotes.html</loc>
     <lastmod>2026-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://pcdoctor.tn/tmmi/cours-peripheriques-pilotes.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/cours-peripheriques-pilotes.html</loc>
     <lastmod>2026-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/cours-bios-ch341a.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/cours-bios-ch341a.html</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/cours-windows11.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/cours-windows11.html</loc>
     <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/1.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/1.html</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/2.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/2.html</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/slides-virtualbox.html</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/slides-virtualbox.html</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
@@ -161,42 +161,42 @@
 
   <!-- 5. Guides PDF Techniques & Manuels de Diagnostic -->
   <url>
-    <loc>https://pcdoctor.tn/tmmi/Flashage_BIOS_CH341A.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/Flashage_BIOS_CH341A.pdf</loc>
     <lastmod>2026-11-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/Guide_Pratique_Diagnostic_Maintenance.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/Guide_Pratique_Diagnostic_Maintenance.pdf</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/Windows_11_Installation_Guide.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/Windows_11_Installation_Guide.pdf</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/Installation_Windows_11_Cle_USB.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/Installation_Windows_11_Cle_USB.pdf</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/Prendre_en_charge_les_pannes.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/Prendre_en_charge_les_pannes.pdf</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
 
   <url>
-    <loc>https://pcdoctor.tn/tmmi/Les_Etapes_de_Demarrage_PC.pdf</loc>
+    <loc>https://69akinator69.github.io/pcdoctor-website/tmmi/Les_Etapes_de_Demarrage_PC.pdf</loc>
     <lastmod>2026-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
